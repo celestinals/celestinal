@@ -1,0 +1,16 @@
+services:
+  app:
+    image: myapp:latest
+    ports:
+      - "8080:80"
+    networks:
+      - app-network
+
+  worker:
+    image: myworker:latest
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

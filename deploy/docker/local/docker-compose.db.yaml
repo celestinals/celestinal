@@ -1,0 +1,23 @@
+services:
+  redis:
+    image: redis
+    ports:
+      - 6379:6379
+    command: /bin/sh -c "redis-server --requirepass password"
+    environment:
+      - REDIS_HOST_PASSWORD=password
+    volumes:
+      - ./.data/redis:/data
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: swipe
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: swip3@admin
+    ports:
+      - 5432:5432
+    restart: on-failure:3
+    volumes:
+      - ./.data/postgres:/var/lib/postgresql/data
+volumes:
+  data:

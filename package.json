@@ -1,0 +1,39 @@
+{
+  "name": "tickex",
+  "version": "0.0.1",
+  "description": "Buying, selling, exchanging, and sharing all types of tickets and game cards on a secure cloud-native platform.",
+  "private": true,
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+  },
+  "devDependencies": {
+    "@tickex/eslint-config": "workspace:*",
+    "@tickex/typescript-config": "workspace:*",
+    "prettier": "^3.2.5",
+    "turbo": "^2.3.0",
+    "typescript": "5.5.4"
+  },
+  "packageManager": "pnpm@9.12.3",
+  "engines": {
+    "yarn": "use pnpm!",
+    "npm" : "use pnpm!",
+    "pnpm": ">=9.0.0",
+    "node": ">=20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tickexvn/tickex.git"
+  },
+  "keywords": [
+    "tkx-web"
+  ],
+  "author": "Tickex Labs",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/tickexvn/tickex/issues"
+  },
+  "homepage": "https://github.com/tickexvn/tickex#readme"
+}

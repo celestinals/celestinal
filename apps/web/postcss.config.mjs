@@ -1,0 +1,1 @@
+export { default } from "@tickex/ui/postcss.config";

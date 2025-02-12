@@ -1,0 +1,6 @@
+.github/
+.idea/
+
+docs/
+third_party/
+x/tools/

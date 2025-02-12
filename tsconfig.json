@@ -1,0 +1,4 @@
+{
+  "extends": "@tickex/typescript-config/base.json"
+}
+
