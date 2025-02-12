@@ -18,7 +18,7 @@
 package init
 
 import (
-	"github.com/tickexvn/tickex/pkg/core/tkxapp"
+	"github.com/tickexvn/tickex/pkg/coretex"
 	"github.com/tickexvn/tickex/x/greeter/v1/internal/controllers"
 	"github.com/tickexvn/tickex/x/greeter/v1/internal/domain"
 	"github.com/tickexvn/tickex/x/greeter/v1/internal/repos"
@@ -27,13 +27,13 @@ import (
 
 var (
 	// handlers/controllers layer
-	_ = tkxapp.Inject(controllers.New)
+	_ = coretex.Inject(controllers.New)
 
 	// domain layer
-	_ = tkxapp.Inject(domain.New)
+	_ = coretex.Inject(domain.New)
 
 	// repo layer
-	_ = tkxapp.InjectLifeCycle(repos.New, repos.OnStart, repos.OnStop)
+	_ = coretex.InjectLifeCycle(repos.New, repos.OnStart, repos.OnStop)
 
 	// data layer
 	//_ = tkxapp.Inject(authors.New)

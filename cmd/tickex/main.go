@@ -19,11 +19,11 @@ package main
 
 import (
 	"github.com/tickexvn/tickex/internal/gateway"
-	"github.com/tickexvn/tickex/pkg/core/tkxfactory"
+	"github.com/tickexvn/tickex/pkg/coretex"
 	"github.com/tickexvn/tickex/pkg/logger"
 )
 
 func main() {
-	app := tkxfactory.Build(gateway.New)
+	app := coretex.Build(gateway.New)
 	logger.Fatal(app.Start())
 }

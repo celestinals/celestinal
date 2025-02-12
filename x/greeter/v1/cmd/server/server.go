@@ -22,18 +22,17 @@ import (
 	"net"
 
 	"github.com/tickexvn/tickex/api/gen/go/controllers/greeter/v1"
-	"github.com/tickexvn/tickex/pkg/core/tkxapp"
-	"github.com/tickexvn/tickex/pkg/core/tkxservice"
+	"github.com/tickexvn/tickex/pkg/coretex"
 	"github.com/tickexvn/tickex/pkg/logger"
 	"github.com/tickexvn/tickex/pkg/msgf"
 	"github.com/tickexvn/tickex/x/greeter/v1/internal/controllers"
 )
 
-var _ tkxapp.Server = (*Greeter)(nil)
+var _ coretex.Server = (*Greeter)(nil)
 
 // Greeter implements GreeterServiceServer.
 type Greeter struct {
-	*tkxservice.ServiceServer
+	*coretex.ServiceServer
 	srv greeter.GreeterServiceServer
 }
 
@@ -52,9 +51,9 @@ func (g *Greeter) ListenAndServe() error {
 }
 
 // New creates a new Greeter module.
-func New(srv controllers.IGreeter) tkxapp.Server {
+func New(srv controllers.IGreeter) coretex.Server {
 	return &Greeter{
-		ServiceServer: tkxservice.NewDefault(),
+		ServiceServer: coretex.NewDefault(),
 		srv:           srv,
 	}
 }

@@ -14,35 +14,18 @@
  * limitations under the License.
  */
 
-// Package tkxhook provides a way to hook into the application lifecycle.
-package tkxhook
+package coretex
 
 import (
-	"context"
-
-	tkxinternal "github.com/tickexvn/tickex/pkg/core/internal"
-
 	"go.uber.org/fx"
 )
 
-// UseBefore uses the given function before the application starts.
-func UseBefore(fn func(ctx context.Context) error) {
-	function := func(lc fx.Lifecycle) {
-		lc.Append(fx.Hook{
-			OnStart: fn,
-		})
-	}
-
-	tkxinternal.Invoke(function)
+type container struct {
+	engine *fx.App
 }
 
-// UseAfter adds a hook to be executed after the application has stopped.
-func UseAfter(fn func(ctx context.Context) error) {
-	function := func(lc fx.Lifecycle) {
-		lc.Append(fx.Hook{
-			OnStop: fn,
-		})
-	}
-
-	tkxinternal.Invoke(function)
+// Start implements IContainer.
+func (c *container) Start() error {
+	c.engine.Run()
+	return c.engine.Err()
 }

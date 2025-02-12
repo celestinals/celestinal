@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-// Package tkxruntime provides the runtime layer for the service.
-package tkxruntime
+package coretex
 
 import (
 	"net/http"

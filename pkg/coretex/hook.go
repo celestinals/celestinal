@@ -14,24 +14,34 @@
  * limitations under the License.
  */
 
-// Package tkxinternal provides internal utilities for the Tickex service.
-package tkxinternal
+package coretex
 
-import "go.uber.org/fx"
+import (
+	"context"
 
-var options = fx.Provide()
+	txinternal "github.com/tickexvn/tickex/pkg/coretex/internal"
 
-// Provide provides the given constructors.
-func Provide(constructors ...interface{}) {
-	options = fx.Options(options, fx.Provide(constructors...))
+	"go.uber.org/fx"
+)
+
+// UseBefore uses the given function before the application starts.
+func UseBefore(fn func(ctx context.Context) error) {
+	function := func(lc fx.Lifecycle) {
+		lc.Append(fx.Hook{
+			OnStart: fn,
+		})
+	}
+
+	txinternal.Invoke(function)
 }
 
-// Option returns the internal option.
-func Option() fx.Option {
-	return options
-}
+// UseAfter adds a hook to be executed after the application has stopped.
+func UseAfter(fn func(ctx context.Context) error) {
+	function := func(lc fx.Lifecycle) {
+		lc.Append(fx.Hook{
+			OnStop: fn,
+		})
+	}
 
-// Invoke invokes the given constructors.
-func Invoke(constructors ...interface{}) {
-	options = fx.Options(options, fx.Invoke(constructors...))
+	txinternal.Invoke(function)
 }

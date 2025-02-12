@@ -20,7 +20,7 @@ package base
 import (
 	"context"
 
-	"github.com/tickexvn/tickex/pkg/core/tkxruntime"
+	"github.com/tickexvn/tickex/pkg/coretex"
 
 	"github.com/tickexvn/tickex/internal/gateway/types"
 
@@ -39,6 +39,6 @@ func (s *Service) Register(_ context.Context, _ *runtime.ServeMux, _ string, _ [
 }
 
 // Accept accepts the base service
-func (s *Service) Accept(_ context.Context, _ tkxruntime.IServeMux, _ types.IVisitor) error {
+func (s *Service) Accept(_ context.Context, _ coretex.IServeMux, _ types.IVisitor) error {
 	panic("unimplemented")
 }
