@@ -14,24 +14,25 @@
  * limitations under the License.
  */
 
-package tkxfactory
+package coretex
 
 import (
 	"context"
 
-	tkxinternal "github.com/tickexvn/tickex/pkg/core/internal"
-	"github.com/tickexvn/tickex/pkg/core/tkxapp"
+	"google.golang.org/grpc"
+
+	txinternal "github.com/tickexvn/tickex/pkg/coretex/internal"
 
 	"github.com/tickexvn/tickex/pkg/logger"
 
 	"go.uber.org/fx"
 )
 
-func _start(srv tkxapp.Server) {
+func _start(srv Server) {
 	logger.Fatal(srv.ListenAndServe())
 }
 
-func _main(lc fx.Lifecycle, srv tkxapp.Server) {
+func _main(lc fx.Lifecycle, srv Server) {
 	lc.Append(fx.Hook{
 		OnStart: func(_ context.Context) error {
 			go _start(srv)
@@ -44,10 +45,19 @@ func _main(lc fx.Lifecycle, srv tkxapp.Server) {
 }
 
 // Build builds the application.
-func Build(constructor interface{}) tkxapp.Application {
-	tkxinternal.Provide(constructor)
+func Build(constructor interface{}) Application {
+	txinternal.Provide(constructor)
 
 	return &container{
-		engine: fx.New(tkxinternal.Option(), fx.Invoke(_main)),
+		engine: fx.New(txinternal.Option(), fx.Invoke(_main)),
 	}
+}
+
+// RegisterService registers a service with the runtime.
+func RegisterService(ctx context.Context, mux IServeMux, service GRPCServicer, endpoint string, opts []grpc.DialOption) error {
+	if err := service.Register(ctx, mux.AsRuntimeMux(), endpoint, opts); err != nil {
+		return err
+	}
+
+	return nil
 }

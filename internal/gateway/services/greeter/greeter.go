@@ -20,10 +20,9 @@ package greeter
 import (
 	"context"
 
-	"github.com/tickexvn/tickex/pkg/core/tkxruntime"
-
 	"github.com/tickexvn/tickex/internal/gateway/services/base"
 	"github.com/tickexvn/tickex/internal/gateway/types"
+	"github.com/tickexvn/tickex/pkg/coretex"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	greetergw "github.com/tickexvn/tickex/api/gen/go/controllers/greeter/v1"
@@ -36,7 +35,7 @@ type Greeter struct {
 }
 
 // Accept accepts the Greeter service
-func (g *Greeter) Accept(ctx context.Context, mux tkxruntime.IServeMux, v types.IVisitor) error {
+func (g *Greeter) Accept(ctx context.Context, mux coretex.IServeMux, v types.IVisitor) error {
 	return v.VisitGreeterService(ctx, mux, g)
 }
 

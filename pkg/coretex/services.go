@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-// Package tkxservice provides a service registrar.
-package tkxservice
+package coretex
 
 import (
 	"context"

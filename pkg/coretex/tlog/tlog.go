@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-// Package tkxlog provides a system logger for the service.
-package tkxlog
+// Package tlog provides the logging utilities.
+package tlog
 
 import (
 	"fmt"

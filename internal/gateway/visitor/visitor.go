@@ -20,9 +20,8 @@ package visitor
 import (
 	"context"
 
-	tkxruntime "github.com/tickexvn/tickex/pkg/core/tkxruntime"
-
 	"github.com/tickexvn/tickex/internal/gateway/types"
+	"github.com/tickexvn/tickex/pkg/coretex"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -39,11 +38,11 @@ var _ types.IVisitor = (*Visitor)(nil)
 type Visitor struct{}
 
 // VisitGreeterService visits the greeter service.
-func (v *Visitor) VisitGreeterService(ctx context.Context, mux tkxruntime.IServeMux, service types.IService) error {
+func (v *Visitor) VisitGreeterService(ctx context.Context, mux coretex.IServeMux, service types.IService) error {
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 
 	greeterAddr := ":8000"
-	if err := tkxruntime.RegisterService(ctx, mux, service, greeterAddr, opts); err != nil {
+	if err := coretex.RegisterService(ctx, mux, service, greeterAddr, opts); err != nil {
 		return err
 	}
 

@@ -20,8 +20,7 @@ package gateway
 import (
 	"context"
 
-	"github.com/tickexvn/tickex/pkg/core/tkxapp"
-	"github.com/tickexvn/tickex/pkg/core/tkxruntime"
+	"github.com/tickexvn/tickex/pkg/coretex"
 
 	"github.com/tickexvn/tickex/internal/gateway/services/greeter"
 	"github.com/tickexvn/tickex/internal/gateway/types"
@@ -31,11 +30,11 @@ import (
 	"github.com/tickexvn/tickex/pkg/msgf"
 )
 
-var _ tkxapp.Server = (*Engine)(nil)
+var _ coretex.Server = (*Engine)(nil)
 
 // Engine represents the gateway app
 type Engine struct {
-	mux     tkxruntime.IServeMux
+	mux     coretex.IServeMux
 	visitor types.IVisitor
 }
 
@@ -77,9 +76,9 @@ func (e *Engine) ListenAndServe() error {
 }
 
 // New creates a new gateway app
-func New() tkxapp.Server {
+func New() coretex.Server {
 	return &Engine{
-		mux:     tkxruntime.NewServeMux(),
+		mux:     coretex.NewServeMux(),
 		visitor: visitor.New(),
 	}
 }

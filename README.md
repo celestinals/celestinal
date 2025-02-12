@@ -1,7 +1,4 @@
 # Tickex
-Buying, selling, exchanging, and sharing all types of tickets and game cards on a secure cloud-native platform.
-
-#
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
 Buying, selling, exchanging, and sharing all types of tickets and game cards on a secure cloud-native platform.

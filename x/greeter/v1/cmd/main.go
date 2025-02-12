@@ -18,7 +18,7 @@
 package main
 
 import (
-	"github.com/tickexvn/tickex/pkg/core/tkxfactory"
+	"github.com/tickexvn/tickex/pkg/coretex"
 	"github.com/tickexvn/tickex/pkg/logger"
 	"github.com/tickexvn/tickex/x/greeter/v1/cmd/server"
 
@@ -26,6 +26,6 @@ import (
 )
 
 func main() {
-	app := tkxfactory.Build(server.New)
+	app := coretex.Build(server.New)
 	logger.Fatal(app.Start())
 }

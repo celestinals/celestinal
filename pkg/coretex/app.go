@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-// Package tkxapp provides the application layer for the service.
-package tkxapp
+// Package coretex provides the core setting for the application.
+package coretex
 
 import (
 	"context"
 
-	tkxinternal "github.com/tickexvn/tickex/pkg/core/internal"
-
+	txinternal "github.com/tickexvn/tickex/pkg/coretex/internal"
 	"go.uber.org/fx"
 )
 
@@ -52,13 +51,13 @@ func InjectLifeCycle[T any](constructor func() T, onStart func(T) error, onStop 
 		return ins
 	}
 
-	tkxinternal.Provide(decorateConstructor)
+	txinternal.Provide(decorateConstructor)
 
 	return constructor
 }
 
 // Inject injects the given constructor into the application.
 func Inject[fn any](constructor fn) fn {
-	tkxinternal.Provide(constructor)
+	txinternal.Provide(constructor)
 	return constructor
 }

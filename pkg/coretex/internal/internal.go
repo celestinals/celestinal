@@ -14,22 +14,24 @@
  * limitations under the License.
  */
 
-// Package tkxruntime provides the runtime layer for the service.
-package tkxruntime
+// Package txinternal provides the internal function for the coretex.
+package txinternal
 
-import (
-	"context"
+import "go.uber.org/fx"
 
-	"github.com/tickexvn/tickex/pkg/core/tkxservice"
+var options = fx.Provide()
 
-	"google.golang.org/grpc"
-)
+// Provide provides the given constructors.
+func Provide(constructors ...interface{}) {
+	options = fx.Options(options, fx.Provide(constructors...))
+}
 
-// RegisterService registers a service with the runtime.
-func RegisterService(ctx context.Context, mux IServeMux, service tkxservice.GRPCServicer, endpoint string, opts []grpc.DialOption) error {
-	if err := service.Register(ctx, mux.AsRuntimeMux(), endpoint, opts); err != nil {
-		return err
-	}
+// Option returns the internal option.
+func Option() fx.Option {
+	return options
+}
 
-	return nil
+// Invoke invokes the given constructors.
+func Invoke(constructors ...interface{}) {
+	options = fx.Options(options, fx.Invoke(constructors...))
 }

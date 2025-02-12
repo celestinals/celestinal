@@ -20,17 +20,16 @@ package types
 import (
 	"context"
 
-	"github.com/tickexvn/tickex/pkg/core/tkxruntime"
-	"github.com/tickexvn/tickex/pkg/core/tkxservice"
+	"github.com/tickexvn/tickex/pkg/coretex"
 )
 
 // IService represents the service interface.
 type IService interface {
-	tkxservice.GRPCServicer
-	Accept(context.Context, tkxruntime.IServeMux, IVisitor) error
+	coretex.GRPCServicer
+	Accept(context.Context, coretex.IServeMux, IVisitor) error
 }
 
 // IVisitor represents the visitor interface.
 type IVisitor interface {
-	VisitGreeterService(ctx context.Context, mux tkxruntime.IServeMux, service IService) error
+	VisitGreeterService(ctx context.Context, mux coretex.IServeMux, service IService) error
 }
