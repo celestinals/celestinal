@@ -1,4 +1,4 @@
-# Copyright 2024 The Tickex Authors.
+# Copyright 2025 The Tickex Authors.
 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ lint.x.greeter.v1:
 
 # Docker build commands
 build.tickex:
-	docker buildx build -f ./cmd/tickex/Dockerfile -t tx.tickex:latest .
+	docker buildx build -f ./cmd/tickex/Dockerfile -t tkx.tickex:latest .
 
 build.x.greeter:
-	docker buildx build -f ./x/greeter/v1/Dockerfile -t tx.x.greeter.v1:latest .
+	docker buildx build -f ./x/greeter/v1/Dockerfile -t tkx.x.greeter.v1:latest .

@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 The Tickex Authors.
+ * Copyright 2025 The Tickex Authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package coretex
+package core
 
 import (
 	"context"
 
 	"google.golang.org/grpc"
 
-	txinternal "github.com/tickexvn/tickex/pkg/coretex/internal"
+	txinternal "github.com/tickexvn/tickex/pkg/core/internal"
 
 	"github.com/tickexvn/tickex/pkg/logger"
 

@@ -1,4 +1,4 @@
-# Copyright 2024 The Tickex Authors.
+# Copyright 2025 The Tickex Authors.
 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,23 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM golang:1.23.3-alpine
+FROM node:20-alpine
 
-LABEL org.opencontainers.image.title="Tickex Go compiler base on Go 1.23.3 Alpine Base Image" \
-      org.opencontainers.image.description="Go 1.23.3 with a lightweight and fast Alpine Linux environment." \
-      org.opencontainers.image.version="1.23.3" \
-      org.opencontainers.image.licenses="Apache-2.0" \
+LABEL org.opencontainers.image.title="Tickex Node Runtime base on Node.js 20 Base Image" \
+      org.opencontainers.image.description="Node.js 20 LTS, a JavaScript runtime built on Chrome's V8 JavaScript engine." \
+      org.opencontainers.image.version="20" \
+      org.opencontainers.image.licenses="MIT" \
       org.opencontainers.image.url="https://tickex.io.vn" \
       org.opencontainers.image.source="https://github.com/tickexvn/tickex" \
-      org.opencontainers.image.authors="Tickex Team"
+      org.opencontainers.image.authors="Tickex Labs"
 
-ENV GO111MODULE=on \
-    CGO_ENABLED=0 \
-    GOOS=linux \
-    GOARCH=amd64
+RUN apk --no-cache add ca-certificates
 
-RUN apk add --no-cache git ca-certificates
+WORKDIR /usr/src/app
 
-WORKDIR /home
-
-CMD ["go", "version"]
+CMD ["node", "--version"]

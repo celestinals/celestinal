@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 The Tickex Authors.
+ * Copyright 2025 The Tickex Authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
 package init
 
 import (
-	"github.com/tickexvn/tickex/pkg/coretex"
+	"github.com/tickexvn/tickex/pkg/core"
 	"github.com/tickexvn/tickex/x/greeter/v1/internal/controllers"
 	"github.com/tickexvn/tickex/x/greeter/v1/internal/domain"
 	"github.com/tickexvn/tickex/x/greeter/v1/internal/repos"
@@ -27,13 +27,13 @@ import (
 
 var (
 	// handlers/controllers layer
-	_ = coretex.Inject(controllers.New)
+	_ = core.Inject(controllers.New)
 
 	// domain layer
-	_ = coretex.Inject(domain.New)
+	_ = core.Inject(domain.New)
 
 	// repo layer
-	_ = coretex.InjectLifeCycle(repos.New, repos.OnStart, repos.OnStop)
+	_ = core.InjectLifeCycle(repos.New, repos.OnStart, repos.OnStop)
 
 	// data layer
 	//_ = tkxapp.Inject(authors.New)

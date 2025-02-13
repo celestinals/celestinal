@@ -1,4 +1,4 @@
-<img src="./assets/tx.png" alt="tickex logo" width="120" height="120">
+<img src="assets/tkx.png" alt="tickex logo" width="120" height="120">
 
 ![Node.js](https://img.shields.io/badge/node-%3E%3D20.x-green.svg)
 ![PNPM](https://img.shields.io/badge/pnpm-%3E%3D9.x-yellow.svg)
