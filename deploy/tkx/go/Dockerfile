@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM golang:1.23.3-alpine
+FROM golang:1.24-alpine
 
-LABEL org.opencontainers.image.title="Tickex Go compiler base on Go 1.23.3 Alpine Base Image" \
-      org.opencontainers.image.description="Go 1.23.3 with a lightweight and fast Alpine Linux environment." \
-      org.opencontainers.image.version="1.23.3" \
+LABEL org.opencontainers.image.title="Tickex Go compiler base on Go 1.24 Alpine Base Image" \
+      org.opencontainers.image.description="Go 1.24 with a lightweight and fast Alpine Linux environment." \
+      org.opencontainers.image.version="1.24" \
       org.opencontainers.image.licenses="Apache-2.0" \
       org.opencontainers.image.url="https://tickex.io.vn" \
       org.opencontainers.image.source="https://github.com/tickexvn/tickex" \

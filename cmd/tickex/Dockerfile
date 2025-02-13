@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM ghcr.io/tickexvn/tickex/tkx.go:1.23.3-alpine AS builder
+FROM ghcr.io/tickexvn/tickex/tkx.go:1.24-alpine AS builder
 
 # Move to working directory (/app).
 WORKDIR /src
