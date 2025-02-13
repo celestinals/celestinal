@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 The Tickex Authors.
+ * Copyright 2025 The Tickex Authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import (
 
 	"github.com/tickexvn/tickex/internal/gateway/services/base"
 	"github.com/tickexvn/tickex/internal/gateway/types"
-	"github.com/tickexvn/tickex/pkg/coretex"
+	"github.com/tickexvn/tickex/pkg/core"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	greetergw "github.com/tickexvn/tickex/api/gen/go/controllers/greeter/v1"
@@ -35,7 +35,7 @@ type Greeter struct {
 }
 
 // Accept accepts the Greeter service
-func (g *Greeter) Accept(ctx context.Context, mux coretex.IServeMux, v types.IVisitor) error {
+func (g *Greeter) Accept(ctx context.Context, mux core.IServeMux, v types.IVisitor) error {
 	return v.VisitGreeterService(ctx, mux, g)
 }
 

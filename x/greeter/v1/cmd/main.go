@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 The Tickex Authors.
+ * Copyright 2025 The Tickex Authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
 package main
 
 import (
-	"github.com/tickexvn/tickex/pkg/coretex"
+	"github.com/tickexvn/tickex/pkg/core"
 	"github.com/tickexvn/tickex/pkg/logger"
 	"github.com/tickexvn/tickex/x/greeter/v1/cmd/server"
 
@@ -26,6 +26,6 @@ import (
 )
 
 func main() {
-	app := coretex.Build(server.New)
+	app := core.Build(server.New)
 	logger.Fatal(app.Start())
 }

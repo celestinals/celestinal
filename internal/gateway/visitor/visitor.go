@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 The Tickex Authors.
+ * Copyright 2025 The Tickex Authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import (
 	"context"
 
 	"github.com/tickexvn/tickex/internal/gateway/types"
-	"github.com/tickexvn/tickex/pkg/coretex"
+	"github.com/tickexvn/tickex/pkg/core"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -32,17 +32,18 @@ func New() types.IVisitor {
 	return &Visitor{}
 }
 
+// implement types.IVisitor interfaces bellows
 var _ types.IVisitor = (*Visitor)(nil)
 
 // Visitor represents the visitor interface.
 type Visitor struct{}
 
 // VisitGreeterService visits the greeter service.
-func (v *Visitor) VisitGreeterService(ctx context.Context, mux coretex.IServeMux, service types.IService) error {
+func (v *Visitor) VisitGreeterService(ctx context.Context, mux core.IServeMux, service types.IService) error {
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 
 	greeterAddr := ":8000"
-	if err := coretex.RegisterService(ctx, mux, service, greeterAddr, opts); err != nil {
+	if err := core.RegisterService(ctx, mux, service, greeterAddr, opts); err != nil {
 		return err
 	}
 

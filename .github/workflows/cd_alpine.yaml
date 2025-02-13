@@ -26,5 +26,5 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          docker build ./deploy/tkx/alpine -t ghcr.io/tickexvn/tickex/tx.alpine:edge
-          docker push ghcr.io/tickexvn/tickex/tx.alpine:edge
+          docker build ./deploy/tkx/alpine -t ghcr.io/tickexvn/tickex/tkx.alpine:edge
+          docker push ghcr.io/tickexvn/tickex/tkx.alpine:edge

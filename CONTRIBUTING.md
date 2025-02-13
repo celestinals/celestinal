@@ -1,39 +1,46 @@
 # Contributors' Guide
+
 This guide will assist contributors to the `tickexvn/tickex` repository.
 
 ## Prerequisites
 
 ### Applications used in this project
+
 - Design: Lottiefiles & Figma
 - Backend Go & Protobuf: GoLand
 - Frontend: Visual Studio Code or any preferred IDE
 - Mobile: Android Studio or Visual Studio Code with Flutter framework
 
 ### Go Coding Style
+
 We follow the Uber Go Style Guide in this project. Please ensure you are familiar with the Go programming style as per the guide.
 
 > See more at: https://github.com/uber-go/guide
 
 Ensure that:
+
 - Go files comply with the standard Go formatting and style.
 - Protobuf files comply with the format and use tabs for indentation.
 - Files do not contain trailing whitespaces and must end with a single newline character.
 
 Use the following command to ensure your code meets expectations:
+
 ```
 make lint
 ```
 
 ### Conventional Commits
+
 All pull requests to the main branch must adhere to Conventional Commits. Otherwise, they will not be accepted.
 
 > See more at: https://www.conventionalcommits.org/en/v1.0.0/
 
 ### Applying License Header to New Files
+
 Ensure that you have added the license header to each file you create, including `.go`, `makefile`, `.sh`, `Dockerfile`, etc.
 
 ```
-Copyright 2024 The Tickex Authors.
+Copyright 2025 The Tickex Authors.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -49,6 +56,7 @@ limitations under the License.
 ```
 
 ### Sign Your Work
+
 The sign-off is a simple line at the end of the explanation for the patch. Your signature certifies that you wrote the patch or otherwise have the right to pass it on as an open-source patch. The rules are simple: if you can certify the below (from https://developercertificate.org/):
 
 ```
@@ -88,14 +96,19 @@ By making a contribution to this project, I certify that:
     maintained indefinitely and may be redistributed consistent with
     this project or the open source license(s) involved.
 ```
+
 Then you just add a line to every git commit message:
+
 ```
 Signed-off-by: Joe Smith <joe.smith@email.com>
 ```
+
 If you set your `user.name` and `user.email` git configs, you can sign your commit automatically with `git commit -s`.
 
 ## Naming Packages
+
 ### Where to Put Packages
+
 - `api`: Define proto files for all service mesh.
 - `cmd`: Main files, app endpoints.
 - `deploy`: Contains scripts and config for deployment.

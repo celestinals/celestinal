@@ -1,4 +1,4 @@
-# Copyright 2024 The Tickex Authors.
+# Copyright 2025 The Tickex Authors.
 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM ghcr.io/tickexvn/tickex/tx.go:1.23.3-alpine AS builder
+FROM ghcr.io/tickexvn/tickex/tkx.go:1.24-alpine AS builder
 
 # Move to working directory (/app).
 WORKDIR /src
@@ -35,7 +35,7 @@ RUN rm -r *
 RUN go clean -modcache
 
 # Stage run
-FROM ghcr.io/tickexvn/tickex/tx.alpine:edge AS runner
+FROM ghcr.io/tickexvn/tickex/tkx.alpine:edge AS runner
 WORKDIR /app
 
 COPY --from=builder /bin/tickex /bin/tickex

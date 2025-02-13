@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 The Tickex Authors.
+ * Copyright 2025 The Tickex Authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ package gateway
 import (
 	"context"
 
-	"github.com/tickexvn/tickex/pkg/coretex"
+	"github.com/tickexvn/tickex/pkg/core"
 
 	"github.com/tickexvn/tickex/internal/gateway/services/greeter"
 	"github.com/tickexvn/tickex/internal/gateway/types"
@@ -30,11 +30,11 @@ import (
 	"github.com/tickexvn/tickex/pkg/msgf"
 )
 
-var _ coretex.Server = (*Engine)(nil)
+var _ core.Server = (*Engine)(nil)
 
 // Engine represents the gateway app
 type Engine struct {
-	mux     coretex.IServeMux
+	mux     core.IServeMux
 	visitor types.IVisitor
 }
 
@@ -48,9 +48,33 @@ func (e *Engine) visit(ctx context.Context, services ...types.IService) error {
 	return nil
 }
 
+// Declare function in gateway/types at types.IVisitor interface
+//
+// Ex:
+//
+//	type IVisitor interface {
+//		VisitGreeterService(ctx context.Context, mux core.IServeMux, service IService) error
+//	}
+//
+// Implement function at visitor.Visitor:
+//
+// Ex:
+//
+//	func (v *Visitor) VisitGreeterService(ctx context.Context, mux core.IServeMux, service types.IService) error {
+//		opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
+//
+//		greeterAddr := ":8000"
+//		if err := core.RegisterService(ctx, mux, service, greeterAddr, opts); err != nil {
+//			return err
+//		}
+//
+//		return nil
+//	}
 func (e *Engine) register(ctx context.Context) error {
 	// TODO: Register gRPC server endpoint
 	// Note: Make sure the gRPC server is running properly and accessible
+	// Create folder at services, inherit base package, override function, implement business logic
+	// See: gateway/services/greeter
 	services := []types.IService{
 		// Example: register the greeter service to the gateway
 		&greeter.Greeter{},
@@ -76,9 +100,9 @@ func (e *Engine) ListenAndServe() error {
 }
 
 // New creates a new gateway app
-func New() coretex.Server {
+func New() core.Server {
 	return &Engine{
-		mux:     coretex.NewServeMux(),
+		mux:     core.NewServeMux(),
 		visitor: visitor.New(),
 	}
 }

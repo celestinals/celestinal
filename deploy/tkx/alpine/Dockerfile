@@ -1,4 +1,4 @@
-# Copyright 2024 The Tickex Authors.
+# Copyright 2025 The Tickex Authors.
 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,18 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM node:20-alpine
+# Use Alpine edge version as the base image
+FROM alpine:edge
 
-LABEL org.opencontainers.image.title="Tickex Node Runtime base on Node.js 20 Base Image" \
-      org.opencontainers.image.description="Node.js 20 LTS, a JavaScript runtime built on Chrome's V8 JavaScript engine." \
-      org.opencontainers.image.version="20" \
-      org.opencontainers.image.licenses="MIT" \
+# Add OCI metadata
+LABEL org.opencontainers.image.title="Tickex Edge base on Alpine Edge base Image" \
+      org.opencontainers.image.description="Edge version of Alpine Linux, lightweight and fast for containerized applications." \
+      org.opencontainers.image.version="edge" \
+      org.opencontainers.image.licenses="Apache-2.0" \
       org.opencontainers.image.url="https://tickex.io.vn" \
       org.opencontainers.image.source="https://github.com/tickexvn/tickex" \
-      org.opencontainers.image.authors="Tickex Team"
+      org.opencontainers.image.authors="Tickex Labs"
 
 RUN apk --no-cache add ca-certificates
 
-WORKDIR /usr/src/app
-
-CMD ["node", "--version"]
+# Default command
+CMD ["sh"]

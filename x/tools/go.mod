@@ -1,6 +1,6 @@
 module github.com/tickexvn/tickex/x/tools
 
-go 1.23.3
+go 1.24
 
 require (
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.25.1
