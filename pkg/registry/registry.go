@@ -20,14 +20,33 @@ package server
 import (
 	"context"
 
+	"github.com/hashicorp/consul/api"
+	"github.com/tickexvn/tickex/api/gen/go/types/v1"
+
 	"github.com/tickexvn/tickex/api/gen/go/utils/srx/v1"
 )
 
 var _ srx.ServiceRegistryServiceServer = (*ServiceRegistry)(nil)
 
+// New provide service registry of Tick microservice network
+func New(conf *types.Config) (*ServiceRegistry, error) {
+	_ = conf
+	config := api.DefaultConfig()
+
+	client, err := api.NewClient(config)
+	if err != nil {
+		return nil, err
+	}
+
+	return &ServiceRegistry{
+		client: client,
+	}, nil
+}
+
 // ServiceRegistry implements the ServiceRegistryService.
 type ServiceRegistry struct {
 	srx.UnimplementedServiceRegistryServiceServer
+	client *api.Client
 }
 
 // RegisterService implements the RegisterService method of the ServiceRegistryService.

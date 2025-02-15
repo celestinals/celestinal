@@ -10,7 +10,7 @@ replace (
 require (
 	github.com/jackc/pgx/v5 v5.7.2
 	github.com/tickexvn/tickex v0.0.0-20250212155624-1033f1936214
-	github.com/tickexvn/tickex/api v0.0.0-20250212155624-1033f1936214
+	github.com/tickexvn/tickex/api v0.0.0-20250213153515-118fae5ac4fa
 )
 
 require (
@@ -18,6 +18,7 @@ require (
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.26.1 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect
+	github.com/joho/godotenv v1.5.1 // indirect
 	go.uber.org/dig v1.18.0 // indirect
 	go.uber.org/fx v1.23.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect

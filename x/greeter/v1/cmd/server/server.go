@@ -19,6 +19,7 @@ package server
 
 import (
 	"fmt"
+	"github.com/tickexvn/tickex/api/gen/go/types/v1"
 	"net"
 
 	"github.com/tickexvn/tickex/api/gen/go/controllers/greeter/v1"
@@ -33,7 +34,8 @@ var _ core.Server = (*Greeter)(nil)
 // Greeter implements GreeterServiceServer.
 type Greeter struct {
 	*core.ServiceServer
-	srv greeter.GreeterServiceServer
+	config *types.Config
+	srv    greeter.GreeterServiceServer
 }
 
 // ListenAndServe implements IGreeter.
@@ -51,9 +53,10 @@ func (g *Greeter) ListenAndServe() error {
 }
 
 // New creates a new Greeter module.
-func New(srv controllers.IGreeter) core.Server {
+func New(srv controllers.IGreeter, conf *types.Config) core.Server {
 	return &Greeter{
 		ServiceServer: core.NewDefault(),
 		srv:           srv,
+		config:        conf,
 	}
 }

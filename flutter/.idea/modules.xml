@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/apps/tickex/melos_tickex.iml" filepath="$PROJECT_DIR$/apps/tickex/melos_tickex.iml" />
+      <module fileurl="file://$PROJECT_DIR$/packages/tickex_ui/melos_tickex_ui.iml" filepath="$PROJECT_DIR$/packages/tickex_ui/melos_tickex_ui.iml" />
+      <module fileurl="file://$PROJECT_DIR$/melos_tickex_workspace.iml" filepath="$PROJECT_DIR$/melos_tickex_workspace.iml" />
+    </modules>
+  </component>
+</project>

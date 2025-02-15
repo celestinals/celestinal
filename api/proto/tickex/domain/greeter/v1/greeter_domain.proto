@@ -18,7 +18,7 @@ package tickex.domain.greeter.v1;
 
 import "buf/validate/validate.proto";
 import "google/protobuf/wrappers.proto";
-import "tickex/domain/shared/v1/shared.proto";
+import "tickex/domain/shared/v1/shared_domain.proto";
 
 option go_package = "github.com/tickexvn/tickex/api/gen/go/domain/greeter/v1;greeter";
 

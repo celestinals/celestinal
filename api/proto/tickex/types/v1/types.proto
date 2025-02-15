@@ -60,7 +60,7 @@ message Context {
   google.protobuf.StringValue ip = 10 [(buf.validate.field).string.min_len = 1];
 }
 
-message Environment {
+message Config {
   string service_registry_address = 1;
   string gateway_address = 2;
 }

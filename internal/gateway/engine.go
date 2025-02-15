@@ -22,6 +22,7 @@ import (
 
 	"github.com/tickexvn/tickex/pkg/core"
 
+	typepb "github.com/tickexvn/tickex/api/gen/go/types/v1"
 	"github.com/tickexvn/tickex/internal/gateway/services/greeter"
 	"github.com/tickexvn/tickex/internal/gateway/types"
 	"github.com/tickexvn/tickex/internal/gateway/visitor"
@@ -34,6 +35,7 @@ var _ core.Server = (*Engine)(nil)
 
 // Engine represents the gateway app
 type Engine struct {
+	config  *typepb.Config
 	mux     core.IServeMux
 	visitor types.IVisitor
 }
@@ -100,9 +102,10 @@ func (e *Engine) ListenAndServe() error {
 }
 
 // New creates a new gateway app
-func New() core.Server {
+func New(conf *typepb.Config) core.Server {
 	return &Engine{
 		mux:     core.NewServeMux(),
 		visitor: visitor.New(),
+		config:  conf,
 	}
 }

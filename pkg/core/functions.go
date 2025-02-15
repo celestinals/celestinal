@@ -45,8 +45,10 @@ func _main(lc fx.Lifecycle, srv Server) {
 }
 
 // Build builds the application.
-func Build(constructor interface{}) Application {
-	txinternal.Provide(constructor)
+func Build(constructors ...interface{}) Application {
+	for _, constructor := range constructors {
+		txinternal.Provide(constructor)
+	}
 
 	return &container{
 		engine: fx.New(txinternal.Option(), fx.Invoke(_main)),

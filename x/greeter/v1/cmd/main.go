@@ -20,12 +20,19 @@ package main
 import (
 	"github.com/tickexvn/tickex/pkg/core"
 	"github.com/tickexvn/tickex/pkg/logger"
+	"github.com/tickexvn/tickex/pkg/settings"
 	"github.com/tickexvn/tickex/x/greeter/v1/cmd/server"
 
 	_ "github.com/tickexvn/tickex/x/greeter/v1/cmd/init"
 )
 
+// Build and run main application with environment variable
+// Remember to inject all layers of the application by core.Inject() function
+//
+// # Example:
+//
+// _ = core.Inject(controllers.New)
 func main() {
-	app := core.Build(server.New)
+	app := core.Build(server.New, settings.DefaultConfig)
 	logger.Fatal(app.Start())
 }

@@ -291,10 +291,9 @@ var _ interface {
 	ErrorName() string
 } = ContextValidationError{}
 
-// Validate checks the field values on Environment with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *Environment) Validate() error {
+// Validate checks the field values on Config with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *Config) Validate() error {
 	if m == nil {
 		return nil
 	}
@@ -306,9 +305,9 @@ func (m *Environment) Validate() error {
 	return nil
 }
 
-// EnvironmentValidationError is the validation error returned by
-// Environment.Validate if the designated constraints aren't met.
-type EnvironmentValidationError struct {
+// ConfigValidationError is the validation error returned by Config.Validate if
+// the designated constraints aren't met.
+type ConfigValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -316,22 +315,22 @@ type EnvironmentValidationError struct {
 }
 
 // Field function returns field value.
-func (e EnvironmentValidationError) Field() string { return e.field }
+func (e ConfigValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e EnvironmentValidationError) Reason() string { return e.reason }
+func (e ConfigValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e EnvironmentValidationError) Cause() error { return e.cause }
+func (e ConfigValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e EnvironmentValidationError) Key() bool { return e.key }
+func (e ConfigValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e EnvironmentValidationError) ErrorName() string { return "EnvironmentValidationError" }
+func (e ConfigValidationError) ErrorName() string { return "ConfigValidationError" }
 
 // Error satisfies the builtin error interface
-func (e EnvironmentValidationError) Error() string {
+func (e ConfigValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -343,14 +342,14 @@ func (e EnvironmentValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sEnvironment.%s: %s%s",
+		"invalid %sConfig.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = EnvironmentValidationError{}
+var _ error = ConfigValidationError{}
 
 var _ interface {
 	Field() string
@@ -358,4 +357,4 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = EnvironmentValidationError{}
+} = ConfigValidationError{}
