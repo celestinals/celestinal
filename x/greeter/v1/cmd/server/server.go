@@ -19,8 +19,9 @@ package server
 
 import (
 	"fmt"
-	"github.com/tickexvn/tickex/api/gen/go/types/v1"
 	"net"
+
+	"github.com/tickexvn/tickex/api/gen/go/types/v1"
 
 	"github.com/tickexvn/tickex/api/gen/go/controllers/greeter/v1"
 	"github.com/tickexvn/tickex/pkg/core"
