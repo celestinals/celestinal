@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-// Package tlog provides the logging utilities.
-package tlog
+// Package syslog provides the system logging utilities.
+package syslog
 
 import (
 	"fmt"

@@ -14,34 +14,32 @@
  * limitations under the License.
  */
 
-// Package version provides the version of the package.
-package version
+package settings
 
 import (
-	"fmt"
-	"runtime"
-	"strings"
+	"testing"
 
 	"github.com/tickexvn/tickex/api/gen/go/types/v1"
+	"github.com/tickexvn/tickex/pkg/pbtools"
 )
 
-var (
-	// Package is filled at linking time
-	Package = "github.com/tickexvn/tickex"
+func TestConfig(t *testing.T) {
+	conf := types.Config{
+		ServiceRegistryAddress: "0.0.0.0:8500",
+		GatewayAddress:         "0.0.0.0:9000",
+	}
 
-	// Version holds the complete version number. Filled in at linking time.
-	Version = "0.0.1"
+	if err := pbtools.Validate(&conf); err != nil {
+		t.Error(err)
+	}
+}
 
-	// GoVersion is Go tree's version.
-	GoVersion = strings.ToUpper(runtime.Version())
+func TestConfigEnv(t *testing.T) {
+	conf := DefaultConfig()
 
-	// FullName is the full name of the project.
-	FullName = "TICKEX"
+	if err := pbtools.Validate(conf); err != nil {
+		return
+	}
 
-	// Code is the code of the project.
-	Code = "TKX"
-)
-
-func Header(status types.Status) string {
-	return fmt.Sprintf("%s<%s<<%s<%s>>>>>>", status.String(), GoVersion, FullName, Version)
+	t.Error("should not validate env")
 }

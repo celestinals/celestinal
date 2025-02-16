@@ -14,26 +14,11 @@
  * limitations under the License.
  */
 
-// Package types provides the types for the gateway.
-package types
+// Package net provide functions extended of http/net
+package net
 
-import (
-	"context"
+import "net"
 
-	"github.com/tickexvn/tickex/pkg/core"
-)
-
-// IService represents the service interface.
-type IService interface {
-	core.GRPCService
-	Accept(context.Context, core.IServeMux, IVisitor) error
-}
-
-// IVisitor represents the visitor interface.
-// Add more visit service method bellows
-type IVisitor interface {
-	// TODO: declare visit service function
-
-	// VisitGreeterService visit greeter service
-	VisitGreeterService(ctx context.Context, mux core.IServeMux, service IService) error
+func ListenTCP(addr string) (net.Listener, error) {
+	return net.Listen("tcp", addr)
 }

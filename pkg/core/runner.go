@@ -18,28 +18,24 @@ package core
 
 import (
 	"context"
-
-	txinternal "github.com/tickexvn/tickex/pkg/core/internal"
+	
+	"github.com/tickexvn/tickex/pkg/logger"
 	"go.uber.org/fx"
-	"google.golang.org/grpc"
 )
 
-// Build builds the application.
-func Build(constructors ...interface{}) Application {
-	for _, constructor := range constructors {
-		txinternal.Provide(constructor)
-	}
-
-	return &container{
-		engine: fx.New(txinternal.Option(), fx.Invoke(runner)),
-	}
+func _start(srv Server) {
+	logger.Fatal(srv.ListenAndServe())
 }
 
-// RegisterService registers a service with the runtime.
-func RegisterService(ctx context.Context, mux IServeMux, service GRPCService, endpoint string, opts []grpc.DialOption) error {
-	if err := service.Register(ctx, mux.AsRuntimeMux(), endpoint, opts); err != nil {
-		return err
-	}
-
-	return nil
+// runner functions called by fx.Invoke
+func runner(lc fx.Lifecycle, srv Server) {
+	lc.Append(fx.Hook{
+		OnStart: func(_ context.Context) error {
+			go _start(srv)
+			return nil
+		},
+		OnStop: func(_ context.Context) error {
+			return nil
+		},
+	})
 }

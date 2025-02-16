@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-// Package pb provides utilities for working with protobuf messages.
-package pb
+// Package pbtools provides utilities for working with protobuf messages.
+package pbtools
 
 import (
 	"time"
 
+	"github.com/bufbuild/protovalidate-go"
 	"github.com/google/go-cmp/cmp"
-	"google.golang.org/protobuf/types/known/timestamppb"
-
 	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 // ToTime creates pb Timestamp from time.Time.
@@ -55,3 +55,12 @@ var Compare = cmp.FilterValues(
 		return proto.Equal(vx, vy)
 	}),
 )
+
+func Validate(msg proto.Message) error {
+	v, err := protovalidate.New()
+	if err != nil {
+		return err
+	}
+
+	return v.Validate(msg)
+}

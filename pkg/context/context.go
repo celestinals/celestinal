@@ -23,7 +23,7 @@ import (
 
 	"github.com/tickexvn/tickex/api/gen/go/types/v1"
 
-	"github.com/tickexvn/tickex/pkg/protobuf/proto"
+	"github.com/tickexvn/tickex/pkg/pbtools/proto"
 )
 
 // Key is the key type for the context.
