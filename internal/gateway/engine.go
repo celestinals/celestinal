@@ -30,6 +30,7 @@ import (
 	"github.com/tickexvn/tickex/pkg/logger"
 	"github.com/tickexvn/tickex/pkg/msgf"
 	"github.com/tickexvn/tickex/pkg/pbtools"
+	"github.com/tickexvn/tickex/pkg/utils"
 )
 
 var _ core.Server = (*Engine)(nil)
@@ -103,7 +104,10 @@ func (e *Engine) ListenAndServe() error {
 	}
 
 	// Listen HTTP server (and mux calls to gRPC server endpoint)
-	logger.Infof(msgf.InfoHTTPServer, e.config.GetGatewayAddress())
+	log := logger.New()
+	log.Sugar().Infof(msgf.InfoHTTPServer, e.config.GetGatewayAddress())
+	defer utils.CallBack(log.Sync)
+
 	return e.mux.Listen(e.config.GetGatewayAddress())
 }
 

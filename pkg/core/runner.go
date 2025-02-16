@@ -18,7 +18,7 @@ package core
 
 import (
 	"context"
-	
+
 	"github.com/tickexvn/tickex/pkg/logger"
 	"go.uber.org/fx"
 )

@@ -19,19 +19,22 @@ package core
 import (
 	"context"
 
-	txinternal "github.com/tickexvn/tickex/pkg/core/internal"
+	coreinternal "github.com/tickexvn/tickex/pkg/core/internal"
 	"go.uber.org/fx"
 	"google.golang.org/grpc"
 )
 
 // Build builds the application.
 func Build(constructors ...interface{}) Application {
+	// coreinternal.ServerInfo()
+
 	for _, constructor := range constructors {
-		txinternal.Provide(constructor)
+		coreinternal.Provide(constructor)
 	}
 
+	// disable log fx.NopLogger
 	return &container{
-		engine: fx.New(txinternal.Option(), fx.Invoke(runner)),
+		engine: fx.New(coreinternal.Option(), fx.Invoke(runner)),
 	}
 }
 

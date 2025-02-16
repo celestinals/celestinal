@@ -14,20 +14,12 @@
  * limitations under the License.
  */
 
-// Package settings provides the settings for the service.
-package settings
+// Package logger provides the logger for the service.
+package logger
 
-import (
-	"os"
+import "testing"
 
-	_ "github.com/joho/godotenv/autoload" // load .env file automatically
-	"github.com/tickexvn/tickex/api/gen/go/types/v1"
-)
-
-// DefaultConfig returns the environment.
-func DefaultConfig() *types.Config {
-	return &types.Config{
-		ServiceRegistryAddress: os.Getenv(types.TickexPublic_TICKEX_PUBLIC_SERVICE_REGISTRY_ADDRESS.String()),
-		GatewayAddress:         os.Getenv(types.TickexPublic_TICKEX_PUBLIC_GATEWAY_ADDRESS.String()),
-	}
+func TestInfo(_ *testing.T) {
+	// TestInfo is a test for Info.
+	Info("test", "test2s")
 }

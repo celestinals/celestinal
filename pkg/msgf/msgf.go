@@ -24,8 +24,8 @@ import (
 
 var (
 	// InfoGrpcServer gRPC server listening on [PORT]
-	InfoGrpcServer = version.Header(types.Status_I) + " [gRPC] Listening on %s"
+	InfoGrpcServer = version.Header(types.Status_STATUS_I) + " [gRPC] Listening on %s"
 
 	// InfoHTTPServer HTTP server listening on [PORT]
-	InfoHTTPServer = version.Header(types.Status_I) + " [HTTP] Listening on %s"
+	InfoHTTPServer = version.Header(types.Status_STATUS_I) + " [HTTP] Listening on %s"
 )

@@ -19,16 +19,16 @@ package errors
 import (
 	"errors"
 	"testing"
-	
+
 	"github.com/tickexvn/tickex/api/gen/go/types/v1"
 	"github.com/tickexvn/tickex/internal/version"
 )
 
 func TestNew(t *testing.T) {
-	err := New(types.Errors_NOT_FOUND, "Resource not found", nil)
+	err := New(types.Errors_ERRORS_NOT_FOUND, "Resource not found", nil)
 
-	if err.Code != types.Errors_NOT_FOUND {
-		t.Errorf("expected code %s, got %s", types.Errors_NOT_FOUND.String(), err.Code)
+	if err.Code != types.Errors_ERRORS_NOT_FOUND {
+		t.Errorf("expected code %s, got %s", types.Errors_ERRORS_NOT_FOUND.String(), err.Code)
 	}
 
 	if err.Message != "Resource not found" {
@@ -41,8 +41,8 @@ func TestNew(t *testing.T) {
 }
 
 func TestErrorFormat(t *testing.T) {
-	err := New(types.Errors_INVALID_DATA, "Invalid input", nil)
-	expected := version.Header(types.Status_E) + " [INVALID_DATA] Invalid input"
+	err := New(types.Errors_ERRORS_INVALID_DATA, "Invalid input", nil)
+	expected := version.Header(types.Status_STATUS_E) + " [INVALID_DATA] Invalid input"
 
 	if err.Error() != expected {
 		t.Errorf("expected error string '%s', got '%s'", expected, err.Error())
@@ -50,8 +50,8 @@ func TestErrorFormat(t *testing.T) {
 
 	t.Log(err.Error())
 
-	wrappedErr := New(types.Errors_INVALID_DATA, "Invalid input", errors.New("missing field"))
-	expectedWrapped := version.Header(types.Status_E) + " [INVALID_DATA] Invalid input: missing field"
+	wrappedErr := New(types.Errors_ERRORS_INVALID_DATA, "Invalid input", errors.New("missing field"))
+	expectedWrapped := version.Header(types.Status_STATUS_E) + " [INVALID_DATA] Invalid input: missing field"
 
 	if wrappedErr.Error() != expectedWrapped {
 		t.Errorf("expected wrapped error string '%s', got '%s'", expectedWrapped, wrappedErr.Error())
@@ -59,20 +59,20 @@ func TestErrorFormat(t *testing.T) {
 }
 
 func TestIs(t *testing.T) {
-	err := New(types.Errors_UNAUTHORIZED, "Unauthorized access", nil)
+	err := New(types.Errors_ERRORS_UNAUTHORIZED, "Unauthorized access", nil)
 
-	if !Is(err, types.Errors_UNAUTHORIZED) {
+	if !Is(err, types.Errors_ERRORS_UNAUTHORIZED) {
 		t.Errorf("expected Is(err, types.Errors_UNAUTHORIZED) to be true, got false")
 	}
 
-	if Is(err, types.Errors_NOT_FOUND) {
+	if Is(err, types.Errors_ERRORS_NOT_FOUND) {
 		t.Errorf("expected Is(err, types.Errors_NOT_FOUND) to be false, got true")
 	}
 }
 
 func TestUnwrap(t *testing.T) {
 	rootErr := errors.New("root cause")
-	err := New(types.Errors_INTERNAL_ERROR, "Something went wrong", rootErr)
+	err := New(types.Errors_ERRORS_INTERNAL_ERROR, "Something went wrong", rootErr)
 
 	unwrappedErr := errors.Unwrap(err)
 	if !errors.Is(unwrappedErr, rootErr) {
@@ -82,13 +82,13 @@ func TestUnwrap(t *testing.T) {
 
 func TestErrorsAs(t *testing.T) {
 	var appErr *Error
-	err := New(types.Errors_FORBIDDEN, "Access denied", nil)
+	err := New(types.Errors_ERRORS_FORBIDDEN, "Access denied", nil)
 
 	if !errors.As(err, &appErr) {
 		t.Errorf("expected errors.As to return true, got false")
 	}
 
-	if appErr.Code != types.Errors_FORBIDDEN {
-		t.Errorf("expected extracted error code %s, got %s", types.Errors_FORBIDDEN.String(), appErr.Code)
+	if appErr.Code != types.Errors_ERRORS_FORBIDDEN {
+		t.Errorf("expected extracted error code %s, got %s", types.Errors_ERRORS_FORBIDDEN.String(), appErr.Code)
 	}
 }

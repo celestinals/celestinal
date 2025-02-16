@@ -19,6 +19,7 @@ package net
 
 import "net"
 
+// ListenTCP listens on the TCP network address addr and returns a net.Listener.
 func ListenTCP(addr string) (net.Listener, error) {
 	return net.Listen("tcp", addr)
 }

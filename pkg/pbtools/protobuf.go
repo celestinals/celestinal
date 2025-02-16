@@ -56,6 +56,7 @@ var Compare = cmp.FilterValues(
 	}),
 )
 
+// Validate validates a proto message.
 func Validate(msg proto.Message) error {
 	v, err := protovalidate.New()
 	if err != nil {

@@ -19,7 +19,7 @@ package core
 import (
 	"context"
 
-	txinternal "github.com/tickexvn/tickex/pkg/core/internal"
+	coreinternal "github.com/tickexvn/tickex/pkg/core/internal"
 
 	"go.uber.org/fx"
 )
@@ -32,7 +32,7 @@ func UseBefore(fn func(ctx context.Context) error) {
 		})
 	}
 
-	txinternal.Invoke(function)
+	coreinternal.Invoke(function)
 }
 
 // UseAfter adds a hook to be executed after the application has stopped.
@@ -43,5 +43,5 @@ func UseAfter(fn func(ctx context.Context) error) {
 		})
 	}
 
-	txinternal.Invoke(function)
+	coreinternal.Invoke(function)
 }

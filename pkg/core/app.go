@@ -20,7 +20,7 @@ package core
 import (
 	"context"
 
-	txinternal "github.com/tickexvn/tickex/pkg/core/internal"
+	coreinternal "github.com/tickexvn/tickex/pkg/core/internal"
 	"go.uber.org/fx"
 )
 
@@ -51,13 +51,13 @@ func InjectLifeCycle[T any](constructor func() T, onStart func(T) error, onStop 
 		return ins
 	}
 
-	txinternal.Provide(decorateConstructor)
+	coreinternal.Provide(decorateConstructor)
 
 	return constructor
 }
 
 // Inject injects the given constructor into the application.
 func Inject[fn any](constructor fn) fn {
-	txinternal.Provide(constructor)
+	coreinternal.Provide(constructor)
 	return constructor
 }

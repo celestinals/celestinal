@@ -18,23 +18,29 @@ option go_package = "github.com/tickexvn/tickex/api/gen/go/types/v1;types";
 package tickex.types.v1;
 
 enum Status {
-  STATUS_NONE = 0;
-  T = 1; // TRACE
-  D = 2; // DEBUG
-  I = 3; // INFO
-  N = 4; // NOTICE
-  W = 5; // WARN
-  E = 6; // ERROR
-  C = 7; // CRITICAL
-  A = 8; // ALERT
-  F = 9; // FATAL
+  STATUS_UNSPECIFIED = 0;
+  STATUS_T = 1; // TRACE
+  STATUS_D = 2; // DEBUG
+  STATUS_I = 3; // INFO
+  STATUS_N = 4; // NOTICE
+  STATUS_W = 5; // WARN
+  STATUS_E = 6; // ERROR
+  STATUS_C = 7; // CRITICAL
+  STATUS_A = 8; // ALERT
+  STATUS_F = 9; // FATAL
 }
 
 enum Errors {
-  ERROR_NONE = 0;
-  INTERNAL_ERROR = 1;
-  NOT_FOUND = 2;
-  UNAUTHORIZED = 3;
-  FORBIDDEN = 4;
-  INVALID_DATA = 5;
+  ERRORS_UNSPECIFIED = 0;
+  ERRORS_INTERNAL_ERROR = 1;
+  ERRORS_NOT_FOUND = 2;
+  ERRORS_UNAUTHORIZED = 3;
+  ERRORS_FORBIDDEN = 4;
+  ERRORS_INVALID_DATA = 5;
+}
+
+enum TickexPublic {
+  TICKEX_PUBLIC_UNSPECIFIED = 0;
+  TICKEX_PUBLIC_SERVICE_REGISTRY_ADDRESS = 1;
+  TICKEX_PUBLIC_GATEWAY_ADDRESS = 2;
 }
