@@ -42,7 +42,7 @@ func TestNew(t *testing.T) {
 
 func TestErrorFormat(t *testing.T) {
 	err := New(types.Errors_ERRORS_INVALID_DATA, "Invalid input", nil)
-	expected := version.Header(types.Status_STATUS_E) + " [INVALID_DATA] Invalid input"
+	expected := version.Header(types.Status_STATUS_E) + " [ERRORS_INVALID_DATA] Invalid input"
 
 	if err.Error() != expected {
 		t.Errorf("expected error string '%s', got '%s'", expected, err.Error())
@@ -51,7 +51,7 @@ func TestErrorFormat(t *testing.T) {
 	t.Log(err.Error())
 
 	wrappedErr := New(types.Errors_ERRORS_INVALID_DATA, "Invalid input", errors.New("missing field"))
-	expectedWrapped := version.Header(types.Status_STATUS_E) + " [INVALID_DATA] Invalid input: missing field"
+	expectedWrapped := version.Header(types.Status_STATUS_E) + " [ERRORS_INVALID_DATA] Invalid input: missing field"
 
 	if wrappedErr.Error() != expectedWrapped {
 		t.Errorf("expected wrapped error string '%s', got '%s'", expectedWrapped, wrappedErr.Error())

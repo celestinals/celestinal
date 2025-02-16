@@ -14,8 +14,9 @@
 
 syntax = "proto3";
 
-option go_package = "github.com/tickexvn/tickex/api/gen/go/types/v1;types";
 package tickex.types.v1;
+
+option go_package = "github.com/tickexvn/tickex/api/gen/go/types/v1;types";
 
 enum Status {
   STATUS_UNSPECIFIED = 0;
