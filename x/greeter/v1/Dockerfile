@@ -19,6 +19,8 @@ FROM golang:1.24-alpine AS builder
 WORKDIR /src
 
 COPY . ./
+
+RUN apk add --no-cache git
 RUN go mod download
 
 WORKDIR /src/x/greeter/v1
@@ -43,4 +45,4 @@ COPY --from=builder /bin/main /bin/main
 # Set the timezone and install CA certificates
 RUN apk --no-cache add ca-certificates tzdata
 
-CMD [ "./main" ]
+CMD [ "main" ]

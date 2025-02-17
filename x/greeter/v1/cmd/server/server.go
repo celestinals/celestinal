@@ -19,6 +19,8 @@ package server
 
 import (
 	"fmt"
+	"github.com/tickexvn/tickex/pkg/logger"
+	"github.com/tickexvn/tickex/pkg/msgf"
 
 	"github.com/tickexvn/tickex/api/gen/go/controllers/greeter/v1"
 	"github.com/tickexvn/tickex/api/gen/go/types/v1"
@@ -26,10 +28,7 @@ import (
 	"github.com/tickexvn/tickex/pkg/core/net"
 	"github.com/tickexvn/tickex/pkg/core/syslog"
 	"github.com/tickexvn/tickex/pkg/errors"
-	"github.com/tickexvn/tickex/pkg/logger"
-	"github.com/tickexvn/tickex/pkg/msgf"
 	"github.com/tickexvn/tickex/pkg/pbtools"
-	"github.com/tickexvn/tickex/pkg/utils"
 	"github.com/tickexvn/tickex/x/greeter/v1/internal/controllers"
 )
 
@@ -56,13 +55,10 @@ func (g *Greeter) ListenAndServe() error {
 		return err
 	}
 
-	log := logger.New()
-	log.Sugar().Infof(msgf.InfoGrpcServer, listener.Addr().String())
-	defer utils.CallBack(log.Sync)
-
 	// Listen gRPC srv here
 	greeter.RegisterGreeterServiceServer(g.AsServer(), g.srv)
 
+	logger.Infof(msgf.InfoGrpcServer, listener.Addr().String())
 	return g.AsServer().Serve(listener)
 }
 

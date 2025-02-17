@@ -24,6 +24,7 @@ WORKDIR /src
 COPY go.mod go.sum ./
 COPY ./api ./
 
+RUN apk add --no-cache git
 RUN go mod download
 
 COPY . .
@@ -46,4 +47,4 @@ COPY --from=builder /bin/tickex /bin/tickex
 # Set the timezone and install CA certificates
 RUN apk --no-cache add ca-certificates tzdata
 
-CMD [ "./tickex" ]
+CMD [ "tickex" ]

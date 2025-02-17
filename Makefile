@@ -36,8 +36,10 @@ run.x.greeter:
 	@./build/$(TKX_OUT)
 
 # Docker build commands
+build.d.tickex: TAG ?= tickexvn/tickex
 build.d.tickex:
-	docker buildx build -f ./cmd/tickex/Dockerfile -t tkx.tickex:latest .
+	docker buildx build -f ./cmd/tickex/Dockerfile -t $(TAG):latest .
 
+build.d.x.greeter: TAG ?= tickexvn/tickex.x.greeter
 build.d.x.greeter:
-	docker buildx build -f ./x/greeter/v1/Dockerfile -t tkx.x.greeter.v1:latest .
+	docker buildx build -f ./x/greeter/v1/Dockerfile -t $(TAG):latest .
