@@ -22,9 +22,8 @@ import (
 	"github.com/tickexvn/tickex/pkg/logger"
 	"github.com/tickexvn/tickex/pkg/settings"
 	"github.com/tickexvn/tickex/pkg/utils"
-	"github.com/tickexvn/tickex/x/greeter/v1/cmd/server"
-
 	_ "github.com/tickexvn/tickex/x/greeter/v1/cmd/init"
+	"github.com/tickexvn/tickex/x/greeter/v1/cmd/server"
 )
 
 // Build and run main application with environment variable
@@ -35,7 +34,7 @@ import (
 // _ = core.Inject(controllers.New)
 func main() {
 	app := core.Build(server.New, settings.DefaultConfig)
-	
+
 	log := logger.New()
 	log.Sugar().Fatal(app.Start())
 	defer utils.CallBack(log.Sync)
