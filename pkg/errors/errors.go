@@ -43,13 +43,13 @@ func (e *Error) Unwrap() error {
 }
 
 // Combine combines the error and its cause
-func (e *Error) Combine() error {
-	if e.Cause == nil {
-		return nil
-	}
-
-	return errors.New(e.format())
-}
+//func (e *Error) Combine() error {
+//	if e.Cause == nil {
+//		return nil
+//	}
+//
+//	return errors.New(e.format())
+//}
 
 func (e *Error) format() string {
 	if e.Cause != nil {

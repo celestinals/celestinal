@@ -19,20 +19,14 @@ package core
 import (
 	"context"
 
-	"github.com/tickexvn/tickex/pkg/logger"
 	"go.uber.org/fx"
 )
-
-func _start(srv Server) {
-	logger.Fatal(srv.ListenAndServe())
-}
 
 // runner functions called by fx.Invoke
 func runner(lc fx.Lifecycle, srv Server) {
 	lc.Append(fx.Hook{
 		OnStart: func(_ context.Context) error {
-			go _start(srv)
-			return nil
+			return srv.ListenAndServe()
 		},
 		OnStop: func(_ context.Context) error {
 			return nil

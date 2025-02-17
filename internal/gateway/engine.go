@@ -94,7 +94,7 @@ func (e *Engine) ListenAndServe() error {
 		errs := errors.New(typepb.Errors_ERRORS_INVALID_DATA, "validation failed", err)
 		syslog.Error(errs.Error())
 
-		return errs.Combine()
+		return err
 	}
 
 	ctx := context.Background()

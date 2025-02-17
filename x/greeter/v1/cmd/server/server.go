@@ -49,7 +49,7 @@ func (g *Greeter) ListenAndServe() error {
 		errs := errors.New(types.Errors_ERRORS_INVALID_DATA, "validation failed", err)
 		syslog.Error(errs.Error())
 
-		return errs.Combine()
+		return errs.Unwrap()
 	}
 
 	listener, err := net.ListenTCP(fmt.Sprintf(":%d", 8000))

@@ -30,7 +30,7 @@ func Build(constructors ...interface{}) Application {
 		coreinternal.Provide(constructor)
 	}
 
-	// disable log fx.NopLogger
+	// disable log: use fx.NopLogger
 	return &container{
 		engine: fx.New(coreinternal.Option(), fx.Invoke(runner)),
 	}

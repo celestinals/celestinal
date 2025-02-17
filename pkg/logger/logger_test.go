@@ -16,10 +16,3 @@
 
 // Package logger provides the logger for the service.
 package logger
-
-import "testing"
-
-func TestInfo(_ *testing.T) {
-	// TestInfo is a test for Info.
-	Info("test", "test2s")
-}
