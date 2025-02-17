@@ -1,4 +1,4 @@
-import { Button } from "@tickex/ui/components/button";
+import { Button } from "@tickex/ui/components/button"
 
 export default function Page() {
   return (
@@ -6,9 +6,9 @@ export default function Page() {
       <div className="flex flex-col items-center justify-center gap-4">
         <h1 className="text-2xl font-bold">Hello World</h1>
         <Button className="text-white" size="sm" variant="default">
-          Button
+          Button {"haha"}
         </Button>
       </div>
     </div>
-  );
+  )
 }
