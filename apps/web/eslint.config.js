@@ -1,4 +1,4 @@
-import { nextJsConfig } from "@tickex/eslint-config/next-js"
+import { nextJsConfig } from "@tickex/eslint-config/next";
 
 /** @type {import("eslint").Linter.Config} */
-export default nextJsConfig
+export default nextJsConfig;
