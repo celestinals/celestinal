@@ -19,6 +19,8 @@ package server
 
 import (
 	"fmt"
+	"github.com/tickexvn/tickex/pkg/core/syslog"
+	"github.com/tickexvn/tickex/pkg/errors"
 
 	"github.com/tickexvn/tickex/pkg/pbtools"
 	"github.com/tickexvn/tickex/pkg/utils"
@@ -44,7 +46,10 @@ type Greeter struct {
 // ListenAndServe implements IGreeter.
 func (g *Greeter) ListenAndServe() error {
 	if err := pbtools.Validate(g.config); err != nil {
-		return err
+		errs := errors.New(types.Errors_ERRORS_INVALID_DATA, "validation failed", err)
+		syslog.Error(errs.Error())
+
+		return errs.Combine()
 	}
 
 	listener, err := net.ListenTCP(fmt.Sprintf(":%d", 8000))

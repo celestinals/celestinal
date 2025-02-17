@@ -26,8 +26,6 @@ import (
 
 // Build builds the application.
 func Build(constructors ...interface{}) Application {
-	// coreinternal.ServerInfo()
-
 	for _, constructor := range constructors {
 		coreinternal.Provide(constructor)
 	}

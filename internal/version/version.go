@@ -44,7 +44,7 @@ var (
 
 // Header returns the header info string.
 func Header(status types.Status) string {
-	return fmt.Sprintf("%s<%s<<%s<<%s>>>>>", getStatusSuffix(status), FullName, Version, GoVersion)
+	return fmt.Sprintf("%s>%s>>%s>>%s>>>>>", getStatusSuffix(status), FullName, Version, GoVersion)
 }
 
 // getStatusSuffix returns the suffix of the status.
