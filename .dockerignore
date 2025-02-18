@@ -1,7 +1,11 @@
 .github/
 .idea/
 
+build/
 docs/
-flutter/
 third_party/
 x/tools/
+
+node_modules
+
+.env
