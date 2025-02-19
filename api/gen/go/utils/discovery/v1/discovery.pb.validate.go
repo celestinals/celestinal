@@ -41,13 +41,15 @@ func (m *RegisterRequest) Validate() error {
 		return nil
 	}
 
-	// no validation rules for Id
-
-	// no validation rules for Name
-
-	// no validation rules for Address
-
-	// no validation rules for Port
+	if v, ok := interface{}(m.GetService()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return RegisterRequestValidationError{
+				field:  "Service",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	// no validation rules for StatusPath
 
@@ -115,6 +117,8 @@ func (m *HeartbeatRequest) Validate() error {
 	if m == nil {
 		return nil
 	}
+
+	// no validation rules for Id
 
 	// no validation rules for Name
 

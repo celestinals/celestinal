@@ -38,7 +38,6 @@ func New(ctxBase context.Context, msg *types.Context, deadline time.Time) (conte
 	}
 
 	msgBin, _ := proto.Marshal(msg)
-
 	ctx := context.WithValue(ctxBase, contextKey, msgBin)
 
 	return context.WithDeadline(ctx, deadline)

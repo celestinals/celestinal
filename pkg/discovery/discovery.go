@@ -31,8 +31,12 @@ var _ discovery.DiscoveryServiceServer = (*Discovery)(nil)
 
 // New provide service registry of Tick microservice network
 func New(conf *types.Config) (*Discovery, error) {
-	_ = conf
+	if err := pbtools.Validate(conf); err != nil {
+		return nil, err
+	}
+
 	config := api.DefaultConfig()
+	config.Address = conf.GetServiceRegistryAddress()
 
 	client, err := api.NewClient(config)
 	if err != nil {
@@ -56,14 +60,14 @@ func (d *Discovery) Register(_ context.Context, req *discovery.RegisterRequest) 
 		return nil, err
 	}
 
-	healthcheck := fmt.Sprintf("%s:%d%s", req.GetAddress(), req.GetPort(), req.GetStatusPath())
-
+	serviceInfo := req.GetService()
+	healthcheck := fmt.Sprintf("%s:%d%s", serviceInfo.GetAddress(), serviceInfo.GetPort(), req.GetStatusPath())
 	registration := &api.AgentServiceRegistration{
-		ID:      req.GetId(),
-		Name:    req.GetName(),
-		Address: req.GetAddress(),
-		Port:    int(req.GetPort()),
-		Tags:    req.GetTags(),
+		ID:      serviceInfo.GetId(),
+		Name:    serviceInfo.GetName(),
+		Address: serviceInfo.GetAddress(),
+		Port:    int(serviceInfo.GetPort()),
+		Tags:    serviceInfo.GetTags(),
 		Check: &api.AgentServiceCheck{
 			HTTP:     "http://" + healthcheck,
 			Interval: "10s",
@@ -75,13 +79,45 @@ func (d *Discovery) Register(_ context.Context, req *discovery.RegisterRequest) 
 }
 
 // Discover implements the Discover method of the ServiceRegistryService.
-func (d *Discovery) Discover(_ context.Context, _ *discovery.DiscoverRequest) (*discovery.DiscoverResponse, error) {
-	//TODO implement me
-	panic("implement me")
+func (d *Discovery) Discover(ctx context.Context, req *discovery.DiscoverRequest) (*discovery.DiscoverResponse, error) {
+	_ = ctx
+	if err := pbtools.Validate(req); err != nil {
+		return nil, err
+	}
+
+	services, _, err := d.client.Health().Service(req.GetName(), "", true, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(services) == 0 {
+		return nil, fmt.Errorf("service %s not found", req.GetName())
+	}
+
+	var resp discovery.DiscoverResponse
+	for _, service := range services {
+		resp.Services = append(resp.Services, &types.Service{
+			Id:      service.Service.ID,
+			Name:    service.Service.Service,
+			Address: service.Service.Address,
+			Port:    uint32(service.Service.Port),
+			Tags:    service.Service.Tags,
+		})
+	}
+
+	return &resp, nil
 }
 
 // Heartbeat implements the Heartbeat method of the ServiceRegistryService.
-func (d *Discovery) Heartbeat(_ context.Context, _ *discovery.HeartbeatRequest) (*discovery.HeartbeatResponse, error) {
-	//TODO implement me
-	panic("implement me")
+func (d *Discovery) Heartbeat(ctx context.Context, req *discovery.HeartbeatRequest) (*discovery.HeartbeatResponse, error) {
+	_ = ctx
+	if err := pbtools.Validate(req); err != nil {
+		return nil, err
+	}
+
+	err := d.client.Agent().UpdateTTL("service:"+req.GetId(), "Service is healthy", api.HealthPassing)
+
+	return &discovery.HeartbeatResponse{
+		Success: err == nil,
+	}, err
 }

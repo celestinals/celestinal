@@ -16,7 +16,8 @@ syntax = "proto3";
 
 package tickex.utils.discovery.v1;
 
-import "buf/validate/validate.proto";;
+import "buf/validate/validate.proto";
+import "tickex/types/v1/types.proto";
 
 option go_package = "github.com/tickexvn/tickex/api/gen/go/utils/discovery/v1;discovery";
 
@@ -34,18 +35,15 @@ service DiscoveryService {
 
 // Detailed service information
 message RegisterRequest {
-  string id = 1 [(buf.validate.field).string.min_len = 2];
-  string name = 2 [(buf.validate.field).string.min_len = 2];
-  string address = 3 [(buf.validate.field).string.min_len = 2];
-  uint32 port = 4 ;
-  repeated string tags = 5;
+  tickex.types.v1.Service service = 1;
   string status_path = 6 [(buf.validate.field).string.min_len = 2];
 }
 
 message HeartbeatRequest {
-  string name = 1;       // Service name
-  string address = 2;    // IP address or hostname
-  int32 port = 3;        // Service port
+  string id = 1 [(buf.validate.field).string.min_len = 2];
+  string name = 2;       // Service name
+  string address = 3;    // IP address or hostname
+  int32 port = 4;        // Service port
 }
 
 // Request to find a service
@@ -55,7 +53,7 @@ message DiscoverRequest {
 
 // Response from the discovery process
 message DiscoverResponse {
-  repeated RegisterRequest services = 1;  // List of service instances
+  repeated tickex.types.v1.Service services = 1;  // List of service instances
 }
 
 // Service registration response
