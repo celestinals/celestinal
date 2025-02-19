@@ -25,7 +25,7 @@ import (
 
 // IService represents the service interface.
 type IService interface {
-	core.GRPCServicer
+	core.GRPCService
 	Accept(context.Context, core.IServeMux, IVisitor) error
 }
 

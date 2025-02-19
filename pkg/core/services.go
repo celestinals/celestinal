@@ -23,8 +23,8 @@ import (
 	"google.golang.org/grpc"
 )
 
-// GRPCServicer is an interface for registering a gRPC service.
-type GRPCServicer interface {
+// GRPCService is an interface for registering a gRPC service.
+type GRPCService interface {
 	Register(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) error
 }
 

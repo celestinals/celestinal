@@ -19,12 +19,16 @@ package server
 
 import (
 	"fmt"
-	"net"
 
 	"github.com/tickexvn/tickex/api/gen/go/controllers/greeter/v1"
+	"github.com/tickexvn/tickex/api/gen/go/types/v1"
 	"github.com/tickexvn/tickex/pkg/core"
+	"github.com/tickexvn/tickex/pkg/core/net"
+	"github.com/tickexvn/tickex/pkg/core/syslog"
+	"github.com/tickexvn/tickex/pkg/errors"
 	"github.com/tickexvn/tickex/pkg/logger"
 	"github.com/tickexvn/tickex/pkg/msgf"
+	"github.com/tickexvn/tickex/pkg/pbtools"
 	"github.com/tickexvn/tickex/x/greeter/v1/internal/controllers"
 )
 
@@ -33,27 +37,36 @@ var _ core.Server = (*Greeter)(nil)
 // Greeter implements GreeterServiceServer.
 type Greeter struct {
 	*core.ServiceServer
-	srv greeter.GreeterServiceServer
+	config *types.Config
+	srv    greeter.GreeterServiceServer
 }
 
 // ListenAndServe implements IGreeter.
 func (g *Greeter) ListenAndServe() error {
-	listener, err := net.Listen("tcp", fmt.Sprintf(":%d", 8000))
+	if err := pbtools.Validate(g.config); err != nil {
+		errs := errors.New(types.Errors_ERRORS_INVALID_DATA, "validation failed", err)
+		syslog.Error(errs.Error())
+
+		return errs.Unwrap()
+	}
+
+	listener, err := net.ListenTCP(fmt.Sprintf(":%d", 8000))
 	if err != nil {
 		return err
 	}
 
 	// Listen gRPC srv here
 	greeter.RegisterGreeterServiceServer(g.AsServer(), g.srv)
-	logger.Infof(msgf.InfoGrpcServer, listener.Addr().String())
 
+	logger.Infof(msgf.InfoGrpcServer, listener.Addr().String())
 	return g.AsServer().Serve(listener)
 }
 
 // New creates a new Greeter module.
-func New(srv controllers.IGreeter) core.Server {
+func New(srv controllers.IGreeter, conf *types.Config) core.Server {
 	return &Greeter{
 		ServiceServer: core.NewDefault(),
 		srv:           srv,
+		config:        conf,
 	}
 }

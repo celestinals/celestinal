@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-// Package txinternal provides the internal function for the core.
-package txinternal
+// Package coreinternal provides the internal function for the core.
+package coreinternal
 
-import "go.uber.org/fx"
+import (
+	"go.uber.org/fx"
+)
 
 var options = fx.Provide()
 

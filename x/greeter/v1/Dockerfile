@@ -12,12 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM ghcr.io/tickexvn/tickex/tkx.go:1.24-alpine AS builder
+#FROM ghcr.io/tickexvn/tickex/tkx.go:1.24-alpine AS builder
+FROM golang:1.24-alpine AS builder
 
 # Move to working directory (/app).
 WORKDIR /src
 
 COPY . ./
+
+RUN apk add --no-cache git
 RUN go mod download
 
 WORKDIR /src/x/greeter/v1
@@ -33,7 +36,8 @@ RUN rm -r *
 RUN go clean -modcache
 
 # Stage run
-FROM ghcr.io/tickexvn/tickex/tkx.alpine:edge AS runner
+#FROM ghcr.io/tickexvn/tickex/tkx.alpine:edge AS runner
+FROM alpine:edge AS runner
 WORKDIR /app
 
 COPY --from=builder /bin/main /bin/main
@@ -41,4 +45,4 @@ COPY --from=builder /bin/main /bin/main
 # Set the timezone and install CA certificates
 RUN apk --no-cache add ca-certificates tzdata
 
-CMD [ "./main" ]
+CMD [ "main" ]

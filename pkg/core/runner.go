@@ -17,15 +17,19 @@
 package core
 
 import (
+	"context"
+
 	"go.uber.org/fx"
 )
 
-type container struct {
-	engine *fx.App
-}
-
-// Start implements IContainer.
-func (c *container) Start() error {
-	c.engine.Run()
-	return c.engine.Err()
+// runner functions called by fx.Invoke
+func runner(lc fx.Lifecycle, srv Server) {
+	lc.Append(fx.Hook{
+		OnStart: func(_ context.Context) error {
+			return srv.ListenAndServe()
+		},
+		OnStop: func(_ context.Context) error {
+			return nil
+		},
+	})
 }

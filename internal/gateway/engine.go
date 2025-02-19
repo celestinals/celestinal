@@ -20,20 +20,23 @@ package gateway
 import (
 	"context"
 
-	"github.com/tickexvn/tickex/pkg/core"
-
+	typepb "github.com/tickexvn/tickex/api/gen/go/types/v1"
 	"github.com/tickexvn/tickex/internal/gateway/services/greeter"
 	"github.com/tickexvn/tickex/internal/gateway/types"
 	"github.com/tickexvn/tickex/internal/gateway/visitor"
-
+	"github.com/tickexvn/tickex/pkg/core"
+	"github.com/tickexvn/tickex/pkg/core/syslog"
+	"github.com/tickexvn/tickex/pkg/errors"
 	"github.com/tickexvn/tickex/pkg/logger"
 	"github.com/tickexvn/tickex/pkg/msgf"
+	"github.com/tickexvn/tickex/pkg/pbtools"
 )
 
 var _ core.Server = (*Engine)(nil)
 
 // Engine represents the gateway app
 type Engine struct {
+	config  *typepb.Config
 	mux     core.IServeMux
 	visitor types.IVisitor
 }
@@ -86,6 +89,13 @@ func (e *Engine) register(ctx context.Context) error {
 
 // ListenAndServe the gateway app
 func (e *Engine) ListenAndServe() error {
+	if err := pbtools.Validate(e.config); err != nil {
+		errs := errors.New(typepb.Errors_ERRORS_INVALID_DATA, "validation failed", err)
+		syslog.Error(errs.Error())
+
+		return err
+	}
+
 	ctx := context.Background()
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
@@ -95,14 +105,16 @@ func (e *Engine) ListenAndServe() error {
 	}
 
 	// Listen HTTP server (and mux calls to gRPC server endpoint)
-	logger.Infof(msgf.InfoHTTPServer, ":9000")
-	return e.mux.Listen(":9000")
+	logger.Infof(msgf.InfoHTTPServer, e.config.GetGatewayAddress())
+
+	return e.mux.Listen(e.config.GetGatewayAddress())
 }
 
 // New creates a new gateway app
-func New() core.Server {
+func New(conf *typepb.Config) core.Server {
 	return &Engine{
 		mux:     core.NewServeMux(),
 		visitor: visitor.New(),
+		config:  conf,
 	}
 }

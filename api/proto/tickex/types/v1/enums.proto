@@ -1,0 +1,47 @@
+// Copyright 2025 The Tickex Authors.
+
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+
+//     http://www.apache.org/licenses/LICENSE-2.0
+
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+package tickex.types.v1;
+
+option go_package = "github.com/tickexvn/tickex/api/gen/go/types/v1;types";
+
+enum Status {
+  STATUS_UNSPECIFIED = 0;
+  STATUS_T = 1; // TRACE
+  STATUS_D = 2; // DEBUG
+  STATUS_I = 3; // INFO
+  STATUS_N = 4; // NOTICE
+  STATUS_W = 5; // WARN
+  STATUS_E = 6; // ERROR
+  STATUS_C = 7; // CRITICAL
+  STATUS_A = 8; // ALERT
+  STATUS_F = 9; // FATAL
+}
+
+enum Errors {
+  ERRORS_UNSPECIFIED = 0;
+  ERRORS_INTERNAL_ERROR = 1;
+  ERRORS_NOT_FOUND = 2;
+  ERRORS_UNAUTHORIZED = 3;
+  ERRORS_FORBIDDEN = 4;
+  ERRORS_INVALID_DATA = 5;
+}
+
+enum TickexPublic {
+  TICKEX_PUBLIC_UNSPECIFIED = 0;
+  TICKEX_PUBLIC_SERVICE_REGISTRY_ADDRESS = 1;
+  TICKEX_PUBLIC_GATEWAY_ADDRESS = 2;
+}

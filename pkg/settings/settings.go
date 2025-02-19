@@ -24,10 +24,10 @@ import (
 	"github.com/tickexvn/tickex/api/gen/go/types/v1"
 )
 
-// GetEnv returns the environment.
-func GetEnv() *types.Environment {
-	return &types.Environment{
-		ServiceRegistryAddress: os.Getenv("SERVICE_REGISTRY_ADDRESS"),
-		GatewayAddress:         os.Getenv("GATEWAY_ADDRESS"),
+// DefaultConfig returns the environment.
+func DefaultConfig() *types.Config {
+	return &types.Config{
+		ServiceRegistryAddress: os.Getenv(types.TickexPublic_TICKEX_PUBLIC_SERVICE_REGISTRY_ADDRESS.String()),
+		GatewayAddress:         os.Getenv(types.TickexPublic_TICKEX_PUBLIC_GATEWAY_ADDRESS.String()),
 	}
 }
