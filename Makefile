@@ -26,10 +26,20 @@ lint.proto:
 lint.x.greeter.v1: 
 	cd ./x/greeter/v1 && golangci-lint run
 
+run.tickex: TKX_OUT ?= tickex-gateway
+run.tickex:
+	@go build -ldflags="-s -w" -o ./build/$(TKX_OUT) ./cmd/tickex && ./build/$(TKX_OUT)
+
+run.x.greeter: TKX_OUT ?= tickex-x-greeter-v1
+run.x.greeter:
+	@cd ./x/greeter/v1 && go build -ldflags="-s -w" -o ../../../build/$(TKX_OUT) ./cmd
+	@./build/$(TKX_OUT)
 
 # Docker build commands
-build.tickex:
-	docker buildx build -f ./cmd/tickex/Dockerfile -t tkx.tickex:latest .
+build.d.tickex: TAG ?= tickexvn/tickex
+build.d.tickex:
+	docker buildx build -f ./cmd/tickex/Dockerfile -t $(TAG):latest .
 
-build.x.greeter:
-	docker buildx build -f ./x/greeter/v1/Dockerfile -t tkx.x.greeter.v1:latest .
+build.d.x.greeter: TAG ?= tickexvn/tickex.x.greeter
+build.d.x.greeter:
+	docker buildx build -f ./x/greeter/v1/Dockerfile -t $(TAG):latest .

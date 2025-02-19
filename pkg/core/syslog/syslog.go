@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-// Package tlog provides the logging utilities.
-package tlog
+// Package syslog provides the system logging utilities.
+package syslog
 
 import (
 	"fmt"
@@ -43,7 +43,7 @@ func Info(message string) {
 	defer utils.CallBack(logger.Sync)
 
 	funcName := ""
-	sugar := logger.Sugar()
+	sugar := logger.WithOptions(zap.AddCallerSkip(1)).Sugar()
 
 	pc, file, line, ok := runtime.Caller(1)
 	if ok {
@@ -62,7 +62,7 @@ func Warn(message string) {
 	defer utils.CallBack(logger.Sync)
 
 	funcName := ""
-	sugar := logger.Sugar()
+	sugar := logger.WithOptions(zap.AddCallerSkip(1)).Sugar()
 
 	pc, file, line, ok := runtime.Caller(1)
 	if ok {
@@ -81,7 +81,7 @@ func Debug(message string) {
 	defer utils.CallBack(logger.Sync)
 
 	funcName := ""
-	sugar := logger.Sugar()
+	sugar := logger.WithOptions(zap.AddCallerSkip(1)).Sugar()
 
 	pc, file, line, ok := runtime.Caller(1)
 	if ok {
@@ -100,7 +100,7 @@ func Error(message string) {
 	defer utils.CallBack(logger.Sync)
 
 	funcName := ""
-	sugar := logger.Sugar()
+	sugar := logger.WithOptions(zap.AddCallerSkip(1)).Sugar()
 
 	pc, file, line, ok := runtime.Caller(1)
 	if ok {
@@ -119,7 +119,7 @@ func Fatal(message string) {
 	defer utils.CallBack(logger.Sync)
 
 	funcName := ""
-	sugar := logger.Sugar()
+	sugar := logger.WithOptions(zap.AddCallerSkip(1)).Sugar()
 
 	pc, file, line, ok := runtime.Caller(1)
 	if ok {

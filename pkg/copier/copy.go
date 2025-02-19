@@ -20,7 +20,7 @@ package copier
 import (
 	"encoding/json"
 
-	"github.com/tickexvn/tickex/pkg/protobuf/proto"
+	"github.com/tickexvn/tickex/pkg/pbtools/proto"
 	google "google.golang.org/protobuf/proto"
 )
 

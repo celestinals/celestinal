@@ -14,23 +14,32 @@
  * limitations under the License.
  */
 
-// Package main provides the entry point for the Tickex.
-package main
+package settings
 
 import (
-	"github.com/tickexvn/tickex/internal/gateway"
-	"github.com/tickexvn/tickex/pkg/core"
-	"github.com/tickexvn/tickex/pkg/logger"
-	"github.com/tickexvn/tickex/pkg/settings"
+	"testing"
+
+	"github.com/tickexvn/tickex/api/gen/go/types/v1"
+	"github.com/tickexvn/tickex/pkg/pbtools"
 )
 
-// Build and run main application with environment variable
-// Remember to inject all layers of the application by core.Inject() function
-//
-// # Example:
-//
-// _ = core.Inject(controllers.New)
-func main() {
-	app := core.Build(gateway.New, settings.DefaultConfig)
-	logger.Fatal(app.Start())
+func TestConfig(t *testing.T) {
+	conf := types.Config{
+		ServiceRegistryAddress: "0.0.0.0:8500",
+		GatewayAddress:         "0.0.0.0:9000",
+	}
+
+	if err := pbtools.Validate(&conf); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestConfigEnv(t *testing.T) {
+	conf := DefaultConfig()
+
+	if err := pbtools.Validate(conf); err != nil {
+		return
+	}
+
+	t.Error("should not validate env")
 }

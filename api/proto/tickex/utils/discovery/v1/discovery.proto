@@ -14,47 +14,50 @@
 
 syntax = "proto3";
 
-package tickex.utils.srx.v1;
+package tickex.utils.discovery.v1;
 
-option go_package = "github.com/tickexvn/tickex/api/gen/go/utils/srx/v1;srx";
+import "buf/validate/validate.proto";
+import "tickex/types/v1/types.proto";
+
+option go_package = "github.com/tickexvn/tickex/api/gen/go/utils/discovery/v1;discovery";
 
 // Define the service registry
-service ServiceRegistryService {
+service DiscoveryService {
   // Register a new service
-  rpc RegisterService(RegisterServiceRequest) returns (RegisterServiceResponse);
+  rpc Register(RegisterRequest) returns (RegisterResponse);
 
   // Discover a service by name
-  rpc DiscoverService(DiscoverServiceRequest) returns (DiscoverServiceResponse);
+  rpc Discover(DiscoverRequest) returns (DiscoverResponse);
 
   // Health check to maintain service status
   rpc Heartbeat(HeartbeatRequest) returns (HeartbeatResponse);
 }
 
 // Detailed service information
-message RegisterServiceRequest {
-  string name = 1;       // Service name
-  string address = 2;    // IP address or hostname
-  int32 port = 3;        // Service port
+message RegisterRequest {
+  tickex.types.v1.Service service = 1;
+  string status_path = 6 [(buf.validate.field).string.min_len = 2];
 }
 
 message HeartbeatRequest {
-  string name = 1;       // Service name
-  string address = 2;    // IP address or hostname
-  int32 port = 3;        // Service port
+  string id = 1 [(buf.validate.field).string.min_len = 2];
+  string name = 2;       // Service name
+  string address = 3;    // IP address or hostname
+  int32 port = 4;        // Service port
 }
 
 // Request to find a service
-message DiscoverServiceRequest {
+message DiscoverRequest {
   string name = 1;  // Name of the service to discover
 }
 
 // Response from the discovery process
-message DiscoverServiceResponse {
-  repeated RegisterServiceRequest services = 1;  // List of service instances
+message DiscoverResponse {
+  repeated tickex.types.v1.Service services = 1;  // List of service instances
 }
 
 // Service registration response
-message RegisterServiceResponse {
+message RegisterResponse {
   string message = 1;  // Result message
 }
 

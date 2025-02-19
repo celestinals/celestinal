@@ -37,7 +37,7 @@ func Info(message ...interface{}) {
 	logger := New()
 	defer utils.CallBack(logger.Sync)
 
-	sugar := logger.Sugar()
+	sugar := logger.WithOptions(zap.AddCallerSkip(1)).Sugar()
 	sugar.Info(message...)
 }
 
@@ -50,7 +50,7 @@ func Infof(template string, message ...interface{}) {
 	logger := New()
 	defer utils.CallBack(logger.Sync)
 
-	sugar := logger.Sugar()
+	sugar := logger.WithOptions(zap.AddCallerSkip(1)).Sugar()
 	sugar.Infof(template, message...)
 }
 
@@ -63,7 +63,7 @@ func Debug(message ...interface{}) {
 	logger := New()
 	defer utils.CallBack(logger.Sync)
 
-	sugar := logger.Sugar()
+	sugar := logger.WithOptions(zap.AddCallerSkip(1)).Sugar()
 	sugar.Debug(message...)
 }
 
@@ -76,7 +76,7 @@ func Error(message ...interface{}) {
 	logger := New()
 	defer utils.CallBack(logger.Sync)
 
-	sugar := logger.Sugar()
+	sugar := logger.WithOptions(zap.AddCallerSkip(1)).Sugar()
 	sugar.Error(message...)
 }
 
@@ -89,7 +89,7 @@ func Fatal(message ...interface{}) {
 	logger := New()
 	defer utils.CallBack(logger.Sync)
 
-	sugar := logger.Sugar()
+	sugar := logger.WithOptions(zap.AddCallerSkip(1)).Sugar()
 	sugar.Fatal(message...)
 }
 

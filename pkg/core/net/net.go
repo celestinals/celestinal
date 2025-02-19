@@ -14,23 +14,12 @@
  * limitations under the License.
  */
 
-// Package main provides the entry point for the Tickex.
-package main
+// Package net provide functions extended of http/net
+package net
 
-import (
-	"github.com/tickexvn/tickex/internal/gateway"
-	"github.com/tickexvn/tickex/pkg/core"
-	"github.com/tickexvn/tickex/pkg/logger"
-	"github.com/tickexvn/tickex/pkg/settings"
-)
+import "net"
 
-// Build and run main application with environment variable
-// Remember to inject all layers of the application by core.Inject() function
-//
-// # Example:
-//
-// _ = core.Inject(controllers.New)
-func main() {
-	app := core.Build(gateway.New, settings.DefaultConfig)
-	logger.Fatal(app.Start())
+// ListenTCP listens on the TCP network address addr and returns a net.Listener.
+func ListenTCP(addr string) (net.Listener, error) {
+	return net.Listen("tcp", addr)
 }

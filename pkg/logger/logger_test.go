@@ -14,23 +14,5 @@
  * limitations under the License.
  */
 
-// Package main provides the entry point for the Tickex.
-package main
-
-import (
-	"github.com/tickexvn/tickex/internal/gateway"
-	"github.com/tickexvn/tickex/pkg/core"
-	"github.com/tickexvn/tickex/pkg/logger"
-	"github.com/tickexvn/tickex/pkg/settings"
-)
-
-// Build and run main application with environment variable
-// Remember to inject all layers of the application by core.Inject() function
-//
-// # Example:
-//
-// _ = core.Inject(controllers.New)
-func main() {
-	app := core.Build(gateway.New, settings.DefaultConfig)
-	logger.Fatal(app.Start())
-}
+// Package logger provides the logger for the service.
+package logger

@@ -1,6 +1,11 @@
 .github/
 .idea/
 
+build/
 docs/
 third_party/
 x/tools/
+
+node_modules
+
+.env

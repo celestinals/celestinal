@@ -19,42 +19,25 @@ package core
 import (
 	"context"
 
-	"google.golang.org/grpc"
-
-	txinternal "github.com/tickexvn/tickex/pkg/core/internal"
-
-	"github.com/tickexvn/tickex/pkg/logger"
-
+	coreinternal "github.com/tickexvn/tickex/pkg/core/internal"
 	"go.uber.org/fx"
+	"google.golang.org/grpc"
 )
 
-func _start(srv Server) {
-	logger.Fatal(srv.ListenAndServe())
-}
-
-func _main(lc fx.Lifecycle, srv Server) {
-	lc.Append(fx.Hook{
-		OnStart: func(_ context.Context) error {
-			go _start(srv)
-			return nil
-		},
-		OnStop: func(_ context.Context) error {
-			return nil
-		},
-	})
-}
-
 // Build builds the application.
-func Build(constructor interface{}) Application {
-	txinternal.Provide(constructor)
+func Build(constructors ...interface{}) Application {
+	for _, constructor := range constructors {
+		coreinternal.Provide(constructor)
+	}
 
+	// disable log: use fx.NopLogger
 	return &container{
-		engine: fx.New(txinternal.Option(), fx.Invoke(_main)),
+		engine: fx.New(coreinternal.Option(), fx.Invoke(runner)),
 	}
 }
 
 // RegisterService registers a service with the runtime.
-func RegisterService(ctx context.Context, mux IServeMux, service GRPCServicer, endpoint string, opts []grpc.DialOption) error {
+func RegisterService(ctx context.Context, mux IServeMux, service GRPCService, endpoint string, opts []grpc.DialOption) error {
 	if err := service.Register(ctx, mux.AsRuntimeMux(), endpoint, opts); err != nil {
 		return err
 	}

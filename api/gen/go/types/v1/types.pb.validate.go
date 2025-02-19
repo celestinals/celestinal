@@ -134,105 +134,25 @@ func (m *Context) Validate() error {
 		return nil
 	}
 
-	if v, ok := interface{}(m.GetTraceId()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ContextValidationError{
-				field:  "TraceId",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
+	// no validation rules for TraceId
 
-	if v, ok := interface{}(m.GetRequestId()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ContextValidationError{
-				field:  "RequestId",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
+	// no validation rules for RequestId
 
-	if v, ok := interface{}(m.GetUserId()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ContextValidationError{
-				field:  "UserId",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
+	// no validation rules for UserId
 
-	if v, ok := interface{}(m.GetAuthorization()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ContextValidationError{
-				field:  "Authorization",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
+	// no validation rules for Authorization
 
-	if v, ok := interface{}(m.GetLocale()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ContextValidationError{
-				field:  "Locale",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
+	// no validation rules for Locale
 
-	if v, ok := interface{}(m.GetCorrelationId()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ContextValidationError{
-				field:  "CorrelationId",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
+	// no validation rules for CorrelationId
 
-	if v, ok := interface{}(m.GetServiceName()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ContextValidationError{
-				field:  "ServiceName",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
+	// no validation rules for ServiceName
 
-	if v, ok := interface{}(m.GetRetryCount()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ContextValidationError{
-				field:  "RetryCount",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
+	// no validation rules for RetryCount
 
-	if v, ok := interface{}(m.GetSpanId()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ContextValidationError{
-				field:  "SpanId",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
+	// no validation rules for SpanId
 
-	if v, ok := interface{}(m.GetIp()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ContextValidationError{
-				field:  "Ip",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
+	// no validation rules for Ip
 
 	return nil
 }
@@ -291,10 +211,9 @@ var _ interface {
 	ErrorName() string
 } = ContextValidationError{}
 
-// Validate checks the field values on Environment with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *Environment) Validate() error {
+// Validate checks the field values on Config with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *Config) Validate() error {
 	if m == nil {
 		return nil
 	}
@@ -306,9 +225,9 @@ func (m *Environment) Validate() error {
 	return nil
 }
 
-// EnvironmentValidationError is the validation error returned by
-// Environment.Validate if the designated constraints aren't met.
-type EnvironmentValidationError struct {
+// ConfigValidationError is the validation error returned by Config.Validate if
+// the designated constraints aren't met.
+type ConfigValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -316,22 +235,22 @@ type EnvironmentValidationError struct {
 }
 
 // Field function returns field value.
-func (e EnvironmentValidationError) Field() string { return e.field }
+func (e ConfigValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e EnvironmentValidationError) Reason() string { return e.reason }
+func (e ConfigValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e EnvironmentValidationError) Cause() error { return e.cause }
+func (e ConfigValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e EnvironmentValidationError) Key() bool { return e.key }
+func (e ConfigValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e EnvironmentValidationError) ErrorName() string { return "EnvironmentValidationError" }
+func (e ConfigValidationError) ErrorName() string { return "ConfigValidationError" }
 
 // Error satisfies the builtin error interface
-func (e EnvironmentValidationError) Error() string {
+func (e ConfigValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -343,14 +262,14 @@ func (e EnvironmentValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sEnvironment.%s: %s%s",
+		"invalid %sConfig.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = EnvironmentValidationError{}
+var _ error = ConfigValidationError{}
 
 var _ interface {
 	Field() string
@@ -358,4 +277,76 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = EnvironmentValidationError{}
+} = ConfigValidationError{}
+
+// Validate checks the field values on Service with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *Service) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Id
+
+	// no validation rules for Name
+
+	// no validation rules for Address
+
+	// no validation rules for Port
+
+	return nil
+}
+
+// ServiceValidationError is the validation error returned by Service.Validate
+// if the designated constraints aren't met.
+type ServiceValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ServiceValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ServiceValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ServiceValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ServiceValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ServiceValidationError) ErrorName() string { return "ServiceValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ServiceValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sService.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ServiceValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ServiceValidationError{}
