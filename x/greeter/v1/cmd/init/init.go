@@ -33,7 +33,7 @@ var (
 	_ = core.Inject(domain.New)
 
 	// repo layer
-	_ = core.InjectLifeCycle(repos.New, repos.OnStart, repos.OnStop)
+	_ = core.Inject(repos.NewAuthor)
 
 	// data layer
 	//_ = tkxapp.Inject(authors.New)

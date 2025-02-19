@@ -46,7 +46,7 @@ func NewSearchLayer[T any, ID comparable](client *elasticsearch.Client, indexNam
 }
 
 // Create inserts a new document into Elasticsearch.
-func (s *BaseSearchLayer[T, ID]) Create(ctx context.Context, entity T) (*T, error) {
+func (s *BaseSearchLayer[T, ID]) Create(ctx context.Context, entity T) (T, error) {
 	_ = ctx
 	_ = entity
 
@@ -54,7 +54,7 @@ func (s *BaseSearchLayer[T, ID]) Create(ctx context.Context, entity T) (*T, erro
 }
 
 // Get retrieves a document from Elasticsearch by ID.
-func (s *BaseSearchLayer[T, ID]) Get(ctx context.Context, id ID) (*T, error) {
+func (s *BaseSearchLayer[T, ID]) Get(ctx context.Context, id ID) (T, error) {
 	_ = ctx
 	_ = id
 
@@ -100,28 +100,28 @@ func (s *BaseSearchLayer[T, ID]) GetAll(ctx context.Context) ([]T, error) {
 }
 
 // Update modifies an existing document in Elasticsearch by ID.
-func (s *BaseSearchLayer[T, ID]) Update(ctx context.Context, id ID, entity T) (*T, error) {
+func (s *BaseSearchLayer[T, ID]) Update(ctx context.Context, id ID, entity T) (T, error) {
 	_ = ctx
 	data, err := json.Marshal(map[string]interface{}{
 		"doc": entity,
 	})
 	if err != nil {
-		return nil, err
+		return entity, err
 	}
 
 	// Send the update request
 	res, err := s.client.Update(s.indexName, fmt.Sprintf("%v", id), bytes.NewReader(data))
 	if err != nil {
-		return nil, err
+		return entity, err
 	}
 	defer utils.CallBack(res.Body.Close)
 
 	// Check for errors
 	if res.IsError() {
-		return nil, fmt.Errorf("error updating document: %s", res.String())
+		return entity, fmt.Errorf("error updating document: %s", res.String())
 	}
 
-	return &entity, nil
+	return entity, nil
 }
 
 // Delete removes a document from Elasticsearch by ID.

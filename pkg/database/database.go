@@ -20,22 +20,32 @@ package database
 import (
 	"context"
 	"fmt"
+
+	"github.com/tickexvn/tickex/pkg/logger"
 )
 
 // Repository provides the interface for the database.
 type Repository[T any, ID comparable] interface {
-	Create(ctx context.Context, entity T) (*T, error)
-	Get(ctx context.Context, id ID) (*T, error)
+	Create(ctx context.Context, entity T) (T, error)
+	Get(ctx context.Context, id ID) (T, error)
 	GetAll(ctx context.Context) ([]T, error)
-	Update(ctx context.Context, id ID, entity T) (*T, error)
+	Update(ctx context.Context, id ID, entity T) (T, error)
 	Delete(ctx context.Context, id ID) error
 	Exists(ctx context.Context, id ID) (bool, error)
 	Count(ctx context.Context) (int64, error)
 }
 
-// Entity is the interface that wraps the basic GetID method.
+// Entity is the interface that wraps the basic GetId method.
 type Entity[ID comparable] interface {
-	GetID() *ID
+	GetId() *ID
+}
+
+// New create multi-layer database instance
+func New[T Entity[ID], ID comparable](searchLayer Repository[T, ID], storageLayer Repository[T, ID]) Repository[T, ID] {
+	return &MultiLayer[T, ID]{
+		search:  searchLayer,
+		storage: storageLayer,
+	}
 }
 
 // MultiLayer database multilayer with postgre & elasticsearch
@@ -46,11 +56,21 @@ type MultiLayer[T Entity[ID], ID comparable] struct {
 
 // Create inserts a new entity into both storage (PostgreSQL) and search (Elasticsearch).
 // If Elasticsearch fails after PostgreSQL succeeds, it rolls back by deleting the entity from PostgreSQL.
-func (m *MultiLayer[T, ID]) Create(ctx context.Context, entity T) (*T, error) {
+func (m *MultiLayer[T, ID]) Create(ctx context.Context, entity T) (T, error) {
+	var empty T
+	if m.storage == nil {
+		return empty, fmt.Errorf("storage layer is nil")
+	}
+
 	// Insert into PostgreSQL first
 	createdEntity, err := m.storage.Create(ctx, entity)
 	if err != nil {
-		return nil, err
+		return empty, err
+	}
+
+	if m.search == nil {
+		logger.Error("search layer is nil, pass")
+		return createdEntity, nil
 	}
 
 	// Insert into Elasticsearch
@@ -58,7 +78,7 @@ func (m *MultiLayer[T, ID]) Create(ctx context.Context, entity T) (*T, error) {
 	if esErr != nil {
 		// Rollback: delete from PostgreSQL if Elasticsearch insertion fails
 		_ = m.storage.Delete(ctx, *getEntityID(entity))
-		return nil, fmt.Errorf("failed to insert into first layer, rollback storage: %v", esErr)
+		return empty, fmt.Errorf("failed to insert into first layer, rollback storage: %v", esErr)
 	}
 
 	return createdEntity, nil
@@ -66,25 +86,35 @@ func (m *MultiLayer[T, ID]) Create(ctx context.Context, entity T) (*T, error) {
 
 // Update modifies an existing entity in both storage (PostgreSQL) and search (Elasticsearch).
 // If Elasticsearch fails after PostgreSQL succeeds, it rolls back by restoring the old value in PostgreSQL.
-func (m *MultiLayer[T, ID]) Update(ctx context.Context, id ID, entity T) (*T, error) {
+func (m *MultiLayer[T, ID]) Update(ctx context.Context, id ID, entity T) (T, error) {
+	var empty T
+	if m.storage == nil {
+		return empty, fmt.Errorf("storage layer is nil")
+	}
+
 	// Get current entity from storage for rollback purposes
 	oldEntity, err := m.storage.Get(ctx, id)
 	if err != nil {
-		return nil, fmt.Errorf("failed to retrieve old entity before update: %v", err)
+		return empty, fmt.Errorf("failed to retrieve old entity before update: %v", err)
 	}
 
 	// Update in PostgreSQL
 	updatedEntity, err := m.storage.Update(ctx, id, entity)
 	if err != nil {
-		return nil, err
+		return empty, err
+	}
+
+	if m.search == nil {
+		logger.Error("search layer is nil, pass")
+		return updatedEntity, nil
 	}
 
 	// Update in Elasticsearch
 	_, esErr := m.search.Update(ctx, id, entity)
 	if esErr != nil {
 		// Rollback: Restore old entity in PostgreSQL if Elasticsearch update fails
-		_, _ = m.storage.Update(ctx, id, *oldEntity)
-		return nil, fmt.Errorf("failed to update in first layer, rollback storage: %v", esErr)
+		_, _ = m.storage.Update(ctx, id, oldEntity)
+		return empty, fmt.Errorf("failed to update in first layer, rollback storage: %v", esErr)
 	}
 
 	return updatedEntity, nil
@@ -93,6 +123,10 @@ func (m *MultiLayer[T, ID]) Update(ctx context.Context, id ID, entity T) (*T, er
 // Delete removes an entity from both storage (PostgreSQL) and search (Elasticsearch).
 // If Elasticsearch fails after PostgreSQL succeeds, it rolls back by restoring the deleted entity.
 func (m *MultiLayer[T, ID]) Delete(ctx context.Context, id ID) error {
+	if m.storage == nil {
+		return fmt.Errorf("storage layer is nil")
+	}
+
 	// Get the entity before deletion for rollback
 	oldEntity, err := m.storage.Get(ctx, id)
 	if err != nil {
@@ -104,10 +138,15 @@ func (m *MultiLayer[T, ID]) Delete(ctx context.Context, id ID) error {
 		return err
 	}
 
+	if m.search == nil {
+		logger.Error("search layer is nil, pass")
+		return nil
+	}
+
 	// Delete from Elasticsearch
 	if esErr := m.search.Delete(ctx, id); esErr != nil {
 		// Rollback: Restore deleted entity in PostgreSQL if Elasticsearch deletion fails
-		_, _ = m.storage.Create(ctx, *oldEntity)
+		_, _ = m.storage.Create(ctx, oldEntity)
 		return fmt.Errorf("failed to delete from first layer, rollback storage: %v", esErr)
 	}
 
@@ -115,22 +154,59 @@ func (m *MultiLayer[T, ID]) Delete(ctx context.Context, id ID) error {
 }
 
 // Get retrieves an entity by ID from the search layer (Elasticsearch).
-func (m *MultiLayer[T, ID]) Get(ctx context.Context, id ID) (*T, error) {
+func (m *MultiLayer[T, ID]) Get(ctx context.Context, id ID) (T, error) {
+	var empty T
+	if m.search == nil {
+		logger.Error("search layer is nil, pass")
+		if m.storage == nil {
+			return empty, fmt.Errorf("storage layer is nil")
+		}
+
+		return m.storage.Get(ctx, id)
+	}
+
 	return m.search.Get(ctx, id)
 }
 
 // GetAll retrieves all entities from the search layer (Elasticsearch).
 func (m *MultiLayer[T, ID]) GetAll(ctx context.Context) ([]T, error) {
+	if m.search == nil {
+		logger.Error("search layer is nil, pass")
+		if m.storage == nil {
+			return nil, fmt.Errorf("storage layer is nil")
+		}
+
+		return m.storage.GetAll(ctx)
+	}
+
 	return m.search.GetAll(ctx)
 }
 
 // Exists checks if an entity exists in the search layer (Elasticsearch).
 func (m *MultiLayer[T, ID]) Exists(ctx context.Context, id ID) (bool, error) {
+	if m.search == nil {
+		logger.Error("search layer is nil, pass")
+		if m.storage == nil {
+			return false, fmt.Errorf("storage layer is nil")
+		}
+
+		return m.storage.Exists(ctx, id)
+	}
+
 	return m.search.Exists(ctx, id)
 }
 
 // Count returns the total number of entities from the search layer (Elasticsearch).
 func (m *MultiLayer[T, ID]) Count(ctx context.Context) (int64, error) {
+	if m.search == nil {
+		logger.Error("search layer is nil, pass")
+		if m.storage == nil {
+			return -1, fmt.Errorf("storage layer is nil")
+		}
+
+		return m.storage.Count(ctx)
+	}
+
 	return m.search.Count(ctx)
 }
 
@@ -138,5 +214,5 @@ func (m *MultiLayer[T, ID]) Count(ctx context.Context) (int64, error) {
 func getEntityID[T Entity[ID], ID comparable](entity T) *ID {
 	// This function should extract the ID field from the entity.
 	// It depends on your entity structure, you may need reflection or a defined method.
-	return entity.GetID()
+	return entity.GetId()
 }

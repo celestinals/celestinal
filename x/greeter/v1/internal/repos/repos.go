@@ -17,7 +17,9 @@
 // Package repos provides the database repository for the greeter service.
 package repos
 
-import "fmt"
+import (
+	"fmt"
+)
 
 // IDB defines the database interface.
 type IDB interface {
@@ -32,10 +34,5 @@ func OnStart(_ IDB) error {
 // OnStop performs the cleanup logic.
 func OnStop(_ IDB) error {
 	fmt.Println("OnStop...")
-	return nil
-}
-
-// New creates a new database repository.
-func New() IDB {
 	return nil
 }
