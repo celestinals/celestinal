@@ -22,7 +22,6 @@ import (
 	"time"
 
 	"github.com/tickexvn/tickex/api/gen/go/domain/greeter/v1"
-	"github.com/tickexvn/tickex/x/greeter/v1/internal/repos"
 )
 
 // IGreeter defines the interface for the Greeter biz module.
@@ -33,7 +32,6 @@ type IGreeter interface {
 // Greeter implements GreeterServiceServer, business logic for the Greeter service.
 type Greeter struct {
 	greeter.UnimplementedGreeterDomainServiceServer
-	repos repos.IDB
 }
 
 // SayHello implements GreeterServiceServer.
@@ -47,8 +45,6 @@ func (g *Greeter) SayHello(_ context.Context, msg *greeter.SayHelloRequest) (*gr
 }
 
 // New creates a new Greeter module.
-func New(db repos.IDB) IGreeter {
-	return &Greeter{
-		repos: db,
-	}
+func New() IGreeter {
+	return &Greeter{}
 }

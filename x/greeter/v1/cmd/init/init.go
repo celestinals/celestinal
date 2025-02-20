@@ -21,8 +21,6 @@ import (
 	"github.com/tickexvn/tickex/pkg/core"
 	"github.com/tickexvn/tickex/x/greeter/v1/internal/controllers"
 	"github.com/tickexvn/tickex/x/greeter/v1/internal/domain"
-	"github.com/tickexvn/tickex/x/greeter/v1/internal/repos"
-	//"github.com/tickexvn/tickex/x/greeter/v1/internal/models/gen/authors"
 )
 
 var (
@@ -33,8 +31,8 @@ var (
 	_ = core.Inject(domain.New)
 
 	// repo layer
-	_ = core.InjectLifeCycle(repos.New, repos.OnStart, repos.OnStop)
+	//_ = core.Inject(repos.NewAuthor)
 
 	// data layer
-	//_ = tkxapp.Inject(authors.New)
+	//_ = core.Inject(authors.New)
 )
