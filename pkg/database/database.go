@@ -35,9 +35,9 @@ type Repository[T any, ID comparable] interface {
 	Count(ctx context.Context) (int64, error)
 }
 
-// Entity is the interface that wraps the basic GetId method.
+// Entity is the interface that wraps the basic GetID method.
 type Entity[ID comparable] interface {
-	GetId() *ID
+	GetID() ID
 }
 
 // New create multi-layer database instance
@@ -77,7 +77,7 @@ func (db *Database[T, ID]) Create(ctx context.Context, entity T) (T, error) {
 	_, esErr := db.search.Create(ctx, entity)
 	if esErr != nil {
 		// Rollback: delete from PostgreSQL if Elasticsearch insertion fails
-		_ = db.storage.Delete(ctx, *getEntityID(entity))
+		_ = db.storage.Delete(ctx, getEntityID(entity))
 		return empty, fmt.Errorf("failed to insert into first layer, rollback storage: %v", esErr)
 	}
 
@@ -211,8 +211,8 @@ func (db *Database[T, ID]) Count(ctx context.Context) (int64, error) {
 }
 
 // getEntityID extracts the ID from an entity (you need to customize this function)
-func getEntityID[T Entity[ID], ID comparable](entity T) *ID {
+func getEntityID[T Entity[ID], ID comparable](entity T) ID {
 	// This function should extract the ID field from the entity.
 	// It depends on your entity structure, you may need reflection or a defined method.
-	return entity.GetId()
+	return entity.GetID()
 }

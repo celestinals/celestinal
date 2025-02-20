@@ -18,26 +18,27 @@ package database
 
 import (
 	"context"
+	"testing"
+
 	"github.com/stretchr/testify/mock"
 	"github.com/tickexvn/tickex/pkg/database/internal"
 	"github.com/tickexvn/tickex/pkg/database/internal/mocks"
-	"testing"
 )
 
 func TestCreate(t *testing.T) {
 	storageLayer := mocks.NewIAuthors(t)
-	storageLayer.On("Create", mock.Anything, mock.Anything).Return(internal.Authors{Id: 123}, nil)
+	storageLayer.On("Create", mock.Anything, mock.Anything).Return(internal.Authors{ID: 123}, nil)
 
 	db := New[internal.Authors, int64](nil, storageLayer)
 	resp, err := db.Create(context.Background(), internal.Authors{
-		Id: 123,
+		ID: 123,
 	})
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	if resp.Id != 123 {
-		t.Errorf("got id %d, want 123", resp.Id)
+	if resp.ID != 123 {
+		t.Errorf("got id %d, want 123", resp.ID)
 	}
 }
 
@@ -46,15 +47,15 @@ func TestGet(t *testing.T) {
 	// Set up expectation for Get
 	storageLayer.
 		On("Get", mock.Anything, int64(123)).
-		Return(internal.Authors{Id: 123}, nil)
+		Return(internal.Authors{ID: 123}, nil)
 
 	db := New[internal.Authors, int64](nil, storageLayer)
 	resp, err := db.Get(context.Background(), 123)
 	if err != nil {
 		t.Fatal(err)
 	}
-	if resp.Id != 123 {
-		t.Errorf("got id %d, want 123", resp.Id)
+	if resp.ID != 123 {
+		t.Errorf("got id %d, want 123", resp.ID)
 	}
 	storageLayer.AssertExpectations(t)
 }
@@ -62,8 +63,8 @@ func TestGet(t *testing.T) {
 func TestGetAll(t *testing.T) {
 	storageLayer := mocks.NewIAuthors(t)
 	expected := []internal.Authors{
-		{Id: 123},
-		{Id: 456},
+		{ID: 123},
+		{ID: 456},
 	}
 	// Set up expectation for GetAll
 	storageLayer.
@@ -84,12 +85,12 @@ func TestGetAll(t *testing.T) {
 
 func TestUpdate(t *testing.T) {
 	storageLayer := mocks.NewIAuthors(t)
-	// Assume updating Authors with Id = 123 with new information
-	updatedAuthor := internal.Authors{Id: 123}
+	// Assume updating Authors with ID = 123 with new information
+	updatedAuthor := internal.Authors{ID: 123}
 	// Set up expectation for
 	storageLayer.
 		On("Get", mock.Anything, int64(123)).
-		Return(internal.Authors{Id: 123}, nil)
+		Return(internal.Authors{ID: 123}, nil)
 	storageLayer.
 		On("Update", mock.Anything, int64(123), updatedAuthor).
 		Return(updatedAuthor, nil)
@@ -99,8 +100,8 @@ func TestUpdate(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if resp.Id != 123 {
-		t.Errorf("got id %d, want 123", resp.Id)
+	if resp.ID != 123 {
+		t.Errorf("got id %d, want 123", resp.ID)
 	}
 	storageLayer.AssertExpectations(t)
 }
@@ -110,7 +111,7 @@ func TestDelete(t *testing.T) {
 	// Set up expectation for Delete
 	storageLayer.
 		On("Get", mock.Anything, int64(123)).
-		Return(internal.Authors{Id: 123}, nil)
+		Return(internal.Authors{ID: 123}, nil)
 	storageLayer.
 		On("Delete", mock.Anything, int64(123)).
 		Return(nil)

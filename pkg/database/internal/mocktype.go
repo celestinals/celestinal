@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
+// Package internal not share external module
 package internal
 
 import (
 	"context"
 )
 
+// IAuthors define to mock test
 type IAuthors interface {
 	Create(ctx context.Context, author Authors) (Authors, error)
 	Update(ctx context.Context, id int64, author Authors) (Authors, error)
@@ -30,8 +32,10 @@ type IAuthors interface {
 	Count(ctx context.Context) (int64, error)
 }
 
+// Authors mock test obj
 type Authors struct {
-	Id int64
+	ID int64
 }
 
-func (a Authors) GetId() *int64 { return &a.Id }
+// GetID return id of obj
+func (a Authors) GetID() int64 { return a.ID }
