@@ -14,4 +14,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# sql generate tools
+go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
+
+# grpc gateway & protocol buffer
+go install \
+    github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway \
+    github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2 \
+    google.golang.org/protobuf/cmd/protoc-gen-go \
+    google.golang.org/grpc/cmd/protoc-gen-go-grpc
+
+# mockup test
+go install github.com/vektra/mockery/v2@latest
+
+# proto lint
 go install github.com/bufbuild/buf/cmd/buf@v1.48.0
