@@ -14,25 +14,24 @@
  * limitations under the License.
  */
 
-// Package init provides the initialization logic for the greeter service.
-package init
+package internal
 
 import (
-	"github.com/tickexvn/tickex/pkg/core"
-	"github.com/tickexvn/tickex/x/greeter/v1/internal/controllers"
-	"github.com/tickexvn/tickex/x/greeter/v1/internal/domain"
+	"context"
 )
 
-var (
-	// handlers/controllers layer
-	_ = core.Inject(controllers.New)
+type IAuthors interface {
+	Create(ctx context.Context, author Authors) (Authors, error)
+	Update(ctx context.Context, id int64, author Authors) (Authors, error)
+	Get(ctx context.Context, id int64) (Authors, error)
+	GetAll(ctx context.Context) ([]Authors, error)
+	Delete(ctx context.Context, id int64) error
+	Exists(ctx context.Context, id int64) (bool, error)
+	Count(ctx context.Context) (int64, error)
+}
 
-	// domain layer
-	_ = core.Inject(domain.New)
+type Authors struct {
+	Id int64
+}
 
-	// repo layer
-	//_ = core.Inject(repos.NewAuthor)
-
-	// data layer
-	//_ = core.Inject(authors.New)
-)
+func (a Authors) GetId() *int64 { return &a.Id }

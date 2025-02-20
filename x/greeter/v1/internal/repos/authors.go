@@ -26,7 +26,20 @@ import (
 	"github.com/tickexvn/tickex/x/greeter/v1/internal/models/gen/authors"
 )
 
+// Check valid Object with Interface
 var _ database.Repository[authors.Author, int64] = (*Authors)(nil)
+var _ IAuthors = (*Authors)(nil)
+
+// IAuthors define for mockup database
+type IAuthors interface {
+	Create(ctx context.Context, author authors.Author) (authors.Author, error)
+	Update(ctx context.Context, id int64, author authors.Author) (authors.Author, error)
+	Get(ctx context.Context, id int64) (authors.Author, error)
+	GetAll(ctx context.Context) ([]authors.Author, error)
+	Delete(ctx context.Context, id int64) error
+	Exists(ctx context.Context, id int64) (bool, error)
+	Count(ctx context.Context) (int64, error)
+}
 
 // NewAuthor creates a new database repository.
 func NewAuthor(pgCon *pgx.Conn) *Authors {
