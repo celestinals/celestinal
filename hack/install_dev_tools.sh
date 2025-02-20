@@ -29,3 +29,6 @@ go install github.com/vektra/mockery/v2@latest
 
 # proto lint
 go install github.com/bufbuild/buf/cmd/buf@v1.48.0
+
+# Go 1.16+
+go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest

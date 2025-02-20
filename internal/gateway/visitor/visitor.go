@@ -39,11 +39,11 @@ var _ types.IVisitor = (*Visitor)(nil)
 type Visitor struct{}
 
 // VisitGreeterService visits the greeter service.
-func (v *Visitor) VisitGreeterService(ctx context.Context, mux core.IServeMux, service types.IService) error {
+func (v *Visitor) VisitGreeterService(ctx context.Context, edge core.Edge, service types.IService) error {
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 
 	greeterAddr := ":8000"
-	if err := core.RegisterService(ctx, mux, service, greeterAddr, opts); err != nil {
+	if err := core.RegisterService(ctx, edge, service, greeterAddr, opts); err != nil {
 		return err
 	}
 

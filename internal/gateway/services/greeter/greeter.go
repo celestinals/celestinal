@@ -35,8 +35,8 @@ type Greeter struct {
 }
 
 // Accept accepts the Greeter service
-func (g *Greeter) Accept(ctx context.Context, mux core.IServeMux, v types.IVisitor) error {
-	return v.VisitGreeterService(ctx, mux, g)
+func (g *Greeter) Accept(ctx context.Context, edge core.Edge, v types.IVisitor) error {
+	return v.VisitGreeterService(ctx, edge, g)
 }
 
 // Register registers the Greeter service

@@ -37,8 +37,8 @@ func Build(constructors ...interface{}) Application {
 }
 
 // RegisterService registers a service with the runtime.
-func RegisterService(ctx context.Context, mux IServeMux, service GRPCService, endpoint string, opts []grpc.DialOption) error {
-	if err := service.Register(ctx, mux.AsRuntimeMux(), endpoint, opts); err != nil {
+func RegisterService(ctx context.Context, edge Edge, service GRPCService, endpoint string, opts []grpc.DialOption) error {
+	if err := service.Register(ctx, edge.AsRuntimeMux(), endpoint, opts); err != nil {
 		return err
 	}
 

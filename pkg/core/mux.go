@@ -22,30 +22,61 @@ import (
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 )
 
-// IServeMux is an interface for a runtime mux.
-type IServeMux interface {
-	Listen(addr string) error
+// Edge is an interface for a runtime mux.
+type Edge interface {
+	Listen(conf *EdgeConfig) error
 	AsRuntimeMux() *runtime.ServeMux
+	AsServeMux() *http.ServeMux
+	HandleFunc(pattern string, handler http.HandlerFunc)
 }
 
-// NewServeMux creates a new runtime mux.
-func NewServeMux(opts ...runtime.ServeMuxOption) IServeMux {
-	return &ServeMux{
-		mux: runtime.NewServeMux(opts...),
+type EdgeConfig struct {
+	Addr    string
+	Handler http.Handler
+}
+
+// NewEdge creates a new runtime mux.
+func NewEdge(opts ...runtime.ServeMuxOption) Edge {
+	return &edge{
+		mux:     runtime.NewServeMux(opts...),
+		httpMux: http.NewServeMux(),
 	}
 }
 
-// ServeMux is a runtime mux.
-type ServeMux struct {
-	mux *runtime.ServeMux
+// edge is a runtime mux.
+type edge struct {
+	mux     *runtime.ServeMux
+	httpMux *http.ServeMux
+	server  *http.Server
+}
+
+func (e *edge) HandleFunc(pattern string, handler http.HandlerFunc) {
+	e.httpMux.HandleFunc(pattern, handler)
 }
 
 // Listen starts the runtime mux.
-func (mux *ServeMux) Listen(addr string) error {
-	return http.ListenAndServe(addr, mux.AsRuntimeMux())
+func (e *edge) Listen(conf *EdgeConfig) error {
+	if conf == nil {
+		conf = &EdgeConfig{
+			Addr:    ":9000",
+			Handler: e.mux,
+		}
+	}
+
+	e.httpMux.Handle("/", e.mux)
+	e.server = &http.Server{
+		Addr:    conf.Addr,
+		Handler: conf.Handler,
+	}
+
+	return e.server.ListenAndServe()
 }
 
 // AsRuntimeMux returns the underlying runtime mux.
-func (mux *ServeMux) AsRuntimeMux() *runtime.ServeMux {
-	return mux.mux
+func (e *edge) AsRuntimeMux() *runtime.ServeMux {
+	return e.mux
+}
+
+func (e *edge) AsServeMux() *http.ServeMux {
+	return e.httpMux
 }

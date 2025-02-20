@@ -14,26 +14,19 @@
  * limitations under the License.
  */
 
-// Package types provides the types for the gateway.
-package types
+package openapi
 
 import (
-	"context"
-
 	"github.com/tickexvn/tickex/pkg/core"
+	"net/http"
 )
 
-// IService represents the service interface.
-type IService interface {
-	core.GRPCService
-	Accept(context.Context, core.Edge, IVisitor) error
-}
+func Serve(edge core.Edge) {
+	fs := http.FileServer(http.Dir("cmd/tickex/swagger/"))
 
-// IVisitor represents the visitor interface.
-// Add more visit service method bellows
-type IVisitor interface {
-	// TODO: declare visit service function
-
-	// VisitGreeterService visit greeter service
-	VisitGreeterService(ctx context.Context, edge core.Edge, service IService) error
+	edge.HandleFunc("/swagger/api/", openAPIServer("cmd/tickex/api/v1"))
+	edge.HandleFunc("/swagger", func(writer http.ResponseWriter, request *http.Request) {
+		http.ServeFile(writer, request, "cmd/tickex/swagger/index.html")
+	})
+	edge.AsServeMux().Handle("/swagger/", http.StripPrefix("/swagger/", fs))
 }
