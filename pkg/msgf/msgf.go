@@ -17,15 +17,10 @@
 // Package msgf contain log message title with format
 package msgf
 
-import (
-	"github.com/tickexvn/tickex/api/gen/go/types/v1"
-	"github.com/tickexvn/tickex/internal/version"
-)
-
 var (
 	// InfoGrpcServer gRPC server listening on [PORT]
-	InfoGrpcServer = version.Header(types.Status_STATUS_I) + " [gRPC] Listening on %s"
+	InfoGrpcServer = "[gRPC] listen on %s"
 
 	// InfoHTTPServer HTTP server listening on [PORT]
-	InfoHTTPServer = version.Header(types.Status_STATUS_I) + " [HTTP] Listening on %s"
+	InfoHTTPServer = "[HTTP] listen on %s"
 )

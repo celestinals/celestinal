@@ -18,10 +18,12 @@
 package main
 
 import (
+	"context"
+
 	"github.com/tickexvn/tickex/internal/gateway"
+	"github.com/tickexvn/tickex/pkg/configs"
 	"github.com/tickexvn/tickex/pkg/core"
 	"github.com/tickexvn/tickex/pkg/logger"
-	"github.com/tickexvn/tickex/pkg/settings"
 )
 
 // Build and run main application with environment variable
@@ -31,6 +33,6 @@ import (
 //
 // _ = core.Inject(controllers.New)
 func main() {
-	app := core.Build(gateway.New, settings.DefaultConfig)
-	logger.Fatal(app.Start())
+	app := core.Build(gateway.New, configs.Default)
+	logger.Fatal(app.Start(context.Background()))
 }

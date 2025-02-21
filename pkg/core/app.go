@@ -26,7 +26,7 @@ import (
 
 // Application represents the application interface.
 type Application interface {
-	Start() error
+	Start(ctx context.Context) error
 }
 
 // Server represents the HTTP server interface.

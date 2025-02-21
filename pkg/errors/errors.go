@@ -18,62 +18,38 @@
 package errors
 
 import (
-	"errors"
 	"fmt"
 
 	"github.com/tickexvn/tickex/api/gen/go/types/v1"
-	"github.com/tickexvn/tickex/internal/version"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
-// Error represents an error
-type Error struct {
-	Code    types.Errors
-	Message string
-	Cause   error
-}
+var (
+	forbidden     = fmt.Sprintf("TICKEX-%d: %s", types.Errors_ERRORS_FORBIDDEN, types.Errors_ERRORS_FORBIDDEN.String())
+	unspecified   = fmt.Sprintf("TICKEX-%d: %s", types.Errors_ERRORS_UNSPECIFIED, types.Errors_ERRORS_UNSPECIFIED.String())
+	internalError = fmt.Sprintf("TICKEX-%d: %s", types.Errors_ERRORS_INTERNAL_ERROR, types.Errors_ERRORS_INTERNAL_ERROR.String())
+	notFound      = fmt.Sprintf("TICKEX-%d: %s", types.Errors_ERRORS_NOT_FOUND, types.Errors_ERRORS_NOT_FOUND.String())
+	unauthorized  = fmt.Sprintf("TICKEX-%d: %s", types.Errors_ERRORS_UNAUTHORIZED, types.Errors_ERRORS_UNAUTHORIZED.String())
+	invalidData   = fmt.Sprintf("TICKEX-%d: %s", types.Errors_ERRORS_INVALID_DATA, types.Errors_ERRORS_INVALID_DATA.String())
+)
 
-// Error returns the error message
-func (e *Error) Error() string {
-	return e.format()
-}
+var (
+	// ErrUnspecified is a generic error
+	ErrUnspecified = status.Error(codes.Unknown, unspecified)
 
-// Unwrap returns the cause of the error
-func (e *Error) Unwrap() error {
-	return e.Cause
-}
+	// ErrInternalError is an internal error
+	ErrInternalError = status.Error(codes.Internal, internalError)
 
-// Combine combines the error and its cause
-//func (e *Error) Combine() error {
-//	if e.Cause == nil {
-//		return nil
-//	}
-//
-//	return errors.New(e.format())
-//}
+	// ErrNotFound is a not found error
+	ErrNotFound = status.Error(codes.NotFound, notFound)
 
-func (e *Error) format() string {
-	if e.Cause != nil {
-		return fmt.Sprintf("%s [%s] %s: %v", version.Header(types.Status_STATUS_E), e.Code.String(), e.Message, e.Cause)
-	}
+	// ErrUnauthorized is an unauthorized error
+	ErrUnauthorized = status.Error(codes.Unauthenticated, unauthorized)
 
-	return fmt.Sprintf("%s [%s] %s", version.Header(types.Status_STATUS_E), e.Code.String(), e.Message)
-}
+	// ErrForbidden is a forbidden error
+	ErrForbidden = status.Error(codes.PermissionDenied, forbidden)
 
-// New creates a new error
-func New(code types.Errors, message string, cause error) *Error {
-	return &Error{
-		Code:    code,
-		Message: message,
-		Cause:   cause,
-	}
-}
-
-// Is checks if the error is of the target code
-func Is(err error, targetCode types.Errors) bool {
-	var appErr *Error
-	if errors.As(err, &appErr) {
-		return appErr.Code == targetCode
-	}
-
-	return false
-}
+	// ErrInvalidData is an invalid data error
+	ErrInvalidData = status.Error(codes.InvalidArgument, invalidData)
+)

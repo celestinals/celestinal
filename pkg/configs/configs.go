@@ -14,29 +14,24 @@
  * limitations under the License.
  */
 
-// Package namespace provides a namespace.
-package namespace
+// Package configs provides the configs for the service.
+package configs
 
 import (
-	"context"
-	"errors"
+	"os"
+
+	_ "github.com/joho/godotenv/autoload" // load .env file automatically
+
+	"github.com/tickexvn/tickex/api/gen/go/types/v1"
 )
 
-// Key represents a context key.
-type Key string
-
-const tkxNamespace Key = "tx.namespace"
-
-// WithNamespace returns a new context with the namespace.
-func WithNamespace(ctx context.Context, ns string) context.Context {
-	return context.WithValue(ctx, tkxNamespace, ns)
+var conf = &types.Config{
+	ServiceRegistryAddress: os.Getenv(types.TickexPublic_TICKEX_PUBLIC_SERVICE_REGISTRY_ADDRESS.String()),
+	GatewayAddress:         os.Getenv(types.TickexPublic_TICKEX_PUBLIC_GATEWAY_ADDRESS.String()),
+	Env:                    os.Getenv(types.TickexPublic_TICKEX_PUBLIC_ENV.String()),
 }
 
-// FromContext returns the namespace from the context.
-func FromContext(ctx context.Context) (string, error) {
-	ns := ctx.Value(tkxNamespace)
-	if ns == nil {
-		return "", errors.New("namespace not found in context")
-	}
-	return ns.(string), nil
+// Default returns the environment.
+func Default() *types.Config {
+	return conf
 }

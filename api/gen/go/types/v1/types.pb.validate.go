@@ -154,6 +154,8 @@ func (m *Context) Validate() error {
 
 	// no validation rules for Ip
 
+	// no validation rules for Environment
+
 	return nil
 }
 
@@ -221,6 +223,8 @@ func (m *Config) Validate() error {
 	// no validation rules for ServiceRegistryAddress
 
 	// no validation rules for GatewayAddress
+
+	// no validation rules for Env
 
 	return nil
 }

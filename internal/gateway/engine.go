@@ -26,8 +26,6 @@ import (
 	"github.com/tickexvn/tickex/internal/gateway/types"
 	"github.com/tickexvn/tickex/internal/gateway/visitor"
 	"github.com/tickexvn/tickex/pkg/core"
-	"github.com/tickexvn/tickex/pkg/core/syslog"
-	"github.com/tickexvn/tickex/pkg/errors"
 	"github.com/tickexvn/tickex/pkg/logger"
 	"github.com/tickexvn/tickex/pkg/msgf"
 	"github.com/tickexvn/tickex/pkg/pbtools"
@@ -91,9 +89,6 @@ func (e *Engine) register(ctx context.Context) error {
 // ListenAndServe the gateway app
 func (e *Engine) ListenAndServe() error {
 	if err := pbtools.Validate(e.config); err != nil {
-		errs := errors.New(typepb.Errors_ERRORS_INVALID_DATA, "validation failed", err)
-		syslog.Error(errs.Error())
-
 		return err
 	}
 
