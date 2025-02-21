@@ -29,7 +29,7 @@ func Serve(edge core.Edge) {
 
 	edge.AsMux().HandleFunc("/swagger/api/", openAPIServer("cmd/tickex/api"))
 	edge.AsMux().HandleFunc("/swagger", func(writer http.ResponseWriter, request *http.Request) {
-		http.ServeFile(writer, request, "cmd/tickex/swagger/index.html")
+		http.Redirect(writer, request, "/swagger/", http.StatusMovedPermanently)
 	})
 
 	edge.AsMux().Handle("/swagger/", http.StripPrefix("/swagger/", fs))
