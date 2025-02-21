@@ -14,19 +14,23 @@
  * limitations under the License.
  */
 
+// Package openapi serve core.Edge to host swagger ui
 package openapi
 
 import (
-	"github.com/tickexvn/tickex/pkg/core"
 	"net/http"
+
+	"github.com/tickexvn/tickex/pkg/core"
 )
 
+// Serve return api json and swagger ui
 func Serve(edge core.Edge) {
 	fs := http.FileServer(http.Dir("cmd/tickex/swagger/"))
 
-	edge.HandleFunc("/swagger/api/", openAPIServer("cmd/tickex/api/v1"))
-	edge.HandleFunc("/swagger", func(writer http.ResponseWriter, request *http.Request) {
+	edge.AsMux().HandleFunc("/swagger/api/", openAPIServer("cmd/tickex/api"))
+	edge.AsMux().HandleFunc("/swagger", func(writer http.ResponseWriter, request *http.Request) {
 		http.ServeFile(writer, request, "cmd/tickex/swagger/index.html")
 	})
-	edge.AsServeMux().Handle("/swagger/", http.StripPrefix("/swagger/", fs))
+
+	edge.AsMux().Handle("/swagger/", http.StripPrefix("/swagger/", fs))
 }

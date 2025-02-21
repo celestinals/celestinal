@@ -26,16 +26,16 @@ import (
 type Edge interface {
 	Listen(conf *EdgeConfig) error
 	AsRuntimeMux() *runtime.ServeMux
-	AsServeMux() *http.ServeMux
-	HandleFunc(pattern string, handler http.HandlerFunc)
+	AsMux() *http.ServeMux
 }
 
+// EdgeConfig is properties of Edge.Listen function, include address and http handler response
 type EdgeConfig struct {
 	Addr    string
 	Handler http.Handler
 }
 
-// NewEdge creates a new runtime mux.
+// NewEdge creates a new http server.
 func NewEdge(opts ...runtime.ServeMuxOption) Edge {
 	return &edge{
 		mux:     runtime.NewServeMux(opts...),
@@ -43,15 +43,11 @@ func NewEdge(opts ...runtime.ServeMuxOption) Edge {
 	}
 }
 
-// edge is a runtime mux.
+// edge is a http server.
 type edge struct {
 	mux     *runtime.ServeMux
 	httpMux *http.ServeMux
 	server  *http.Server
-}
-
-func (e *edge) HandleFunc(pattern string, handler http.HandlerFunc) {
-	e.httpMux.HandleFunc(pattern, handler)
 }
 
 // Listen starts the runtime mux.
@@ -77,6 +73,7 @@ func (e *edge) AsRuntimeMux() *runtime.ServeMux {
 	return e.mux
 }
 
-func (e *edge) AsServeMux() *http.ServeMux {
+// AsMux returns the underlying http mux
+func (e *edge) AsMux() *http.ServeMux {
 	return e.httpMux
 }

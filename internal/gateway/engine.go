@@ -19,6 +19,7 @@ package gateway
 
 import (
 	"context"
+
 	typepb "github.com/tickexvn/tickex/api/gen/go/types/v1"
 	"github.com/tickexvn/tickex/internal/gateway/openapi"
 	"github.com/tickexvn/tickex/internal/gateway/services/greeter"
@@ -112,7 +113,7 @@ func (e *Engine) ListenAndServe() error {
 	logger.Infof(msgf.InfoHTTPServer, e.config.GetGatewayAddress())
 	return e.edge.Listen(&core.EdgeConfig{
 		Addr:    e.config.GetGatewayAddress(),
-		Handler: logRequestBody(openapi.AllowCORS(e.edge.AsServeMux())),
+		Handler: logRequestBody(openapi.AllowCORS(e.edge.AsMux())),
 	})
 }
 

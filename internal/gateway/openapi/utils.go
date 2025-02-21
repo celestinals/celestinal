@@ -17,10 +17,11 @@
 package openapi
 
 import (
-	"google.golang.org/grpc/grpclog"
 	"net/http"
 	"path"
 	"strings"
+
+	"google.golang.org/grpc/grpclog"
 )
 
 func openAPIServer(dir string) http.HandlerFunc {
@@ -44,6 +45,9 @@ func AllowCORS(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if origin := r.Header.Get("Origin"); origin != "" {
 			w.Header().Set("Access-Control-Allow-Origin", origin)
+			w.Header().Set("Vary", "Origin")                           // Fix cache issue
+			w.Header().Set("Access-Control-Allow-Credentials", "true") // If cookies need to be sent
+
 			if r.Method == "OPTIONS" && r.Header.Get("Access-Control-Request-Method") != "" {
 				preflightHandler(w, r)
 				return
@@ -61,5 +65,12 @@ func preflightHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Headers", strings.Join(headers, ","))
 	methods := []string{"GET", "HEAD", "POST", "PUT", "DELETE"}
 	w.Header().Set("Access-Control-Allow-Methods", strings.Join(methods, ","))
+
+	// Fix: Add status code to avoid error
+	w.WriteHeader(http.StatusNoContent)
+
+	// Fix: Add Max-Age to optimize
+	w.Header().Set("Access-Control-Max-Age", "86400")
+
 	grpclog.Infof("Preflight request for %s", r.URL.Path)
 }

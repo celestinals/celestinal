@@ -19,9 +19,10 @@ package gateway
 import (
 	"bytes"
 	"fmt"
-	"google.golang.org/grpc/grpclog"
 	"io"
 	"net/http"
+
+	"google.golang.org/grpc/grpclog"
 )
 
 type logResponseWriter struct {
