@@ -18,9 +18,11 @@
 package main
 
 import (
+	"context"
+
+	"github.com/tickexvn/tickex/pkg/configs"
 	"github.com/tickexvn/tickex/pkg/core"
 	"github.com/tickexvn/tickex/pkg/logger"
-	"github.com/tickexvn/tickex/pkg/settings"
 	_ "github.com/tickexvn/tickex/x/greeter/v1/cmd/init"
 	"github.com/tickexvn/tickex/x/greeter/v1/cmd/server"
 )
@@ -32,6 +34,6 @@ import (
 //
 // _ = core.Inject(controllers.New)
 func main() {
-	app := core.Build(server.New, settings.DefaultConfig)
-	logger.Fatal(app.Start())
+	app := core.Build(server.New, configs.Default)
+	logger.Fatal(app.Start(context.Background()))
 }

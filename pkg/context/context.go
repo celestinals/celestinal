@@ -19,7 +19,6 @@ package context
 
 import (
 	"context"
-	"time"
 
 	"github.com/tickexvn/tickex/api/gen/go/types/v1"
 
@@ -31,16 +30,16 @@ type Key int
 
 const contextKey Key = 0
 
-// New returns a new context with the given message and deadline.
-func New(ctxBase context.Context, msg *types.Context, deadline time.Time) (context.Context, context.CancelFunc) {
+// New returns a new context with the given message
+func New(msg *types.Context) context.Context {
 	if msg == nil {
-		return context.WithDeadline(ctxBase, deadline)
+		msg = &types.Context{}
 	}
 
+	ctx := context.Background()
 	msgBin, _ := proto.Marshal(msg)
-	ctx := context.WithValue(ctxBase, contextKey, msgBin)
 
-	return context.WithDeadline(ctx, deadline)
+	return context.WithValue(ctx, contextKey, msgBin)
 }
 
 // Value returns the context value.

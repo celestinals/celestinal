@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package settings
+package configs
 
 import (
 	"testing"
@@ -27,6 +27,7 @@ func TestConfig(t *testing.T) {
 	conf := types.Config{
 		ServiceRegistryAddress: "0.0.0.0:8500",
 		GatewayAddress:         "0.0.0.0:9000",
+		Env:                    "prod",
 	}
 
 	if err := pbtools.Validate(&conf); err != nil {
@@ -35,7 +36,7 @@ func TestConfig(t *testing.T) {
 }
 
 func TestConfigEnv(t *testing.T) {
-	conf := DefaultConfig()
+	conf := Default()
 
 	if err := pbtools.Validate(conf); err != nil {
 		return

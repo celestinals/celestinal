@@ -24,8 +24,6 @@ import (
 	"github.com/tickexvn/tickex/api/gen/go/types/v1"
 	"github.com/tickexvn/tickex/pkg/core"
 	"github.com/tickexvn/tickex/pkg/core/net"
-	"github.com/tickexvn/tickex/pkg/core/syslog"
-	"github.com/tickexvn/tickex/pkg/errors"
 	"github.com/tickexvn/tickex/pkg/logger"
 	"github.com/tickexvn/tickex/pkg/msgf"
 	"github.com/tickexvn/tickex/pkg/pbtools"
@@ -44,10 +42,7 @@ type Greeter struct {
 // ListenAndServe implements IGreeter.
 func (g *Greeter) ListenAndServe() error {
 	if err := pbtools.Validate(g.config); err != nil {
-		errs := errors.New(types.Errors_ERRORS_INVALID_DATA, "validation failed", err)
-		syslog.Error(errs.Error())
-
-		return errs.Unwrap()
+		return err
 	}
 
 	listener, err := net.ListenTCP(fmt.Sprintf(":%d", 8000))

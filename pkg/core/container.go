@@ -18,14 +18,11 @@ package core
 
 import (
 	"context"
-	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
 
-	"github.com/tickexvn/tickex/api/gen/go/types/v1"
 	"github.com/tickexvn/tickex/internal/version"
-	"github.com/tickexvn/tickex/pkg/errors"
 	"github.com/tickexvn/tickex/pkg/logger"
 	"go.uber.org/fx"
 )
@@ -35,28 +32,26 @@ type container struct {
 }
 
 // Start implements IContainer.
-func (c *container) Start() error {
-	go c.stop()
-	if err := c.engine.Start(context.Background()); err != nil {
-		errs := errors.New(types.Errors_ERRORS_INTERNAL_ERROR, "START ERROR", err)
-
-		return fmt.Errorf("%s", errs.Error())
+func (c *container) Start(ctx context.Context) error {
+	go c.stop(ctx)
+	if err := c.engine.Start(ctx); err != nil {
+		return err
 	}
 
 	return nil
 }
 
-func (c *container) stop() {
+func (c *container) stop(ctx context.Context) {
 	sigChan := make(chan os.Signal, 1)
 	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
 
 	sig := <-sigChan
-	logger.Infof("%s Received signal: %v. Stopping application...\n",
-		version.Header(types.Status_STATUS_I), sig)
 
-	if err := c.engine.Stop(context.Background()); err != nil {
-		logger.Error(errors.New(types.Errors_ERRORS_INTERNAL_ERROR,
-			"While stopping app", err).Error())
+	logger.Infof("%s Received signal: %v. Stopping application...\n",
+		version.Header(), sig)
+
+	if err := c.engine.Stop(ctx); err != nil {
+		logger.Error(err)
 
 		os.Exit(1)
 		return

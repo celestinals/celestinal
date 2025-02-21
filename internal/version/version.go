@@ -21,8 +21,6 @@ import (
 	"fmt"
 	"runtime"
 	"strings"
-
-	"github.com/tickexvn/tickex/api/gen/go/types/v1"
 )
 
 var (
@@ -43,16 +41,6 @@ var (
 )
 
 // Header returns the header info string.
-func Header(status types.Status) string {
-	return fmt.Sprintf("%s>%s>>%s>>%s>>>>>", getStatusSuffix(status), FullName, Version, GoVersion)
-}
-
-// getStatusSuffix returns the suffix of the status.
-func getStatusSuffix(status types.Status) string {
-	arr := strings.Split(status.String(), "_")
-	if len(arr) < 2 {
-		return ""
-	}
-
-	return arr[len(arr)-1]
+func Header() string {
+	return fmt.Sprintf("%s>%s>>>", FullName, Version)
 }

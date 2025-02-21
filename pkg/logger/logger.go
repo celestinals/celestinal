@@ -18,13 +18,33 @@
 package logger
 
 import (
+	"fmt"
+	"os"
+
+	"github.com/tickexvn/tickex/internal/version"
 	"github.com/tickexvn/tickex/pkg/utils"
 	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 )
 
 // New creates a new logger.
 func New() *zap.Logger {
-	logger, _ := zap.NewDevelopment()
+	config := zapcore.EncoderConfig{
+		TimeKey:       "timestamp",
+		LevelKey:      "level",
+		NameKey:       "logger",
+		MessageKey:    "message",
+		StacktraceKey: "stacktrace",
+		EncodeTime:    zapcore.ISO8601TimeEncoder,
+		EncodeLevel:   zapcore.CapitalColorLevelEncoder,
+		EncodeCaller:  zapcore.ShortCallerEncoder,
+	}
+
+	// Console output
+	consoleEncoder := zapcore.NewConsoleEncoder(config)
+	core := zapcore.NewCore(consoleEncoder, zapcore.Lock(os.Stdout), zapcore.DebugLevel)
+
+	logger := zap.New(core, zap.AddCaller(), zap.AddStacktrace(zapcore.ErrorLevel))
 	return logger
 }
 
@@ -38,7 +58,7 @@ func Info(message ...interface{}) {
 	defer utils.CallBack(logger.Sync)
 
 	sugar := logger.WithOptions(zap.AddCallerSkip(1)).Sugar()
-	sugar.Info(message...)
+	sugar.Info(appendHeader(message...))
 }
 
 // Infof logs an info message with a format.
@@ -51,7 +71,8 @@ func Infof(template string, message ...interface{}) {
 	defer utils.CallBack(logger.Sync)
 
 	sugar := logger.WithOptions(zap.AddCallerSkip(1)).Sugar()
-	sugar.Infof(template, message...)
+	msg := fmt.Sprintf("%s %s", version.Header(), fmt.Sprintf(template, message...))
+	sugar.Info(msg)
 }
 
 // Debug logs a debug message.
@@ -64,7 +85,7 @@ func Debug(message ...interface{}) {
 	defer utils.CallBack(logger.Sync)
 
 	sugar := logger.WithOptions(zap.AddCallerSkip(1)).Sugar()
-	sugar.Debug(message...)
+	sugar.Debug(appendHeader(message...))
 }
 
 // Error logs an error message.
@@ -77,7 +98,21 @@ func Error(message ...interface{}) {
 	defer utils.CallBack(logger.Sync)
 
 	sugar := logger.WithOptions(zap.AddCallerSkip(1)).Sugar()
-	sugar.Error(message...)
+	sugar.Error(appendHeader(message...))
+}
+
+// Errorf logs an error message with a format.
+func Errorf(template string, message ...interface{}) {
+	if len(removeNil(message)) == 0 {
+		return
+	}
+
+	logger := New()
+	defer utils.CallBack(logger.Sync)
+
+	sugar := logger.WithOptions(zap.AddCallerSkip(1)).Sugar()
+	msg := fmt.Sprintf("%s %s", version.Header(), fmt.Sprintf(template, message...))
+	sugar.Errorf(msg)
 }
 
 // Fatal logs a fatal message.
@@ -90,7 +125,7 @@ func Fatal(message ...interface{}) {
 	defer utils.CallBack(logger.Sync)
 
 	sugar := logger.WithOptions(zap.AddCallerSkip(1)).Sugar()
-	sugar.Fatal(message...)
+	sugar.Fatal(appendHeader(message...))
 }
 
 func removeNil(input []interface{}) []interface{} {
@@ -101,4 +136,9 @@ func removeNil(input []interface{}) []interface{} {
 		}
 	}
 	return result
+}
+
+func appendHeader(message ...interface{}) string {
+	msg := fmt.Sprint(message...)
+	return fmt.Sprintf("%s %s", version.Header(), msg)
 }

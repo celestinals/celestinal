@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-// Package syslog provides the system logging utilities.
-package syslog
+// Package tracklog provides the system logging utilities.
+package tracklog
 
 import (
 	"fmt"
-	"os"
 	"runtime"
 
 	"github.com/tickexvn/tickex/pkg/utils"
@@ -28,11 +27,6 @@ import (
 
 // New creates a new logger instance.
 func New() *zap.Logger {
-	if os.Getenv("MODE") == "dev" {
-		logger, _ := zap.NewDevelopment()
-		return logger
-	}
-
 	logger, _ := zap.NewProduction()
 	return logger
 }

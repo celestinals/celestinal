@@ -19,9 +19,12 @@ package domain
 
 import (
 	"context"
+	"encoding/json"
 	"time"
 
 	"github.com/tickexvn/tickex/api/gen/go/domain/greeter/v1"
+	"github.com/tickexvn/tickex/pkg/errors"
+	"github.com/tickexvn/tickex/pkg/logger"
 )
 
 // IGreeter defines the interface for the Greeter biz module.
@@ -36,8 +39,15 @@ type Greeter struct {
 
 // SayHello implements GreeterServiceServer.
 func (g *Greeter) SayHello(_ context.Context, msg *greeter.SayHelloRequest) (*greeter.SayHelloResponse, error) {
+	msgs, _ := json.Marshal(msg)
+	logger.Debug("Received a SayHello request" + string(msgs))
+
 	name := msg.GetName()
 	t := time.Now().String()
+
+	if name == "error" {
+		return nil, errors.ErrForbidden
+	}
 
 	return &greeter.SayHelloResponse{
 		Message: "Reply " + name + " at " + t,
