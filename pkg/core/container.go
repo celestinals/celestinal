@@ -22,7 +22,6 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/tickexvn/tickex/internal/version"
 	"github.com/tickexvn/tickex/pkg/logger"
 	"go.uber.org/fx"
 )
@@ -47,8 +46,7 @@ func (c *container) stop(ctx context.Context) {
 
 	sig := <-sigChan
 
-	logger.Infof("%s Received signal: %v. Stopping application...\n",
-		version.Header(), sig)
+	logger.Infof("Received signal: %v. Stopping application...\n", sig)
 
 	if err := c.engine.Stop(ctx); err != nil {
 		logger.Error(err)
