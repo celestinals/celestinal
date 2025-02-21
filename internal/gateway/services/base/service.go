@@ -39,6 +39,6 @@ func (s *Service) Register(_ context.Context, _ *runtime.ServeMux, _ string, _ [
 }
 
 // Accept accepts the base service
-func (s *Service) Accept(_ context.Context, _ core.IServeMux, _ types.IVisitor) error {
+func (s *Service) Accept(_ context.Context, _ core.Edge, _ types.IVisitor) error {
 	panic("unimplemented")
 }

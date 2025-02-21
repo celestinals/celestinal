@@ -14,26 +14,23 @@
  * limitations under the License.
  */
 
-// Package types provides the types for the gateway.
-package types
+// Package openapi serve core.Edge to host swagger ui
+package openapi
 
 import (
-	"context"
+	"net/http"
 
 	"github.com/tickexvn/tickex/pkg/core"
 )
 
-// IService represents the service interface.
-type IService interface {
-	core.GRPCService
-	Accept(context.Context, core.Edge, IVisitor) error
-}
+// Serve return api json and swagger ui
+func Serve(edge core.Edge) {
+	fs := http.FileServer(http.Dir("cmd/tickex/swagger/"))
 
-// IVisitor represents the visitor interface.
-// Add more visit service method bellows
-type IVisitor interface {
-	// TODO: declare visit service function
+	edge.AsMux().HandleFunc("/swagger/api/", openAPIServer("cmd/tickex/api"))
+	edge.AsMux().HandleFunc("/swagger", func(writer http.ResponseWriter, request *http.Request) {
+		http.ServeFile(writer, request, "cmd/tickex/swagger/index.html")
+	})
 
-	// VisitGreeterService visit greeter service
-	VisitGreeterService(ctx context.Context, edge core.Edge, service IService) error
+	edge.AsMux().Handle("/swagger/", http.StripPrefix("/swagger/", fs))
 }

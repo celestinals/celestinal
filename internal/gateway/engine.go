@@ -21,6 +21,7 @@ import (
 	"context"
 
 	typepb "github.com/tickexvn/tickex/api/gen/go/types/v1"
+	"github.com/tickexvn/tickex/internal/gateway/openapi"
 	"github.com/tickexvn/tickex/internal/gateway/services/greeter"
 	"github.com/tickexvn/tickex/internal/gateway/types"
 	"github.com/tickexvn/tickex/internal/gateway/visitor"
@@ -37,13 +38,13 @@ var _ core.Server = (*Engine)(nil)
 // Engine represents the gateway app
 type Engine struct {
 	config  *typepb.Config
-	mux     core.IServeMux
+	edge    core.Edge
 	visitor types.IVisitor
 }
 
 func (e *Engine) visit(ctx context.Context, services ...types.IService) error {
 	for _, service := range services {
-		if err := service.Accept(ctx, e.mux, e.visitor); err != nil {
+		if err := service.Accept(ctx, e.edge, e.visitor); err != nil {
 			return err
 		}
 	}
@@ -56,18 +57,18 @@ func (e *Engine) visit(ctx context.Context, services ...types.IService) error {
 // Ex:
 //
 //	type IVisitor interface {
-//		VisitGreeterService(ctx context.Context, mux core.IServeMux, service IService) error
+//		VisitGreeterService(ctx context.Context, edge core.Edge, service IService) error
 //	}
 //
 // Implement function at visitor.Visitor:
 //
 // Ex:
 //
-//	func (v *Visitor) VisitGreeterService(ctx context.Context, mux core.IServeMux, service types.IService) error {
+//	func (v *Visitor) VisitGreeterService(ctx context.Context, edge core.Edge, service types.IService) error {
 //		opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 //
 //		greeterAddr := ":8000"
-//		if err := core.RegisterService(ctx, mux, service, greeterAddr, opts); err != nil {
+//		if err := core.RegisterService(ctx, edge, service, greeterAddr, opts); err != nil {
 //			return err
 //		}
 //
@@ -100,20 +101,26 @@ func (e *Engine) ListenAndServe() error {
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
+	// register service
 	if err := e.register(ctx); err != nil {
 		return err
 	}
 
-	// Listen HTTP server (and mux calls to gRPC server endpoint)
-	logger.Infof(msgf.InfoHTTPServer, e.config.GetGatewayAddress())
+	// serve swagger ui
+	openapi.Serve(e.edge)
 
-	return e.mux.Listen(e.config.GetGatewayAddress())
+	// Listen HTTP server (and edge calls to gRPC server endpoint)
+	logger.Infof(msgf.InfoHTTPServer, e.config.GetGatewayAddress())
+	return e.edge.Listen(&core.EdgeConfig{
+		Addr:    e.config.GetGatewayAddress(),
+		Handler: logRequestBody(openapi.AllowCORS(e.edge.AsMux())),
+	})
 }
 
 // New creates a new gateway app
 func New(conf *typepb.Config) core.Server {
 	return &Engine{
-		mux:     core.NewServeMux(),
+		edge:    core.NewEdge(),
 		visitor: visitor.New(),
 		config:  conf,
 	}
