@@ -55,12 +55,13 @@ func logRequestBody(h http.Handler) http.Handler {
 			http.Error(w, fmt.Sprintf("grpc server read request body err %+v", err), http.StatusBadRequest)
 			return
 		}
+
 		clonedR := r.Clone(r.Context())
 		clonedR.Body = io.NopCloser(bytes.NewReader(body))
 
 		h.ServeHTTP(lw, clonedR)
 
-		if lw.statusCode != http.StatusOK {
+		if lw.statusCode >= 400 {
 			grpclog.Errorf("http error %+v request body %+v", lw.statusCode, string(body))
 		}
 	})
