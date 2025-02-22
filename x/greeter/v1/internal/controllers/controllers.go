@@ -19,12 +19,12 @@ package controllers
 
 import (
 	"context"
-	"github.com/tickexvn/tickex/pkg/errors"
-	"github.com/tickexvn/tickex/pkg/logger"
 
 	"github.com/tickexvn/tickex/api/gen/go/controllers/greeter/v1"
 	greeterdomain "github.com/tickexvn/tickex/api/gen/go/domain/greeter/v1"
 	"github.com/tickexvn/tickex/pkg/copier"
+	"github.com/tickexvn/tickex/pkg/errors"
+	"github.com/tickexvn/tickex/pkg/logger"
 	"github.com/tickexvn/tickex/x/greeter/v1/internal/domain"
 )
 
