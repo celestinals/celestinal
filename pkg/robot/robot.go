@@ -14,25 +14,28 @@
  * limitations under the License.
  */
 
-// Package configs provides the configs for the service.
-package configs
+// Package robot provide functions log by telegram bot
+package robot
 
 import (
-	"os"
-
-	_ "github.com/joho/godotenv/autoload" // load .env file automatically
-
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/tickexvn/tickex/api/gen/go/types/v1"
+	"github.com/tickexvn/tickex/pkg/logger"
 )
 
-var conf = &types.Config{
-	ServiceRegistryAddress: os.Getenv(types.TickexPublic_TICKEX_PUBLIC_SERVICE_REGISTRY_ADDRESS.String()),
-	GatewayAddress:         os.Getenv(types.TickexPublic_TICKEX_PUBLIC_GATEWAY_ADDRESS.String()),
-	Env:                    os.Getenv(types.TickexPublic_TICKEX_PUBLIC_ENV.String()),
-	BotToken:               os.Getenv(types.TickexPublic_TICKEX_PUBLIC_BOT_TOKEN.String()),
-}
+var bot *tgbotapi.BotAPI
 
-// Default returns the environment.
-func Default() *types.Config {
-	return conf
+// Init telegram bot api
+func Init(conf *types.Config) {
+	if bot != nil {
+		return
+	}
+
+	var err error
+	bot, err = tgbotapi.NewBotAPI(conf.GetBotToken())
+
+	if err != nil {
+		logger.Errorf("Failed to connect to Telegram: %v", err)
+	}
+
 }

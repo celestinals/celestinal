@@ -116,7 +116,7 @@ func (e *Engine) ListenAndServe() error {
 func New(conf *typepb.Config) core.Server {
 	return &Engine{
 		edge:    core.NewEdge(),
-		visitor: visitor.New(),
+		visitor: visitor.New(conf),
 		config:  conf,
 	}
 }

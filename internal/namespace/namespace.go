@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-// Package msgf contain log message title with format
-package msgf
+// Package namespace provide name of all service at tickex
+package namespace
 
 const (
-	// InfoGrpcServer gRPC server listening on [PORT]
-	InfoGrpcServer = "[gRPC] listen on %s"
+	// GatewayV1 namespace info
+	GatewayV1 = "tickex.gateway.v1"
 
-	// InfoHTTPServer HTTP server listening on [PORT]
-	InfoHTTPServer = "[HTTP] listen on %s"
+	// GreeterV1 namespace info
+	GreeterV1 = "tickex.x.greeter.v1"
 )

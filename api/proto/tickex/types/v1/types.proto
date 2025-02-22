@@ -45,7 +45,8 @@ message Context {
 message Config {
   string service_registry_address = 1 [(buf.validate.field).string.pattern = "^[a-zA-Z0-9.-]+:[0-9]{1,5}$"];
   string gateway_address = 2 [(buf.validate.field).string.pattern = "^[a-zA-Z0-9.-]+:[0-9]{1,5}$"];
-  string env = 3 [(buf.validate.field).string.pattern = "^(dev|prod|development|production|sandbox)$"];
+  string env = 3 [(buf.validate.field).string.pattern = "^(dev|prod|sandbox)$"];
+  string bot_token = 4;
 }
 
 message Service {

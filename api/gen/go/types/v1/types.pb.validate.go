@@ -226,6 +226,8 @@ func (m *Config) Validate() error {
 
 	// no validation rules for Env
 
+	// no validation rules for BotToken
+
 	return nil
 }
 

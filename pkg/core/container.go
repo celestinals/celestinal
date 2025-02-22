@@ -22,7 +22,6 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/tickexvn/tickex/pkg/logger"
 	"go.uber.org/fx"
 )
 
@@ -32,28 +31,21 @@ type container struct {
 
 // Start implements IContainer.
 func (c *container) Start(ctx context.Context) error {
-	go c.stop(ctx)
-	if err := c.engine.Start(ctx); err != nil {
-		return err
-	}
+	err := make(chan error)
+	sig := make(chan os.Signal, 1)
+	signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM)
 
-	return nil
+	go c.start(ctx, err)
+	go c.stop(ctx, sig, err)
+
+	return <-err
 }
 
-func (c *container) stop(ctx context.Context) {
-	sigChan := make(chan os.Signal, 1)
-	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
+func (c *container) start(ctx context.Context, err chan<- error) {
+	err <- c.engine.Start(ctx)
+}
 
-	sig := <-sigChan
-
-	logger.Infof("Received signal: %v. Stopping application...\n", sig)
-
-	if err := c.engine.Stop(ctx); err != nil {
-		logger.Error(err)
-
-		os.Exit(1)
-		return
-	}
-
-	os.Exit(0)
+func (c *container) stop(ctx context.Context, sig <-chan os.Signal, err chan<- error) {
+	<-sig
+	err <- c.engine.Stop(ctx)
 }
