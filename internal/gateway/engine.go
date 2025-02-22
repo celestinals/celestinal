@@ -19,8 +19,8 @@ package gateway
 
 import (
 	"context"
-
 	typepb "github.com/tickexvn/tickex/api/gen/go/types/v1"
+	"github.com/tickexvn/tickex/internal/gateway/middleware"
 	"github.com/tickexvn/tickex/internal/gateway/openapi"
 	"github.com/tickexvn/tickex/internal/gateway/services/greeter"
 	"github.com/tickexvn/tickex/internal/gateway/types"
@@ -33,6 +33,15 @@ import (
 
 var _ core.Server = (*Engine)(nil)
 
+// New creates a new gateway app
+func New(conf *typepb.Config) core.Server {
+	return &Engine{
+		edge:    core.NewEdge(),
+		visitor: visitor.New(conf),
+		config:  conf,
+	}
+}
+
 // Engine represents the gateway app
 type Engine struct {
 	config  *typepb.Config
@@ -40,6 +49,7 @@ type Engine struct {
 	visitor types.IVisitor
 }
 
+// visit all service by Accept function
 func (e *Engine) visit(ctx context.Context, services ...types.IService) error {
 	for _, service := range services {
 		if err := service.Accept(ctx, e.edge, e.visitor); err != nil {
@@ -104,19 +114,15 @@ func (e *Engine) ListenAndServe() error {
 	// serve swagger ui
 	openapi.Serve(e.edge)
 
-	// Listen HTTP server (and edge calls to gRPC server endpoint)
+	// log info in console
 	logger.Infof(msgf.InfoHTTPServer, e.config.GetGatewayAddress())
+
+	// new middleware handler
+	mdw := middleware.New(e.config)
+
+	// Listen HTTP server (and edge calls to gRPC server endpoint)
 	return e.edge.Listen(&core.EdgeConfig{
 		Addr:    e.config.GetGatewayAddress(),
-		Handler: logRequestBody(openapi.AllowCORS(e.edge.AsMux())),
+		Handler: mdw.LogRequestBody(mdw.AllowCORS(e.edge.AsMux())),
 	})
-}
-
-// New creates a new gateway app
-func New(conf *typepb.Config) core.Server {
-	return &Engine{
-		edge:    core.NewEdge(),
-		visitor: visitor.New(conf),
-		config:  conf,
-	}
 }

@@ -19,20 +19,25 @@ package configs
 
 import (
 	"os"
+	"strconv"
 
 	_ "github.com/joho/godotenv/autoload" // load .env file automatically
 
 	"github.com/tickexvn/tickex/api/gen/go/types/v1"
 )
 
-var conf = &types.Config{
-	ServiceRegistryAddress: os.Getenv(types.TickexPublic_TICKEX_PUBLIC_SERVICE_REGISTRY_ADDRESS.String()),
-	GatewayAddress:         os.Getenv(types.TickexPublic_TICKEX_PUBLIC_GATEWAY_ADDRESS.String()),
-	Env:                    os.Getenv(types.TickexPublic_TICKEX_PUBLIC_ENV.String()),
-	BotToken:               os.Getenv(types.TickexPublic_TICKEX_PUBLIC_BOT_TOKEN.String()),
-}
-
 // Default returns the environment.
 func Default() *types.Config {
+	sChatID := os.Getenv(types.TickexPublic_TICKEX_PUBLIC_CHAT_ID.String())
+	ID, _ := strconv.ParseInt(sChatID, 10, 64)
+
+	var conf = &types.Config{
+		ServiceRegistryAddress: os.Getenv(types.TickexPublic_TICKEX_PUBLIC_SERVICE_REGISTRY_ADDRESS.String()),
+		GatewayAddress:         os.Getenv(types.TickexPublic_TICKEX_PUBLIC_GATEWAY_ADDRESS.String()),
+		Env:                    os.Getenv(types.TickexPublic_TICKEX_PUBLIC_ENV.String()),
+		BotToken:               os.Getenv(types.TickexPublic_TICKEX_PUBLIC_BOT_TOKEN.String()),
+		ChatId:                 ID,
+	}
+
 	return conf
 }

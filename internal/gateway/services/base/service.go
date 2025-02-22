@@ -20,9 +20,8 @@ package base
 import (
 	"context"
 
-	"github.com/tickexvn/tickex/pkg/core"
-
 	"github.com/tickexvn/tickex/internal/gateway/types"
+	"github.com/tickexvn/tickex/pkg/core"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"

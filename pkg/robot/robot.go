@@ -18,24 +18,61 @@
 package robot
 
 import (
+	"fmt"
+
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/tickexvn/tickex/api/gen/go/types/v1"
-	"github.com/tickexvn/tickex/pkg/logger"
+	"github.com/tickexvn/tickex/pkg/pbtools"
 )
 
-var bot *tgbotapi.BotAPI
+var _ IRobot = (*Robot)(nil)
 
-// Init telegram bot api
-func Init(conf *types.Config) {
-	if bot != nil {
-		return
-	}
-
-	var err error
-	bot, err = tgbotapi.NewBotAPI(conf.GetBotToken())
-
+// New Telegram bot
+func New(conf *types.Config) (IRobot, error) {
+	bot, err := tgbotapi.NewBotAPI(conf.GetBotToken())
 	if err != nil {
-		logger.Errorf("Failed to connect to Telegram: %v", err)
+		return nil, err
 	}
 
+	return &Robot{
+		bot:  bot,
+		conf: conf,
+	}, nil
+}
+
+// IRobot telegram bot interface
+type IRobot interface {
+	Send(msg *types.RobotMessage) error
+}
+
+// Robot Telegram bot
+type Robot struct {
+	bot  *tgbotapi.BotAPI
+	conf *types.Config
+}
+
+// Send message to group telegram
+func (r *Robot) Send(msg *types.RobotMessage) error {
+	msgText := fmt.Sprintf(
+		"*Tickex Message*\n\n"+
+			"*ID:* `%s`\n"+
+			"*Created At:* `%s`\n"+
+			"*Author:* `%s`\n\n"+
+			"*Header:* `%s`\n"+
+			"*Body:* `%s`\n"+
+			"*Footer:* `%s`\n",
+		msg.Metadata.Id,
+		pbtools.FromTime(msg.Metadata.CreatedAt).String(),
+		msg.Metadata.Author,
+		msg.Header,
+		msg.Body,
+		msg.Footer,
+	)
+
+	// Send to Telegram
+	mdv2 := tgbotapi.NewMessage(r.conf.GetChatId(), msgText)
+	mdv2.ParseMode = "MarkdownV2"
+
+	_, err := r.bot.Send(mdv2)
+	return err
 }

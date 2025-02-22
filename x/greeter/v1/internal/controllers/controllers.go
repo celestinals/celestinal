@@ -19,6 +19,8 @@ package controllers
 
 import (
 	"context"
+	"github.com/tickexvn/tickex/pkg/errors"
+	"github.com/tickexvn/tickex/pkg/logger"
 
 	"github.com/tickexvn/tickex/api/gen/go/controllers/greeter/v1"
 	greeterdomain "github.com/tickexvn/tickex/api/gen/go/domain/greeter/v1"
@@ -41,7 +43,9 @@ type Greeter struct {
 func (g *Greeter) SayHello(ctx context.Context, msg *greeter.SayHelloRequest) (*greeter.SayHelloResponse, error) {
 	var SayHelloReq greeterdomain.SayHelloRequest
 	if err := copier.CopyMsg(msg, &SayHelloReq); err != nil {
-		return nil, err
+		logger.Error(err)
+
+		return nil, errors.ErrInvalidData
 	}
 
 	sayHelloResp, err := g.domain.SayHello(ctx, &SayHelloReq)

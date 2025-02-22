@@ -41,97 +41,17 @@ func (m *SayHelloRequest) Validate() error {
 		return nil
 	}
 
+	if v, ok := interface{}(m.GetPage()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return SayHelloRequestValidationError{
+				field:  "Page",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	// no validation rules for Name
-
-	if v, ok := interface{}(m.GetStrVal()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return SayHelloRequestValidationError{
-				field:  "StrVal",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if v, ok := interface{}(m.GetFloatVal()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return SayHelloRequestValidationError{
-				field:  "FloatVal",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if v, ok := interface{}(m.GetDoubleVal()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return SayHelloRequestValidationError{
-				field:  "DoubleVal",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if v, ok := interface{}(m.GetBoolVal()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return SayHelloRequestValidationError{
-				field:  "BoolVal",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if v, ok := interface{}(m.GetBytesVal()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return SayHelloRequestValidationError{
-				field:  "BytesVal",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if v, ok := interface{}(m.GetInt32Val()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return SayHelloRequestValidationError{
-				field:  "Int32Val",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if v, ok := interface{}(m.GetUint32Val()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return SayHelloRequestValidationError{
-				field:  "Uint32Val",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if v, ok := interface{}(m.GetInt64Val()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return SayHelloRequestValidationError{
-				field:  "Int64Val",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if v, ok := interface{}(m.GetUint64Val()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return SayHelloRequestValidationError{
-				field:  "Uint64Val",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
 
 	return nil
 }

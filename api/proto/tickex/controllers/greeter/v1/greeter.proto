@@ -16,10 +16,11 @@ syntax = "proto3";
 
 package tickex.controllers.greeter.v1;
 
+import "tickex/types/v1/types.proto";
+
 import "protoc-gen-openapiv2/options/annotations.proto";
 import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
-import "google/protobuf/wrappers.proto";
 
 option go_package = "github.com/tickexvn/tickex/api/gen/go/controllers/greeter/v1;greeter";
 
@@ -52,31 +53,14 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 service GreeterService {
   rpc SayHello(SayHelloRequest) returns (SayHelloResponse) {
     option (google.api.http) = {
-      get: "/say/{name}"
-      additional_bindings: {get: "/say/strval/{str_val}"}
-      additional_bindings: {get: "/say/floatval/{float_val}"}
-      additional_bindings: {get: "/say/doubleval/{double_val}"}
-      additional_bindings: {get: "/say/boolval/{bool_val}"}
-      additional_bindings: {get: "/say/bytesval/{bytes_val}"}
-      additional_bindings: {get: "/say/int32val/{int32_val}"}
-      additional_bindings: {get: "/say/uint32val/{uint32_val}"}
-      additional_bindings: {get: "/say/int64val/{int64_val}"}
-      additional_bindings: {get: "/say/uint64val/{uint64_val}"}
+      get: "/say"
     };
   }
 }
 
 message SayHelloRequest {
-  string name = 1 [(buf.validate.field).string.min_len = 1];
-  google.protobuf.StringValue str_val = 2;
-  google.protobuf.FloatValue float_val = 3;
-  google.protobuf.DoubleValue double_val = 4;
-  google.protobuf.BoolValue bool_val = 5;
-  google.protobuf.BytesValue bytes_val = 6;
-  google.protobuf.Int32Value int32_val = 7;
-  google.protobuf.UInt32Value uint32_val = 8;
-  google.protobuf.Int64Value int64_val = 9;
-  google.protobuf.UInt64Value uint64_val = 10;
+  tickex.types.v1.Pages page = 1;
+  string name = 2 [(buf.validate.field).string.min_len = 1];
 }
 
 message SayHelloResponse {
