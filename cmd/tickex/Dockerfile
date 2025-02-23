@@ -13,27 +13,29 @@
 # limitations under the License.
 
 #FROM ghcr.io/tickexvn/tickex/tkx.go:1.24-alpine AS builder
-FROM golang:1.24-alpine AS builder
+FROM golang:1.24.0-alpine AS builder
 
 # Set necessary environment variables needed for our image and build the API server.
-ENV CGO_ENABLED=0 GOOS=linux GOARCH=amd64 GO111MODULE=on GOPROXY=direct
+ENV CGO_ENABLED=0 GOOS=linux GOARCH=amd64
 
 # Move to working directory (/app).
 WORKDIR /src
 
-COPY go.mod go.sum ./
-COPY ./api ./
+COPY cmd/tickex /tmp/cmd/tickex
+COPY . ./
+
+# Set the timezone and install CA certificates
+RUN apk --no-cache add ca-certificates tzdata
 
 RUN apk add --no-cache git
-RUN go mod download
-
-COPY . .
+RUN go mod tidy
 
 # Build the application
 RUN go build -ldflags="-s -w" -o /bin/tickex ./cmd/tickex
 
 # Remove all source code files
 RUN rm -r *
+
 # Clean up
 RUN go clean -modcache
 
@@ -42,9 +44,10 @@ RUN go clean -modcache
 FROM alpine:edge AS runner
 WORKDIR /app
 
-COPY --from=builder /bin/tickex /bin/tickex
+COPY --from=builder /bin/tickex ./tickex
+COPY --from=builder /tmp/cmd/tickex ./cmd/tickex
 
 # Set the timezone and install CA certificates
 RUN apk --no-cache add ca-certificates tzdata
 
-CMD [ "tickex" ]
+CMD [ "./tickex" ]

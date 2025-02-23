@@ -13,15 +13,18 @@
 # limitations under the License.
 
 #FROM ghcr.io/tickexvn/tickex/tkx.go:1.24-alpine AS builder
-FROM golang:1.24-alpine AS builder
+FROM golang:1.24.0-alpine AS builder
 
 # Move to working directory (/app).
 WORKDIR /src
 
 COPY . ./
 
+# Set the timezone and install CA certificates
+RUN apk --no-cache add ca-certificates tzdata
+
 RUN apk add --no-cache git
-RUN go mod download
+RUN go mod tidy
 
 WORKDIR /src/x/greeter/v1
 
