@@ -1,5 +1,5 @@
 services:
-  app:
+  tickex.edge:
     deploy:
       resources:
         limits:
@@ -9,7 +9,7 @@ services:
           cpus: '0.5'
           memory: 256M
 
-  worker:
+  tickex.greeter:
     deploy:
       resources:
         limits:

@@ -1,16 +1,19 @@
 services:
-  app:
-    image: myapp:latest
+  tickex.edge:
+    image: tickexvn/tickex:latest
     ports:
-      - "8080:80"
+      - "9000:9000"
     networks:
-      - app-network
-
-  worker:
-    image: myworker:latest
+      - tickex-network
+    env_file:
+      - .env
+  tickex.greeter:
+    image: tickexvn/tickex.x.greeter:latest
     networks:
-      - app-network
+      - tickex-network
+    env_file:
+      - .env
 
 networks:
-  app-network:
+  tickex-network:
     driver: bridge

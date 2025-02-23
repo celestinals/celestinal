@@ -36,6 +36,11 @@ run.x.greeter:
 	@cd ./x/greeter/v1 && go build -ldflags="-s -w" -o ../../../build/$(TKX_OUT) ./cmd
 	@./build/$(TKX_OUT)
 
+
+mesh:
+	@docker compose -f ./deploy/docker/mesh/docker-compose.yaml \
+    -f ./deploy/docker/resource/docker-compose.resources.yaml up -d
+
 # Docker build commands
 build.d.tickex: TAG ?= tickexvn/tickex
 build.d.tickex:
