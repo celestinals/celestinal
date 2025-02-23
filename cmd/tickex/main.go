@@ -20,7 +20,7 @@ package main
 import (
 	"context"
 
-	"github.com/tickexvn/tickex/internal/gateway"
+	"github.com/tickexvn/tickex/internal/edge"
 	"github.com/tickexvn/tickex/pkg/cli"
 	"github.com/tickexvn/tickex/pkg/configs"
 	"github.com/tickexvn/tickex/pkg/core"
@@ -36,6 +36,6 @@ import (
 func main() {
 	_ = cli.Parse()
 
-	app := core.Build(gateway.New, configs.Default)
+	app := core.Build(edge.New, configs.Default)
 	logger.Fatal(app.Start(context.Background()))
 }
