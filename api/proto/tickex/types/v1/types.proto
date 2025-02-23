@@ -28,9 +28,8 @@ message Pages {
 }
 
 message Metadata {
-  string id = 1 [(buf.validate.field).string.min_len = 1];
-  google.protobuf.Timestamp created_at = 2;
-  string author = 3;
+  google.protobuf.Timestamp created_at = 1;
+  string author = 2;
 }
 
 message RobotMessage {
@@ -68,4 +67,9 @@ message Service {
   string address = 3 [(buf.validate.field).string.min_len = 2];
   uint32 port = 4 [(buf.validate.field).uint32.gte = 1000];
   repeated string tags = 5;
+}
+
+message Flags {
+  bool turn_on_bots = 1;
+  string hostname = 2;
 }

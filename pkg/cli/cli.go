@@ -14,13 +14,34 @@
  * limitations under the License.
  */
 
-// Package msgf contain log message title with format
-package msgf
+// Package cli provide flag variable props
+package cli
 
-const (
-	// InfoGrpcServer gRPC server listening on [PORT]
-	InfoGrpcServer = "[gRPC] listen on %s"
+import (
+	"flag"
+	"fmt"
+	"sync"
 
-	// InfoHTTPServer HTTP server listening on [PORT]
-	InfoHTTPServer = "[HTTP] listen on %s"
+	"github.com/tickexvn/tickex/api/gen/go/types/v1"
 )
+
+var once sync.Once
+var flags = &types.Flags{
+	TurnOnBots: false,
+}
+
+// Parse flag args
+func Parse() *types.Flags {
+	once.Do(func() {
+		flag.BoolVar(&flags.TurnOnBots, "bot", false, "Turn on bot ?")
+		flag.StringVar(&flags.Hostname, "hostname", "server", "Hostname ?")
+
+		flag.Usage = func() {
+			fmt.Println("Usage: tickex [flags]")
+			flag.PrintDefaults()
+		}
+		flag.Parse()
+	})
+
+	return flags
+}

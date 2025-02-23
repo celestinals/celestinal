@@ -22,6 +22,7 @@ import (
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/tickexvn/tickex/api/gen/go/types/v1"
+	"github.com/tickexvn/tickex/pkg/cli"
 	"github.com/tickexvn/tickex/pkg/pbtools"
 )
 
@@ -53,15 +54,18 @@ type Robot struct {
 
 // Send message to group telegram
 func (r *Robot) Send(msg *types.RobotMessage) error {
+	flag := cli.Parse()
+	if !flag.TurnOnBots {
+		return nil
+	}
+
 	msgText := fmt.Sprintf(
 		"*Tickex Message*\n\n"+
-			"*ID:* `%s`\n"+
 			"*Created At:* `%s`\n"+
 			"*Author:* `%s`\n\n"+
-			"*Header:* `%s`\n"+
-			"*Body:* `%s`\n"+
-			"*Footer:* `%s`\n",
-		msg.Metadata.Id,
+			"`%s`\n\n"+
+			"*body*\n```%s```\n\n"+
+			"`%s`\n",
 		pbtools.FromTime(msg.Metadata.CreatedAt).String(),
 		msg.Metadata.Author,
 		msg.Header,

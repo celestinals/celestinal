@@ -23,8 +23,13 @@ import (
 	"io"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/tickexvn/tickex/api/gen/go/types/v1"
+	"github.com/tickexvn/tickex/internal/version"
+	"github.com/tickexvn/tickex/pkg/cli"
+	"github.com/tickexvn/tickex/pkg/pbtools"
+	"github.com/tickexvn/tickex/pkg/robot"
 	"google.golang.org/grpc/grpclog"
 )
 
@@ -58,6 +63,9 @@ func (mdw *Middleware) LogRequestBody(h http.Handler) http.Handler {
 
 		if lw.statusCode >= 400 {
 			grpclog.Errorf("http error %+v request body %+v", lw.statusCode, string(body))
+
+			// send log to telegram
+			mdw.notify(lw.statusCode, string(body))
 		}
 	})
 }
@@ -96,4 +104,20 @@ func (mdw *Middleware) preflightHandler(w http.ResponseWriter, r *http.Request) 
 	w.Header().Set("Access-Control-Max-Age", "86400")
 
 	grpclog.Infof("Preflight request for %s", r.URL.Path)
+}
+
+func (mdw *Middleware) notify(statusCode int, body string) {
+	monitor, _ := robot.New(mdw.conf)
+
+	footer := fmt.Sprintf("%s<%s<<%s<<<%s<<<<<<<<<<<<<<<<<<\nGITHUB<COM<<TICKEXVN<<<TICKEX<<<<<<<<<<<<<<<\n",
+		"I", version.FullName, version.Version, version.GoVersion)
+	_ = monitor.Send(&types.RobotMessage{
+		Metadata: &types.Metadata{
+			CreatedAt: pbtools.ToTime(time.Now().Local()),
+			Author:    cli.Parse().GetHostname(),
+		},
+		Header: fmt.Sprintf("http error %+v ", statusCode),
+		Body:   fmt.Sprintf("http error %+v request body %+v", statusCode, string(body)),
+		Footer: footer,
+	})
 }
