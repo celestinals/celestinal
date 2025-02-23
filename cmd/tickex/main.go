@@ -21,6 +21,7 @@ import (
 	"context"
 
 	"github.com/tickexvn/tickex/internal/gateway"
+	"github.com/tickexvn/tickex/pkg/cli"
 	"github.com/tickexvn/tickex/pkg/configs"
 	"github.com/tickexvn/tickex/pkg/core"
 	"github.com/tickexvn/tickex/pkg/logger"
@@ -33,6 +34,8 @@ import (
 //
 // _ = core.Inject(controllers.New)
 func main() {
+	_ = cli.Parse()
+
 	app := core.Build(gateway.New, configs.Default)
 	logger.Fatal(app.Start(context.Background()))
 }

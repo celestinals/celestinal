@@ -17,8 +17,9 @@ syntax = "proto3";
 package tickex.domain.greeter.v1;
 
 import "buf/validate/validate.proto";
-import "google/protobuf/wrappers.proto";
+
 import "tickex/domain/shared/v1/shared_domain.proto";
+import "tickex/types/v1/types.proto";
 
 option go_package = "github.com/tickexvn/tickex/api/gen/go/domain/greeter/v1;greeter";
 
@@ -27,16 +28,8 @@ service GreeterDomainService {
 }
 
 message SayHelloRequest {
-  string name = 1 [(buf.validate.field).string.min_len = 1];
-  google.protobuf.StringValue str_val = 2;
-  google.protobuf.FloatValue float_val = 3;
-  google.protobuf.DoubleValue double_val = 4;
-  google.protobuf.BoolValue bool_val = 5;
-  google.protobuf.BytesValue bytes_val = 6;
-  google.protobuf.Int32Value int32_val = 7;
-  google.protobuf.UInt32Value uint32_val = 8;
-  google.protobuf.Int64Value int64_val = 9;
-  google.protobuf.UInt64Value uint64_val = 10;
+  tickex.types.v1.Pages page = 1;
+  string name = 2 [(buf.validate.field).string.min_len = 1];
 }
 
 message SayHelloResponse {

@@ -14,38 +14,34 @@
  * limitations under the License.
  */
 
-package core
+// Package cli provide flag variable props
+package cli
 
 import (
-	"context"
-	"os"
-	"os/signal"
-	"syscall"
+	"flag"
+	"fmt"
+	"sync"
 
-	"go.uber.org/fx"
+	"github.com/tickexvn/tickex/api/gen/go/types/v1"
 )
 
-type container struct {
-	engine *fx.App
+var once sync.Once
+var flags = &types.Flags{
+	TurnOnBots: false,
 }
 
-// Start implements IContainer.
-func (c *container) Start(ctx context.Context) error {
-	err := make(chan error)
-	sig := make(chan os.Signal, 1)
-	signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM)
+// Parse flag args
+func Parse() *types.Flags {
+	once.Do(func() {
+		flag.BoolVar(&flags.TurnOnBots, "bot", false, "Turn on bots?")
+		flag.StringVar(&flags.Hostname, "hostname", "server", "Hostname?")
 
-	go c.start(ctx, err)
-	go c.stop(ctx, sig, err)
+		flag.Usage = func() {
+			fmt.Println("Usage: tickex [flags]")
+			flag.PrintDefaults()
+		}
+		flag.Parse()
+	})
 
-	return <-err
-}
-
-func (c *container) start(ctx context.Context, err chan<- error) {
-	err <- c.engine.Start(ctx)
-}
-
-func (c *container) stop(ctx context.Context, sig <-chan os.Signal, err chan<- error) {
-	<-sig
-	err <- c.engine.Stop(ctx)
+	return flags
 }

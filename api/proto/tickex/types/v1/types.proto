@@ -17,15 +17,26 @@ syntax = "proto3";
 package tickex.types.v1;
 
 import "buf/validate/validate.proto";
-import "google/protobuf/wrappers.proto";
 import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/tickexvn/tickex/api/gen/go/types/v1;types";
 
+message Pages {
+  int32 index = 1;
+  int32 size = 2;
+  bool total = 3;
+}
+
 message Metadata {
-  google.protobuf.StringValue id = 1 [(buf.validate.field).string.min_len = 1];
-  google.protobuf.Timestamp created_at = 2;
-  google.protobuf.StringValue author = 3;
+  google.protobuf.Timestamp created_at = 1;
+  string author = 2;
+}
+
+message RobotMessage {
+  Metadata metadata = 1;
+  string header = 2;
+  string body = 3;
+  string footer = 4;
 }
 
 message Context {
@@ -45,7 +56,9 @@ message Context {
 message Config {
   string service_registry_address = 1 [(buf.validate.field).string.pattern = "^[a-zA-Z0-9.-]+:[0-9]{1,5}$"];
   string gateway_address = 2 [(buf.validate.field).string.pattern = "^[a-zA-Z0-9.-]+:[0-9]{1,5}$"];
-  string env = 3 [(buf.validate.field).string.pattern = "^(dev|prod|development|production|sandbox)$"];
+  string env = 3 [(buf.validate.field).string.pattern = "^(dev|prod|sandbox)$"];
+  string bot_token = 4;
+  int64 chat_id = 5;
 }
 
 message Service {
@@ -54,4 +67,9 @@ message Service {
   string address = 3 [(buf.validate.field).string.min_len = 2];
   uint32 port = 4 [(buf.validate.field).uint32.gte = 1000];
   repeated string tags = 5;
+}
+
+message Flags {
+  bool turn_on_bots = 1;
+  string hostname = 2;
 }

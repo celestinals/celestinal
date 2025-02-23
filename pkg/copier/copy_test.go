@@ -14,13 +14,5 @@
  * limitations under the License.
  */
 
-// Package msgf contain log message title with format
-package msgf
-
-var (
-	// InfoGrpcServer gRPC server listening on [PORT]
-	InfoGrpcServer = "[gRPC] listen on %s"
-
-	// InfoHTTPServer HTTP server listening on [PORT]
-	InfoHTTPServer = "[HTTP] listen on %s"
-)
+// Package copier provides functions to copy objects.
+package copier

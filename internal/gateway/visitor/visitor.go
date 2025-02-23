@@ -20,26 +20,36 @@ package visitor
 import (
 	"context"
 
+	typepb "github.com/tickexvn/tickex/api/gen/go/types/v1"
 	"github.com/tickexvn/tickex/internal/gateway/types"
 	"github.com/tickexvn/tickex/pkg/core"
+	"github.com/tickexvn/tickex/pkg/pbtools"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
 
 // New returns a new visitor.
-func New() types.IVisitor {
-	return &Visitor{}
+func New(conf *typepb.Config) types.IVisitor {
+	return &Visitor{
+		conf: conf,
+	}
 }
 
 // implement types.IVisitor interfaces bellows
 var _ types.IVisitor = (*Visitor)(nil)
 
 // Visitor represents the visitor interface.
-type Visitor struct{}
+type Visitor struct {
+	conf *typepb.Config
+}
 
 // VisitGreeterService visits the greeter service.
 func (v *Visitor) VisitGreeterService(ctx context.Context, edge core.Edge, service types.IService) error {
+	if err := pbtools.Validate(v.conf); err != nil {
+		return err
+	}
+
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 
 	greeterAddr := ":8000"

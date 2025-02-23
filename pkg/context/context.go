@@ -21,7 +21,6 @@ import (
 	"context"
 
 	"github.com/tickexvn/tickex/api/gen/go/types/v1"
-
 	"github.com/tickexvn/tickex/pkg/pbtools/proto"
 )
 

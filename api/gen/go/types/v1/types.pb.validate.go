@@ -33,21 +33,81 @@ var (
 	_ = anypb.Any{}
 )
 
+// Validate checks the field values on Pages with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *Pages) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Index
+
+	// no validation rules for Size
+
+	// no validation rules for Total
+
+	return nil
+}
+
+// PagesValidationError is the validation error returned by Pages.Validate if
+// the designated constraints aren't met.
+type PagesValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e PagesValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e PagesValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e PagesValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e PagesValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e PagesValidationError) ErrorName() string { return "PagesValidationError" }
+
+// Error satisfies the builtin error interface
+func (e PagesValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sPages.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = PagesValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = PagesValidationError{}
+
 // Validate checks the field values on Metadata with the rules defined in the
 // proto definition for this message. If any rules are violated, an error is returned.
 func (m *Metadata) Validate() error {
 	if m == nil {
 		return nil
-	}
-
-	if v, ok := interface{}(m.GetId()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return MetadataValidationError{
-				field:  "Id",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
 	}
 
 	if v, ok := interface{}(m.GetCreatedAt()).(interface{ Validate() error }); ok {
@@ -60,15 +120,7 @@ func (m *Metadata) Validate() error {
 		}
 	}
 
-	if v, ok := interface{}(m.GetAuthor()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return MetadataValidationError{
-				field:  "Author",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
+	// no validation rules for Author
 
 	return nil
 }
@@ -126,6 +178,87 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = MetadataValidationError{}
+
+// Validate checks the field values on RobotMessage with the rules defined in
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
+func (m *RobotMessage) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if v, ok := interface{}(m.GetMetadata()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return RobotMessageValidationError{
+				field:  "Metadata",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	// no validation rules for Header
+
+	// no validation rules for Body
+
+	// no validation rules for Footer
+
+	return nil
+}
+
+// RobotMessageValidationError is the validation error returned by
+// RobotMessage.Validate if the designated constraints aren't met.
+type RobotMessageValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e RobotMessageValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e RobotMessageValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e RobotMessageValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e RobotMessageValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e RobotMessageValidationError) ErrorName() string { return "RobotMessageValidationError" }
+
+// Error satisfies the builtin error interface
+func (e RobotMessageValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sRobotMessage.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = RobotMessageValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = RobotMessageValidationError{}
 
 // Validate checks the field values on Context with the rules defined in the
 // proto definition for this message. If any rules are violated, an error is returned.
@@ -225,6 +358,10 @@ func (m *Config) Validate() error {
 	// no validation rules for GatewayAddress
 
 	// no validation rules for Env
+
+	// no validation rules for BotToken
+
+	// no validation rules for ChatId
 
 	return nil
 }
@@ -354,3 +491,71 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = ServiceValidationError{}
+
+// Validate checks the field values on Flags with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *Flags) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for TurnOnBots
+
+	// no validation rules for Hostname
+
+	return nil
+}
+
+// FlagsValidationError is the validation error returned by Flags.Validate if
+// the designated constraints aren't met.
+type FlagsValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e FlagsValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e FlagsValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e FlagsValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e FlagsValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e FlagsValidationError) ErrorName() string { return "FlagsValidationError" }
+
+// Error satisfies the builtin error interface
+func (e FlagsValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sFlags.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = FlagsValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = FlagsValidationError{}

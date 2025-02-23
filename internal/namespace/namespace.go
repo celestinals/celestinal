@@ -14,27 +14,13 @@
  * limitations under the License.
  */
 
-package openapi
+// Package namespace provide name of all service at tickex
+package namespace
 
-import (
-	"net/http"
-	"path"
-	"strings"
+const (
+	// GatewayV1 namespace info
+	GatewayV1 = "tickex.gateway.v1"
 
-	"google.golang.org/grpc/grpclog"
+	// GreeterV1 namespace info
+	GreeterV1 = "tickex.x.greeter.v1"
 )
-
-func openAPIServer(dir string) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		if !strings.HasSuffix(r.URL.Path, ".swagger.json") {
-			grpclog.Errorf("Not Found: %s", r.URL.Path)
-			http.NotFound(w, r)
-			return
-		}
-
-		grpclog.Infof("Serving %s", r.URL.Path)
-		p := strings.TrimPrefix(r.URL.Path, "/swagger/api/")
-		p = path.Join(dir, p)
-		http.ServeFile(w, r, p)
-	}
-}
