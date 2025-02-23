@@ -21,7 +21,7 @@ import (
 	"context"
 
 	typepb "github.com/tickexvn/tickex/api/gen/go/types/v1"
-	"github.com/tickexvn/tickex/internal/gateway/types"
+	"github.com/tickexvn/tickex/internal/edge/types"
 	"github.com/tickexvn/tickex/pkg/core"
 	"github.com/tickexvn/tickex/pkg/pbtools"
 

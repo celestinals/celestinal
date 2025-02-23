@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-// Package gateway provides the gateway of tickex.
-package gateway
+// Package edge provides the gateway of tickex.
+package edge
 
 import (
 	"context"
 
 	typepb "github.com/tickexvn/tickex/api/gen/go/types/v1"
-	"github.com/tickexvn/tickex/internal/gateway/middleware"
-	"github.com/tickexvn/tickex/internal/gateway/openapi"
-	"github.com/tickexvn/tickex/internal/gateway/services/greeter/v1"
-	"github.com/tickexvn/tickex/internal/gateway/types"
-	"github.com/tickexvn/tickex/internal/gateway/visitor"
+	"github.com/tickexvn/tickex/internal/edge/openapi"
+	"github.com/tickexvn/tickex/internal/edge/services/greeter/v1"
+	"github.com/tickexvn/tickex/internal/edge/types"
+	"github.com/tickexvn/tickex/internal/edge/visitor"
+	"github.com/tickexvn/tickex/internal/middleware"
 	"github.com/tickexvn/tickex/pkg/constant"
 	"github.com/tickexvn/tickex/pkg/core"
 	"github.com/tickexvn/tickex/pkg/logger"
@@ -33,19 +33,19 @@ import (
 	"github.com/tickexvn/tickex/pkg/robot"
 )
 
-var _ core.Server = (*Engine)(nil)
+var _ core.Server = (*Edge)(nil)
 
 // New creates a new gateway app
 func New(conf *typepb.Config) core.Server {
-	return &Engine{
+	return &Edge{
 		edge:    core.NewEdge(),
 		visitor: visitor.New(conf),
 		config:  conf,
 	}
 }
 
-// Engine represents the gateway app
-type Engine struct {
+// Edge represents the gateway app
+type Edge struct {
 	config  *typepb.Config
 	edge    core.Edge
 	visitor types.IVisitor
@@ -53,7 +53,7 @@ type Engine struct {
 }
 
 // visit all service by Accept function
-func (e *Engine) visit(ctx context.Context, services ...types.IService) error {
+func (e *Edge) visit(ctx context.Context, services ...types.IService) error {
 	for _, service := range services {
 		if err := service.Accept(ctx, e.edge, e.visitor); err != nil {
 			return err
@@ -85,7 +85,7 @@ func (e *Engine) visit(ctx context.Context, services ...types.IService) error {
 //
 //		return nil
 //	}
-func (e *Engine) register(ctx context.Context) error {
+func (e *Edge) register(ctx context.Context) error {
 	// TODO: Register gRPC server endpoint
 	// Note: Make sure the gRPC server is running properly and accessible
 	// Create folder at services, inherit base package, override function, implement business logic
@@ -100,7 +100,7 @@ func (e *Engine) register(ctx context.Context) error {
 }
 
 // ListenAndServe the gateway app
-func (e *Engine) ListenAndServe() error {
+func (e *Edge) ListenAndServe() error {
 	if err := pbtools.Validate(e.config); err != nil {
 		return err
 	}
