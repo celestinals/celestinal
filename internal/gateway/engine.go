@@ -23,7 +23,7 @@ import (
 	typepb "github.com/tickexvn/tickex/api/gen/go/types/v1"
 	"github.com/tickexvn/tickex/internal/gateway/middleware"
 	"github.com/tickexvn/tickex/internal/gateway/openapi"
-	"github.com/tickexvn/tickex/internal/gateway/services/greeter"
+	"github.com/tickexvn/tickex/internal/gateway/services/greeter/v1"
 	"github.com/tickexvn/tickex/internal/gateway/types"
 	"github.com/tickexvn/tickex/internal/gateway/visitor"
 	"github.com/tickexvn/tickex/pkg/constant"

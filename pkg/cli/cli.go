@@ -33,8 +33,8 @@ var flags = &types.Flags{
 // Parse flag args
 func Parse() *types.Flags {
 	once.Do(func() {
-		flag.BoolVar(&flags.TurnOnBots, "bot", false, "Turn on bot ?")
-		flag.StringVar(&flags.Hostname, "hostname", "server", "Hostname ?")
+		flag.BoolVar(&flags.TurnOnBots, "bot", false, "Turn on bots?")
+		flag.StringVar(&flags.Hostname, "hostname", "server", "Hostname?")
 
 		flag.Usage = func() {
 			fmt.Println("Usage: tickex [flags]")

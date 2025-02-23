@@ -20,12 +20,11 @@ package greeter
 import (
 	"context"
 
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	greetergw "github.com/tickexvn/tickex/api/gen/go/controllers/greeter/v1"
 	"github.com/tickexvn/tickex/internal/gateway/services/base"
 	"github.com/tickexvn/tickex/internal/gateway/types"
 	"github.com/tickexvn/tickex/pkg/core"
-
-	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	greetergw "github.com/tickexvn/tickex/api/gen/go/controllers/greeter/v1"
 	"google.golang.org/grpc"
 )
 
