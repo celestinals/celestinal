@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-// Package edge provides the gateway of tickex.
+// Package edge provides the tickex-edge
 package edge
 
 import (
@@ -22,7 +22,7 @@ import (
 
 	typepb "github.com/tickexvn/tickex/api/gen/go/types/v1"
 	"github.com/tickexvn/tickex/internal/edge/openapi"
-	"github.com/tickexvn/tickex/internal/edge/services/greeter/v1"
+	"github.com/tickexvn/tickex/internal/edge/services/v1"
 	"github.com/tickexvn/tickex/internal/edge/types"
 	"github.com/tickexvn/tickex/internal/edge/visitor"
 	"github.com/tickexvn/tickex/internal/middleware"
@@ -30,7 +30,6 @@ import (
 	"github.com/tickexvn/tickex/pkg/core"
 	"github.com/tickexvn/tickex/pkg/logger"
 	"github.com/tickexvn/tickex/pkg/pbtools"
-	"github.com/tickexvn/tickex/pkg/robot"
 )
 
 var _ core.Server = (*Edge)(nil)
@@ -49,7 +48,6 @@ type Edge struct {
 	config  *typepb.Config
 	edge    core.Edge
 	visitor types.IVisitor
-	notify  robot.IRobot
 }
 
 // visit all service by Accept function
@@ -63,7 +61,7 @@ func (e *Edge) visit(ctx context.Context, services ...types.IService) error {
 	return nil
 }
 
-// Declare function in gateway/types at types.IVisitor interface
+// Declare function in edge/types at types.IVisitor interface
 //
 // Ex:
 //
@@ -89,10 +87,10 @@ func (e *Edge) register(ctx context.Context) error {
 	// TODO: Register gRPC server endpoint
 	// Note: Make sure the gRPC server is running properly and accessible
 	// Create folder at services, inherit base package, override function, implement business logic
-	// See: gateway/services/greeter
+	// See: services/v1/greeter
 	services := []types.IService{
 		// Example: register the greeter service to the gateway
-		&greeter.Greeter{},
+		&services.Greeter{},
 		// Add more services here ...
 	}
 
