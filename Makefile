@@ -26,7 +26,7 @@ lint.proto:
 lint.x.greeter.v1: 
 	cd ./x/greeter/v1 && golangci-lint run
 
-run.tickex: TKX_OUT ?= tickex-gateway
+run.tickex: TKX_OUT ?= tickex-edge
 run.tickex:
 	@go build -ldflags="-s -w" -o ./build/$(TKX_OUT) ./cmd/tickex && \
  	./build/$(TKX_OUT)
