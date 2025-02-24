@@ -14,30 +14,31 @@
  * limitations under the License.
  */
 
-// Package base provides the base service.
-package base
+// Package services provides all service declare.
+package services
 
 import (
 	"context"
 
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	greetergw "github.com/tickexvn/tickex/api/gen/go/controllers/greeter/v1"
+	"github.com/tickexvn/tickex/internal/edge/services"
 	"github.com/tickexvn/tickex/internal/edge/types"
 	"github.com/tickexvn/tickex/pkg/core"
-
-	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
 )
 
-var _ types.IService = (*Service)(nil)
-
-// Service represents the base service
-type Service struct{}
-
-// Register registers the base service
-func (s *Service) Register(_ context.Context, _ *runtime.ServeMux, _ string, _ []grpc.DialOption) error {
-	panic("unimplemented")
+// Greeter represents the Greeter service
+type Greeter struct {
+	services.Service
 }
 
-// Accept accepts the base service
-func (s *Service) Accept(_ context.Context, _ core.Edge, _ types.IVisitor) error {
-	panic("unimplemented")
+// Accept accepts the Greeter service
+func (g *Greeter) Accept(ctx context.Context, edge core.Edge, v types.IVisitor) error {
+	return v.VisitGreeterService(ctx, edge, g)
+}
+
+// Register registers the Greeter service
+func (g *Greeter) Register(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) error {
+	return greetergw.RegisterGreeterServiceHandlerFromEndpoint(ctx, mux, endpoint, opts)
 }
