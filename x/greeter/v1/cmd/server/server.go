@@ -18,8 +18,6 @@
 package server
 
 import (
-	"fmt"
-
 	"github.com/tickexvn/tickex/api/gen/go/controllers/greeter/v1"
 	"github.com/tickexvn/tickex/api/gen/go/types/v1"
 	"github.com/tickexvn/tickex/pkg/constant"
@@ -45,7 +43,7 @@ func (g *Greeter) ListenAndServe() error {
 		return err
 	}
 
-	listener, err := net.ListenTCP(fmt.Sprintf(":%d", 8000))
+	listener, err := net.ListenTCP(":8000")
 	if err != nil {
 		return err
 	}

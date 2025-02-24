@@ -88,16 +88,16 @@ func (e *Edge) register(ctx context.Context) error {
 	// Note: Make sure the gRPC server is running properly and accessible
 	// Create folder at services, inherit base package, override function, implement business logic
 	// See: services/v1/greeter
-	services := []types.IService{
+	serviceList := []types.IService{
 		// Example: register the greeter service to the gateway
 		&services.Greeter{},
-		// Add more services here ...
+		// Add more service here ...
 	}
 
-	return e.visit(ctx, services...)
+	return e.visit(ctx, serviceList...)
 }
 
-// ListenAndServe the gateway app
+// ListenAndServe the edge/gateway app
 func (e *Edge) ListenAndServe() error {
 	if err := pbtools.Validate(e.config); err != nil {
 		return err

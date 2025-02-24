@@ -14,10 +14,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-export TKX_MODE=dev
-export TKX_GATEWAY_PORT=8080
-
-docker compose \ 
-    -f ./deploy/docker/mesh/docker-compose.yml \ 
-    -f ./deploy/docker/resource/docker-compose.resources.yml \
-    up
+docker compose -f ./deploy/docker/mesh/docker-compose.yaml \
+    -f ./deploy/docker/resource/docker-compose.resources.yaml up -d

@@ -11,9 +11,9 @@ services:
   postgres:
     image: postgres:latest
     environment:
-      POSTGRES_DB: swipe
+      POSTGRES_DB: tickex-dev
       POSTGRES_USER: admin
-      POSTGRES_PASSWORD: swip3@admin
+      POSTGRES_PASSWORD: admin
     ports:
       - 5432:5432
     restart: on-failure:3

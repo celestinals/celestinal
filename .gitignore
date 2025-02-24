@@ -69,3 +69,4 @@ dist
 next-env.d.ts
 
 .vscode
+.data

@@ -32,7 +32,7 @@ var _ IRobot = (*Robot)(nil)
 func New(conf *types.Config) (IRobot, error) {
 	bot, err := tgbotapi.NewBotAPI(conf.GetBotToken())
 	if err != nil {
-		return nil, err
+		return &Robot{}, err
 	}
 
 	return &Robot{
