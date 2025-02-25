@@ -22,7 +22,8 @@ import (
 	"go.uber.org/fx"
 )
 
-// runner functions called by fx.Invoke
+// runner functions called by fx.Invoke.
+// when the application starts, it will start the server
 func runner(lc fx.Lifecycle, srv Server) {
 	lc.Append(fx.Hook{
 		OnStart: func(_ context.Context) error {

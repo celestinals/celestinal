@@ -14,5 +14,5 @@
  * limitations under the License.
  */
 
-// Package redis provides an implementation of the database using redis.
+// Package redis provides an implementation of the caching using redis.
 package redis

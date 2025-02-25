@@ -22,7 +22,8 @@ import (
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 )
 
-// Edge is an interface for a runtime mux.
+// Edge is an interface for a runtime mux with http server.
+// default port is 9000
 type Edge interface {
 	Listen(conf *EdgeConfig) error
 	AsRuntimeMux() *runtime.ServeMux
@@ -43,7 +44,7 @@ func NewEdge(opts ...runtime.ServeMuxOption) Edge {
 	}
 }
 
-// edge is a http server.
+// edge is a http server with http serve mux and grpc-gateway serve mux.
 type edge struct {
 	mux     *runtime.ServeMux
 	httpMux *http.ServeMux

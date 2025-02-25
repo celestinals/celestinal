@@ -27,12 +27,24 @@ import (
 	"github.com/tickexvn/tickex/pkg/logger"
 )
 
-// Build and run main application with environment variable
-// Remember to inject all layers of the application by core.Inject() function
+// Build and run the main application with environment variables.
+// Remember to inject all layers of the application using the core.Inject() function.
 //
-// # Example:
+// Example:
 //
-// _ = core.Inject(controllers.New)
+//	_ = core.Inject(controllers.New)
+//
+// This is the Tickex edge application, it will automatically connect to other services via gRPC.
+// Start the application along with other services in the x/ directory.
+// The application provides APIs for users through a single HTTP gateway
+// following the RESTful API standard. The application uses gRPC to connect to other services.
+// Additionally, the system provides a Swagger UI interface for users to easily
+// interact with the system through a web interface.
+//
+// Start the application using the Makefile command
+//
+//	make run.tickex // start tickex edge
+//	make run.x.<service> // start service
 func main() {
 	_ = cli.Parse()
 

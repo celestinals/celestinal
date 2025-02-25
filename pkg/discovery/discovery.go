@@ -29,7 +29,7 @@ import (
 
 var _ discovery.DiscoveryServiceServer = (*Discovery)(nil)
 
-// New provide service registry of Tick microservice network
+// New provide service registry of Tickex microservice network
 func New(conf *types.Config) (*Discovery, error) {
 	if err := pbtools.Validate(conf); err != nil {
 		return nil, err

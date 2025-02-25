@@ -23,7 +23,7 @@ import (
 	"github.com/tickexvn/tickex/pkg/core"
 )
 
-// IService represents the service interface.
+// IService represents the service gRPC interface.
 type IService interface {
 	core.GRPCService
 	Accept(context.Context, core.Edge, IVisitor) error
