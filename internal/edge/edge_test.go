@@ -14,41 +14,17 @@
  * limitations under the License.
  */
 
-package configs
+package edge
 
 import (
 	"testing"
 
-	"github.com/tickexvn/tickex/api/gen/go/types/v1"
-	"github.com/tickexvn/tickex/pkg/pbtools"
+	"github.com/tickexvn/tickex/pkg/configs"
 )
 
-func TestConfig(t *testing.T) {
-	conf := types.Config{
-		ServiceRegistryAddress: "0.0.0.0:8500",
-		GatewayAddress:         "0.0.0.0:9000",
-		Env:                    "prod",
-	}
-
-	if err := pbtools.Validate(&conf); err != nil {
-		t.Error(err)
-	}
-}
-
-func TestConfigEnv(t *testing.T) {
-	conf := Default()
-
-	if err := pbtools.Validate(conf); err != nil {
-		return
-	}
-
-	t.Error("should not validate env")
-}
-
-func BenchmarkConfigHeapAllocation(b *testing.B) {
+func BenchmarkEdgeToService(b *testing.B) {
 	b.ReportAllocs()
-
 	for i := 0; i < b.N; i++ {
-		_ = Default()
+		_ = New(configs.Default())
 	}
 }

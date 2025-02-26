@@ -53,12 +53,9 @@ func (g *Greeter) SayHello(ctx context.Context, msg *greeter.SayHelloRequest) (*
 		return nil, err
 	}
 
-	var resp greeter.SayHelloResponse
-	if err := copier.CopyMsg(sayHelloResp, &resp); err != nil {
-		return nil, err
-	}
-
-	return &resp, nil
+	return &greeter.SayHelloResponse{
+		Response: sayHelloResp.Response,
+	}, nil
 }
 
 // New creates a new Greeter module.

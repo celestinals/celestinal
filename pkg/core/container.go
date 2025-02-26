@@ -37,6 +37,9 @@ func (c *container) Start(ctx context.Context) error {
 	sig := make(chan os.Signal, 1)
 	signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM)
 
+	defer close(err)
+	defer close(sig)
+
 	// fork the goroutine 1 for start the app
 	go c.start(ctx, err)
 

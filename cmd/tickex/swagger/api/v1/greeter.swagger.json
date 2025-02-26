@@ -27,7 +27,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1SayHelloResponse"
+              "$ref": "#/definitions/tickexcontrollersgreeterv1SayHelloResponse"
             }
           },
           "default": {
@@ -100,6 +100,22 @@
         }
       }
     },
+    "tickexcontrollersgreeterv1SayHelloResponse": {
+      "type": "object",
+      "properties": {
+        "response": {
+          "$ref": "#/definitions/tickexsharedgreeterv1SayHelloResponse"
+        }
+      }
+    },
+    "tickexsharedgreeterv1SayHelloResponse": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      }
+    },
     "v1Pages": {
       "type": "object",
       "properties": {
@@ -113,14 +129,6 @@
         },
         "total": {
           "type": "boolean"
-        }
-      }
-    },
-    "v1SayHelloResponse": {
-      "type": "object",
-      "properties": {
-        "message": {
-          "type": "string"
         }
       }
     }

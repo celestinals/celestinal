@@ -44,25 +44,23 @@ func New(conf *typepb.Config) core.Server {
 }
 
 // Edge represents the tickex app
-// The edge application is the main entry point for the Tickex.
-// It will automatically connect to other services via gRPC.
-// Start the application along with other services in the x/ directory.
-// The application provides APIs for users through a single HTTP gateway
-// following the RESTful API standard. The application uses gRPC to connect to other services.
-// Additionally, the system provides a Swagger UI interface for users to easily
-// interact with the system through a web interface.
+// The edge application is the main entry point for the Tickex. It will automatically connect
+// to other services via gRPC. Start the application along with other services in the x/ directory.
+// The application provides APIs for users through a single HTTP gateway following the RESTful API
+// standard. The application uses gRPC to connect to other services. Additionally, the system provides
+// a Swagger UI interface for users to easily interact with the system through a web interface.
 type Edge struct {
 	// config is the configuration of the edge app, load environment variables from .env file
 	config *typepb.Config
 
-	// edge is the core edge server, manage all constructors, api gateway by dependency injection
+	// edge is the core edge server, manage http.ServeMux, runtime.ServeMux and HTTP server
 	edge core.Edge
 
 	// visitor is the visitor to visit all services by visitor pattern and register them to the edge server
 	visitor types.IVisitor
 }
 
-// register gRPC server endpoint.
+// Register gRPC server endpoint.
 // Declare function in edge/types at types.IVisitor interface
 //
 // Ex:
@@ -91,7 +89,7 @@ func (e *Edge) register(ctx context.Context) error {
 	// See: services/v1/greeter
 	serviceList := []types.IService{
 		// Example: register the greeter service to the gateway
-		&services.Greeter{},
+		services.NewGreeter(),
 		// TODO: add more service here ...
 	}
 

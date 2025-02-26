@@ -23,6 +23,7 @@ import (
 	"time"
 
 	"github.com/tickexvn/tickex/api/gen/go/domain/greeter/v1"
+	shared "github.com/tickexvn/tickex/api/gen/go/shared/greeter/v1"
 	"github.com/tickexvn/tickex/pkg/errors"
 	"github.com/tickexvn/tickex/pkg/logger"
 )
@@ -50,7 +51,9 @@ func (g *Greeter) SayHello(_ context.Context, msg *greeter.SayHelloRequest) (*gr
 	}
 
 	return &greeter.SayHelloResponse{
-		Message: "Reply " + name + " at " + t,
+		Response: &shared.SayHelloResponse{
+			Message: "Reply " + name + " at " + t,
+		},
 	}, nil
 }
 

@@ -20,10 +20,9 @@ package services
 import (
 	"context"
 
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/tickexvn/tickex/internal/edge/types"
 	"github.com/tickexvn/tickex/pkg/core"
-
-	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
 )
 
@@ -33,11 +32,11 @@ var _ types.IService = (*Service)(nil)
 type Service struct{}
 
 // Register registers the base service
-func (s *Service) Register(_ context.Context, _ *runtime.ServeMux, _ string, _ []grpc.DialOption) error {
+func (s Service) Register(_ context.Context, _ *runtime.ServeMux, _ string, _ []grpc.DialOption) error {
 	panic("unimplemented")
 }
 
 // Accept accepts the base service
-func (s *Service) Accept(_ context.Context, _ core.Edge, _ types.IVisitor) error {
+func (s Service) Accept(_ context.Context, _ core.Edge, _ types.IVisitor) error {
 	panic("unimplemented")
 }
