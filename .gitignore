@@ -70,3 +70,6 @@ next-env.d.ts
 
 .vscode
 .data
+
+# testing
+*.prof

@@ -28,17 +28,24 @@ import (
 	"google.golang.org/grpc"
 )
 
+var _ types.IService = (*Greeter)(nil)
+
+// NewGreeter creates a new Greeter service to register handler to gateway
+func NewGreeter() Greeter {
+	return Greeter{}
+}
+
 // Greeter represents the Greeter service
 type Greeter struct {
 	services.Service
 }
 
 // Accept accepts the Greeter service
-func (g *Greeter) Accept(ctx context.Context, edge core.Edge, v types.IVisitor) error {
+func (g Greeter) Accept(ctx context.Context, edge core.Edge, v types.IVisitor) error {
 	return v.VisitGreeterService(ctx, edge, g)
 }
 
 // Register registers the Greeter service
-func (g *Greeter) Register(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) error {
+func (g Greeter) Register(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) error {
 	return greetergw.RegisterGreeterServiceHandlerFromEndpoint(ctx, mux, endpoint, opts)
 }

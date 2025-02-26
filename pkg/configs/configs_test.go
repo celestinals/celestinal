@@ -44,3 +44,11 @@ func TestConfigEnv(t *testing.T) {
 
 	t.Error("should not validate env")
 }
+
+func BenchmarkConfigHeapAllocation(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = Default()
+	}
+}

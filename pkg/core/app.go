@@ -24,12 +24,13 @@ import (
 	"go.uber.org/fx"
 )
 
-// Application represents the application interface.
+// Application represents the application when all constructor was build by core.Build()
+// start the app, it will start the server and provide all constructor needed
 type Application interface {
 	Start(ctx context.Context) error
 }
 
-// Server represents the HTTP server interface.
+// Server represents the HTTP/gRPC server interface.
 type Server interface {
 	ListenAndServe() error
 }

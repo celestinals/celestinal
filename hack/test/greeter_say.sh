@@ -14,4 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-mockery --name=IAuthors --output=./mocks --with-expecter
+# -c 100: 100 concurrent users.
+# -n 10000: 10,000 requests.
+bombardier -c 100 -n 10000 http://localhost:9000/say?name=hello

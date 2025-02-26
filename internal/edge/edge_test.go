@@ -14,23 +14,17 @@
  * limitations under the License.
  */
 
-package core
+package edge
 
 import (
-	"context"
+	"testing"
 
-	"go.uber.org/fx"
+	"github.com/tickexvn/tickex/pkg/configs"
 )
 
-// runner functions called by fx.Invoke.
-// when the application starts, it will start the server
-func runner(lc fx.Lifecycle, srv Server) {
-	lc.Append(fx.Hook{
-		OnStart: func(_ context.Context) error {
-			return srv.ListenAndServe()
-		},
-		OnStop: func(_ context.Context) error {
-			return nil
-		},
-	})
+func BenchmarkEdgeToService(b *testing.B) {
+	b.ReportAllocs()
+	for i := 0; i < b.N; i++ {
+		_ = New(configs.Default())
+	}
 }

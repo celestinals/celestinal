@@ -6,12 +6,14 @@
 #
 # Use git ls-files '<pattern>' without a / prefix to see the list of matching files.
 
-/api/* @kyerand
-/cmd/* @kyerand
-/internal/* @kyerand
-/pkg/* @kyerand
+# Tickex Edge & framework
+/cmd/ @kyerand
+/internal/ @kyerand
+/pkg/ @kyerand
 
-/apps/* @lamdienchinh
-/packages/* @lamdienchinh
+# Tickex User Interface
+/apps/ @lamdienchinh
+/packages/ @lamdienchinh
 
-/x/greeter/* @kyerand
+# Tickex Services
+/x/greeter/v1/ @kyerand

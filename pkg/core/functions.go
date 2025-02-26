@@ -25,6 +25,7 @@ import (
 )
 
 // Build builds the application.
+// The application is built by providing the constructors.
 func Build(constructors ...interface{}) Application {
 	for _, constructor := range constructors {
 		coreinternal.Provide(constructor)
@@ -37,6 +38,11 @@ func Build(constructors ...interface{}) Application {
 }
 
 // RegisterService registers a service with the runtime.
+// The service is registered with the runtime mux.
+//
+// dependency:
+//
+// - github.com/grpc-ecosystem/grpc-gateway/v2/runtime
 func RegisterService(ctx context.Context, edge Edge, service GRPCService, endpoint string, opts []grpc.DialOption) error {
 	if err := service.Register(ctx, edge.AsRuntimeMux(), endpoint, opts); err != nil {
 		return err

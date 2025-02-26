@@ -43,24 +43,24 @@ func New(conf *typepb.Config) core.Server {
 	}
 }
 
-// Edge represents the gateway app
+// Edge represents the tickex app
+// The edge application is the main entry point for the Tickex. It will automatically connect
+// to other services via gRPC. Start the application along with other services in the x/ directory.
+// The application provides APIs for users through a single HTTP gateway following the RESTful API
+// standard. The application uses gRPC to connect to other services. Additionally, the system provides
+// a Swagger UI interface for users to easily interact with the system through a web interface.
 type Edge struct {
-	config  *typepb.Config
-	edge    core.Edge
+	// config is the configuration of the edge app, load environment variables from .env file
+	config *typepb.Config
+
+	// edge is the core edge server, manage http.ServeMux, runtime.ServeMux and HTTP server
+	edge core.Edge
+
+	// visitor is the visitor to visit all services by visitor pattern and register them to the edge server
 	visitor types.IVisitor
 }
 
-// visit all service by Accept function
-func (e *Edge) visit(ctx context.Context, services ...types.IService) error {
-	for _, service := range services {
-		if err := service.Accept(ctx, e.edge, e.visitor); err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
+// Register gRPC server endpoint.
 // Declare function in edge/types at types.IVisitor interface
 //
 // Ex:
@@ -84,17 +84,27 @@ func (e *Edge) visit(ctx context.Context, services ...types.IService) error {
 //		return nil
 //	}
 func (e *Edge) register(ctx context.Context) error {
-	// TODO: Register gRPC server endpoint
 	// Note: Make sure the gRPC server is running properly and accessible
 	// Create folder at services, inherit base package, override function, implement business logic
 	// See: services/v1/greeter
 	serviceList := []types.IService{
 		// Example: register the greeter service to the gateway
-		&services.Greeter{},
-		// Add more service here ...
+		services.NewGreeter(),
+		// TODO: add more service here ...
 	}
 
 	return e.visit(ctx, serviceList...)
+}
+
+// visit all service by Accept function
+func (e *Edge) visit(ctx context.Context, services ...types.IService) error {
+	for _, service := range services {
+		if err := service.Accept(ctx, e.edge, e.visitor); err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 // ListenAndServe the edge/gateway app

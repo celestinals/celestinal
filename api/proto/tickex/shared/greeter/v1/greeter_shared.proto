@@ -14,24 +14,10 @@
 
 syntax = "proto3";
 
-package tickex.domain.greeter.v1;
+package tickex.shared.greeter.v1;
 
-import "buf/validate/validate.proto";
-
-import "tickex/types/v1/types.proto";
-import "tickex/shared/greeter/v1/greeter_shared.proto";
-
-option go_package = "github.com/tickexvn/tickex/api/gen/go/domain/greeter/v1;greeter";
-
-service GreeterDomainService {
-  rpc SayHello(SayHelloRequest) returns (SayHelloResponse) {}
-}
-
-message SayHelloRequest {
-  tickex.types.v1.Pages page = 1;
-  string name = 2 [(buf.validate.field).string.min_len = 1];
-}
+option go_package = "github.com/tickexvn/tickex/api/gen/go/shared/greeter/v1;shared";
 
 message SayHelloResponse {
-  tickex.shared.greeter.v1.SayHelloResponse response = 1;
+  string message = 1;
 }
