@@ -1,5 +1,0 @@
-
-
-> @tickex/ui@0.0.0 lint /home/kayano/go/src/github.com/tickexvn/tickex/packages/tickex-ui
-> eslint . --max-warnings 0
-
