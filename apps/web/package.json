@@ -1,5 +1,5 @@
 {
-  "name": "tickex-client",
+  "name": "tickex-vn",
   "version": "0.0.1",
   "type": "module",
   "private": true,
@@ -13,8 +13,8 @@
     "@tickex/ui": "workspace:*",
     "next": "^15.1.2",
     "next-themes": "^0.4.3",
-    "react": "^19.0.0",
-    "zod": "^3.23.8"
+    "react": "^18.3.1",
+    "react-dom": "18"
   },
   "devDependencies": {
     "@tickex/eslint-config": "workspace:^",
