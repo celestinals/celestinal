@@ -55,13 +55,13 @@ type Discovery struct {
 }
 
 // Register implements the Register method of the ServiceRegistryService.
-func (d *Discovery) Register(_ context.Context, req *discovery.RegisterRequest) (*discovery.RegisterResponse, error) {
+func (d *Discovery) Register(ctx context.Context, req *discovery.RegisterRequest) (*discovery.RegisterResponse, error) {
+	_ = ctx
 	if err := pbtools.Validate(req); err != nil {
 		return nil, err
 	}
 
 	serviceInfo := req.GetService()
-	healthcheck := fmt.Sprintf("%s:%d%s", serviceInfo.GetAddress(), serviceInfo.GetPort(), req.GetStatusPath())
 	registration := &api.AgentServiceRegistration{
 		ID:      serviceInfo.GetId(),
 		Name:    serviceInfo.GetName(),
@@ -69,9 +69,9 @@ func (d *Discovery) Register(_ context.Context, req *discovery.RegisterRequest) 
 		Port:    int(serviceInfo.GetPort()),
 		Tags:    serviceInfo.GetTags(),
 		Check: &api.AgentServiceCheck{
-			HTTP:     "http://" + healthcheck,
-			Interval: "10s",
-			Timeout:  "5s",
+			DeregisterCriticalServiceAfter: req.GetServiceCheck().GetDeregisterCriticalServiceAfter(),
+			TTL:                            req.GetServiceCheck().GetTtl(),
+			TLSSkipVerify:                  req.GetServiceCheck().GetTlsSkipVerify(),
 		},
 	}
 

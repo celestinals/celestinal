@@ -22,6 +22,7 @@ import "tickex/shared/greeter/v1/greeter_shared.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
 
 option go_package = "github.com/tickexvn/tickex/api/gen/go/controllers/greeter/v1;greeter";
 
@@ -57,6 +58,12 @@ service GreeterService {
       get: "/say"
     };
   }
+
+  rpc Status(StatusRequest) returns (StatusResponse) {
+    option (google.api.http) = {
+      get: "/status"
+    };
+  }
 }
 
 message SayHelloRequest {
@@ -66,4 +73,12 @@ message SayHelloRequest {
 
 message SayHelloResponse {
   tickex.shared.greeter.v1.SayHelloResponse response = 1;
+}
+
+message StatusResponse {
+  string message = 1;
+}
+
+message StatusRequest {
+    google.protobuf.Empty empty = 1;
 }

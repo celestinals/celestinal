@@ -36,14 +36,17 @@ service DiscoveryService {
 // Detailed service information
 message RegisterRequest {
   tickex.types.v1.Service service = 1;
-  string status_path = 6 [(buf.validate.field).string.min_len = 2];
+  ServiceCheck service_check = 2;
 }
 
 message HeartbeatRequest {
   string id = 1 [(buf.validate.field).string.min_len = 2];
-  string name = 2;       // Service name
-  string address = 3;    // IP address or hostname
-  int32 port = 4;        // Service port
+}
+
+message ServiceCheck {
+  string deregister_critical_service_after = 1;
+  string ttl = 2;
+  bool tls_skip_verify = 3;
 }
 
 // Request to find a service

@@ -58,6 +58,16 @@ func (g *Greeter) SayHello(ctx context.Context, msg *greeter.SayHelloRequest) (*
 	}, nil
 }
 
+// Status healthcheck for consul
+func (g *Greeter) Status(ctx context.Context, msg *greeter.StatusRequest) (*greeter.StatusResponse, error) {
+	_ = ctx
+	_ = msg
+
+	return &greeter.StatusResponse{
+		Message: "ok",
+	}, nil
+}
+
 // New creates a new Greeter module.
 func New(biz domain.IGreeter) IGreeter {
 	return &Greeter{

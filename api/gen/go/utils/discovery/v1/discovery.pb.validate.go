@@ -51,7 +51,15 @@ func (m *RegisterRequest) Validate() error {
 		}
 	}
 
-	// no validation rules for StatusPath
+	if v, ok := interface{}(m.GetServiceCheck()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return RegisterRequestValidationError{
+				field:  "ServiceCheck",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	return nil
 }
@@ -120,12 +128,6 @@ func (m *HeartbeatRequest) Validate() error {
 
 	// no validation rules for Id
 
-	// no validation rules for Name
-
-	// no validation rules for Address
-
-	// no validation rules for Port
-
 	return nil
 }
 
@@ -182,6 +184,77 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = HeartbeatRequestValidationError{}
+
+// Validate checks the field values on ServiceCheck with the rules defined in
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
+func (m *ServiceCheck) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for DeregisterCriticalServiceAfter
+
+	// no validation rules for Ttl
+
+	// no validation rules for TlsSkipVerify
+
+	return nil
+}
+
+// ServiceCheckValidationError is the validation error returned by
+// ServiceCheck.Validate if the designated constraints aren't met.
+type ServiceCheckValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ServiceCheckValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ServiceCheckValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ServiceCheckValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ServiceCheckValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ServiceCheckValidationError) ErrorName() string { return "ServiceCheckValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ServiceCheckValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sServiceCheck.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ServiceCheckValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ServiceCheckValidationError{}
 
 // Validate checks the field values on DiscoverRequest with the rules defined
 // in the proto definition for this message. If any rules are violated, an
