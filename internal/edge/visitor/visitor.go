@@ -19,9 +19,8 @@ package visitor
 
 import (
 	"context"
-	"sync"
 
-	"github.com/tickexvn/tickex/api/gen/go/controllers/greeter/v1"
+	"github.com/tickexvn/tickex/api/gen/go/greeter/v1"
 	typepb "github.com/tickexvn/tickex/api/gen/go/types/v1"
 	"github.com/tickexvn/tickex/internal/edge/types"
 	"github.com/tickexvn/tickex/pkg/core"
@@ -42,7 +41,6 @@ func New(conf *typepb.Config) types.IVisitor {
 
 // implement types.IVisitor interfaces bellows
 var _ types.IVisitor = (*Visitor)(nil)
-var once sync.Once
 
 // Visitor represents the visitor interface.
 type Visitor struct {

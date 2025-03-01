@@ -22,24 +22,24 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/tickexvn/tickex/api/gen/go/domain/greeter/v1"
-	shared "github.com/tickexvn/tickex/api/gen/go/shared/greeter/v1"
+	"github.com/tickexvn/tickex/api/gen/go/greeter/domain/v1"
+	"github.com/tickexvn/tickex/api/gen/go/greeter/shared/v1"
 	"github.com/tickexvn/tickex/pkg/errors"
 	"github.com/tickexvn/tickex/pkg/logger"
 )
 
 // IGreeter defines the interface for the Greeter biz module.
 type IGreeter interface {
-	greeter.GreeterDomainServiceServer
+	domain.GreeterDomainServiceServer
 }
 
 // Greeter implements GreeterServiceServer, business logic for the Greeter service.
 type Greeter struct {
-	greeter.UnimplementedGreeterDomainServiceServer
+	domain.UnimplementedGreeterDomainServiceServer
 }
 
 // SayHello implements GreeterServiceServer.
-func (g *Greeter) SayHello(_ context.Context, msg *greeter.SayHelloRequest) (*greeter.SayHelloResponse, error) {
+func (g *Greeter) SayHello(_ context.Context, msg *domain.SayHelloRequest) (*domain.SayHelloResponse, error) {
 	msgs, _ := json.Marshal(msg)
 	logger.Debug("Received a SayHello request" + string(msgs))
 
@@ -50,7 +50,7 @@ func (g *Greeter) SayHello(_ context.Context, msg *greeter.SayHelloRequest) (*gr
 		return nil, errors.ErrForbidden
 	}
 
-	return &greeter.SayHelloResponse{
+	return &domain.SayHelloResponse{
 		Response: &shared.SayHelloResponse{
 			Message: "Reply " + name + " at " + t,
 		},
