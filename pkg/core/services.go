@@ -18,8 +18,13 @@ package core
 
 import (
 	"context"
+	"time"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"github.com/tickexvn/tickex/api/gen/go/types/v1"
+	discoverypb "github.com/tickexvn/tickex/api/gen/go/utils/discovery/v1"
+	"github.com/tickexvn/tickex/pkg/discovery"
+	"github.com/tickexvn/tickex/pkg/logger"
 	"google.golang.org/grpc"
 )
 
@@ -38,8 +43,17 @@ type GRPCService interface {
 
 // IServiceServer is a gRPC service server.
 type IServiceServer interface {
+	Discover(conf *types.Config, service ServiceDiscovery) error
 	AsServer() *grpc.Server
 	Run() error
+}
+
+// ServiceDiscovery is Discover Properties
+type ServiceDiscovery struct {
+	Addr string
+	Port uint32
+	Name string
+	Tags []string
 }
 
 // ServiceServer is a gRPC server that registers services.
@@ -52,13 +66,75 @@ type IServiceServer interface {
 //		srv    greeter.GreeterServiceServer
 //	}
 type ServiceServer struct {
-	server *grpc.Server
+	server    *grpc.Server
+	discovery discoverypb.DiscoveryServiceServer
 }
 
 // AsServer returns the underlying gRPC server.
 // return the underlying gRPC server.
 func (s *ServiceServer) AsServer() *grpc.Server {
 	return s.server
+}
+
+// Discover registers the service with the service discovery.
+func (s *ServiceServer) Discover(conf *types.Config, service ServiceDiscovery) error {
+	discover, err := discovery.New(conf)
+	if err != nil {
+		return err
+	}
+
+	s.discovery = discover
+	return s.discover(service)
+}
+
+func (s *ServiceServer) discover(service ServiceDiscovery) error {
+	if s.discovery == nil {
+		return nil
+	}
+
+	serviceID := service.Name
+	ttl := time.Second * 5
+
+	if _, err := s.discovery.Register(context.Background(),
+		&discoverypb.RegisterRequest{
+			ServiceCheck: &discoverypb.ServiceCheck{
+				Ttl:                            ttl.String(),
+				TlsSkipVerify:                  true,
+				DeregisterCriticalServiceAfter: ttl.String(),
+			},
+			Service: &types.Service{
+				Id:      serviceID,
+				Name:    service.Name,
+				Address: service.Addr,
+				Port:    service.Port,
+				Tags:    service.Tags,
+			},
+		}); err != nil {
+		return err
+	}
+
+	go s.heartbeat(serviceID, ttl)
+
+	return nil
+}
+
+func (s *ServiceServer) heartbeat(id string, ttl time.Duration) {
+	if s.discovery == nil {
+		return
+	}
+
+	ticker := time.NewTicker(ttl)
+	for {
+		_, err := s.discovery.Heartbeat(context.Background(), &discoverypb.HeartbeatRequest{
+			Id: id,
+		})
+		if err != nil {
+			logger.Errorf("consul heartbeat error: %v", err)
+		}
+
+		<-ticker.C
+	}
+
 }
 
 // Run starts the service registrar.

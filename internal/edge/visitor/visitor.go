@@ -19,12 +19,15 @@ package visitor
 
 import (
 	"context"
+	"sync"
 
+	"github.com/tickexvn/tickex/api/gen/go/controllers/greeter/v1"
 	typepb "github.com/tickexvn/tickex/api/gen/go/types/v1"
 	"github.com/tickexvn/tickex/internal/edge/types"
 	"github.com/tickexvn/tickex/pkg/core"
+	"github.com/tickexvn/tickex/pkg/discovery"
+	"github.com/tickexvn/tickex/pkg/logger"
 	"github.com/tickexvn/tickex/pkg/pbtools"
-
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -32,16 +35,19 @@ import (
 // New returns a new visitor.
 func New(conf *typepb.Config) types.IVisitor {
 	return &Visitor{
-		conf: conf,
+		conf:    conf,
+		visitor: discovery.NewVisitor(conf),
 	}
 }
 
 // implement types.IVisitor interfaces bellows
 var _ types.IVisitor = (*Visitor)(nil)
+var once sync.Once
 
 // Visitor represents the visitor interface.
 type Visitor struct {
-	conf *typepb.Config
+	conf    *typepb.Config
+	visitor discovery.Visitor
 }
 
 // VisitGreeterService visits the greeter service.
@@ -52,8 +58,13 @@ func (v *Visitor) VisitGreeterService(ctx context.Context, edge core.Edge, servi
 
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 
-	greeterAddr := ":8000"
-	if err := core.RegisterService(ctx, edge, service, greeterAddr, opts); err != nil {
+	endpoint, err := v.visitor.Visit(ctx, greeter.GreeterService_ServiceDesc)
+	if err != nil {
+		logger.Errorf("visit greeter service failed: %v", err)
+		return err
+	}
+
+	if err := core.RegisterService(ctx, edge, service, endpoint, opts); err != nil {
 		return err
 	}
 

@@ -23,6 +23,7 @@ import (
 	"github.com/tickexvn/tickex/pkg/constant"
 	"github.com/tickexvn/tickex/pkg/core"
 	"github.com/tickexvn/tickex/pkg/core/net"
+	"github.com/tickexvn/tickex/pkg/discovery"
 	"github.com/tickexvn/tickex/pkg/logger"
 	"github.com/tickexvn/tickex/pkg/pbtools"
 	"github.com/tickexvn/tickex/x/greeter/v1/internal/controllers"
@@ -30,11 +31,21 @@ import (
 
 var _ core.Server = (*Greeter)(nil)
 
+// New creates a new Greeter module.
+func New(srv controllers.IGreeter, conf *types.Config) core.Server {
+	return &Greeter{
+		ServiceServer: core.NewDefault(),
+		srv:           srv,
+		config:        conf,
+	}
+}
+
 // Greeter implements GreeterServiceServer.
 type Greeter struct {
 	*core.ServiceServer
-	config *types.Config
-	srv    greeter.GreeterServiceServer
+	config    *types.Config
+	srv       greeter.GreeterServiceServer
+	discovery *discovery.Discovery
 }
 
 // ListenAndServe implements IGreeter.
@@ -48,18 +59,17 @@ func (g *Greeter) ListenAndServe() error {
 		return err
 	}
 
-	// Listen gRPC srv here
+	// Listen gRPC srv here and register service to service registry (consul)
 	greeter.RegisterGreeterServiceServer(g.AsServer(), g.srv)
+	if err := g.Discover(g.config, core.ServiceDiscovery{
+		Addr: "127.0.0.1",
+		Port: 8000,
+		Name: greeter.GreeterService_ServiceDesc.ServiceName,
+		Tags: []string{"greeter", "tickex.x.greeter"},
+	}); err != nil {
+		return err
+	}
 
 	logger.Infof(constant.InfoGrpcServer, listener.Addr().String())
 	return g.AsServer().Serve(listener)
-}
-
-// New creates a new Greeter module.
-func New(srv controllers.IGreeter, conf *types.Config) core.Server {
-	return &Greeter{
-		ServiceServer: core.NewDefault(),
-		srv:           srv,
-		config:        conf,
-	}
 }

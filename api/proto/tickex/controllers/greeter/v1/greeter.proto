@@ -57,6 +57,12 @@ service GreeterService {
       get: "/say"
     };
   }
+
+  rpc Status(StatusRequest) returns (StatusResponse) {
+    option (google.api.http) = {
+      get: "/status"
+    };
+  }
 }
 
 message SayHelloRequest {
@@ -67,3 +73,9 @@ message SayHelloRequest {
 message SayHelloResponse {
   tickex.shared.greeter.v1.SayHelloResponse response = 1;
 }
+
+message StatusResponse {
+  string message = 1;
+}
+
+message StatusRequest {}

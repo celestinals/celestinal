@@ -115,6 +115,20 @@ func Errorf(template string, message ...interface{}) {
 	sugar.Errorf(msg)
 }
 
+// Warnf logs an error message with a format.
+func Warnf(template string, message ...interface{}) {
+	if len(removeNil(message)) == 0 {
+		return
+	}
+
+	logger := New()
+	defer utils.CallBack(logger.Sync)
+
+	sugar := logger.WithOptions(zap.AddCallerSkip(1)).Sugar()
+	msg := fmt.Sprintf("%s %s", version.Header(), fmt.Sprintf(template, message...))
+	sugar.Warnf(msg)
+}
+
 // Fatal logs a fatal message.
 func Fatal(message ...interface{}) {
 	if len(removeNil(message)) == 0 {
@@ -126,6 +140,20 @@ func Fatal(message ...interface{}) {
 
 	sugar := logger.WithOptions(zap.AddCallerSkip(1)).Sugar()
 	sugar.Fatal(appendHeader(message...))
+}
+
+// Fatalf logs a fatal message.
+func Fatalf(template string, message ...interface{}) {
+	if len(removeNil(message)) == 0 {
+		return
+	}
+
+	logger := New()
+	defer utils.CallBack(logger.Sync)
+
+	sugar := logger.WithOptions(zap.AddCallerSkip(1)).Sugar()
+	msg := fmt.Sprintf("%s %s", version.Header(), fmt.Sprintf(template, message...))
+	sugar.Fatalf(msg)
 }
 
 func removeNil(input []interface{}) []interface{} {
