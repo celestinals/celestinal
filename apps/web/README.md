@@ -108,7 +108,7 @@ pnpm lint
 This project leverages **ShadCN's Monorepo** for shared components. Add new components using the command:
 
 ```bash
-pnpm shadcn add [component-name]
+pnpm dlx shadcn@canary add [component-name]
 ```
 
 Refer to the [ShadCN documentation](https://ui.shadcn.com/docs) for guidance.

@@ -41,6 +41,7 @@ node_modules
 # misc
 .DS_Store
 *.pem
+.turbo/
 
 # debug
 npm-debug.log*
