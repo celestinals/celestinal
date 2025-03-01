@@ -87,14 +87,6 @@
             }
           }
         },
-        "parameters": [
-          {
-            "name": "empty",
-            "in": "query",
-            "required": false,
-            "type": "object"
-          }
-        ],
         "tags": [
           "GreeterService"
         ]

@@ -260,16 +260,6 @@ func (m *StatusRequest) Validate() error {
 		return nil
 	}
 
-	if v, ok := interface{}(m.GetEmpty()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return StatusRequestValidationError{
-				field:  "Empty",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
 	return nil
 }
 
