@@ -22,8 +22,8 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/consul/api"
+	"github.com/tickexvn/tickex/api/gen/go/discovery/v1"
 	"github.com/tickexvn/tickex/api/gen/go/types/v1"
-	"github.com/tickexvn/tickex/api/gen/go/utils/discovery/v1"
 	"github.com/tickexvn/tickex/pkg/pbtools"
 )
 

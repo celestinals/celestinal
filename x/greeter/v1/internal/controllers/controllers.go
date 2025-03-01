@@ -20,8 +20,8 @@ package controllers
 import (
 	"context"
 
-	"github.com/tickexvn/tickex/api/gen/go/controllers/greeter/v1"
-	greeterdomain "github.com/tickexvn/tickex/api/gen/go/domain/greeter/v1"
+	domainpb "github.com/tickexvn/tickex/api/gen/go/greeter/domain/v1"
+	"github.com/tickexvn/tickex/api/gen/go/greeter/v1"
 	"github.com/tickexvn/tickex/pkg/copier"
 	"github.com/tickexvn/tickex/pkg/errors"
 	"github.com/tickexvn/tickex/pkg/logger"
@@ -36,12 +36,12 @@ type IGreeter interface {
 // Greeter is the module for Greeter.
 type Greeter struct {
 	greeter.UnimplementedGreeterServiceServer
-	domain greeterdomain.GreeterDomainServiceServer
+	domain domainpb.GreeterDomainServiceServer
 }
 
 // SayHello implements GreeterServer.
 func (g *Greeter) SayHello(ctx context.Context, msg *greeter.SayHelloRequest) (*greeter.SayHelloResponse, error) {
-	var SayHelloReq greeterdomain.SayHelloRequest
+	var SayHelloReq domainpb.SayHelloRequest
 	if err := copier.CopyMsg(msg, &SayHelloReq); err != nil {
 		logger.Error(err)
 

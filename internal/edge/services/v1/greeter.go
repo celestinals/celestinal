@@ -21,7 +21,7 @@ import (
 	"context"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	greetergw "github.com/tickexvn/tickex/api/gen/go/controllers/greeter/v1"
+	greetergw "github.com/tickexvn/tickex/api/gen/go/greeter/v1"
 	"github.com/tickexvn/tickex/internal/edge/services"
 	"github.com/tickexvn/tickex/internal/edge/types"
 	"github.com/tickexvn/tickex/pkg/core"

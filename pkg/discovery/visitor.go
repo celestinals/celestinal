@@ -20,8 +20,8 @@ import (
 	"context"
 	"fmt"
 
+	discoverypb "github.com/tickexvn/tickex/api/gen/go/discovery/v1"
 	"github.com/tickexvn/tickex/api/gen/go/types/v1"
-	discoverypb "github.com/tickexvn/tickex/api/gen/go/utils/discovery/v1"
 	"github.com/tickexvn/tickex/pkg/errors"
 	"github.com/tickexvn/tickex/pkg/logger"
 	"google.golang.org/grpc"

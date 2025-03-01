@@ -27,7 +27,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/tickexcontrollersgreeterv1SayHelloResponse"
+              "$ref": "#/definitions/tickexgreeterv1SayHelloResponse"
             }
           },
           "default": {
@@ -113,6 +113,14 @@
         }
       }
     },
+    "greetersharedv1SayHelloResponse": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      }
+    },
     "protobufAny": {
       "type": "object",
       "properties": {
@@ -122,19 +130,11 @@
       },
       "additionalProperties": {}
     },
-    "tickexcontrollersgreeterv1SayHelloResponse": {
+    "tickexgreeterv1SayHelloResponse": {
       "type": "object",
       "properties": {
         "response": {
-          "$ref": "#/definitions/tickexsharedgreeterv1SayHelloResponse"
-        }
-      }
-    },
-    "tickexsharedgreeterv1SayHelloResponse": {
-      "type": "object",
-      "properties": {
-        "message": {
-          "type": "string"
+          "$ref": "#/definitions/greetersharedv1SayHelloResponse"
         }
       }
     },
