@@ -33,32 +33,20 @@ var (
 	_ = anypb.Any{}
 )
 
-// Validate checks the field values on SayHelloRequest with the rules defined
+// Validate checks the field values on GetTicketRequest with the rules defined
 // in the proto definition for this message. If any rules are violated, an
 // error is returned.
-func (m *SayHelloRequest) Validate() error {
+func (m *GetTicketRequest) Validate() error {
 	if m == nil {
 		return nil
 	}
 
-	if v, ok := interface{}(m.GetPage()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return SayHelloRequestValidationError{
-				field:  "Page",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	// no validation rules for Name
-
 	return nil
 }
 
-// SayHelloRequestValidationError is the validation error returned by
-// SayHelloRequest.Validate if the designated constraints aren't met.
-type SayHelloRequestValidationError struct {
+// GetTicketRequestValidationError is the validation error returned by
+// GetTicketRequest.Validate if the designated constraints aren't met.
+type GetTicketRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -66,22 +54,22 @@ type SayHelloRequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e SayHelloRequestValidationError) Field() string { return e.field }
+func (e GetTicketRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e SayHelloRequestValidationError) Reason() string { return e.reason }
+func (e GetTicketRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e SayHelloRequestValidationError) Cause() error { return e.cause }
+func (e GetTicketRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e SayHelloRequestValidationError) Key() bool { return e.key }
+func (e GetTicketRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e SayHelloRequestValidationError) ErrorName() string { return "SayHelloRequestValidationError" }
+func (e GetTicketRequestValidationError) ErrorName() string { return "GetTicketRequestValidationError" }
 
 // Error satisfies the builtin error interface
-func (e SayHelloRequestValidationError) Error() string {
+func (e GetTicketRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -93,14 +81,14 @@ func (e SayHelloRequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sSayHelloRequest.%s: %s%s",
+		"invalid %sGetTicketRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = SayHelloRequestValidationError{}
+var _ error = GetTicketRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -108,32 +96,22 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = SayHelloRequestValidationError{}
+} = GetTicketRequestValidationError{}
 
-// Validate checks the field values on SayHelloResponse with the rules defined
-// in the proto definition for this message. If any rules are violated, an
-// error is returned.
-func (m *SayHelloResponse) Validate() error {
+// Validate checks the field values on CreateTicketRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *CreateTicketRequest) Validate() error {
 	if m == nil {
 		return nil
-	}
-
-	if v, ok := interface{}(m.GetResponse()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return SayHelloResponseValidationError{
-				field:  "Response",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
 	}
 
 	return nil
 }
 
-// SayHelloResponseValidationError is the validation error returned by
-// SayHelloResponse.Validate if the designated constraints aren't met.
-type SayHelloResponseValidationError struct {
+// CreateTicketRequestValidationError is the validation error returned by
+// CreateTicketRequest.Validate if the designated constraints aren't met.
+type CreateTicketRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -141,22 +119,24 @@ type SayHelloResponseValidationError struct {
 }
 
 // Field function returns field value.
-func (e SayHelloResponseValidationError) Field() string { return e.field }
+func (e CreateTicketRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e SayHelloResponseValidationError) Reason() string { return e.reason }
+func (e CreateTicketRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e SayHelloResponseValidationError) Cause() error { return e.cause }
+func (e CreateTicketRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e SayHelloResponseValidationError) Key() bool { return e.key }
+func (e CreateTicketRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e SayHelloResponseValidationError) ErrorName() string { return "SayHelloResponseValidationError" }
+func (e CreateTicketRequestValidationError) ErrorName() string {
+	return "CreateTicketRequestValidationError"
+}
 
 // Error satisfies the builtin error interface
-func (e SayHelloResponseValidationError) Error() string {
+func (e CreateTicketRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -168,14 +148,14 @@ func (e SayHelloResponseValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sSayHelloResponse.%s: %s%s",
+		"invalid %sCreateTicketRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = SayHelloResponseValidationError{}
+var _ error = CreateTicketRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -183,4 +163,71 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = SayHelloResponseValidationError{}
+} = CreateTicketRequestValidationError{}
+
+// Validate checks the field values on DeleteTicketRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *DeleteTicketRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// DeleteTicketRequestValidationError is the validation error returned by
+// DeleteTicketRequest.Validate if the designated constraints aren't met.
+type DeleteTicketRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DeleteTicketRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DeleteTicketRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DeleteTicketRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DeleteTicketRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DeleteTicketRequestValidationError) ErrorName() string {
+	return "DeleteTicketRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e DeleteTicketRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDeleteTicketRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DeleteTicketRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DeleteTicketRequestValidationError{}

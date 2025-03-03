@@ -20,56 +20,6 @@
     "application/json"
   ],
   "paths": {
-    "/say": {
-      "get": {
-        "operationId": "TicketService_SayHello",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/tickexticketv1SayHelloResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/googlerpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "page.index",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int32"
-          },
-          {
-            "name": "page.size",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int32"
-          },
-          {
-            "name": "page.total",
-            "in": "query",
-            "required": false,
-            "type": "boolean"
-          },
-          {
-            "name": "name",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "TicketService"
-        ]
-      }
-    },
     "/status": {
       "get": {
         "operationId": "TicketService_Status",
@@ -87,6 +37,38 @@
             }
           }
         },
+        "tags": [
+          "TicketService"
+        ]
+      }
+    },
+    "/ticket": {
+      "post": {
+        "operationId": "TicketService_CreateTicket",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/tickexticketv1CreateTicketResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateTicketRequest"
+            }
+          }
+        ],
         "tags": [
           "TicketService"
         ]
@@ -122,37 +104,19 @@
       },
       "additionalProperties": {}
     },
-    "ticketsharedv1SayHelloResponse": {
+    "ticketsharedv1CreateTicketResponse": {
+      "type": "object"
+    },
+    "tickexticketv1CreateTicketResponse": {
       "type": "object",
       "properties": {
-        "message": {
-          "type": "string"
+        "data": {
+          "$ref": "#/definitions/ticketsharedv1CreateTicketResponse"
         }
       }
     },
-    "tickexticketv1SayHelloResponse": {
-      "type": "object",
-      "properties": {
-        "response": {
-          "$ref": "#/definitions/ticketsharedv1SayHelloResponse"
-        }
-      }
-    },
-    "v1Pages": {
-      "type": "object",
-      "properties": {
-        "index": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "size": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "total": {
-          "type": "boolean"
-        }
-      }
+    "v1CreateTicketRequest": {
+      "type": "object"
     },
     "v1StatusResponse": {
       "type": "object",

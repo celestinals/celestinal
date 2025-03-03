@@ -14,22 +14,6 @@
 
 syntax = "proto3";
 
-package tickex.ticket.shared.v1;
+package tickex.ticket.shared.x.v1;
 
-option go_package = "github.com/tickexvn/tickex/api/gen/go/ticket/shared/v1;shared";
-
-message CreateTicketResponse {
-
-}
-
-message UpdateTicketResponse {
-
-}
-
-message DeleteTicketResponse {
-
-}
-
-message GetTicketResponse {
-
-}
+option go_package = "github.com/tickexvn/tickex/api/gen/go/ticket/shared/x/v1;sharedx";

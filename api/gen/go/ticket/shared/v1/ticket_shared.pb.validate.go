@@ -33,22 +33,20 @@ var (
 	_ = anypb.Any{}
 )
 
-// Validate checks the field values on SayHelloResponse with the rules defined
-// in the proto definition for this message. If any rules are violated, an
-// error is returned.
-func (m *SayHelloResponse) Validate() error {
+// Validate checks the field values on CreateTicketResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *CreateTicketResponse) Validate() error {
 	if m == nil {
 		return nil
 	}
 
-	// no validation rules for Message
-
 	return nil
 }
 
-// SayHelloResponseValidationError is the validation error returned by
-// SayHelloResponse.Validate if the designated constraints aren't met.
-type SayHelloResponseValidationError struct {
+// CreateTicketResponseValidationError is the validation error returned by
+// CreateTicketResponse.Validate if the designated constraints aren't met.
+type CreateTicketResponseValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -56,22 +54,24 @@ type SayHelloResponseValidationError struct {
 }
 
 // Field function returns field value.
-func (e SayHelloResponseValidationError) Field() string { return e.field }
+func (e CreateTicketResponseValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e SayHelloResponseValidationError) Reason() string { return e.reason }
+func (e CreateTicketResponseValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e SayHelloResponseValidationError) Cause() error { return e.cause }
+func (e CreateTicketResponseValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e SayHelloResponseValidationError) Key() bool { return e.key }
+func (e CreateTicketResponseValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e SayHelloResponseValidationError) ErrorName() string { return "SayHelloResponseValidationError" }
+func (e CreateTicketResponseValidationError) ErrorName() string {
+	return "CreateTicketResponseValidationError"
+}
 
 // Error satisfies the builtin error interface
-func (e SayHelloResponseValidationError) Error() string {
+func (e CreateTicketResponseValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -83,14 +83,14 @@ func (e SayHelloResponseValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sSayHelloResponse.%s: %s%s",
+		"invalid %sCreateTicketResponse.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = SayHelloResponseValidationError{}
+var _ error = CreateTicketResponseValidationError{}
 
 var _ interface {
 	Field() string
@@ -98,4 +98,205 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = SayHelloResponseValidationError{}
+} = CreateTicketResponseValidationError{}
+
+// Validate checks the field values on UpdateTicketResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *UpdateTicketResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// UpdateTicketResponseValidationError is the validation error returned by
+// UpdateTicketResponse.Validate if the designated constraints aren't met.
+type UpdateTicketResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e UpdateTicketResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e UpdateTicketResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e UpdateTicketResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e UpdateTicketResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e UpdateTicketResponseValidationError) ErrorName() string {
+	return "UpdateTicketResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e UpdateTicketResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sUpdateTicketResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = UpdateTicketResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = UpdateTicketResponseValidationError{}
+
+// Validate checks the field values on DeleteTicketResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *DeleteTicketResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// DeleteTicketResponseValidationError is the validation error returned by
+// DeleteTicketResponse.Validate if the designated constraints aren't met.
+type DeleteTicketResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DeleteTicketResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DeleteTicketResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DeleteTicketResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DeleteTicketResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DeleteTicketResponseValidationError) ErrorName() string {
+	return "DeleteTicketResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e DeleteTicketResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDeleteTicketResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DeleteTicketResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DeleteTicketResponseValidationError{}
+
+// Validate checks the field values on GetTicketResponse with the rules defined
+// in the proto definition for this message. If any rules are violated, an
+// error is returned.
+func (m *GetTicketResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// GetTicketResponseValidationError is the validation error returned by
+// GetTicketResponse.Validate if the designated constraints aren't met.
+type GetTicketResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetTicketResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetTicketResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetTicketResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetTicketResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetTicketResponseValidationError) ErrorName() string {
+	return "GetTicketResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e GetTicketResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetTicketResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetTicketResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetTicketResponseValidationError{}

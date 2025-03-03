@@ -14,22 +14,23 @@
 
 syntax = "proto3";
 
-package tickex.ticket.shared.v1;
+package tickex.ticket.metadata.v1;
 
-option go_package = "github.com/tickexvn/tickex/api/gen/go/ticket/shared/v1;shared";
+import "google/protobuf/timestamp.proto";
 
-message CreateTicketResponse {
+option go_package = "github.com/tickexvn/tickex/api/gen/go/ticket/metadata/v1;metadata";
 
+enum TicketType {
+    TICKET_TYPE_UNSPECIFIED = 0;
+    TICKET_TYPE_EVENT = 1;
+    TICKET_TYPE_TRANSPORT = 2;
+    TICKET_TYPE_ENTERTAINMENT = 3;
 }
 
-message UpdateTicketResponse {
-
-}
-
-message DeleteTicketResponse {
-
-}
-
-message GetTicketResponse {
-
+message Metadata {
+    TicketType ticket_type = 1;
+    string holder_name = 2;
+    google.protobuf.Timestamp issued_at = 3;
+    google.protobuf.Timestamp valid_until = 4;
+    bool is_used = 5;
 }

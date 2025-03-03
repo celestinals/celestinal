@@ -20,18 +20,24 @@ import "buf/validate/validate.proto";
 
 import "tickex/types/v1/types.proto";
 import "tickex/ticket/shared/v1/ticket_shared.proto";
+import "google/protobuf/empty.proto";
 
 option go_package = "github.com/tickexvn/tickex/api/gen/go/ticket/domain/v1;domain";
 
 service TicketDomainService {
-  rpc SayHello(SayHelloRequest) returns (SayHelloResponse) {}
+  rpc CreateTicket(CreateTicketRequest) returns (tickex.ticket.shared.v1.CreateTicketResponse){}
+  rpc GetTicket(GetTicketRequest) returns (tickex.ticket.shared.v1.GetTicketResponse){}
+  rpc DeleteTicket(DeleteTicketRequest) returns (google.protobuf.Empty){}
 }
 
-message SayHelloRequest {
-  tickex.types.v1.Pages page = 1;
-  string name = 2 [(buf.validate.field).string.min_len = 1];
+message GetTicketRequest {
+
 }
 
-message SayHelloResponse {
-  tickex.ticket.shared.v1.SayHelloResponse response = 1;
+message CreateTicketRequest {
+
+}
+
+message DeleteTicketRequest {
+
 }

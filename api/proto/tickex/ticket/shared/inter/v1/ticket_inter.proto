@@ -14,22 +14,20 @@
 
 syntax = "proto3";
 
-package tickex.ticket.shared.v1;
+package tickex.ticket.shared.inter.v1;
 
-option go_package = "github.com/tickexvn/tickex/api/gen/go/ticket/shared/v1;shared";
+import "tickex/ticket/metadata/v1/ticket_metadata.proto";
 
-message CreateTicketResponse {
+option go_package = "github.com/tickexvn/tickex/api/gen/go/ticket/shared/inter/v1;inter";
 
+message Event {
+  ticket.metadata.v1.Metadata metadata = 1;
 }
 
-message UpdateTicketResponse {
-
+message Transport {
+  ticket.metadata.v1.Metadata metadata = 1;
 }
 
-message DeleteTicketResponse {
-
-}
-
-message GetTicketResponse {
-
+message Entertainment {
+  ticket.metadata.v1.Metadata metadata = 1;
 }

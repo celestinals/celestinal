@@ -22,6 +22,7 @@ import "tickex/ticket/shared/v1/ticket_shared.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
 
 option go_package = "github.com/tickexvn/tickex/api/gen/go/ticket/v1;ticket";
 
@@ -52,30 +53,28 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 };
 
 service TicketService {
-  rpc SayHello(SayHelloRequest) returns (SayHelloResponse) {
-    option (google.api.http) = {
-      get: "/say"
-    };
-  }
-
-  rpc Status(StatusRequest) returns (StatusResponse) {
+  rpc Status(google.protobuf.Empty) returns (StatusResponse) {
     option (google.api.http) = {
       get: "/status"
     };
   }
-}
 
-message SayHelloRequest {
-  tickex.types.v1.Pages page = 1;
-  string name = 2 [(buf.validate.field).string.min_len = 1];
-}
-
-message SayHelloResponse {
-  tickex.ticket.shared.v1.SayHelloResponse response = 1;
+  rpc CreateTicket(CreateTicketRequest) returns (CreateTicketResponse) {
+    option (google.api.http) = {
+      post: "/ticket",
+      body: "*",
+    };
+  }
 }
 
 message StatusResponse {
   string message = 1;
 }
 
-message StatusRequest {}
+message CreateTicketRequest {
+
+}
+
+message CreateTicketResponse {
+  tickex.ticket.shared.v1.CreateTicketResponse data = 1;
+}

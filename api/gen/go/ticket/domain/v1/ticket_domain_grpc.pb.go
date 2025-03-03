@@ -22,9 +22,11 @@ package domain
 
 import (
 	context "context"
+	v1 "github.com/tickexvn/tickex/api/gen/go/ticket/shared/v1"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -33,14 +35,18 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	TicketDomainService_SayHello_FullMethodName = "/tickex.ticket.domain.v1.TicketDomainService/SayHello"
+	TicketDomainService_CreateTicket_FullMethodName = "/tickex.ticket.domain.v1.TicketDomainService/CreateTicket"
+	TicketDomainService_GetTicket_FullMethodName    = "/tickex.ticket.domain.v1.TicketDomainService/GetTicket"
+	TicketDomainService_DeleteTicket_FullMethodName = "/tickex.ticket.domain.v1.TicketDomainService/DeleteTicket"
 )
 
 // TicketDomainServiceClient is the client API for TicketDomainService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TicketDomainServiceClient interface {
-	SayHello(ctx context.Context, in *SayHelloRequest, opts ...grpc.CallOption) (*SayHelloResponse, error)
+	CreateTicket(ctx context.Context, in *CreateTicketRequest, opts ...grpc.CallOption) (*v1.CreateTicketResponse, error)
+	GetTicket(ctx context.Context, in *GetTicketRequest, opts ...grpc.CallOption) (*v1.GetTicketResponse, error)
+	DeleteTicket(ctx context.Context, in *DeleteTicketRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type ticketDomainServiceClient struct {
@@ -51,10 +57,30 @@ func NewTicketDomainServiceClient(cc grpc.ClientConnInterface) TicketDomainServi
 	return &ticketDomainServiceClient{cc}
 }
 
-func (c *ticketDomainServiceClient) SayHello(ctx context.Context, in *SayHelloRequest, opts ...grpc.CallOption) (*SayHelloResponse, error) {
+func (c *ticketDomainServiceClient) CreateTicket(ctx context.Context, in *CreateTicketRequest, opts ...grpc.CallOption) (*v1.CreateTicketResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(SayHelloResponse)
-	err := c.cc.Invoke(ctx, TicketDomainService_SayHello_FullMethodName, in, out, cOpts...)
+	out := new(v1.CreateTicketResponse)
+	err := c.cc.Invoke(ctx, TicketDomainService_CreateTicket_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *ticketDomainServiceClient) GetTicket(ctx context.Context, in *GetTicketRequest, opts ...grpc.CallOption) (*v1.GetTicketResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(v1.GetTicketResponse)
+	err := c.cc.Invoke(ctx, TicketDomainService_GetTicket_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *ticketDomainServiceClient) DeleteTicket(ctx context.Context, in *DeleteTicketRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, TicketDomainService_DeleteTicket_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -65,7 +91,9 @@ func (c *ticketDomainServiceClient) SayHello(ctx context.Context, in *SayHelloRe
 // All implementations must embed UnimplementedTicketDomainServiceServer
 // for forward compatibility.
 type TicketDomainServiceServer interface {
-	SayHello(context.Context, *SayHelloRequest) (*SayHelloResponse, error)
+	CreateTicket(context.Context, *CreateTicketRequest) (*v1.CreateTicketResponse, error)
+	GetTicket(context.Context, *GetTicketRequest) (*v1.GetTicketResponse, error)
+	DeleteTicket(context.Context, *DeleteTicketRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedTicketDomainServiceServer()
 }
 
@@ -76,8 +104,14 @@ type TicketDomainServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedTicketDomainServiceServer struct{}
 
-func (UnimplementedTicketDomainServiceServer) SayHello(context.Context, *SayHelloRequest) (*SayHelloResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SayHello not implemented")
+func (UnimplementedTicketDomainServiceServer) CreateTicket(context.Context, *CreateTicketRequest) (*v1.CreateTicketResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateTicket not implemented")
+}
+func (UnimplementedTicketDomainServiceServer) GetTicket(context.Context, *GetTicketRequest) (*v1.GetTicketResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTicket not implemented")
+}
+func (UnimplementedTicketDomainServiceServer) DeleteTicket(context.Context, *DeleteTicketRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteTicket not implemented")
 }
 func (UnimplementedTicketDomainServiceServer) mustEmbedUnimplementedTicketDomainServiceServer() {}
 func (UnimplementedTicketDomainServiceServer) testEmbeddedByValue()                             {}
@@ -100,20 +134,56 @@ func RegisterTicketDomainServiceServer(s grpc.ServiceRegistrar, srv TicketDomain
 	s.RegisterService(&TicketDomainService_ServiceDesc, srv)
 }
 
-func _TicketDomainService_SayHello_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SayHelloRequest)
+func _TicketDomainService_CreateTicket_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateTicketRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TicketDomainServiceServer).SayHello(ctx, in)
+		return srv.(TicketDomainServiceServer).CreateTicket(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: TicketDomainService_SayHello_FullMethodName,
+		FullMethod: TicketDomainService_CreateTicket_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TicketDomainServiceServer).SayHello(ctx, req.(*SayHelloRequest))
+		return srv.(TicketDomainServiceServer).CreateTicket(ctx, req.(*CreateTicketRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TicketDomainService_GetTicket_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetTicketRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TicketDomainServiceServer).GetTicket(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TicketDomainService_GetTicket_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TicketDomainServiceServer).GetTicket(ctx, req.(*GetTicketRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TicketDomainService_DeleteTicket_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteTicketRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TicketDomainServiceServer).DeleteTicket(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TicketDomainService_DeleteTicket_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TicketDomainServiceServer).DeleteTicket(ctx, req.(*DeleteTicketRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -126,8 +196,16 @@ var TicketDomainService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*TicketDomainServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "SayHello",
-			Handler:    _TicketDomainService_SayHello_Handler,
+			MethodName: "CreateTicket",
+			Handler:    _TicketDomainService_CreateTicket_Handler,
+		},
+		{
+			MethodName: "GetTicket",
+			Handler:    _TicketDomainService_GetTicket_Handler,
+		},
+		{
+			MethodName: "DeleteTicket",
+			Handler:    _TicketDomainService_DeleteTicket_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

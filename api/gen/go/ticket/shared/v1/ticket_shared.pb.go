@@ -34,28 +34,26 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type SayHelloResponse struct {
+type CreateTicketResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
-
-	Message string `protobuf:"bytes,1,opt,name=message,proto3" json:"message,omitempty"`
 }
 
-func (x *SayHelloResponse) Reset() {
-	*x = SayHelloResponse{}
+func (x *CreateTicketResponse) Reset() {
+	*x = CreateTicketResponse{}
 	mi := &file_ticket_shared_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *SayHelloResponse) String() string {
+func (x *CreateTicketResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*SayHelloResponse) ProtoMessage() {}
+func (*CreateTicketResponse) ProtoMessage() {}
 
-func (x *SayHelloResponse) ProtoReflect() protoreflect.Message {
+func (x *CreateTicketResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_ticket_shared_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -67,16 +65,117 @@ func (x *SayHelloResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use SayHelloResponse.ProtoReflect.Descriptor instead.
-func (*SayHelloResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use CreateTicketResponse.ProtoReflect.Descriptor instead.
+func (*CreateTicketResponse) Descriptor() ([]byte, []int) {
 	return file_ticket_shared_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *SayHelloResponse) GetMessage() string {
+type UpdateTicketResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *UpdateTicketResponse) Reset() {
+	*x = UpdateTicketResponse{}
+	mi := &file_ticket_shared_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateTicketResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateTicketResponse) ProtoMessage() {}
+
+func (x *UpdateTicketResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_ticket_shared_proto_msgTypes[1]
 	if x != nil {
-		return x.Message
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
 	}
-	return ""
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateTicketResponse.ProtoReflect.Descriptor instead.
+func (*UpdateTicketResponse) Descriptor() ([]byte, []int) {
+	return file_ticket_shared_proto_rawDescGZIP(), []int{1}
+}
+
+type DeleteTicketResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *DeleteTicketResponse) Reset() {
+	*x = DeleteTicketResponse{}
+	mi := &file_ticket_shared_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteTicketResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteTicketResponse) ProtoMessage() {}
+
+func (x *DeleteTicketResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_ticket_shared_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteTicketResponse.ProtoReflect.Descriptor instead.
+func (*DeleteTicketResponse) Descriptor() ([]byte, []int) {
+	return file_ticket_shared_proto_rawDescGZIP(), []int{2}
+}
+
+type GetTicketResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *GetTicketResponse) Reset() {
+	*x = GetTicketResponse{}
+	mi := &file_ticket_shared_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetTicketResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetTicketResponse) ProtoMessage() {}
+
+func (x *GetTicketResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_ticket_shared_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetTicketResponse.ProtoReflect.Descriptor instead.
+func (*GetTicketResponse) Descriptor() ([]byte, []int) {
+	return file_ticket_shared_proto_rawDescGZIP(), []int{3}
 }
 
 var File_ticket_shared_proto protoreflect.FileDescriptor
@@ -84,15 +183,18 @@ var File_ticket_shared_proto protoreflect.FileDescriptor
 var file_ticket_shared_proto_rawDesc = []byte{
 	0x0a, 0x13, 0x74, 0x69, 0x63, 0x6b, 0x65, 0x74, 0x5f, 0x73, 0x68, 0x61, 0x72, 0x65, 0x64, 0x2e,
 	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x17, 0x74, 0x69, 0x63, 0x6b, 0x65, 0x78, 0x2e, 0x74, 0x69,
-	0x63, 0x6b, 0x65, 0x74, 0x2e, 0x73, 0x68, 0x61, 0x72, 0x65, 0x64, 0x2e, 0x76, 0x31, 0x22, 0x2c,
-	0x0a, 0x10, 0x53, 0x61, 0x79, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x18, 0x01, 0x20,
-	0x01, 0x28, 0x09, 0x52, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x42, 0x3f, 0x5a, 0x3d,
-	0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x74, 0x69, 0x63, 0x6b, 0x65,
-	0x78, 0x76, 0x6e, 0x2f, 0x74, 0x69, 0x63, 0x6b, 0x65, 0x78, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x67,
-	0x65, 0x6e, 0x2f, 0x67, 0x6f, 0x2f, 0x74, 0x69, 0x63, 0x6b, 0x65, 0x74, 0x2f, 0x73, 0x68, 0x61,
-	0x72, 0x65, 0x64, 0x2f, 0x76, 0x31, 0x3b, 0x73, 0x68, 0x61, 0x72, 0x65, 0x64, 0x62, 0x06, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x63, 0x6b, 0x65, 0x74, 0x2e, 0x73, 0x68, 0x61, 0x72, 0x65, 0x64, 0x2e, 0x76, 0x31, 0x22, 0x16,
+	0x0a, 0x14, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54, 0x69, 0x63, 0x6b, 0x65, 0x74, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x16, 0x0a, 0x14, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65,
+	0x54, 0x69, 0x63, 0x6b, 0x65, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x16,
+	0x0a, 0x14, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x54, 0x69, 0x63, 0x6b, 0x65, 0x74, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x13, 0x0a, 0x11, 0x47, 0x65, 0x74, 0x54, 0x69, 0x63,
+	0x6b, 0x65, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x3f, 0x5a, 0x3d, 0x67,
+	0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x74, 0x69, 0x63, 0x6b, 0x65, 0x78,
+	0x76, 0x6e, 0x2f, 0x74, 0x69, 0x63, 0x6b, 0x65, 0x78, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x67, 0x65,
+	0x6e, 0x2f, 0x67, 0x6f, 0x2f, 0x74, 0x69, 0x63, 0x6b, 0x65, 0x74, 0x2f, 0x73, 0x68, 0x61, 0x72,
+	0x65, 0x64, 0x2f, 0x76, 0x31, 0x3b, 0x73, 0x68, 0x61, 0x72, 0x65, 0x64, 0x62, 0x06, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -107,9 +209,12 @@ func file_ticket_shared_proto_rawDescGZIP() []byte {
 	return file_ticket_shared_proto_rawDescData
 }
 
-var file_ticket_shared_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
+var file_ticket_shared_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_ticket_shared_proto_goTypes = []any{
-	(*SayHelloResponse)(nil), // 0: tickex.ticket.shared.v1.SayHelloResponse
+	(*CreateTicketResponse)(nil), // 0: tickex.ticket.shared.v1.CreateTicketResponse
+	(*UpdateTicketResponse)(nil), // 1: tickex.ticket.shared.v1.UpdateTicketResponse
+	(*DeleteTicketResponse)(nil), // 2: tickex.ticket.shared.v1.DeleteTicketResponse
+	(*GetTicketResponse)(nil),    // 3: tickex.ticket.shared.v1.GetTicketResponse
 }
 var file_ticket_shared_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
@@ -130,7 +235,7 @@ func file_ticket_shared_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_ticket_shared_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   1,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
