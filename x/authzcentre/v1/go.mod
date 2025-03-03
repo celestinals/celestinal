@@ -1,3 +1,3 @@
-module github.com/tickexvn/tickex/x/authzcentre/v1
+module github.com/tickexvn/tickex/x/authzcentre
 
 go 1.24

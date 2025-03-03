@@ -23,8 +23,8 @@ import (
 	"github.com/tickexvn/tickex/pkg/configs"
 	"github.com/tickexvn/tickex/pkg/core"
 	"github.com/tickexvn/tickex/pkg/logger"
-	_ "github.com/tickexvn/tickex/x/greeter/v1/cmd/init"
-	"github.com/tickexvn/tickex/x/greeter/v1/cmd/server"
+	_ "github.com/tickexvn/tickex/x/greeter/cmd/init"
+	"github.com/tickexvn/tickex/x/greeter/cmd/server"
 )
 
 // Build and run main application with environment variable

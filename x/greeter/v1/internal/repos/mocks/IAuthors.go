@@ -5,7 +5,7 @@ package mocks
 import (
 	context "context"
 
-	authors "github.com/tickexvn/tickex/x/greeter/v1/internal/models/gen/authors"
+	authors "github.com/tickexvn/tickex/x/greeter/internal/models/gen/authors"
 
 	mock "github.com/stretchr/testify/mock"
 )

@@ -1,3 +1,3 @@
-module github.com/tickexvn/tickex/x/transfermarkt/v1
+module github.com/tickexvn/tickex/x/transfermarkt
 
 go 1.24.0

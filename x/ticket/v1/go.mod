@@ -1,3 +1,3 @@
-module github.com/tickexvn/ticket/x/ticket/v1
+module github.com/tickexvn/ticket/x/ticket
 
 go 1.24.0
