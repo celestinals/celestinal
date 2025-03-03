@@ -15,10 +15,7 @@ Trong đó, một microservice sẽ được chia thành các layer cơ bản nh
 - repo: các chức năng truy vấn vào cơ sở dữ liệu
 - data (models): các models của ứng dụng sẽ khai báo ở đây
 
-Tất cả các hàm public ở `controllers` và `domain` phải được khai báo trong các file proto tương ứng ở `api/proto`
-
-- `api/proto/tickex/controllers` -> `api/gen/go/controllers`
-- `api/proto/tickex/domain` -> `api/gen/go/domain`
+Tất cả các hàm public ở `controllers` và `domain` phải được khai báo trong các file proto tương ứng ở `api/proto`. Xem ví dụ ở `api/proto/tickex/greeter`
 
 Hãy tuân thủ các nguyên tắc chính của clean architecture
 

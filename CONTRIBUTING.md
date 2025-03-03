@@ -110,11 +110,11 @@ If you set your `user.name` and `user.email` git configs, you can sign your comm
 ### Where to Put Packages
 
 - `api`: Define proto files for all service mesh.
-- `cmd`: Main files, app endpoints.
+- `cmd`: Main files, edge app endpoints.
 - `deploy`: Contains scripts and config for deployment.
 - `docs`: Documentation.
 - `hack`: Scripts used by developers.
 - `internal`: Internal packages, not exported.
 - `pkg`: Common packages, shared with external modules.
 - `third_party`: Third-party proto libraries.
-- `x`: Plugin services, all built on a microservice network.
+- `x`: "Extend" services, all built on a microservice network.

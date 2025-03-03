@@ -1,4 +1,4 @@
-## TicketBox
+## Tickex
 
 ### Mục tiêu chính
 - Xây dựng một nền tảng giúp người dùng tạo tổ chức, tổ chức có thể tạo sự kiện bán vé.
