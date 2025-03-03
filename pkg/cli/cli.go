@@ -28,13 +28,16 @@ import (
 var once sync.Once
 var flags = &types.Flags{
 	TurnOnBots: false,
+	Name:       "Edge Server",
+	Address:    "0.0.0.0:9000",
 }
 
 // Parse flag args
 func Parse() *types.Flags {
 	once.Do(func() {
-		flag.BoolVar(&flags.TurnOnBots, "bot", false, "Turn on bots?")
-		flag.StringVar(&flags.Hostname, "hostname", "server", "Hostname?")
+		flag.BoolVar(&flags.TurnOnBots, "bot", flags.GetTurnOnBots(), "turn on bots?")
+		flag.StringVar(&flags.Name, "name", flags.GetName(), "hostname?")
+		flag.StringVar(&flags.Address, "address", flags.GetAddress(), "host address?")
 
 		flag.Usage = func() {
 			fmt.Println("Usage: tickex [flags]")

@@ -20,6 +20,7 @@ import (
 	"net/http"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"github.com/tickexvn/tickex/pkg/cli"
 )
 
 // Edge is an interface for a runtime mux with http server.
@@ -55,7 +56,7 @@ type edge struct {
 func (e *edge) Listen(conf *EdgeConfig) error {
 	if conf == nil {
 		conf = &EdgeConfig{
-			Addr:    ":9000",
+			Addr:    cli.Parse().GetAddress(),
 			Handler: e.mux,
 		}
 	}
