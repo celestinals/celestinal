@@ -501,7 +501,9 @@ func (m *Flags) Validate() error {
 
 	// no validation rules for TurnOnBots
 
-	// no validation rules for Hostname
+	// no validation rules for Name
+
+	// no validation rules for Address
 
 	return nil
 }

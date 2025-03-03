@@ -114,7 +114,7 @@ func (mdw *Middleware) notify(statusCode int, body string) {
 	_ = monitor.Send(&types.RobotMessage{
 		Metadata: &types.Metadata{
 			CreatedAt: pbtools.ToTime(time.Now().Local()),
-			Author:    cli.Parse().GetHostname(),
+			Author:    cli.Parse().GetName(),
 		},
 		Header: fmt.Sprintf("http error %+v ", statusCode),
 		Body:   fmt.Sprintf("http error %+v request body %+v", statusCode, string(body)),
