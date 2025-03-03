@@ -25,7 +25,7 @@ import (
 	"github.com/tickexvn/tickex/pkg/core/net"
 	"github.com/tickexvn/tickex/pkg/logger"
 	"github.com/tickexvn/tickex/pkg/pbtools"
-	"github.com/tickexvn/tickex/x/greeter/v1/internal/controllers"
+	"github.com/tickexvn/tickex/x/greeter/internal/controllers"
 )
 
 var _ core.Server = (*Greeter)(nil)

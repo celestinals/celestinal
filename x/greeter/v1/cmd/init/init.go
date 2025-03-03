@@ -19,8 +19,8 @@ package init
 
 import (
 	"github.com/tickexvn/tickex/pkg/core"
-	"github.com/tickexvn/tickex/x/greeter/v1/internal/controllers"
-	"github.com/tickexvn/tickex/x/greeter/v1/internal/domain"
+	"github.com/tickexvn/tickex/x/greeter/internal/controllers"
+	"github.com/tickexvn/tickex/x/greeter/internal/domain"
 )
 
 var (

@@ -1,0 +1,36 @@
+// Copyright 2025 The Tickex Authors.
+
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+
+//     http://www.apache.org/licenses/LICENSE-2.0
+
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+package tickex.ticket.metadata.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/tickexvn/tickex/api/gen/go/ticket/metadata/v1;metadata";
+
+enum TicketType {
+    TICKET_TYPE_UNSPECIFIED = 0;
+    TICKET_TYPE_EVENT = 1;
+    TICKET_TYPE_TRANSPORT = 2;
+    TICKET_TYPE_ENTERTAINMENT = 3;
+}
+
+message Metadata {
+    TicketType ticket_type = 1;
+    string holder_name = 2;
+    google.protobuf.Timestamp issued_at = 3;
+    google.protobuf.Timestamp valid_until = 4;
+    bool is_used = 5;
+}

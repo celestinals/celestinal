@@ -23,7 +23,7 @@ import (
 
 	"github.com/tickexvn/tickex/pkg/database"
 	"github.com/tickexvn/tickex/pkg/database/pg"
-	"github.com/tickexvn/tickex/x/greeter/v1/internal/models/gen/authors"
+	"github.com/tickexvn/tickex/x/greeter/internal/models/gen/authors"
 )
 
 // Check valid Object with Interface

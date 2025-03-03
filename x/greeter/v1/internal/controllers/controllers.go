@@ -25,7 +25,7 @@ import (
 	"github.com/tickexvn/tickex/pkg/copier"
 	"github.com/tickexvn/tickex/pkg/errors"
 	"github.com/tickexvn/tickex/pkg/logger"
-	"github.com/tickexvn/tickex/x/greeter/v1/internal/domain"
+	"github.com/tickexvn/tickex/x/greeter/internal/domain"
 )
 
 // IGreeter defines the interface for the Greeter controller.

@@ -1,4 +1,4 @@
-module github.com/tickexvn/tickex/x/greeter/v1
+module github.com/tickexvn/tickex/x/greeter
 
 go 1.24
 
