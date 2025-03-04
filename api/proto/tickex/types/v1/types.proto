@@ -64,7 +64,7 @@ message Config {
 message Service {
   string id = 1 [(buf.validate.field).string.min_len = 2];
   string name = 2 [(buf.validate.field).string.min_len = 2];
-  string address = 3 [(buf.validate.field).string.min_len = 2];
+  string host = 3 [(buf.validate.field).string.min_len = 2];
   uint32 port = 4 [(buf.validate.field).uint32.gte = 1000];
   repeated string tags = 5;
 }

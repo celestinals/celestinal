@@ -26,25 +26,27 @@ import (
 )
 
 var once sync.Once
-var flags = &types.Flags{
+
+// Flags global variable
+var Flags = &types.Flags{
 	TurnOnBots: false,
-	Name:       "Edge Server",
+	Name:       "Tickex mesh server",
 	Address:    "0.0.0.0:9000",
 }
 
 // Parse flag args
 func Parse() *types.Flags {
 	once.Do(func() {
-		flag.BoolVar(&flags.TurnOnBots, "bot", flags.GetTurnOnBots(), "turn on bots?")
-		flag.StringVar(&flags.Name, "name", flags.GetName(), "hostname?")
-		flag.StringVar(&flags.Address, "address", flags.GetAddress(), "host address?")
+		flag.BoolVar(&Flags.TurnOnBots, "bot", Flags.GetTurnOnBots(), "turn on bots?")
+		flag.StringVar(&Flags.Name, "name", Flags.GetName(), "hostname?")
+		flag.StringVar(&Flags.Address, "address", Flags.GetAddress(), "host address?")
 
 		flag.Usage = func() {
-			fmt.Println("Usage: tickex [flags]")
+			fmt.Println("Usage: tickex [Flags]")
 			flag.PrintDefaults()
 		}
 		flag.Parse()
 	})
 
-	return flags
+	return Flags
 }

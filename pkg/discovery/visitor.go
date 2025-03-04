@@ -62,8 +62,8 @@ func (v visitor) Visit(ctx context.Context, service grpc.ServiceDesc) (string, e
 		return "", err
 	}
 
-	addr := services.GetServices()[0].GetAddress()
+	host := services.GetServices()[0].GetHost()
 	port := services.GetServices()[0].GetPort()
 
-	return fmt.Sprintf("%s:%d", addr, port), nil
+	return fmt.Sprintf("%s:%d", host, port), nil
 }

@@ -20,6 +20,7 @@ package main
 import (
 	"context"
 
+	"github.com/tickexvn/tickex/pkg/cli"
 	"github.com/tickexvn/tickex/pkg/configs"
 	"github.com/tickexvn/tickex/pkg/core"
 	"github.com/tickexvn/tickex/pkg/logger"
@@ -34,6 +35,11 @@ import (
 //
 // _ = core.Inject(controllers.New)
 func main() {
+	cli.Flags.Address = "127.0.0.1:8000"
+	cli.Flags.Name = "tickex.greeter.v1"
+
+	_ = cli.Parse()
+
 	app := core.Build(server.New, configs.Default)
 	logger.Fatal(app.Start(context.Background()))
 }
