@@ -103,16 +103,17 @@ var _ interface {
 	ErrorName() string
 } = PagesValidationError{}
 
-// Validate checks the field values on Metadata with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
-func (m *Metadata) Validate() error {
+// Validate checks the field values on RobotMessageMetadata with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *RobotMessageMetadata) Validate() error {
 	if m == nil {
 		return nil
 	}
 
 	if v, ok := interface{}(m.GetCreatedAt()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return MetadataValidationError{
+			return RobotMessageMetadataValidationError{
 				field:  "CreatedAt",
 				reason: "embedded message failed validation",
 				cause:  err,
@@ -125,9 +126,9 @@ func (m *Metadata) Validate() error {
 	return nil
 }
 
-// MetadataValidationError is the validation error returned by
-// Metadata.Validate if the designated constraints aren't met.
-type MetadataValidationError struct {
+// RobotMessageMetadataValidationError is the validation error returned by
+// RobotMessageMetadata.Validate if the designated constraints aren't met.
+type RobotMessageMetadataValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -135,22 +136,24 @@ type MetadataValidationError struct {
 }
 
 // Field function returns field value.
-func (e MetadataValidationError) Field() string { return e.field }
+func (e RobotMessageMetadataValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e MetadataValidationError) Reason() string { return e.reason }
+func (e RobotMessageMetadataValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e MetadataValidationError) Cause() error { return e.cause }
+func (e RobotMessageMetadataValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e MetadataValidationError) Key() bool { return e.key }
+func (e RobotMessageMetadataValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e MetadataValidationError) ErrorName() string { return "MetadataValidationError" }
+func (e RobotMessageMetadataValidationError) ErrorName() string {
+	return "RobotMessageMetadataValidationError"
+}
 
 // Error satisfies the builtin error interface
-func (e MetadataValidationError) Error() string {
+func (e RobotMessageMetadataValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -162,14 +165,14 @@ func (e MetadataValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sMetadata.%s: %s%s",
+		"invalid %sRobotMessageMetadata.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = MetadataValidationError{}
+var _ error = RobotMessageMetadataValidationError{}
 
 var _ interface {
 	Field() string
@@ -177,7 +180,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = MetadataValidationError{}
+} = RobotMessageMetadataValidationError{}
 
 // Validate checks the field values on RobotMessage with the rules defined in
 // the proto definition for this message. If any rules are violated, an error

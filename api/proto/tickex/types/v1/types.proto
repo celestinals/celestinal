@@ -27,30 +27,36 @@ message Pages {
   bool total = 3;
 }
 
-message Metadata {
+message RobotMessageMetadata {
   google.protobuf.Timestamp created_at = 1;
   string author = 2;
 }
 
 message RobotMessage {
-  Metadata metadata = 1;
+  RobotMessageMetadata metadata = 1;
   string header = 2;
   string body = 3;
   string footer = 4;
 }
 
 message Context {
-  string trace_id = 1 [(buf.validate.field).string.min_len = 1]; // Tracks each request across microservices.
-  string request_id = 2 [(buf.validate.field).string.min_len = 1]; // Unique identifier for each request. Useful for debugging and logging.
-  string user_id = 3 [(buf.validate.field).string.min_len = 1]; // Identifies the user making the request.
-  string authorization = 4; // Passes tokens or authentication information through the context.
-  string locale = 5 [(buf.validate.field).string.min_len = 1]; // Passes language information for multilingual systems.
-  string correlation_id = 6 [(buf.validate.field).string.min_len = 1]; // Links multiple related requests in a workflow.
-  string service_name = 7 [(buf.validate.field).string.min_len = 1]; // Identifies the current service processing the request.
-  uint32 retry_count = 8; // Tracks the number of retries to prevent infinite loops.
-  string span_id = 9; // Identifies individual parts within a request (tracing).
-  string ip = 10 [(buf.validate.field).string.min_len = 1]; // Identifies the IP address of the client sending the request.
-  string environment = 11 [(buf.validate.field).string.min_len = 1]; // Identifies the environment in which the service is running.
+  // Identifies the user making the request.
+  string user_id = 3 [(buf.validate.field).string.min_len = 1];
+
+  // Passes tokens or authentication information through the context.
+  string authorization = 4 [(buf.validate.field).string.pattern = "^Bearer[ \t]+([A-Za-z0-9\\-._~+/]+=*)$"];
+
+  // Passes language information for multilingual systems.
+  string locale = 5 [(buf.validate.field).string.min_len = 1];
+
+  // Identifies the current service processing the request.
+  string service_name = 7 [(buf.validate.field).string.pattern = "^tickex\\..*$"];
+
+  // Identifies the IP address of the client sending the request.
+  string ip = 10 [(buf.validate.field).string.pattern = "^([a-zA-Z0-9.-]+)$"];
+
+  // Identifies the environment in which the service is running.
+  string environment = 11 [(buf.validate.field).string.pattern = "^(dev|prod|sandbox)$"];
 }
 
 message Config {
@@ -64,8 +70,8 @@ message Config {
 message Service {
   string id = 1 [(buf.validate.field).string.min_len = 2];
   string name = 2 [(buf.validate.field).string.min_len = 2];
-  string host = 3 [(buf.validate.field).string.min_len = 2];
-  uint32 port = 4 [(buf.validate.field).uint32.gte = 1000];
+  string host = 3 [(buf.validate.field).string.pattern = "^([a-zA-Z0-9.-]+)$"];
+  uint32 port = 4 [(buf.validate.field).uint32.gte = 0];
   repeated string tags = 5;
 }
 

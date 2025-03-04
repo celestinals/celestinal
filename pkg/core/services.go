@@ -49,8 +49,8 @@ type IServiceServer interface {
 	Serve(info *ServiceInfo) error
 }
 
-// serviceDiscovery is serviceDiscover Properties
-type serviceDiscovery struct {
+// service is register Properties
+type service struct {
 	Host string
 	Port uint32
 	Name string
@@ -102,7 +102,7 @@ func (s *ServiceServer) Serve(info *ServiceInfo) error {
 		return err
 	}
 
-	if err := s.serviceDiscover(info.Config, serviceDiscovery{
+	if err := s.register(info.Config, service{
 		Host: host,
 		Port: port,
 		Name: info.Name,
@@ -114,18 +114,18 @@ func (s *ServiceServer) Serve(info *ServiceInfo) error {
 	return s.AsServer().Serve(listener)
 }
 
-// serviceDiscover registers the service with the service discovery.
-func (s *ServiceServer) serviceDiscover(conf *types.Config, service serviceDiscovery) error {
+// register registers the service with the service discovery.
+func (s *ServiceServer) register(conf *types.Config, service service) error {
 	discover, err := discovery.New(conf)
 	if err != nil {
 		return err
 	}
 
 	s.discovery = discover
-	return s.discover(service)
+	return s.registerConsul(service)
 }
 
-func (s *ServiceServer) discover(service serviceDiscovery) error {
+func (s *ServiceServer) registerConsul(service service) error {
 	if s.discovery == nil {
 		return nil
 	}
