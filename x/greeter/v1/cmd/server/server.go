@@ -21,9 +21,7 @@ import (
 	"github.com/tickexvn/tickex/api/gen/go/greeter/v1"
 	"github.com/tickexvn/tickex/api/gen/go/types/v1"
 	"github.com/tickexvn/tickex/pkg/cli"
-	"github.com/tickexvn/tickex/pkg/constant"
 	"github.com/tickexvn/tickex/pkg/core"
-	"github.com/tickexvn/tickex/pkg/logger"
 	"github.com/tickexvn/tickex/pkg/pbtools"
 	"github.com/tickexvn/tickex/x/greeter/internal/controllers"
 )
@@ -52,7 +50,6 @@ func (g *Greeter) ListenAndServe() error {
 		return err
 	}
 
-	logger.Infof(constant.InfoGrpcServer, cli.Parse().GetAddress())
 	greeter.RegisterGreeterServiceServer(g.AsServer(), g.srv)
 
 	return g.Serve(&core.ServiceInfo{
