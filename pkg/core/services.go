@@ -45,13 +45,12 @@ type GRPCService interface {
 
 // IServiceServer is a gRPC service server.
 type IServiceServer interface {
-	Discover(conf *types.Config, service ServiceDiscovery) error
 	AsServer() *grpc.Server
 	Serve(info *ServiceInfo) error
 }
 
-// ServiceDiscovery is Discover Properties
-type ServiceDiscovery struct {
+// serviceDiscovery is serviceDiscover Properties
+type serviceDiscovery struct {
 	Host string
 	Port uint32
 	Name string
@@ -86,8 +85,37 @@ func (s *ServiceServer) AsServer() *grpc.Server {
 	return s.server
 }
 
-// Discover registers the service with the service discovery.
-func (s *ServiceServer) Discover(conf *types.Config, service ServiceDiscovery) error {
+// Serve starts the http server.
+// return error if the http server fails to start.
+func (s *ServiceServer) Serve(info *ServiceInfo) error {
+	if info == nil {
+		return fmt.Errorf("info is nil")
+	}
+
+	listener, err := net.ListenNetworkTCP(info.Addr)
+	if err != nil {
+		return err
+	}
+
+	host, port, err := net.SplitHostPortListener(listener)
+	if err != nil {
+		return err
+	}
+
+	if err := s.serviceDiscover(info.Config, serviceDiscovery{
+		Host: host,
+		Port: port,
+		Name: info.Name,
+		Tags: info.Tags,
+	}); err != nil {
+		return err
+	}
+
+	return s.AsServer().Serve(listener)
+}
+
+// serviceDiscover registers the service with the service discovery.
+func (s *ServiceServer) serviceDiscover(conf *types.Config, service serviceDiscovery) error {
 	discover, err := discovery.New(conf)
 	if err != nil {
 		return err
@@ -97,7 +125,7 @@ func (s *ServiceServer) Discover(conf *types.Config, service ServiceDiscovery) e
 	return s.discover(service)
 }
 
-func (s *ServiceServer) discover(service ServiceDiscovery) error {
+func (s *ServiceServer) discover(service serviceDiscovery) error {
 	if s.discovery == nil {
 		return nil
 	}
@@ -145,35 +173,6 @@ func (s *ServiceServer) heartbeat(id string, ttl time.Duration) {
 		<-ticker.C
 	}
 
-}
-
-// Serve starts the http server.
-// return error if the http server fails to start.
-func (s *ServiceServer) Serve(info *ServiceInfo) error {
-	if info == nil {
-		return fmt.Errorf("info is nil")
-	}
-
-	listener, err := net.ListenNetworkTCP(info.Addr)
-	if err != nil {
-		return err
-	}
-
-	host, port, err := net.SplitHostPortListener(listener)
-	if err != nil {
-		return err
-	}
-
-	if err := s.Discover(info.Config, ServiceDiscovery{
-		Host: host,
-		Port: port,
-		Name: info.Name,
-		Tags: info.Tags,
-	}); err != nil {
-		return err
-	}
-
-	return s.AsServer().Serve(listener)
 }
 
 // New returns a new service registrar.
