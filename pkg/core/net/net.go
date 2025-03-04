@@ -17,9 +17,27 @@
 // Package net provide functions extended of http/net
 package net
 
-import "net"
+import (
+	"net"
+	"strconv"
+)
 
-// ListenTCP listens on the TCP network address addr and returns a net.Listener.
-func ListenTCP(addr string) (net.Listener, error) {
+// ListenNetworkTCP listens on the TCP network address addr and returns a net.Listener.
+func ListenNetworkTCP(addr string) (net.Listener, error) {
 	return net.Listen("tcp", addr)
+}
+
+// SplitHostPortListener return host, port of the net.Listener instance
+func SplitHostPortListener(listener net.Listener) (string, uint32, error) {
+	host, port, err := net.SplitHostPort(listener.Addr().String())
+	if err != nil {
+		return "", 0, err
+	}
+
+	portNumber, err := strconv.Atoi(port)
+	if err != nil {
+		return "", 0, err
+	}
+
+	return host, uint32(portNumber), nil
 }

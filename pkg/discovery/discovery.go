@@ -65,7 +65,7 @@ func (d *Discovery) Register(ctx context.Context, req *discovery.RegisterRequest
 	registration := &api.AgentServiceRegistration{
 		ID:      serviceInfo.GetId(),
 		Name:    serviceInfo.GetName(),
-		Address: serviceInfo.GetAddress(),
+		Address: serviceInfo.GetHost(),
 		Port:    int(serviceInfo.GetPort()),
 		Tags:    serviceInfo.GetTags(),
 		Check: &api.AgentServiceCheck{
@@ -97,11 +97,11 @@ func (d *Discovery) Discover(ctx context.Context, req *discovery.DiscoverRequest
 	var resp discovery.DiscoverResponse
 	for _, service := range services {
 		resp.Services = append(resp.Services, &types.Service{
-			Id:      service.Service.ID,
-			Name:    service.Service.Service,
-			Address: service.Service.Address,
-			Port:    uint32(service.Service.Port),
-			Tags:    service.Service.Tags,
+			Id:   service.Service.ID,
+			Name: service.Service.Service,
+			Host: service.Service.Address,
+			Port: uint32(service.Service.Port),
+			Tags: service.Service.Tags,
 		})
 	}
 

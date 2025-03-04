@@ -18,11 +18,13 @@ package core
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	discoverypb "github.com/tickexvn/tickex/api/gen/go/discovery/v1"
 	"github.com/tickexvn/tickex/api/gen/go/types/v1"
+	"github.com/tickexvn/tickex/pkg/core/net"
 	"github.com/tickexvn/tickex/pkg/discovery"
 	"github.com/tickexvn/tickex/pkg/logger"
 	"google.golang.org/grpc"
@@ -45,15 +47,23 @@ type GRPCService interface {
 type IServiceServer interface {
 	Discover(conf *types.Config, service ServiceDiscovery) error
 	AsServer() *grpc.Server
-	Run() error
+	Serve(info *ServiceInfo) error
 }
 
 // ServiceDiscovery is Discover Properties
 type ServiceDiscovery struct {
-	Addr string
+	Host string
 	Port uint32
 	Name string
 	Tags []string
+}
+
+// ServiceInfo is Serve method properties
+type ServiceInfo struct {
+	Config *types.Config
+	Addr   string
+	Tags   []string
+	Name   string
 }
 
 // ServiceServer is a gRPC server that registers services.
@@ -103,11 +113,11 @@ func (s *ServiceServer) discover(service ServiceDiscovery) error {
 				DeregisterCriticalServiceAfter: ttl.String(),
 			},
 			Service: &types.Service{
-				Id:      serviceID,
-				Name:    service.Name,
-				Address: service.Addr,
-				Port:    service.Port,
-				Tags:    service.Tags,
+				Id:   serviceID,
+				Name: service.Name,
+				Host: service.Host,
+				Port: service.Port,
+				Tags: service.Tags,
 			},
 		}); err != nil {
 		return err
@@ -137,11 +147,33 @@ func (s *ServiceServer) heartbeat(id string, ttl time.Duration) {
 
 }
 
-// Run starts the service registrar.
-// Need to implement this function when you embed ServiceServer.
-// return error if the service registrar fails to start.
-func (s *ServiceServer) Run() error {
-	panic("unimplemented")
+// Serve starts the http server.
+// return error if the http server fails to start.
+func (s *ServiceServer) Serve(info *ServiceInfo) error {
+	if info == nil {
+		return fmt.Errorf("info is nil")
+	}
+
+	listener, err := net.ListenNetworkTCP(info.Addr)
+	if err != nil {
+		return err
+	}
+
+	host, port, err := net.SplitHostPortListener(listener)
+	if err != nil {
+		return err
+	}
+
+	if err := s.Discover(info.Config, ServiceDiscovery{
+		Host: host,
+		Port: port,
+		Name: info.Name,
+		Tags: info.Tags,
+	}); err != nil {
+		return err
+	}
+
+	return s.AsServer().Serve(listener)
 }
 
 // New returns a new service registrar.

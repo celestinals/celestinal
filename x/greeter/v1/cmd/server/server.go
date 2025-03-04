@@ -20,9 +20,9 @@ package server
 import (
 	"github.com/tickexvn/tickex/api/gen/go/greeter/v1"
 	"github.com/tickexvn/tickex/api/gen/go/types/v1"
+	"github.com/tickexvn/tickex/pkg/cli"
 	"github.com/tickexvn/tickex/pkg/constant"
 	"github.com/tickexvn/tickex/pkg/core"
-	"github.com/tickexvn/tickex/pkg/core/net"
 	"github.com/tickexvn/tickex/pkg/logger"
 	"github.com/tickexvn/tickex/pkg/pbtools"
 	"github.com/tickexvn/tickex/x/greeter/internal/controllers"
@@ -52,22 +52,13 @@ func (g *Greeter) ListenAndServe() error {
 		return err
 	}
 
-	listener, err := net.ListenTCP(":8000")
-	if err != nil {
-		return err
-	}
-
-	// Listen gRPC srv here and register service to service registry (consul)
+	logger.Infof(constant.InfoGrpcServer, cli.Parse().GetAddress())
 	greeter.RegisterGreeterServiceServer(g.AsServer(), g.srv)
-	if err := g.Discover(g.config, core.ServiceDiscovery{
-		Addr: "127.0.0.1",
-		Port: 8000,
-		Name: greeter.GreeterService_ServiceDesc.ServiceName,
-		Tags: []string{"greeter", "tickex.x.greeter"},
-	}); err != nil {
-		return err
-	}
 
-	logger.Infof(constant.InfoGrpcServer, listener.Addr().String())
-	return g.AsServer().Serve(listener)
+	return g.Serve(&core.ServiceInfo{
+		Config: g.config,
+		Addr:   cli.Parse().GetAddress(),
+		Tags:   []string{"greeter", "tickex.x.greeter"},
+		Name:   greeter.GreeterService_ServiceDesc.ServiceName,
+	})
 }

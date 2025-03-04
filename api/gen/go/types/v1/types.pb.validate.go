@@ -431,7 +431,7 @@ func (m *Service) Validate() error {
 
 	// no validation rules for Name
 
-	// no validation rules for Address
+	// no validation rules for Host
 
 	// no validation rules for Port
 
