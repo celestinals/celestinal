@@ -71,18 +71,23 @@ type Edge struct {
 // Ex:
 //
 //	type IVisitor interface {
-//		VisitGreeterService(ctx context.Context, edge core.Edge, service IService) error
+//		VisitGreeterService(
+//		ctx context.Context, edge core.Edge, service IService) error
 //	}
 //
 // Implement function at visitor.Visitor:
 //
 // Ex:
 //
-//	func (v *Visitor) VisitGreeterService(ctx context.Context, edge core.Edge, service types.IService) error {
-//		opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
+//	func (v *Visitor) VisitGreeterService(
+//		ctx context.Context, edge core.Edge, service types.IService) error {
+//
+//		opts := []grpc.DialOption{
+//			grpc.WithTransportCredentials(insecure.NewCredentials())}
 //
 //		greeterAddr := ":8000"
-//		if err := core.RegisterService(ctx, edge, service, greeterAddr, opts); err != nil {
+//		if err := core.RegisterService(
+//			ctx, edge, service, greeterAddr, opts); err != nil {
 //			return err
 //		}
 //

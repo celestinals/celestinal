@@ -34,7 +34,8 @@ type Visitor interface {
 	Visit(ctx context.Context, service grpc.ServiceDesc) (string, error)
 }
 
-// NewVisitor returns a new Visitor. It uses the discovery service to discover the service.
+// NewVisitor returns a new Visitor. It uses the discovery service to
+// discover the service.
 func NewVisitor(conf *types.Config) Visitor {
 	if discover == nil {
 		discovery, err := New(conf)

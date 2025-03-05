@@ -46,13 +46,17 @@ type Middleware struct {
 }
 
 // LogRequestBody logs the request body when the response status code is not 200.
-// This addresses the issue of being unable to retrieve the request body in the customErrorHandler middleware.
+// This addresses the issue of being unable to retrieve the request body in the
+// customErrorHandler middleware.
 func (mdw *Middleware) LogRequestBody(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		lw := newLogResponseWriter(w)
 		body, err := io.ReadAll(r.Body)
 		if err != nil {
-			http.Error(w, fmt.Sprintf("grpc server read request body err %+v", err), http.StatusBadRequest)
+			http.Error(w,
+				fmt.Sprintf("grpc server read request body err %+v", err),
+				http.StatusBadRequest)
+
 			return
 		}
 
@@ -62,7 +66,8 @@ func (mdw *Middleware) LogRequestBody(h http.Handler) http.Handler {
 		h.ServeHTTP(lw, clonedR)
 
 		if lw.statusCode >= 400 {
-			grpclog.Errorf("http error %+v request body %+v", lw.statusCode, string(body))
+			grpclog.Errorf("http error %+v request body %+v",
+				lw.statusCode, string(body))
 
 			// send log to telegram
 			mdw.notify(lw.statusCode, string(body))
@@ -79,7 +84,9 @@ func (mdw *Middleware) AllowCORS(h http.Handler) http.Handler {
 			w.Header().Set("Vary", "Origin")                           // Fix cache issue
 			w.Header().Set("Access-Control-Allow-Credentials", "true") // If cookies need to be sent
 
-			if r.Method == "OPTIONS" && r.Header.Get("Access-Control-Request-Method") != "" {
+			if r.Method == "OPTIONS" &&
+				r.Header.Get("Access-Control-Request-Method") != "" {
+
 				mdw.preflightHandler(w, r)
 				return
 			}

@@ -270,23 +270,13 @@ func (m *Context) Validate() error {
 		return nil
 	}
 
-	// no validation rules for TraceId
-
-	// no validation rules for RequestId
-
 	// no validation rules for UserId
 
 	// no validation rules for Authorization
 
 	// no validation rules for Locale
 
-	// no validation rules for CorrelationId
-
 	// no validation rules for ServiceName
-
-	// no validation rules for RetryCount
-
-	// no validation rules for SpanId
 
 	// no validation rules for Ip
 

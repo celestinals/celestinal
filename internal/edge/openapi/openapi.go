@@ -28,7 +28,8 @@ func Serve(edge core.Edge) {
 	fs := http.FileServer(http.Dir("cmd/tickex/swagger/"))
 	edge.AsMux().Handle("/swagger/", http.StripPrefix("/swagger/", fs))
 
-	edge.AsMux().HandleFunc("/swagger", func(writer http.ResponseWriter, request *http.Request) {
-		http.Redirect(writer, request, "/swagger/", http.StatusMovedPermanently)
-	})
+	edge.AsMux().HandleFunc("/swagger",
+		func(writer http.ResponseWriter, request *http.Request) {
+			http.Redirect(writer, request, "/swagger/", http.StatusMovedPermanently)
+		})
 }

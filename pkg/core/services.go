@@ -40,7 +40,8 @@ var _ IServiceServer = (*ServiceServer)(nil)
 //		core.GRPCService
 //	}
 type GRPCService interface {
-	Register(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) error
+	Register(ctx context.Context,
+		mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) error
 }
 
 // IServiceServer is a gRPC service server.
@@ -163,7 +164,8 @@ func (s *ServiceServer) heartbeat(id string, ttl time.Duration) {
 
 	ticker := time.NewTicker(ttl)
 	for {
-		_, err := s.discovery.Heartbeat(context.Background(), &discoverypb.HeartbeatRequest{Id: id})
+		_, err := s.discovery.Heartbeat(
+			context.Background(), &discoverypb.HeartbeatRequest{Id: id})
 		if err != nil {
 			logger.Errorf("consul heartbeat error: %v", err)
 		}

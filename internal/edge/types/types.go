@@ -35,5 +35,6 @@ type IVisitor interface {
 	// TODO: declare visit service function
 
 	// VisitGreeterService visit greeter service
-	VisitGreeterService(ctx context.Context, edge core.Edge, service IService) error
+	VisitGreeterService(
+		ctx context.Context, edge core.Edge, service IService) error
 }

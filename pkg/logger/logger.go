@@ -102,7 +102,7 @@ func Error(message ...interface{}) {
 }
 
 // Errorf logs an error message with a format.
-func Errorf(template string, message ...interface{}) {
+func Errorf(template string, message ...any) {
 	if len(removeNil(message)) == 0 {
 		return
 	}
@@ -116,7 +116,7 @@ func Errorf(template string, message ...interface{}) {
 }
 
 // Warnf logs an error message with a format.
-func Warnf(template string, message ...interface{}) {
+func Warnf(template string, message ...any) {
 	if len(removeNil(message)) == 0 {
 		return
 	}
@@ -143,7 +143,7 @@ func Fatal(message ...interface{}) {
 }
 
 // Fatalf logs a fatal message.
-func Fatalf(template string, message ...interface{}) {
+func Fatalf(template string, message ...any) {
 	if len(removeNil(message)) == 0 {
 		return
 	}
@@ -166,7 +166,7 @@ func removeNil(input []interface{}) []interface{} {
 	return result
 }
 
-func appendHeader(message ...interface{}) string {
+func appendHeader(message ...any) string {
 	msg := fmt.Sprint(message...)
 	return fmt.Sprintf("%s %s", version.Header(), msg)
 }

@@ -31,7 +31,7 @@ var once sync.Once
 var Flags = &types.Flags{
 	TurnOnBots: false,
 	Name:       "Tickex mesh server",
-	Address:    "0.0.0.0:9000",
+	Address:    "0.0.0.0:0",
 }
 
 // Parse flag args

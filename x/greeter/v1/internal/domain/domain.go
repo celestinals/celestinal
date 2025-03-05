@@ -39,7 +39,9 @@ type Greeter struct {
 }
 
 // SayHello implements GreeterServiceServer.
-func (g *Greeter) SayHello(_ context.Context, msg *domain.SayHelloRequest) (*domain.SayHelloResponse, error) {
+func (g *Greeter) SayHello(
+	_ context.Context, msg *domain.SayHelloRequest) (*domain.SayHelloResponse, error) {
+
 	msgs, _ := json.Marshal(msg)
 	logger.Debug("Received a SayHello request" + string(msgs))
 

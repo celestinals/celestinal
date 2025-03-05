@@ -49,12 +49,14 @@ type Visitor struct {
 }
 
 // VisitGreeterService visits the greeter service.
-func (v *Visitor) VisitGreeterService(ctx context.Context, edge core.Edge, service types.IService) error {
+func (v *Visitor) VisitGreeterService(
+	ctx context.Context, edge core.Edge, service types.IService) error {
 	if err := pbtools.Validate(v.conf); err != nil {
 		return err
 	}
 
-	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
+	opts := []grpc.DialOption{
+		grpc.WithTransportCredentials(insecure.NewCredentials())}
 
 	endpoint, err := v.visitor.Visit(ctx, greeter.GreeterService_ServiceDesc)
 	if err != nil {
@@ -62,7 +64,8 @@ func (v *Visitor) VisitGreeterService(ctx context.Context, edge core.Edge, servi
 		return err
 	}
 
-	if err := core.RegisterService(ctx, edge, service, endpoint, opts); err != nil {
+	if err := core.RegisterService(
+		ctx, edge, service, endpoint, opts); err != nil {
 		return err
 	}
 
