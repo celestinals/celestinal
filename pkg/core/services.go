@@ -133,8 +133,8 @@ func (s *ServiceServer) registerConsul(service service) error {
 	serviceID := service.Name
 	ttl := time.Second * 5
 
-	if _, err := s.discovery.Register(context.Background(),
-		&discoverypb.RegisterRequest{
+	if _, err := s.discovery.Register(
+		context.Background(), &discoverypb.RegisterRequest{
 			ServiceCheck: &discoverypb.ServiceCheck{
 				Ttl:                            ttl.String(),
 				TlsSkipVerify:                  true,
@@ -163,9 +163,7 @@ func (s *ServiceServer) heartbeat(id string, ttl time.Duration) {
 
 	ticker := time.NewTicker(ttl)
 	for {
-		_, err := s.discovery.Heartbeat(context.Background(), &discoverypb.HeartbeatRequest{
-			Id: id,
-		})
+		_, err := s.discovery.Heartbeat(context.Background(), &discoverypb.HeartbeatRequest{Id: id})
 		if err != nil {
 			logger.Errorf("consul heartbeat error: %v", err)
 		}

@@ -43,20 +43,25 @@ func New(conf *typepb.Config) core.Server {
 	}
 }
 
-// Edge represents the tickex app
-// The edge application is the main entry point for the Tickex. It will automatically connect
-// to other services via gRPC. Start the application along with other services in the x/ directory.
-// The application provides APIs for users through a single HTTP gateway following the RESTful API
-// standard. The application uses gRPC to connect to other services. Additionally, the system provides
-// a Swagger UI interface for users to easily interact with the system through a web interface.
+// Edge represents the tickex app The edge application is the main
+// entry point for the Tickex. It will automatically connect to other
+// services via gRPC. Start the application along with other services
+// in the x/ directory. The application provides APIs for users through
+// a single HTTP gateway following the RESTful API standard. The application
+// uses gRPC to connect to other services. Additionally, the system provides
+// a Swagger UI interface for users to easily interact with the system
+// through a web interface.
 type Edge struct {
-	// config is the configuration of the edge app, load environment variables from .env file
+	// config is the configuration of the edge app, load environment
+	// variables from .env file
 	config *typepb.Config
 
-	// edge is the core edge server, manage http.ServeMux, runtime.ServeMux and HTTP server
+	// edge is the core edge server, manage http.ServeMux,
+	// runtime.ServeMux and HTTP server
 	edge core.Edge
 
-	// visitor is the visitor to visit all services by visitor pattern and register them to the edge server
+	// visitor is the visitor to visit all services by visitor pattern
+	// and register them to the edge server
 	visitor types.IVisitor
 }
 
@@ -85,7 +90,8 @@ type Edge struct {
 //	}
 func (e *Edge) register(ctx context.Context) error {
 	// Note: Make sure the gRPC server is running properly and accessible
-	// Create folder at services, inherit base package, override function, implement business logic
+	// Create folder at services, inherit base package, override function,
+	// implement business logic
 	// See: services/v1/greeter
 	serviceList := []types.IService{
 		// Example: register the greeter service to the gateway

@@ -31,7 +31,8 @@ type Edge interface {
 	AsMux() *http.ServeMux
 }
 
-// EdgeConfig is properties of Edge.Listen function, include address and http handler response
+// EdgeConfig is properties of Edge.Listen function, include address and
+// http handler response
 type EdgeConfig struct {
 	Addr    string
 	Handler http.Handler

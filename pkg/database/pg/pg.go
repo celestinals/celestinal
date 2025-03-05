@@ -34,12 +34,15 @@ type BaseStorageLayer[T any, ID comparable] struct {
 // NewStorageLayer initializes a new StorageLayer with PostgreSQL.
 // StorageLayer is a generic repository for PostgreSQL using pgx.
 // Must be implemented Create method by the user.
-func NewStorageLayer[T any, ID comparable](db *pgx.Conn, tableName string) *BaseStorageLayer[T, ID] {
+func NewStorageLayer[T any, ID comparable](
+	db *pgx.Conn, tableName string) *BaseStorageLayer[T, ID] {
+
 	return &BaseStorageLayer[T, ID]{db: db, tableName: tableName}
 }
 
 // Create inserts a new record into the database.
 func (s *BaseStorageLayer[T, ID]) Create(ctx context.Context, entity T) (T, error) {
+
 	_ = ctx
 	_ = entity
 

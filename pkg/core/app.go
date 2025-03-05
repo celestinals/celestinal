@@ -24,8 +24,9 @@ import (
 	"go.uber.org/fx"
 )
 
-// Application represents the application when all constructor was build by core.Build()
-// start the app, it will start the server and provide all constructor needed
+// Application represents the application when all constructor was build
+// by core.Build() start the app, it will start the server and provide all
+// constructor needed
 type Application interface {
 	Start(ctx context.Context) error
 }
@@ -35,8 +36,11 @@ type Server interface {
 	ListenAndServe() error
 }
 
-// InjectLifeCycle injects the given constructor into the application with lifecycle hooks.
-func InjectLifeCycle[T any](constructor func() T, onStart func(T) error, onStop func(T) error) func() T {
+// InjectLifeCycle injects the given constructor into the application with
+// lifecycle hooks.
+func InjectLifeCycle[T any](
+	constructor func() T, onStart func(T) error, onStop func(T) error) func() T {
+
 	decorateConstructor := func(lc fx.Lifecycle) T {
 		ins := constructor()
 

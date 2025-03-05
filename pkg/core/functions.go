@@ -43,8 +43,12 @@ func Build(constructors ...interface{}) Application {
 // dependency:
 //
 // - github.com/grpc-ecosystem/grpc-gateway/v2/runtime
-func RegisterService(ctx context.Context, edge Edge, service GRPCService, endpoint string, opts []grpc.DialOption) error {
-	if err := service.Register(ctx, edge.AsRuntimeMux(), endpoint, opts); err != nil {
+func RegisterService(
+	ctx context.Context, edge Edge, service GRPCService, endpoint string,
+	opts []grpc.DialOption) error {
+
+	if err := service.Register(
+		ctx, edge.AsRuntimeMux(), endpoint, opts); err != nil {
 		return err
 	}
 

@@ -38,7 +38,9 @@ type BaseSearchLayer[T any, ID comparable] struct {
 // NewSearchLayer initializes a new SearchLayer with Elasticsearch.
 // SearchLayer is a generic Elasticsearch repository.
 // Must be implemented Create, Get method by the user.
-func NewSearchLayer[T any, ID comparable](client *elasticsearch.Client, indexName string) *BaseSearchLayer[T, ID] {
+func NewSearchLayer[T any, ID comparable](
+	client *elasticsearch.Client, indexName string) *BaseSearchLayer[T, ID] {
+
 	return &BaseSearchLayer[T, ID]{
 		client:    client,
 		indexName: indexName,
