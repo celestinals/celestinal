@@ -55,7 +55,9 @@ type Discovery struct {
 }
 
 // Register implements the Register method of the ServiceRegistryService.
-func (d *Discovery) Register(ctx context.Context, req *discovery.RegisterRequest) (*discovery.RegisterResponse, error) {
+func (d *Discovery) Register(
+	ctx context.Context, req *discovery.RegisterRequest) (*discovery.RegisterResponse, error) {
+
 	_ = ctx
 	if err := pbtools.Validate(req); err != nil {
 		return nil, err
@@ -79,7 +81,8 @@ func (d *Discovery) Register(ctx context.Context, req *discovery.RegisterRequest
 }
 
 // Discover implements the Discover method of the ServiceRegistryService.
-func (d *Discovery) Discover(ctx context.Context, req *discovery.DiscoverRequest) (*discovery.DiscoverResponse, error) {
+func (d *Discovery) Discover(
+	ctx context.Context, req *discovery.DiscoverRequest) (*discovery.DiscoverResponse, error) {
 	_ = ctx
 	if err := pbtools.Validate(req); err != nil {
 		return nil, err
@@ -109,13 +112,16 @@ func (d *Discovery) Discover(ctx context.Context, req *discovery.DiscoverRequest
 }
 
 // Heartbeat implements the Heartbeat method of the ServiceRegistryService.
-func (d *Discovery) Heartbeat(ctx context.Context, req *discovery.HeartbeatRequest) (*discovery.HeartbeatResponse, error) {
+func (d *Discovery) Heartbeat(
+	ctx context.Context, req *discovery.HeartbeatRequest) (*discovery.HeartbeatResponse, error) {
+
 	_ = ctx
 	if err := pbtools.Validate(req); err != nil {
 		return nil, err
 	}
 
-	err := d.client.Agent().UpdateTTL("service:"+req.GetId(), "Service is healthy", api.HealthPassing)
+	err := d.client.Agent().
+		UpdateTTL("service:"+req.GetId(), "Service is healthy", api.HealthPassing)
 
 	return &discovery.HeartbeatResponse{
 		Success: err == nil,
