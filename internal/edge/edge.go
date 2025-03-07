@@ -20,15 +20,16 @@ package edge
 import (
 	"context"
 
+	"github.com/tickexvn/tickex/pkg/constant"
+	"github.com/tickexvn/tickex/pkg/logger"
+
 	typepb "github.com/tickexvn/tickex/api/gen/go/types/v1"
-	"github.com/tickexvn/tickex/internal/edge/openapi"
 	"github.com/tickexvn/tickex/internal/edge/services/v1"
 	"github.com/tickexvn/tickex/internal/edge/types"
 	"github.com/tickexvn/tickex/internal/edge/visitor"
-	"github.com/tickexvn/tickex/internal/middleware"
-	"github.com/tickexvn/tickex/pkg/constant"
+	"github.com/tickexvn/tickex/internal/funcs/middleware"
+	"github.com/tickexvn/tickex/internal/funcs/openapi"
 	"github.com/tickexvn/tickex/pkg/core"
-	"github.com/tickexvn/tickex/pkg/logger"
 	"github.com/tickexvn/tickex/pkg/pbtools"
 )
 
@@ -118,6 +119,22 @@ func (e *Edge) visit(ctx context.Context, services ...types.IService) error {
 	return nil
 }
 
+// functions is chain of functions to use before starting the edge app
+func (e *Edge) functions(ctx context.Context) error {
+	// serve swagger ui
+	openapi.Serve(e.edge)
+
+	// new middleware handler
+	// mdw.LogRequestBody(mdw.AllowCORS(e.edge.AsMux()))
+	mdw := middleware.New(e.config)
+	e.edge.Use(mdw.AllowCORS)
+	e.edge.Use(mdw.LogRequestBody)
+
+	// log info in console and return register error if they exist
+	logger.Infof(constant.InfoHTTPServer, e.config.GetApiAddr())
+	return e.register(ctx)
+}
+
 // ListenAndServe the edge/gateway app
 func (e *Edge) ListenAndServe() error {
 	if err := pbtools.Validate(e.config); err != nil {
@@ -128,23 +145,10 @@ func (e *Edge) ListenAndServe() error {
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
-	// register service
-	if err := e.register(ctx); err != nil {
+	if err := e.functions(ctx); err != nil {
 		return err
 	}
 
-	// serve swagger ui
-	openapi.Serve(e.edge)
-
-	// log info in console
-	logger.Infof(constant.InfoHTTPServer, e.config.GetGatewayAddress())
-
-	// new middleware handler
-	mdw := middleware.New(e.config)
-
 	// Listen HTTP server (and edge calls to gRPC server endpoint)
-	return e.edge.Listen(&core.EdgeConfig{
-		Addr:    e.config.GetGatewayAddress(),
-		Handler: mdw.LogRequestBody(mdw.AllowCORS(e.edge.AsMux())),
-	})
+	return e.edge.Listen(e.config.GetApiAddr())
 }

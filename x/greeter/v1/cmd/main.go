@@ -37,7 +37,7 @@ import (
 // _ = core.Inject(controllers.New)
 func main() {
 	cli.Flags.Name = "tickex.greeter.v1"
-
+	cli.Flags.Address = "127.0.0.1:0"
 	_ = cli.Parse()
 
 	app := core.Build(server.New, configs.Default)

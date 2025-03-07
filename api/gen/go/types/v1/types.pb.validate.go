@@ -346,9 +346,9 @@ func (m *Config) Validate() error {
 		return nil
 	}
 
-	// no validation rules for ServiceRegistryAddress
+	// no validation rules for ServiceRegistryAddr
 
-	// no validation rules for GatewayAddress
+	// no validation rules for ApiAddr
 
 	// no validation rules for Env
 
@@ -492,7 +492,7 @@ func (m *Flags) Validate() error {
 		return nil
 	}
 
-	// no validation rules for TurnOnBots
+	// no validation rules for IsTurnOnBots
 
 	// no validation rules for Name
 

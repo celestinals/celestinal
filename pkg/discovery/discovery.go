@@ -36,7 +36,7 @@ func New(conf *types.Config) (*Discovery, error) {
 	}
 
 	config := api.DefaultConfig()
-	config.Address = conf.GetServiceRegistryAddress()
+	config.Address = conf.GetServiceRegistryAddr()
 
 	client, err := api.NewClient(config)
 	if err != nil {

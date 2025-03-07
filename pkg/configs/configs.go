@@ -37,11 +37,11 @@ func Default() *types.Config {
 		ID, _ := strconv.ParseInt(sChatID, 10, 64)
 
 		conf = &types.Config{
-			ServiceRegistryAddress: os.Getenv(types.TickexPublic_TICKEX_PUBLIC_SERVICE_REGISTRY_ADDRESS.String()),
-			GatewayAddress:         os.Getenv(types.TickexPublic_TICKEX_PUBLIC_GATEWAY_ADDRESS.String()),
-			Env:                    os.Getenv(types.TickexPublic_TICKEX_PUBLIC_ENV.String()),
-			BotToken:               os.Getenv(types.TickexPublic_TICKEX_PUBLIC_BOT_TOKEN.String()),
-			ChatId:                 ID,
+			ServiceRegistryAddr: os.Getenv(types.TickexPublic_TICKEX_PUBLIC_SERVICE_REGISTRY_ADDR.String()),
+			ApiAddr:             os.Getenv(types.TickexPublic_TICKEX_PUBLIC_API_ADDR.String()),
+			Env:                 os.Getenv(types.TickexPublic_TICKEX_PUBLIC_ENV.String()),
+			BotToken:            os.Getenv(types.TickexPublic_TICKEX_PUBLIC_BOT_TOKEN.String()),
+			ChatId:              ID,
 		}
 	})
 
