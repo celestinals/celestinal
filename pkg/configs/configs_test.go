@@ -19,15 +19,15 @@ package configs
 import (
 	"testing"
 
-	"github.com/tickexvn/tickex/api/gen/go/types/v1"
+	"github.com/tickexvn/tickex/api/gen/go/universal/env/config/v1"
 	"github.com/tickexvn/tickex/pkg/pbtools"
 )
 
 func TestConfig(t *testing.T) {
-	conf := types.Config{
-		ServiceRegistryAddress: "0.0.0.0:8500",
-		GatewayAddress:         "0.0.0.0:9000",
-		Env:                    "prod",
+	conf := config.Config{
+		ServiceRegistryAddr: "0.0.0.0:8500",
+		ApiAddr:             "0.0.0.0:9000",
+		Env:                 "prod",
 	}
 
 	if err := pbtools.Validate(&conf); err != nil {

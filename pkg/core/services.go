@@ -22,8 +22,9 @@ import (
 	"time"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	discoverypb "github.com/tickexvn/tickex/api/gen/go/discovery/v1"
-	"github.com/tickexvn/tickex/api/gen/go/types/v1"
+	discoverypb "github.com/tickexvn/tickex/api/gen/go/universal/discovery/v1"
+	"github.com/tickexvn/tickex/api/gen/go/universal/env/config/v1"
+	servicepb "github.com/tickexvn/tickex/api/gen/go/universal/service/v1"
 	"github.com/tickexvn/tickex/pkg/core/net"
 	"github.com/tickexvn/tickex/pkg/discovery"
 	"github.com/tickexvn/tickex/pkg/logger"
@@ -40,7 +41,8 @@ var _ IServiceServer = (*ServiceServer)(nil)
 //		core.GRPCService
 //	}
 type GRPCService interface {
-	Register(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) error
+	Register(ctx context.Context,
+		mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) error
 }
 
 // IServiceServer is a gRPC service server.
@@ -49,8 +51,8 @@ type IServiceServer interface {
 	Serve(info *ServiceInfo) error
 }
 
-// serviceDiscovery is serviceDiscover Properties
-type serviceDiscovery struct {
+// service is register Properties
+type service struct {
 	Host string
 	Port uint32
 	Name string
@@ -59,7 +61,7 @@ type serviceDiscovery struct {
 
 // ServiceInfo is Serve method properties
 type ServiceInfo struct {
-	Config *types.Config
+	Config *config.Config
 	Addr   string
 	Tags   []string
 	Name   string
@@ -102,7 +104,7 @@ func (s *ServiceServer) Serve(info *ServiceInfo) error {
 		return err
 	}
 
-	if err := s.serviceDiscover(info.Config, serviceDiscovery{
+	if err := s.register(info.Config, service{
 		Host: host,
 		Port: port,
 		Name: info.Name,
@@ -114,18 +116,18 @@ func (s *ServiceServer) Serve(info *ServiceInfo) error {
 	return s.AsServer().Serve(listener)
 }
 
-// serviceDiscover registers the service with the service discovery.
-func (s *ServiceServer) serviceDiscover(conf *types.Config, service serviceDiscovery) error {
+// register registers the service with the service discovery.
+func (s *ServiceServer) register(conf *config.Config, service service) error {
 	discover, err := discovery.New(conf)
 	if err != nil {
 		return err
 	}
 
 	s.discovery = discover
-	return s.discover(service)
+	return s.registerConsul(service)
 }
 
-func (s *ServiceServer) discover(service serviceDiscovery) error {
+func (s *ServiceServer) registerConsul(service service) error {
 	if s.discovery == nil {
 		return nil
 	}
@@ -133,14 +135,14 @@ func (s *ServiceServer) discover(service serviceDiscovery) error {
 	serviceID := service.Name
 	ttl := time.Second * 5
 
-	if _, err := s.discovery.Register(context.Background(),
-		&discoverypb.RegisterRequest{
+	if _, err := s.discovery.Register(
+		context.Background(), &discoverypb.RegisterRequest{
 			ServiceCheck: &discoverypb.ServiceCheck{
 				Ttl:                            ttl.String(),
 				TlsSkipVerify:                  true,
 				DeregisterCriticalServiceAfter: ttl.String(),
 			},
-			Service: &types.Service{
+			Service: &servicepb.Service{
 				Id:   serviceID,
 				Name: service.Name,
 				Host: service.Host,
@@ -163,9 +165,8 @@ func (s *ServiceServer) heartbeat(id string, ttl time.Duration) {
 
 	ticker := time.NewTicker(ttl)
 	for {
-		_, err := s.discovery.Heartbeat(context.Background(), &discoverypb.HeartbeatRequest{
-			Id: id,
-		})
+		_, err := s.discovery.Heartbeat(
+			context.Background(), &discoverypb.HeartbeatRequest{Id: id})
 		if err != nil {
 			logger.Errorf("consul heartbeat error: %v", err)
 		}

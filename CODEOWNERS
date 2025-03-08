@@ -11,6 +11,13 @@
 /internal/ @kyerand
 /pkg/ @kyerand
 
+# Ticket Protocol Buffer
+/api/proto/tickex/universal/ @kyerand
+
+/api/proto/tickex/greeter/ @kyerand
+/api/proto/tickex/transfermarkt/ @kyerand
+/api/proto/tickex/ticket/ @kyerand
+
 # Tickex User Interface
 /apps/ @lamdienchinh
 /packages/ @lamdienchinh

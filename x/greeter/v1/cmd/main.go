@@ -29,15 +29,15 @@ import (
 )
 
 // Build and run main application with environment variable
-// Remember to inject all layers of the application by core.Inject() function
+// Remember to inject all layers of the application by
+// core.Inject() function
 //
 // # Example:
 //
 // _ = core.Inject(controllers.New)
 func main() {
-	cli.Flags.Address = "127.0.0.1:0"
 	cli.Flags.Name = "tickex.greeter.v1"
-
+	cli.Flags.Address = "127.0.0.1:0"
 	_ = cli.Parse()
 
 	app := core.Build(server.New, configs.Default)

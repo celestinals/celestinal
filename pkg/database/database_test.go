@@ -29,7 +29,7 @@ func TestCreate(t *testing.T) {
 	storageLayer := mocks.NewIAuthors(t)
 	storageLayer.On("Create", mock.Anything, mock.Anything).Return(internal.Authors{ID: 123}, nil)
 
-	db := New[internal.Authors, int64](nil, storageLayer)
+	db := New(nil, storageLayer)
 	resp, err := db.Create(context.Background(), internal.Authors{
 		ID: 123,
 	})
@@ -49,7 +49,7 @@ func TestGet(t *testing.T) {
 		On("Get", mock.Anything, int64(123)).
 		Return(internal.Authors{ID: 123}, nil)
 
-	db := New[internal.Authors, int64](nil, storageLayer)
+	db := New(nil, storageLayer)
 	resp, err := db.Get(context.Background(), 123)
 	if err != nil {
 		t.Fatal(err)
@@ -71,7 +71,7 @@ func TestGetAll(t *testing.T) {
 		On("GetAll", mock.Anything).
 		Return(expected, nil)
 
-	db := New[internal.Authors, int64](nil, storageLayer)
+	db := New(nil, storageLayer)
 	resp, err := db.GetAll(context.Background())
 	if err != nil {
 		t.Fatal(err)
@@ -95,7 +95,7 @@ func TestUpdate(t *testing.T) {
 		On("Update", mock.Anything, int64(123), updatedAuthor).
 		Return(updatedAuthor, nil)
 
-	db := New[internal.Authors, int64](nil, storageLayer)
+	db := New(nil, storageLayer)
 	resp, err := db.Update(context.Background(), 123, updatedAuthor)
 	if err != nil {
 		t.Fatal(err)
@@ -116,7 +116,7 @@ func TestDelete(t *testing.T) {
 		On("Delete", mock.Anything, int64(123)).
 		Return(nil)
 
-	db := New[internal.Authors, int64](nil, storageLayer)
+	db := New(nil, storageLayer)
 	err := db.Delete(context.Background(), 123)
 	if err != nil {
 		t.Fatal(err)
@@ -131,7 +131,7 @@ func TestExists(t *testing.T) {
 		On("Exists", mock.Anything, int64(123)).
 		Return(true, nil)
 
-	db := New[internal.Authors, int64](nil, storageLayer)
+	db := New(nil, storageLayer)
 	exists, err := db.Exists(context.Background(), 123)
 	if err != nil {
 		t.Fatal(err)
@@ -149,7 +149,7 @@ func TestCount(t *testing.T) {
 		On("Count", mock.Anything).
 		Return(int64(2), nil)
 
-	db := New[internal.Authors, int64](nil, storageLayer)
+	db := New(nil, storageLayer)
 	count, err := db.Count(context.Background())
 	if err != nil {
 		t.Fatal(err)

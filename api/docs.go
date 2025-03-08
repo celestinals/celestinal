@@ -15,28 +15,10 @@
  */
 
 // Package api contains the proto files used in the Tickex ecosystem,
-// including proto files used in the runtime, services, and domain layers.
+// including proto files used in the services, and domain layers.
 // All functions are separated and run completely independently of each other.
-//
-// # Architecture Layer
-//
-// Runtime: defines common system services such as service registry, proxy, etc...
 //
 // Services: defines tasks by combining business logic through the domain layer
 //
 // Domain: defines business logic and data types
-//
-// #
-//
-// Package api chứa các tệp proto được sử dụng trong hệ sinh thái Tickex,
-// bao gồm các tệp proto được sử dụng trong runtime, services và các lớp domain.
-// Tất cả các chức năng đều được tách biệt và chạy hoàn toàn độc lập với nhau.
-//
-// # Lớp Kiến trúc
-//
-// Runtime: định nghĩa các dịch vụ hệ thống chung như đăng ký dịch vụ, proxy, v.v...
-//
-// Service: định nghĩa các nhiệm vụ bằng cách kết hợp logic kinh doanh thông qua lớp miền
-//
-// Domain: định nghĩa logic kinh doanh và các kiểu dữ liệu
 package api

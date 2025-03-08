@@ -20,12 +20,13 @@ package edge
 import (
 	"context"
 
-	typepb "github.com/tickexvn/tickex/api/gen/go/types/v1"
-	"github.com/tickexvn/tickex/internal/edge/openapi"
+	configpb "github.com/tickexvn/tickex/api/gen/go/universal/env/config/v1"
 	"github.com/tickexvn/tickex/internal/edge/services/v1"
 	"github.com/tickexvn/tickex/internal/edge/types"
 	"github.com/tickexvn/tickex/internal/edge/visitor"
-	"github.com/tickexvn/tickex/internal/middleware"
+	"github.com/tickexvn/tickex/internal/funcs/middleware"
+	"github.com/tickexvn/tickex/internal/funcs/openapi"
+	"github.com/tickexvn/tickex/internal/funcs/watch"
 	"github.com/tickexvn/tickex/pkg/constant"
 	"github.com/tickexvn/tickex/pkg/core"
 	"github.com/tickexvn/tickex/pkg/logger"
@@ -35,7 +36,7 @@ import (
 var _ core.Server = (*Edge)(nil)
 
 // New creates a new gateway app
-func New(conf *typepb.Config) core.Server {
+func New(conf *configpb.Config) core.Server {
 	return &Edge{
 		edge:    core.NewEdge(),
 		visitor: visitor.New(conf),
@@ -43,20 +44,25 @@ func New(conf *typepb.Config) core.Server {
 	}
 }
 
-// Edge represents the tickex app
-// The edge application is the main entry point for the Tickex. It will automatically connect
-// to other services via gRPC. Start the application along with other services in the x/ directory.
-// The application provides APIs for users through a single HTTP gateway following the RESTful API
-// standard. The application uses gRPC to connect to other services. Additionally, the system provides
-// a Swagger UI interface for users to easily interact with the system through a web interface.
+// Edge represents the tickex app The edge application is the main
+// entry point for the Tickex. It will automatically connect to other
+// services via gRPC. Start the application along with other services
+// in the x/ directory. The application provides APIs for users through
+// a single HTTP gateway following the RESTful API standard. The application
+// uses gRPC to connect to other services. Additionally, the system provides
+// a Swagger UI interface for users to easily interact with the system
+// through a web interface.
 type Edge struct {
-	// config is the configuration of the edge app, load environment variables from .env file
-	config *typepb.Config
+	// config is the configuration of the edge app, load environment
+	// variables from .env file
+	config *configpb.Config
 
-	// edge is the core edge server, manage http.ServeMux, runtime.ServeMux and HTTP server
+	// edge is the core edge server, manage http.ServeMux,
+	// runtime.ServeMux and HTTP server
 	edge core.Edge
 
-	// visitor is the visitor to visit all services by visitor pattern and register them to the edge server
+	// visitor is the visitor to visit all services by visitor pattern
+	// and register them to the edge server
 	visitor types.IVisitor
 }
 
@@ -66,18 +72,23 @@ type Edge struct {
 // Ex:
 //
 //	type IVisitor interface {
-//		VisitGreeterService(ctx context.Context, edge core.Edge, service IService) error
+//		VisitGreeterService(
+//		ctx context.Context, edge core.Edge, service IService) error
 //	}
 //
 // Implement function at visitor.Visitor:
 //
 // Ex:
 //
-//	func (v *Visitor) VisitGreeterService(ctx context.Context, edge core.Edge, service types.IService) error {
-//		opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
+//	func (v *Visitor) VisitGreeterService(
+//		ctx context.Context, edge core.Edge, service types.IService) error {
+//
+//		opts := []grpc.DialOption{
+//			grpc.WithTransportCredentials(insecure.NewCredentials())}
 //
 //		greeterAddr := ":8000"
-//		if err := core.RegisterService(ctx, edge, service, greeterAddr, opts); err != nil {
+//		if err := core.RegisterService(
+//			ctx, edge, service, greeterAddr, opts); err != nil {
 //			return err
 //		}
 //
@@ -85,7 +96,8 @@ type Edge struct {
 //	}
 func (e *Edge) register(ctx context.Context) error {
 	// Note: Make sure the gRPC server is running properly and accessible
-	// Create folder at services, inherit base package, override function, implement business logic
+	// Create folder at services, inherit base package, override function,
+	// implement business logic
 	// See: services/v1/greeter
 	serviceList := []types.IService{
 		// Example: register the greeter service to the gateway
@@ -107,6 +119,25 @@ func (e *Edge) visit(ctx context.Context, services ...types.IService) error {
 	return nil
 }
 
+// functions is chain of functions to use before starting the edge app
+func (e *Edge) functions(ctx context.Context) error {
+	// serve swagger ui
+	openapi.Serve(e.edge)
+
+	// watch service change on service registry
+	watch.Service(e.config)
+
+	// new middleware handler
+	// mdw.LogRequestBody(mdw.AllowCORS(e.edge.AsMux()))
+	mdw := middleware.New(e.config)
+	e.edge.Use(mdw.AllowCORS)
+	e.edge.Use(mdw.LogRequestBody)
+
+	// log info in console and return register error if they exist
+	logger.Infof(constant.InfoHTTPServer, e.config.GetApiAddr())
+	return e.register(ctx)
+}
+
 // ListenAndServe the edge/gateway app
 func (e *Edge) ListenAndServe() error {
 	if err := pbtools.Validate(e.config); err != nil {
@@ -117,23 +148,10 @@ func (e *Edge) ListenAndServe() error {
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
-	// register service
-	if err := e.register(ctx); err != nil {
+	if err := e.functions(ctx); err != nil {
 		return err
 	}
 
-	// serve swagger ui
-	openapi.Serve(e.edge)
-
-	// log info in console
-	logger.Infof(constant.InfoHTTPServer, e.config.GetGatewayAddress())
-
-	// new middleware handler
-	mdw := middleware.New(e.config)
-
 	// Listen HTTP server (and edge calls to gRPC server endpoint)
-	return e.edge.Listen(&core.EdgeConfig{
-		Addr:    e.config.GetGatewayAddress(),
-		Handler: mdw.LogRequestBody(mdw.AllowCORS(e.edge.AsMux())),
-	})
+	return e.edge.Listen(e.config.GetApiAddr())
 }

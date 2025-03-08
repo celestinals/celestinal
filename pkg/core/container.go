@@ -57,7 +57,9 @@ func (c *container) start(ctx context.Context, err chan<- error) {
 }
 
 // stop the app with the given context.
-func (c *container) stop(ctx context.Context, sig <-chan os.Signal, err chan<- error) {
+func (c *container) stop(
+	ctx context.Context, sig <-chan os.Signal, err chan<- error) {
+
 	// wait for the signal interrupt from the OS
 	<-sig
 

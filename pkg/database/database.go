@@ -41,7 +41,9 @@ type Entity[ID comparable] interface {
 }
 
 // New create multi-layer database instance
-func New[T Entity[ID], ID comparable](searchLayer Repository[T, ID], storageLayer Repository[T, ID]) Repository[T, ID] {
+func New[T Entity[ID], ID comparable](
+	searchLayer Repository[T, ID], storageLayer Repository[T, ID]) Repository[T, ID] {
+
 	return &Database[T, ID]{
 		search:  searchLayer,
 		storage: storageLayer,
@@ -54,8 +56,9 @@ type Database[T Entity[ID], ID comparable] struct {
 	storage Repository[T, ID]
 }
 
-// Create inserts a new entity into both storage (PostgreSQL) and search (Elasticsearch).
-// If Elasticsearch fails after PostgreSQL succeeds, it rolls back by deleting the entity from PostgreSQL.
+// Create inserts a new entity into both storage (PostgreSQL) and
+// search (Elasticsearch). If Elasticsearch fails after PostgreSQL succeeds,
+// it rolls back by deleting the entity from PostgreSQL.
 func (db *Database[T, ID]) Create(ctx context.Context, entity T) (T, error) {
 	var empty T
 	if db.storage == nil {
@@ -78,14 +81,16 @@ func (db *Database[T, ID]) Create(ctx context.Context, entity T) (T, error) {
 	if esErr != nil {
 		// Rollback: delete from PostgreSQL if Elasticsearch insertion fails
 		_ = db.storage.Delete(ctx, getEntityID(entity))
-		return empty, fmt.Errorf("failed to insert into first layer, rollback storage: %v", esErr)
+		return empty,
+			fmt.Errorf("failed to insert into first layer, rollback storage: %v", esErr)
 	}
 
 	return createdEntity, nil
 }
 
-// Update modifies an existing entity in both storage (PostgreSQL) and search (Elasticsearch).
-// If Elasticsearch fails after PostgreSQL succeeds, it rolls back by restoring the old value in PostgreSQL.
+// Update modifies an existing entity in both storage (PostgreSQL) and
+// search (Elasticsearch).If Elasticsearch fails after PostgreSQL succeeds,
+// it rolls back by restoring the old value in PostgreSQL.
 func (db *Database[T, ID]) Update(ctx context.Context, id ID, entity T) (T, error) {
 	var empty T
 	if db.storage == nil {
@@ -114,7 +119,8 @@ func (db *Database[T, ID]) Update(ctx context.Context, id ID, entity T) (T, erro
 	if esErr != nil {
 		// Rollback: Restore old entity in PostgreSQL if Elasticsearch update fails
 		_, _ = db.storage.Update(ctx, id, oldEntity)
-		return empty, fmt.Errorf("failed to update in first layer, rollback storage: %v", esErr)
+		return empty,
+			fmt.Errorf("failed to update in first layer, rollback storage: %v", esErr)
 	}
 
 	return updatedEntity, nil

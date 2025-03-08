@@ -40,7 +40,9 @@ type Greeter struct {
 }
 
 // SayHello implements GreeterServer.
-func (g *Greeter) SayHello(ctx context.Context, msg *greeter.SayHelloRequest) (*greeter.SayHelloResponse, error) {
+func (g *Greeter) SayHello(
+	ctx context.Context, msg *greeter.SayHelloRequest) (*greeter.SayHelloResponse, error) {
+
 	var SayHelloReq domainpb.SayHelloRequest
 	if err := copier.CopyMsg(msg, &SayHelloReq); err != nil {
 		logger.Error(err)
@@ -59,7 +61,9 @@ func (g *Greeter) SayHello(ctx context.Context, msg *greeter.SayHelloRequest) (*
 }
 
 // Status healthcheck for consul
-func (g *Greeter) Status(ctx context.Context, msg *greeter.StatusRequest) (*greeter.StatusResponse, error) {
+func (g *Greeter) Status(
+	ctx context.Context, msg *greeter.StatusRequest) (*greeter.StatusResponse, error) {
+
 	_ = ctx
 	_ = msg
 

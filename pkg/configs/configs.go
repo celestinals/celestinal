@@ -24,24 +24,25 @@ import (
 
 	_ "github.com/joho/godotenv/autoload" // load .env file automatically
 
-	"github.com/tickexvn/tickex/api/gen/go/types/v1"
+	"github.com/tickexvn/tickex/api/gen/go/universal/env/config/v1"
+	"github.com/tickexvn/tickex/api/gen/go/universal/env/v1"
 )
 
-var conf *types.Config
+var conf *config.Config
 var once sync.Once
 
 // Default returns the environment.
-func Default() *types.Config {
+func Default() *config.Config {
 	once.Do(func() {
-		sChatID := os.Getenv(types.TickexPublic_TICKEX_PUBLIC_CHAT_ID.String())
+		sChatID := os.Getenv(env.TickexPublic_TICKEX_PUBLIC_CHAT_ID.String())
 		ID, _ := strconv.ParseInt(sChatID, 10, 64)
 
-		conf = &types.Config{
-			ServiceRegistryAddress: os.Getenv(types.TickexPublic_TICKEX_PUBLIC_SERVICE_REGISTRY_ADDRESS.String()),
-			GatewayAddress:         os.Getenv(types.TickexPublic_TICKEX_PUBLIC_GATEWAY_ADDRESS.String()),
-			Env:                    os.Getenv(types.TickexPublic_TICKEX_PUBLIC_ENV.String()),
-			BotToken:               os.Getenv(types.TickexPublic_TICKEX_PUBLIC_BOT_TOKEN.String()),
-			ChatId:                 ID,
+		conf = &config.Config{
+			ServiceRegistryAddr: os.Getenv(env.TickexPublic_TICKEX_PUBLIC_SERVICE_REGISTRY_ADDR.String()),
+			ApiAddr:             os.Getenv(env.TickexPublic_TICKEX_PUBLIC_API_ADDR.String()),
+			Env:                 os.Getenv(env.TickexPublic_TICKEX_PUBLIC_ENV.String()),
+			BotToken:            os.Getenv(env.TickexPublic_TICKEX_PUBLIC_BOT_TOKEN.String()),
+			ChatId:              ID,
 		}
 	})
 

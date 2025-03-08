@@ -22,7 +22,8 @@ import (
 	"strconv"
 )
 
-// ListenNetworkTCP listens on the TCP network address addr and returns a net.Listener.
+// ListenNetworkTCP listens on the TCP network address addr and
+// returns a net.Listener.
 func ListenNetworkTCP(addr string) (net.Listener, error) {
 	return net.Listen("tcp", addr)
 }

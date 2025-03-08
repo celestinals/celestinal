@@ -41,11 +41,20 @@ type Greeter struct {
 }
 
 // Accept accepts the Greeter service
-func (g Greeter) Accept(ctx context.Context, edge core.Edge, v types.IVisitor) error {
+func (g Greeter) Accept(
+	ctx context.Context, edge core.Edge, v types.IVisitor) error {
+
 	return v.VisitGreeterService(ctx, edge, g)
 }
 
 // Register registers the Greeter service
-func (g Greeter) Register(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) error {
-	return greetergw.RegisterGreeterServiceHandlerFromEndpoint(ctx, mux, endpoint, opts)
+func (g Greeter) Register(
+	ctx context.Context,
+	mux *runtime.ServeMux,
+	endpoint string,
+	opts []grpc.DialOption,
+) error {
+
+	return greetergw.RegisterGreeterServiceHandlerFromEndpoint(
+		ctx, mux, endpoint, opts)
 }

@@ -26,15 +26,10 @@ import (
 // Edge is an interface for a runtime mux with http server.
 // default port is 9000
 type Edge interface {
-	Listen(conf *EdgeConfig) error
+	Listen(address string) error
 	AsRuntimeMux() *runtime.ServeMux
 	AsMux() *http.ServeMux
-}
-
-// EdgeConfig is properties of Edge.Listen function, include address and http handler response
-type EdgeConfig struct {
-	Addr    string
-	Handler http.Handler
+	Use(handler func(http.Handler) http.Handler)
 }
 
 // NewEdge creates a new http server.
@@ -47,27 +42,50 @@ func NewEdge(opts ...runtime.ServeMuxOption) Edge {
 
 // edge is a http server with http serve mux and grpc-gateway serve mux.
 type edge struct {
-	mux     *runtime.ServeMux
+	// grpc-gateway runtime mux
+	mux *runtime.ServeMux
+
+	// http server mux
 	httpMux *http.ServeMux
-	server  *http.Server
+
+	// middlewares for the http server
+	middlewares []func(http.Handler) http.Handler
+}
+
+// handler wraps the http handler with the middlewares. middlewares
+// will be executed in the order they are added, top to bottom.
+func (e *edge) handler(httpHandler http.Handler) http.Handler {
+	for _, middleware := range e.middlewares {
+		httpHandler = middleware(httpHandler)
+	}
+	return httpHandler
+}
+
+// Use middleware for the http server. Middleware will be called
+// in the order they are added, top to bottom. the middleware will
+// be executed before the http handler.
+func (e *edge) Use(handler func(http.Handler) http.Handler) {
+	e.middlewares = append(e.middlewares, handler)
 }
 
 // Listen starts the runtime mux.
-func (e *edge) Listen(conf *EdgeConfig) error {
-	if conf == nil {
-		conf = &EdgeConfig{
-			Addr:    cli.Parse().GetAddress(),
-			Handler: e.mux,
-		}
+func (e *edge) Listen(address string) error {
+	if address == "" {
+		address = cli.Parse().GetAddress()
 	}
 
+	// handler runtime.Mux with http.ServeMux
+	// serve grpc-gateway mux on the root path
 	e.httpMux.Handle("/", e.mux)
-	e.server = &http.Server{
-		Addr:    conf.Addr,
-		Handler: conf.Handler,
+
+	// create http server with address and http.Handler
+	// httpMux was wrapped with the middlewares
+	server := &http.Server{
+		Addr:    address,
+		Handler: e.handler(e.httpMux),
 	}
 
-	return e.server.ListenAndServe()
+	return server.ListenAndServe()
 }
 
 // AsRuntimeMux returns the underlying runtime mux.
