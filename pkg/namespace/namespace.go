@@ -18,8 +18,8 @@
 package namespace
 
 const (
-	// GatewayV1 namespace info
-	GatewayV1 = "tickex.gateway.v1"
+	// Edge namespace info
+	Edge = "tickex.edge"
 
 	// GreeterV1 namespace info
 	GreeterV1 = "tickex.x.greeter.v1"
