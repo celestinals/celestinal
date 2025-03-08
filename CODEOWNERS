@@ -12,8 +12,7 @@
 /pkg/ @kyerand
 
 # Ticket Protocol Buffer
-/api/proto/tickex/types/ @kyerand
-/api/proto/tickex/discovery/ @kyerand
+/api/proto/tickex/universal/ @kyerand
 
 /api/proto/tickex/greeter/ @kyerand
 /api/proto/tickex/transfermarkt/ @kyerand
