@@ -20,23 +20,23 @@ package edge
 import (
 	"context"
 
-	"github.com/tickexvn/tickex/pkg/constant"
-	"github.com/tickexvn/tickex/pkg/logger"
-
-	typepb "github.com/tickexvn/tickex/api/gen/go/types/v1"
+	configpb "github.com/tickexvn/tickex/api/gen/go/universal/env/config/v1"
 	"github.com/tickexvn/tickex/internal/edge/services/v1"
 	"github.com/tickexvn/tickex/internal/edge/types"
 	"github.com/tickexvn/tickex/internal/edge/visitor"
 	"github.com/tickexvn/tickex/internal/funcs/middleware"
 	"github.com/tickexvn/tickex/internal/funcs/openapi"
+	"github.com/tickexvn/tickex/internal/funcs/watch"
+	"github.com/tickexvn/tickex/pkg/constant"
 	"github.com/tickexvn/tickex/pkg/core"
+	"github.com/tickexvn/tickex/pkg/logger"
 	"github.com/tickexvn/tickex/pkg/pbtools"
 )
 
 var _ core.Server = (*Edge)(nil)
 
 // New creates a new gateway app
-func New(conf *typepb.Config) core.Server {
+func New(conf *configpb.Config) core.Server {
 	return &Edge{
 		edge:    core.NewEdge(),
 		visitor: visitor.New(conf),
@@ -55,7 +55,7 @@ func New(conf *typepb.Config) core.Server {
 type Edge struct {
 	// config is the configuration of the edge app, load environment
 	// variables from .env file
-	config *typepb.Config
+	config *configpb.Config
 
 	// edge is the core edge server, manage http.ServeMux,
 	// runtime.ServeMux and HTTP server
@@ -123,6 +123,9 @@ func (e *Edge) visit(ctx context.Context, services ...types.IService) error {
 func (e *Edge) functions(ctx context.Context) error {
 	// serve swagger ui
 	openapi.Serve(e.edge)
+
+	// watch service change on service registry
+	watch.Service(e.config)
 
 	// new middleware handler
 	// mdw.LogRequestBody(mdw.AllowCORS(e.edge.AsMux()))

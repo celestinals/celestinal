@@ -25,7 +25,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tickexvn/tickex/api/gen/go/types/v1"
+	"github.com/tickexvn/tickex/api/gen/go/universal/env/config/v1"
+	robotpb "github.com/tickexvn/tickex/api/gen/go/universal/robot/v1"
 	"github.com/tickexvn/tickex/internal/version"
 	"github.com/tickexvn/tickex/pkg/cli"
 	"github.com/tickexvn/tickex/pkg/pbtools"
@@ -34,7 +35,7 @@ import (
 )
 
 // New middleware handler
-func New(conf *types.Config) *Middleware {
+func New(conf *config.Config) *Middleware {
 	return &Middleware{
 		conf: conf,
 	}
@@ -42,7 +43,7 @@ func New(conf *types.Config) *Middleware {
 
 // Middleware for http handler in grpc gateway
 type Middleware struct {
-	conf *types.Config
+	conf *config.Config
 }
 
 // LogRequestBody logs the request body when the response status code is not 200.
@@ -118,8 +119,8 @@ func (mdw *Middleware) notify(statusCode int, body string) {
 
 	footer := fmt.Sprintf("%s<%s<<%s<<<%s<<<<<<<<<<<<<<<<<<\nGITHUB<COM<<TICKEXVN<<<TICKEX<<<<<<<<<<<<<<<\n",
 		"I", version.FullName, version.Version, version.GoVersion)
-	_ = monitor.Send(&types.RobotMessage{
-		Metadata: &types.RobotMessageMetadata{
+	_ = monitor.Send(&robotpb.Message{
+		Metadata: &robotpb.MessageMetadata{
 			CreatedAt: pbtools.ToTime(time.Now().Local()),
 			Author:    cli.Parse().GetName(),
 		},

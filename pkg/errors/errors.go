@@ -20,18 +20,18 @@ package errors
 import (
 	"fmt"
 
-	"github.com/tickexvn/tickex/api/gen/go/types/v1"
+	"github.com/tickexvn/tickex/api/gen/go/universal/errors/v1"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
 
 var (
-	forbidden     = fmt.Sprintf("TICKEX-%d: %s", types.Errors_ERRORS_FORBIDDEN, types.Errors_ERRORS_FORBIDDEN.String())
-	unspecified   = fmt.Sprintf("TICKEX-%d: %s", types.Errors_ERRORS_UNSPECIFIED, types.Errors_ERRORS_UNSPECIFIED.String())
-	internalError = fmt.Sprintf("TICKEX-%d: %s", types.Errors_ERRORS_INTERNAL_ERROR, types.Errors_ERRORS_INTERNAL_ERROR.String())
-	notFound      = fmt.Sprintf("TICKEX-%d: %s", types.Errors_ERRORS_NOT_FOUND, types.Errors_ERRORS_NOT_FOUND.String())
-	unauthorized  = fmt.Sprintf("TICKEX-%d: %s", types.Errors_ERRORS_UNAUTHORIZED, types.Errors_ERRORS_UNAUTHORIZED.String())
-	invalidData   = fmt.Sprintf("TICKEX-%d: %s", types.Errors_ERRORS_INVALID_DATA, types.Errors_ERRORS_INVALID_DATA.String())
+	forbidden     = fmt.Sprintf("TICKEX-%d: %s", errors.Errors_ERRORS_FORBIDDEN, errors.Errors_ERRORS_FORBIDDEN.String())
+	unspecified   = fmt.Sprintf("TICKEX-%d: %s", errors.Errors_ERRORS_UNSPECIFIED, errors.Errors_ERRORS_UNSPECIFIED.String())
+	internalError = fmt.Sprintf("TICKEX-%d: %s", errors.Errors_ERRORS_INTERNAL_ERROR, errors.Errors_ERRORS_INTERNAL_ERROR.String())
+	notFound      = fmt.Sprintf("TICKEX-%d: %s", errors.Errors_ERRORS_NOT_FOUND, errors.Errors_ERRORS_NOT_FOUND.String())
+	unauthorized  = fmt.Sprintf("TICKEX-%d: %s", errors.Errors_ERRORS_UNAUTHORIZED, errors.Errors_ERRORS_UNAUTHORIZED.String())
+	invalidData   = fmt.Sprintf("TICKEX-%d: %s", errors.Errors_ERRORS_INVALID_DATA, errors.Errors_ERRORS_INVALID_DATA.String())
 )
 
 var (

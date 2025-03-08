@@ -22,15 +22,16 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/consul/api"
-	"github.com/tickexvn/tickex/api/gen/go/discovery/v1"
-	"github.com/tickexvn/tickex/api/gen/go/types/v1"
+	"github.com/tickexvn/tickex/api/gen/go/universal/discovery/v1"
+	configpb "github.com/tickexvn/tickex/api/gen/go/universal/env/config/v1"
+	servicepb "github.com/tickexvn/tickex/api/gen/go/universal/service/v1"
 	"github.com/tickexvn/tickex/pkg/pbtools"
 )
 
 var _ discovery.DiscoveryServiceServer = (*Discovery)(nil)
 
 // New provide service registry of Tickex microservice network
-func New(conf *types.Config) (*Discovery, error) {
+func New(conf *configpb.Config) (*Discovery, error) {
 	if err := pbtools.Validate(conf); err != nil {
 		return nil, err
 	}
@@ -99,7 +100,7 @@ func (d *Discovery) Discover(
 
 	var resp discovery.DiscoverResponse
 	for _, service := range services {
-		resp.Services = append(resp.Services, &types.Service{
+		resp.Services = append(resp.Services, &servicepb.Service{
 			Id:   service.Service.ID,
 			Name: service.Service.Service,
 			Host: service.Service.Address,

@@ -20,7 +20,7 @@ package context
 import (
 	"context"
 
-	"github.com/tickexvn/tickex/api/gen/go/types/v1"
+	contextpb "github.com/tickexvn/tickex/api/gen/go/universal/context/v1"
 	"github.com/tickexvn/tickex/pkg/pbtools/proto"
 )
 
@@ -30,9 +30,9 @@ type Key int
 const contextKey Key = 0
 
 // New returns a new context with the given message
-func New(msg *types.Context) context.Context {
+func New(msg *contextpb.Context) context.Context {
 	if msg == nil {
-		msg = &types.Context{}
+		msg = &contextpb.Context{}
 	}
 
 	ctx := context.Background()
@@ -42,13 +42,13 @@ func New(msg *types.Context) context.Context {
 }
 
 // Value returns the context value.
-func Value(ctx context.Context) (*types.Context, bool) {
+func Value(ctx context.Context) (*contextpb.Context, bool) {
 	msgBin, ok := ctx.Value(contextKey).([]byte)
 	if !ok {
 		return nil, false
 	}
 
-	var msg types.Context
+	var msg contextpb.Context
 	if err := proto.Unmarshal(msgBin, &msg); err != nil {
 		return nil, false
 	}

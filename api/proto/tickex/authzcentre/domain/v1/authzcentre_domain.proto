@@ -18,7 +18,7 @@ package tickex.authzcentre.domain.v1;
 
 import "buf/validate/validate.proto";
 
-import "tickex/types/v1/types.proto";
+import "tickex/universal/meta/v1/meta.proto";
 import "tickex/authzcentre/shared/v1/authzcentre_shared.proto";
 
 option go_package = "github.com/tickexvn/tickex/api/gen/go/authzcentre/domain/v1;domain";
@@ -28,7 +28,7 @@ service AuthzCentreDomainService {
 }
 
 message SayHelloRequest {
-  tickex.types.v1.Pages page = 1;
+  tickex.universal.meta.v1.Pages page = 1;
   string name = 2 [(buf.validate.field).string.min_len = 1];
 }
 

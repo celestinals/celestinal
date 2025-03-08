@@ -20,6 +20,7 @@ package logger
 import (
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/tickexvn/tickex/internal/version"
 	"github.com/tickexvn/tickex/pkg/utils"
@@ -35,9 +36,11 @@ func New() *zap.Logger {
 		NameKey:       "logger",
 		MessageKey:    "message",
 		StacktraceKey: "stacktrace",
-		EncodeTime:    zapcore.ISO8601TimeEncoder,
-		EncodeLevel:   zapcore.CapitalColorLevelEncoder,
-		EncodeCaller:  zapcore.ShortCallerEncoder,
+		EncodeTime: func(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
+			enc.AppendString(t.Format(time.DateTime))
+		},
+		EncodeLevel:  zapcore.CapitalColorLevelEncoder,
+		EncodeCaller: zapcore.ShortCallerEncoder,
 	}
 
 	// Console output

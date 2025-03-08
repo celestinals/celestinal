@@ -42,5 +42,5 @@ var (
 
 // Header returns the header info string.
 func Header() string {
-	return fmt.Sprintf("%s>>v%s>>>", FullName, Version)
+	return fmt.Sprintf("%s >>", FullName)
 }

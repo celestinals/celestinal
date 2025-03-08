@@ -22,8 +22,9 @@ import (
 	"time"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	discoverypb "github.com/tickexvn/tickex/api/gen/go/discovery/v1"
-	"github.com/tickexvn/tickex/api/gen/go/types/v1"
+	discoverypb "github.com/tickexvn/tickex/api/gen/go/universal/discovery/v1"
+	"github.com/tickexvn/tickex/api/gen/go/universal/env/config/v1"
+	servicepb "github.com/tickexvn/tickex/api/gen/go/universal/service/v1"
 	"github.com/tickexvn/tickex/pkg/core/net"
 	"github.com/tickexvn/tickex/pkg/discovery"
 	"github.com/tickexvn/tickex/pkg/logger"
@@ -60,7 +61,7 @@ type service struct {
 
 // ServiceInfo is Serve method properties
 type ServiceInfo struct {
-	Config *types.Config
+	Config *config.Config
 	Addr   string
 	Tags   []string
 	Name   string
@@ -116,7 +117,7 @@ func (s *ServiceServer) Serve(info *ServiceInfo) error {
 }
 
 // register registers the service with the service discovery.
-func (s *ServiceServer) register(conf *types.Config, service service) error {
+func (s *ServiceServer) register(conf *config.Config, service service) error {
 	discover, err := discovery.New(conf)
 	if err != nil {
 		return err
@@ -141,7 +142,7 @@ func (s *ServiceServer) registerConsul(service service) error {
 				TlsSkipVerify:                  true,
 				DeregisterCriticalServiceAfter: ttl.String(),
 			},
-			Service: &types.Service{
+			Service: &servicepb.Service{
 				Id:   serviceID,
 				Name: service.Name,
 				Host: service.Host,
