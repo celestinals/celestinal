@@ -38,7 +38,7 @@ func Subscribe(ctx context.Context, namespace string, handler func(value string)
 				logger.Infof("subscription to namespace %s stopped", namespace)
 				return
 			case event, ok := <-ch:
-				logger.Infof("received event of namespace: %s", namespace)
+				logger.Debugf("received event of namespace: %s", namespace)
 				if !ok {
 					logger.Warnf("channel for namespace %s closed", namespace)
 					return
@@ -66,7 +66,7 @@ func Publish(namespace string, value string) {
 
 	select {
 	case ch <- value:
-		logger.Infof("published event to namespace: %s", namespace)
+		logger.Debugf("published event to namespace: %s", namespace)
 	default:
 		logger.Warnf("channel for namespace %s is full, dropping event", namespace)
 	}

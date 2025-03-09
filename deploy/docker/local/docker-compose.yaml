@@ -1,29 +1,32 @@
 services:
-  redis:
+  tickex.redis:
     image: redis
+    container_name: tickex.redis
+    hostname: tickex.redis
     ports:
       - "6379:6379"
     command: /bin/sh -c "redis-server --requirepass password"
-    environment:
-      - REDIS_HOST_PASSWORD=password
     volumes:
       - ./.data/redis:/data
+    networks:
+      - tickex-network
 
-  postgres:
+  tickex.postgres:
     image: postgres:latest
-    environment:
-      POSTGRES_DB: tickex-dev
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
+    hostname: tickex.postgres
+    container_name: tickex.postgres
     ports:
       - "5432:5432"
     restart: on-failure:3
     volumes:
       - ./.data/postgres:/var/lib/postgresql/data
+    networks:
+      - tickex-network
 
-  consul:
+  tickex.consul:
     image: hashicorp/consul:latest
-    container_name: consul
+    container_name: tickex.consul
+    hostname: tickex.consul
     restart: unless-stopped
     ports:
       - "8500:8500"   # UI & API
@@ -32,11 +35,11 @@ services:
     volumes:
       - ./.data:/consul/data
     networks:
-      - tickex_resource_local_network
+      - tickex-network
 
 volumes:
   .data:
 
 networks:
-  tickex_resource_local_network:
+  tickex-network:
     driver: bridge

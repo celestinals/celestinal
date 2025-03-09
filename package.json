@@ -1,7 +1,7 @@
 {
   "name": "tickex",
   "version": "0.0.1",
-  "description": "Buying, selling, exchanging, and sharing all types of tickets and game cards on a secure cloud-native platform.",
+  "description": "Buying, selling, exchanging, and sharing all types of tickets and game cards.",
   "private": true,
   "scripts": {
     "build": "turbo build",

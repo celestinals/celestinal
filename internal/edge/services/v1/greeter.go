@@ -25,6 +25,7 @@ import (
 	"github.com/tickexvn/tickex/internal/edge/services"
 	"github.com/tickexvn/tickex/internal/edge/types"
 	"github.com/tickexvn/tickex/pkg/core"
+	"github.com/tickexvn/tickex/pkg/namespace"
 	"google.golang.org/grpc"
 )
 
@@ -44,7 +45,7 @@ type Greeter struct {
 func (g Greeter) Accept(
 	ctx context.Context, edge core.Edge, v types.IVisitor) error {
 
-	return v.VisitGreeterService(ctx, edge, g)
+	return v.VisitService(ctx, namespace.GreeterV1, edge, g)
 }
 
 // Register registers the Greeter service
