@@ -39,7 +39,7 @@ var _ core.Server = (*Edge)(nil)
 func New(conf *configpb.Config) core.Server {
 	return &Edge{
 		edge:    core.NewEdge(),
-		visitor: visitor.New(conf),
+		visitor: visitor.New(),
 		config:  conf,
 	}
 }

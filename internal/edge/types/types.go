@@ -30,10 +30,6 @@ type IService interface {
 }
 
 // IVisitor represents the visitor interface.
-// Add more visit service method bellows
 type IVisitor interface {
-	// TODO: declare visit service function
-
-	// VisitGreeterService visit greeter service
-	VisitGreeterService(ctx context.Context, edge core.Edge, service IService) error
+	VisitService(ctx context.Context, namespace string, edge core.Edge, service IService) error
 }

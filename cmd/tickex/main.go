@@ -40,7 +40,7 @@ import (
 // in the x/ directory.The application provides APIs for users through a
 // single HTTP gateway following the RESTful API standard. The application
 // uses gRPC to connect to other services.Additionally, the system provides
-// a Swagger UI interface for users to easily interact with the system 
+// a Swagger UI interface for users to easily interact with the system
 // through a web interface.
 //
 // Start the application using the Makefile command

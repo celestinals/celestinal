@@ -91,6 +91,20 @@ func Debug(message ...interface{}) {
 	sugar.Debug(appendHeader(message...))
 }
 
+// Debugf logs a debug message.
+func Debugf(template string, message ...interface{}) {
+	if len(removeNil(message)) == 0 {
+		return
+	}
+
+	logger := New()
+	defer utils.CallBack(logger.Sync)
+
+	sugar := logger.WithOptions(zap.AddCallerSkip(1)).Sugar()
+	msg := fmt.Sprintf("%s %s", version.Header(), fmt.Sprintf(template, message...))
+	sugar.Debug(msg)
+}
+
 // Error logs an error message.
 func Error(message ...interface{}) {
 	if len(removeNil(message)) == 0 {
