@@ -20,8 +20,8 @@ import (
 	"context"
 	"fmt"
 
-	discoverypb "github.com/tickexvn/tickex/api/gen/go/universal/discovery/v1"
-	"github.com/tickexvn/tickex/api/gen/go/universal/env/config/v1"
+	discoverypb "github.com/tickexvn/tickex/api/gen/go/common/discovery/v1"
+	"github.com/tickexvn/tickex/api/gen/go/common/env/config/v1"
 	"github.com/tickexvn/tickex/pkg/errors"
 	"github.com/tickexvn/tickex/pkg/logger"
 )

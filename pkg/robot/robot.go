@@ -21,8 +21,8 @@ import (
 	"fmt"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
-	"github.com/tickexvn/tickex/api/gen/go/universal/env/config/v1"
-	"github.com/tickexvn/tickex/api/gen/go/universal/robot/v1"
+	"github.com/tickexvn/tickex/api/gen/go/common/env/config/v1"
+	"github.com/tickexvn/tickex/api/gen/go/common/robot/v1"
 	"github.com/tickexvn/tickex/pkg/cli"
 	"github.com/tickexvn/tickex/pkg/pbtools"
 )

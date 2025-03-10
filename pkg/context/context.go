@@ -20,7 +20,7 @@ package context
 import (
 	"context"
 
-	contextpb "github.com/tickexvn/tickex/api/gen/go/universal/context/v1"
+	contextpb "github.com/tickexvn/tickex/api/gen/go/common/context/v1"
 	"github.com/tickexvn/tickex/pkg/pbtools/proto"
 )
 

@@ -18,7 +18,7 @@ package tickex.greeter.domain.v1;
 
 import "buf/validate/validate.proto";
 
-import "tickex/universal/meta/v1/meta.proto";
+import "tickex/common/meta/v1/meta.proto";
 import "tickex/greeter/shared/v1/greeter_shared.proto";
 
 option go_package = "github.com/tickexvn/tickex/api/gen/go/greeter/domain/v1;domain";
@@ -28,7 +28,7 @@ service GreeterDomainService {
 }
 
 message SayHelloRequest {
-  tickex.universal.meta.v1.Pages page = 1;
+  tickex.common.meta.v1.Pages page = 1;
   string name = 2 [(buf.validate.field).string.min_len = 1];
 }
 
