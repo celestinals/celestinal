@@ -20,7 +20,7 @@ package edge
 import (
 	"context"
 
-	configpb "github.com/tickexvn/tickex/api/gen/go/universal/env/config/v1"
+	configpb "github.com/tickexvn/tickex/api/gen/go/common/env/config/v1"
 	"github.com/tickexvn/tickex/internal/edge/services/v1"
 	"github.com/tickexvn/tickex/internal/edge/types"
 	"github.com/tickexvn/tickex/internal/edge/visitor"

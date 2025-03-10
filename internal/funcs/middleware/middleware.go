@@ -25,8 +25,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tickexvn/tickex/api/gen/go/universal/env/config/v1"
-	robotpb "github.com/tickexvn/tickex/api/gen/go/universal/robot/v1"
+	"github.com/tickexvn/tickex/api/gen/go/common/env/config/v1"
+	robotpb "github.com/tickexvn/tickex/api/gen/go/common/robot/v1"
 	"github.com/tickexvn/tickex/internal/version"
 	"github.com/tickexvn/tickex/pkg/cli"
 	"github.com/tickexvn/tickex/pkg/pbtools"

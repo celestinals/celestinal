@@ -24,8 +24,8 @@ import (
 
 	_ "github.com/joho/godotenv/autoload" // load .env file automatically
 
-	"github.com/tickexvn/tickex/api/gen/go/universal/env/config/v1"
-	"github.com/tickexvn/tickex/api/gen/go/universal/env/v1"
+	"github.com/tickexvn/tickex/api/gen/go/common/env/config/v1"
+	"github.com/tickexvn/tickex/api/gen/go/common/env/v1"
 )
 
 var conf *config.Config

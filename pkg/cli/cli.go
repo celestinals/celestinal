@@ -22,7 +22,7 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/tickexvn/tickex/api/gen/go/universal/flags/v1"
+	"github.com/tickexvn/tickex/api/gen/go/common/flags/v1"
 )
 
 var once sync.Once

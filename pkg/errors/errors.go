@@ -20,7 +20,7 @@ package errors
 import (
 	"fmt"
 
-	"github.com/tickexvn/tickex/api/gen/go/universal/errors/v1"
+	"github.com/tickexvn/tickex/api/gen/go/common/errors/v1"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )

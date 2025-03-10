@@ -22,9 +22,9 @@ import (
 	"time"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	discoverypb "github.com/tickexvn/tickex/api/gen/go/universal/discovery/v1"
-	"github.com/tickexvn/tickex/api/gen/go/universal/env/config/v1"
-	servicepb "github.com/tickexvn/tickex/api/gen/go/universal/service/v1"
+	discoverypb "github.com/tickexvn/tickex/api/gen/go/common/discovery/v1"
+	"github.com/tickexvn/tickex/api/gen/go/common/env/config/v1"
+	servicepb "github.com/tickexvn/tickex/api/gen/go/common/service/v1"
 	"github.com/tickexvn/tickex/pkg/core/net"
 	"github.com/tickexvn/tickex/pkg/discovery"
 	"github.com/tickexvn/tickex/pkg/logger"

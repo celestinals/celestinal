@@ -22,7 +22,7 @@ import (
 	"time"
 
 	"github.com/hashicorp/consul/api"
-	"github.com/tickexvn/tickex/api/gen/go/universal/env/config/v1"
+	"github.com/tickexvn/tickex/api/gen/go/common/env/config/v1"
 	"github.com/tickexvn/tickex/pkg/eventq"
 	"github.com/tickexvn/tickex/pkg/logger"
 )
