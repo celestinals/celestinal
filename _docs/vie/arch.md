@@ -6,7 +6,7 @@ Clean Architecture (Kiến Trúc Sạch)
 
 Kiến trúc tổng quan của hệ thống bao gồm các thành phần được mô tả như hình dưới đây
 
-![arch](/docs/img/arch/arch.png)
+![arch](/_docs/img/arch/arch.png)
 
 Trong đó, một microservice sẽ được chia thành các layer cơ bản như sau:
 
