@@ -25,7 +25,7 @@ import (
 
 // Serve return api json and swagger ui
 func Serve(edge core.Edge) {
-	fs := http.FileServer(http.Dir("cmd/tickex/swagger/"))
+	fs := http.FileServer(http.Dir("swagger/"))
 	edge.AsMux().Handle("/swagger/", http.StripPrefix("/swagger/", fs))
 
 	edge.AsMux().HandleFunc("/swagger",
