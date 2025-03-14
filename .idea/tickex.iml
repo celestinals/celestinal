@@ -3,6 +3,9 @@
   <component name="Go" enabled="true" />
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/.turbo" />
+      <excludeFolder url="file://$MODULE_DIR$/_build" />
+      <excludeFolder url="file://$MODULE_DIR$/apps/web/.turbo" />
       <excludeFolder url="file://$MODULE_DIR$/deploy/docker/local/.data" />
     </content>
     <orderEntry type="inheritedJdk" />

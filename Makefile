@@ -28,13 +28,13 @@ lint.x.greeter.v1:
 
 run.tickex: TKX_OUT ?= tickex-edge
 run.tickex:
-	@go build -ldflags="-s -w" -o ./build/$(TKX_OUT) ./cmd/tickex && \
- 	./build/$(TKX_OUT)
+	@go build -ldflags="-s -w" -o ./_build/$(TKX_OUT) ./cmd/tickex && \
+ 	./_build/$(TKX_OUT)
 
 run.x.greeter: TKX_OUT ?= tickex-x-greeter-v1
 run.x.greeter:
-	@cd ./x/greeter/v1 && go build -ldflags="-s -w" -o ../../../build/$(TKX_OUT) ./cmd
-	@./build/$(TKX_OUT)
+	@cd ./x/greeter/v1 && go build -ldflags="-s -w" -o ../../../_build/$(TKX_OUT) ./cmd
+	@./_build/$(TKX_OUT)
 
 
 mesh:

@@ -1,5 +1,4 @@
 # Contributors' Guide
-
 This guide will assist contributors to the `tickexvn/tickex` repository.
 
 ## Prerequisites
@@ -107,14 +106,19 @@ If you set your `user.name` and `user.email` git configs, you can sign your comm
 
 ## Naming Packages
 
-### Where to Put Packages
-
+**Where to Put Packages**
 - `api`: Define proto files for all service mesh.
-- `cmd`: Main files, edge app endpoints.
+- `apps`: Main application web ui based on monorepo
+- `cmd`: Main application apis, edge app endpoints.
 - `deploy`: Contains scripts and config for deployment.
 - `docs`: Documentation.
 - `hack`: Scripts used by developers.
 - `internal`: Internal packages, not exported.
+- `packages`: Shared packages across apps
 - `pkg`: Common packages, shared with external modules.
-- `third_party`: Third-party proto libraries.
 - `x`: "Extend" services, all built on a microservice network.
+
+**Every folder with prefix "_" not related to the main source code.**
+- `_submodules`: All repo submodules needed to generate go code from proto file
+- `_test`: Test folder with scripts run performance test
+- `_tools`: Tools necessary used in project, not imported
