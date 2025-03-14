@@ -4,8 +4,10 @@
 
 build/
 docs/
+_docs/
 third_party/
-x/tools/
+_submodules/
+_tools/
 
 node_modules
 

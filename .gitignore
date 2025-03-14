@@ -37,6 +37,7 @@ node_modules
 
 # production
 /build
+/_build
 
 # misc
 .DS_Store

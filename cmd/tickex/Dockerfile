@@ -21,7 +21,7 @@ ENV CGO_ENABLED=0 GOOS=linux GOARCH=amd64
 # Move to working directory (/app).
 WORKDIR /src
 
-COPY cmd/tickex /tmp/cmd/tickex
+COPY swagger/ /tmp/swagger
 COPY . ./
 
 # Set the timezone and install CA certificates
@@ -45,7 +45,7 @@ FROM alpine:edge AS runner
 WORKDIR /app
 
 COPY --from=builder /bin/tickex ./tickex
-COPY --from=builder /tmp/cmd/tickex ./cmd/tickex
+COPY --from=builder /tmp/swagger ./swagger
 
 # Set the timezone and install CA certificates
 RUN apk --no-cache add ca-certificates tzdata

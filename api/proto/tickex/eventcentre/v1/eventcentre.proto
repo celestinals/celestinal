@@ -27,7 +27,7 @@ option go_package = "github.com/tickexvn/tickex/api/gen/go/eventcentre/v1;eventc
 
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
   info: {
-    title: "Authentication Centre Service";
+    title: "Event Centre Service";
     version: "1.0";
   };
   schemes: HTTPS;

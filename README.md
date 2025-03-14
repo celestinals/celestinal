@@ -27,6 +27,11 @@ Tickex is a platform that allows users to buy, sell, exchange, and share various
     git clone --recurse-submodules -j8 git@github.com:tickexvn/tickex.git $GOPATH/src/github.com/tickexvn/tickex
     ```
 
+If you have already cloned the repo, you can initialize the submodule with:
+```sh
+git submodule update --init --recursive
+```
+
 **Navigate to the project directory**
 ```sh
 cd $GOPATH/src/github.com/tickexvn/tickex
