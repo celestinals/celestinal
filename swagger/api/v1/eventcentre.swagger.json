@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Authentication Centre Service",
+    "title": "Event Centre Service",
     "version": "1.0"
   },
   "tags": [
