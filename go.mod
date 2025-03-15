@@ -1,6 +1,6 @@
 module github.com/tickexvn/tickex
 
-go 1.24
+go 1.24.0
 
 replace github.com/tickexvn/tickex/api => ./api
 
