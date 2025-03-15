@@ -1,13 +1,15 @@
 .github/
 .idea/
-.data/
+
+_docs/
+_submodules/
+_tools/
+
+dumpdata/
 
 build/
 docs/
-_docs/
 third_party/
-_submodules/
-_tools/
 
 node_modules
 

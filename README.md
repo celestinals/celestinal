@@ -1,4 +1,4 @@
-![ico](favicon.ico)
+![ico](public/assets/favicon.ico)
 
 # 🎫 Tickex
 

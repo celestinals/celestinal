@@ -6,7 +6,7 @@
       <excludeFolder url="file://$MODULE_DIR$/.turbo" />
       <excludeFolder url="file://$MODULE_DIR$/_build" />
       <excludeFolder url="file://$MODULE_DIR$/apps/web/.turbo" />
-      <excludeFolder url="file://$MODULE_DIR$/deploy/docker/local/.data" />
+      <excludeFolder url="file://$MODULE_DIR$/deploy/docker/local/dumpdata" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

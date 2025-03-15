@@ -7,7 +7,7 @@ services:
       - "6379:6379"
     command: /bin/sh -c "redis-server --requirepass password"
     volumes:
-      - ./.data/redis:/data
+      - ./dumpdata/redis:/data
     networks:
       - tickex-network
 
@@ -19,7 +19,7 @@ services:
       - "5432:5432"
     restart: on-failure:3
     volumes:
-      - ./.data/postgres:/var/lib/postgresql/data
+      - ./dumpdata/postgres:/var/lib/postgresql/data
     networks:
       - tickex-network
 
@@ -33,12 +33,12 @@ services:
       - "8600:8600/udp" # DNS
     command: "agent -dev -client=0.0.0.0"
     volumes:
-      - ./.data:/consul/data
+      - ./dumpdata:/consul/data
     networks:
       - tickex-network
 
 volumes:
-  .data:
+  dumpdata:
 
 networks:
   tickex-network:
