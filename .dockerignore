@@ -5,6 +5,7 @@ _docs/
 _submodules/
 _tools/
 
+_dumpdata/
 dumpdata/
 
 build/
