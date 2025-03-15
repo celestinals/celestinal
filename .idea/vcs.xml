@@ -2,8 +2,8 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/third_party/googleapis" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/third_party/grpc-gateway" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/third_party/protovalidate" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/_submodules/googleapis" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/_submodules/grpc-gateway" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/_submodules/protovalidate" vcs="Git" />
   </component>
 </project>
