@@ -50,8 +50,7 @@ func service(client *api.Client) {
 	for {
 		services, meta, err := client.Catalog().Services(&api.QueryOptions{})
 		if err != nil {
-			logger.Debug("service event:", err)
-			continue
+			logger.Fatal("service event:", err)
 		}
 
 		if meta.LastIndex != lastIndex {

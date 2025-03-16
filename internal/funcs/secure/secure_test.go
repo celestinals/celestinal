@@ -14,26 +14,16 @@
  * limitations under the License.
  */
 
-package core
+package secure
 
 import (
-	"context"
-	"fmt"
-
-	"github.com/tickexvn/tickex/internal/version"
-	"go.uber.org/fx"
+	"github.com/tickexvn/tickex/internal/funcs/secure/rules"
+	"testing"
 )
 
-// runner functions called by fx.Invoke.
-// when the application starts, it will start the server
-func runner(lc fx.Lifecycle, srv Server) {
-	fmt.Println(version.AsciiArt)
-	lc.Append(fx.Hook{
-		OnStart: func(_ context.Context) error {
-			return srv.ListenAndServe()
-		},
-		OnStop: func(_ context.Context) error {
-			return nil
-		},
-	})
+func TestNewWAF(t *testing.T) {
+	_, err := NewWAF(rules.R932RCE)
+	if err != nil {
+		t.Error(err)
+	}
 }

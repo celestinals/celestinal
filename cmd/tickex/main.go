@@ -49,8 +49,8 @@ import (
 //	make run.tickex // start tickex edge
 //	make run.x.<service> // start service
 func main() {
-	cli.Flags.Name = namespace.Edge
-	_ = cli.Parse()
+	cli.ServiceFlags.Name = namespace.Edge
+	_ = cli.ParseEdge()
 
 	app := core.Build(edge.New, configs.Default)
 	logger.Fatal(app.Start(context.Background()))

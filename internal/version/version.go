@@ -38,6 +38,13 @@ var (
 
 	// Code is the code of the project.
 	Code = "TKX"
+
+	AsciiArt = `
+ _______     __          
+/_  __(_)___/ /_______ __
+ / / / / __/  '_/ -_) \ /
+/_/ /_/\__/_/\_\\__/_\_\        
+	`
 )
 
 // Header returns the header info string.

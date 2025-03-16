@@ -20,8 +20,12 @@ import "buf/validate/validate.proto";
 
 option go_package = "github.com/tickexvn/tickex/api/gen/go/common/flags/v1;flags";
 
-message Flags {
+message ServiceFlags {
+  string name = 1;
+  string address = 2 [(buf.validate.field).string.pattern = "^[a-zA-Z0-9.-]+:[0-9]{1,5}$"];
+}
+
+message EdgeFlags {
   bool is_turn_on_bots = 1;
-  string name = 2;
-  string address = 3 [(buf.validate.field).string.pattern = "^[a-zA-Z0-9.-]+:[0-9]{1,5}$"];
+  bool secure = 2;
 }
