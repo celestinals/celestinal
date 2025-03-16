@@ -24,8 +24,9 @@ import (
 	"github.com/tickexvn/tickex/pkg/configs"
 	"github.com/tickexvn/tickex/pkg/core"
 	"github.com/tickexvn/tickex/pkg/logger"
-	_ "github.com/tickexvn/tickex/x/greeter/cmd/init"
-	"github.com/tickexvn/tickex/x/greeter/cmd/server"
+	"github.com/tickexvn/tickex/pkg/namespace"
+	_ "github.com/tickexvn/tickex/x/greeter/boots/init"
+	"github.com/tickexvn/tickex/x/greeter/boots/server"
 )
 
 // Build and run main application with environment variable
@@ -36,7 +37,7 @@ import (
 //
 // _ = core.Inject(controllers.New)
 func main() {
-	cli.Flags.Name = "tickex.greeter.v1"
+	cli.Flags.Name = namespace.GreeterV1
 	cli.Flags.Address = "127.0.0.1:0"
 	_ = cli.Parse()
 

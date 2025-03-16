@@ -14,16 +14,4 @@
  * limitations under the License.
  */
 
-// Package namespace provide name of all service at tickex
-package namespace
-
-const (
-	// Edge namespace info
-	Edge = "tickex.edge"
-
-	// GreeterV1 namespace info
-	GreeterV1 = "tickex.x.greeter.v1"
-
-	// TicketV1 namespace info
-	TicketV1 = "tickex.x.ticket.v1"
-)
+package server
