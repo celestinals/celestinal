@@ -62,8 +62,7 @@ func service(client *api.Client) {
 					continue
 				}
 
-				entries, _, err := client.Health().Service(serviceName,
-					"", true, nil)
+				entries, _, err := client.Health().Service(serviceName, "", true, nil)
 				if err != nil {
 					logger.Debug("healthcheck service: ", err)
 					continue
@@ -71,8 +70,8 @@ func service(client *api.Client) {
 
 				if len(entries) != 0 {
 					logger.Infof("service found: name=%s index=%d", serviceName, lastIndex)
-					eventq.Publish(serviceName, fmt.Sprintf("%s:%d",
-						entries[0].Service.Address, entries[0].Service.Port))
+					eventq.Publish(serviceName,
+						fmt.Sprintf("%s:%d", entries[0].Service.Address, entries[0].Service.Port))
 				}
 			}
 		}

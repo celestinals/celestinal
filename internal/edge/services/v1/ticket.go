@@ -21,37 +21,38 @@ import (
 	"context"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	greeterpb "github.com/tickexvn/tickex/api/gen/go/greeter/v1"
+	"google.golang.org/grpc"
+
+	ticketpb "github.com/tickexvn/tickex/api/gen/go/ticket/v1"
 	"github.com/tickexvn/tickex/internal/edge/services"
 	"github.com/tickexvn/tickex/internal/edge/types"
 	"github.com/tickexvn/tickex/pkg/core"
 	"github.com/tickexvn/tickex/pkg/namespace"
-	"google.golang.org/grpc"
 )
 
-var _ types.IService = (*greeter)(nil)
+var _ types.IService = (*ticket)(nil)
 
-// NewGreeter creates a new greeter service to register handler to gateway
-func NewGreeter() types.IService {
-	return greeter{}
+// NewTicket creates a new ticket service to register handler to gateway
+func NewTicket() types.IService {
+	return ticket{}
 }
 
-// greeter represents the greeter service
-type greeter struct {
+// ticket represents the ticket service
+type ticket struct {
 	services.Base
 }
 
-// Accept accepts the greeter service
-func (g greeter) Accept(
+// Accept accepts the ticket service
+func (t ticket) Accept(
 	ctx context.Context, edge core.Edge, v types.IVisitor) error {
 
-	return v.VisitService(ctx, namespace.GreeterV1, edge, g)
+	return v.VisitService(ctx, namespace.TicketV1, edge, t)
 }
 
-// Register registers the greeter service
-func (g greeter) Register(ctx context.Context, mux *runtime.ServeMux,
+// Register registers the ticket service
+func (t ticket) Register(ctx context.Context, mux *runtime.ServeMux,
 	endpoint string, opts []grpc.DialOption) error {
 
-	return greeterpb.
-		RegisterGreeterServiceHandlerFromEndpoint(ctx, mux, endpoint, opts)
+	return ticketpb.
+		RegisterTicketServiceHandlerFromEndpoint(ctx, mux, endpoint, opts)
 }

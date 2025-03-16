@@ -56,7 +56,7 @@ func (g *Greeter) ListenAndServe() error {
 	return g.Serve(&core.ServiceInfo{
 		Config: g.config,
 		Addr:   cli.Parse().GetAddress(),
-		Tags:   []string{"greeter", "tickex.x.greeter"},
+		Tags:   []string{"greeter", namespace.GreeterV1},
 		Name:   namespace.GreeterV1,
 	})
 }

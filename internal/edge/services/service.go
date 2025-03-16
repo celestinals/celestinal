@@ -26,19 +26,19 @@ import (
 	"google.golang.org/grpc"
 )
 
-var _ types.IService = (*Service)(nil)
+var _ types.IService = (*Base)(nil)
 
-// Service represents the base service
-type Service struct{}
+// Base represents the base service
+type Base struct{}
 
 // Register registers the base service
-func (s Service) Register(
+func (b Base) Register(
 	_ context.Context, _ *runtime.ServeMux, _ string, _ []grpc.DialOption) error {
 	panic("unimplemented")
 }
 
 // Accept accepts the base service
-func (s Service) Accept(
+func (b Base) Accept(
 	_ context.Context, _ core.Edge, _ types.IVisitor) error {
 	panic("unimplemented")
 }

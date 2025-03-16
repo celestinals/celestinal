@@ -48,7 +48,7 @@ func New(conf *configpb.Config) core.Server {
 // entry point for the Tickex. It will automatically connect to other
 // services via gRPC. Start the application along with other services
 // in the x/ directory. The application provides APIs for users through
-// a single HTTP gateway following the RESTful API standard. The application
+// a single HTTP gateway following the REST API standard. The application
 // uses gRPC to connect to other services. Additionally, the system provides
 // a Swagger UI interface for users to easily interact with the system
 // through a web interface.
@@ -66,34 +66,7 @@ type Edge struct {
 	visitor types.IVisitor
 }
 
-// Register gRPC server endpoint.
-// Declare function in edge/types at types.IVisitor interface
-//
-// Ex:
-//
-//	type IVisitor interface {
-//		VisitGreeterService(
-//		ctx context.Context, edge core.Edge, service IService) error
-//	}
-//
-// Implement function at visitor.Visitor:
-//
-// Ex:
-//
-//	func (v *Visitor) VisitGreeterService(
-//		ctx context.Context, edge core.Edge, service types.IService) error {
-//
-//		opts := []grpc.DialOption{
-//			grpc.WithTransportCredentials(insecure.NewCredentials())}
-//
-//		greeterAddr := ":8000"
-//		if err := core.RegisterService(
-//			ctx, edge, service, greeterAddr, opts); err != nil {
-//			return err
-//		}
-//
-//		return nil
-//	}
+// register gRPC server endpoint.
 func (e *Edge) register(ctx context.Context) error {
 	// Note: Make sure the gRPC server is running properly and accessible
 	// Create folder at services, inherit base package, override function,
@@ -102,7 +75,8 @@ func (e *Edge) register(ctx context.Context) error {
 	serviceList := []types.IService{
 		// Example: register the greeter service to the gateway
 		services.NewGreeter(),
-		// TODO: add more service here ...
+		// add more service here ...
+		services.NewTicket(),
 	}
 
 	return e.visit(ctx, serviceList...)
