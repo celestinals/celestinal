@@ -29,6 +29,7 @@ import (
 	robotpb "github.com/tickexvn/tickex/api/gen/go/common/robot/v1"
 	"github.com/tickexvn/tickex/internal/version"
 	"github.com/tickexvn/tickex/pkg/cli"
+	"github.com/tickexvn/tickex/pkg/core"
 	"github.com/tickexvn/tickex/pkg/pbtools"
 	"github.com/tickexvn/tickex/pkg/robot"
 	"google.golang.org/grpc/grpclog"
@@ -39,6 +40,16 @@ func New(conf *config.Config) *Middleware {
 	return &Middleware{
 		conf: conf,
 	}
+}
+
+// Serve middleware handler for http handler in edge server
+func Serve(edge core.Edge, conf *config.Config) {
+	// new middleware handler
+	mdw := New(conf)
+
+	// mdw.LogRequestBody(mdw.AllowCORS(e.edge.AsMux()))
+	edge.Use(mdw.AllowCORS)
+	edge.Use(mdw.LogRequestBody)
 }
 
 // Middleware for http handler in grpc gateway

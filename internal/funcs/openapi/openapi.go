@@ -20,11 +20,12 @@ package openapi
 import (
 	"net/http"
 
+	"github.com/tickexvn/tickex/api/gen/go/common/env/config/v1"
 	"github.com/tickexvn/tickex/pkg/core"
 )
 
 // Serve return api json and swagger ui
-func Serve(edge core.Edge) {
+func Serve(edge core.Edge, _ *config.Config) {
 	fs := http.FileServer(http.Dir("public/swagger/"))
 	edge.AsMux().Handle("/swagger/", http.StripPrefix("/swagger/", fs))
 

@@ -17,11 +17,22 @@
 // Package cache provides the cache middleware for the edge app
 package cache
 
-import "net/http"
+import (
+	"net/http"
 
-// Cache is a middleware that caches the response of the request
+	"github.com/tickexvn/tickex/api/gen/go/common/env/config/v1"
+	"github.com/tickexvn/tickex/pkg/core"
+)
+
+// Serve is a middleware that serves the cache response for the same
+// request in the future.
+func Serve(edge core.Edge, _ *config.Config) {
+	edge.Use(cache)
+}
+
+// cache is a middleware that caches the response of the request
 // and serves the cached response for the same request in the future.
-func Cache(next http.Handler) http.Handler {
+func cache(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		next.ServeHTTP(w, r)
 	})
