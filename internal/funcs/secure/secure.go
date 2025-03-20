@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+// Package secure provide secure middleware layer
 package secure
 
 import (
@@ -39,4 +40,3 @@ func NewWAF(rules ...string) (*WAF, error) {
 type WAF struct {
 	cozarawaf *coraza.WAF
 }
-

@@ -27,7 +27,7 @@ import (
 // runner functions called by fx.Invoke.
 // when the application starts, it will start the server
 func runner(lc fx.Lifecycle, srv Server) {
-	fmt.Println(version.AsciiArt)
+	fmt.Println(version.ASCIIArt)
 	lc.Append(fx.Hook{
 		OnStart: func(_ context.Context) error {
 			return srv.ListenAndServe()

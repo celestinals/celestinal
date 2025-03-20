@@ -39,7 +39,7 @@ var (
 	// Code is the code of the project.
 	Code = "TKX"
 
-	AsciiArt = `
+	ASCIIArt = `
  _______     __          
 /_  __(_)___/ /_______ __
  / / / / __/  '_/ -_) \ /

@@ -17,12 +17,13 @@
 package secure
 
 import (
-	"github.com/tickexvn/tickex/internal/funcs/secure/rules"
 	"testing"
+
+	"github.com/corazawaf/coraza/v3"
 )
 
-func TestNewWAF(t *testing.T) {
-	_, err := NewWAF(rules.R932RCE)
+func TestWAFConfig(t *testing.T) {
+	_, err := coraza.NewWAF(coraza.NewWAFConfig().WithDirectivesFromFile("deploy/waf-rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf"))
 	if err != nil {
 		t.Error(err)
 	}

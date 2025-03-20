@@ -52,7 +52,7 @@ func Parse() *flags.ServiceFlags {
 		flag.StringVar(&ServiceFlags.Address, "address", ServiceFlags.GetAddress(), "host address?")
 
 		flag.Usage = func() {
-			fmt.Println(version.AsciiArt)
+			fmt.Println(version.ASCIIArt)
 			fmt.Println("Usage: tickex [Flags]")
 			flag.PrintDefaults()
 		}

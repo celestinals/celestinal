@@ -26,6 +26,9 @@ lint.proto:
 lint.x.greeter.v1: 
 	cd ./x/greeter/v1 && golangci-lint run
 
+updaterule:
+	@echo "Updating the core ruleset"
+
 run.tickex: TKX_OUT ?= tickex-edge
 run.tickex:
 	@go build -ldflags="-s -w" -o ./_build/$(TKX_OUT) ./cmd/tickex && \
