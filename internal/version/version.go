@@ -39,6 +39,7 @@ var (
 	// Code is the code of the project.
 	Code = "TKX"
 
+	// ASCIIArt using in console
 	ASCIIArt = `
  _______     __          
 /_  __(_)___/ /_______ __

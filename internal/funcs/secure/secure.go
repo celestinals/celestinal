@@ -21,6 +21,7 @@ import (
 	"github.com/corazawaf/coraza/v3"
 )
 
+// NewWAF create a new WAF middleware layer
 func NewWAF(filepath string) (*WAF, error) {
 	var wafconf = coraza.NewWAFConfig().WithDirectivesFromFile(filepath)
 
@@ -34,6 +35,7 @@ func NewWAF(filepath string) (*WAF, error) {
 	}, nil
 }
 
+// WAF middleware layer
 type WAF struct {
 	cozarawaf *coraza.WAF
 }

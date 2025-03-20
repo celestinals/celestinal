@@ -35,6 +35,7 @@ var ServiceFlags = &flags.ServiceFlags{
 	Address: "0.0.0.0:9000",
 }
 
+// EdgeFlags global variable
 var EdgeFlags = &flags.EdgeFlags{
 	IsTurnOnBots: false,
 	Secure:       false,
@@ -62,6 +63,7 @@ func Parse() *flags.ServiceFlags {
 	return ServiceFlags
 }
 
+// ParseEdge flag args for edge service
 func ParseEdge() *flags.EdgeFlags {
 	isService = false
 
