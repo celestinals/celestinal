@@ -21,11 +21,8 @@ import (
 	"github.com/corazawaf/coraza/v3"
 )
 
-func NewWAF(rules ...string) (*WAF, error) {
-	var wafconf = coraza.NewWAFConfig()
-	for _, rule := range rules {
-		wafconf.WithDirectives(rule)
-	}
+func NewWAF(filepath string) (*WAF, error) {
+	var wafconf = coraza.NewWAFConfig().WithDirectivesFromFile(filepath)
 
 	cozarawaf, err := coraza.NewWAF(wafconf)
 	if err != nil {

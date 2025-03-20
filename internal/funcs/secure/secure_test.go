@@ -23,7 +23,14 @@ import (
 )
 
 func TestWAFConfig(t *testing.T) {
-	_, err := coraza.NewWAF(coraza.NewWAFConfig().WithDirectivesFromFile("deploy/waf-rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf"))
+	_, err := coraza.NewWAF(coraza.NewWAFConfig().WithDirectivesFromFile("../../../deploy/waf-rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf"))
+	if err != nil {
+		t.Error(err)
+	}
+}
+
+func TestNewWAF(t *testing.T) {
+	_, err := NewWAF("../../../deploy/waf-rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf")
 	if err != nil {
 		t.Error(err)
 	}
