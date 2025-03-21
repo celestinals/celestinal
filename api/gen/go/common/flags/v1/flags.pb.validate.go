@@ -33,14 +33,13 @@ var (
 	_ = anypb.Any{}
 )
 
-// Validate checks the field values on Flags with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
-func (m *Flags) Validate() error {
+// Validate checks the field values on ServiceFlags with the rules defined in
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
+func (m *ServiceFlags) Validate() error {
 	if m == nil {
 		return nil
 	}
-
-	// no validation rules for IsTurnOnBots
 
 	// no validation rules for Name
 
@@ -49,9 +48,9 @@ func (m *Flags) Validate() error {
 	return nil
 }
 
-// FlagsValidationError is the validation error returned by Flags.Validate if
-// the designated constraints aren't met.
-type FlagsValidationError struct {
+// ServiceFlagsValidationError is the validation error returned by
+// ServiceFlags.Validate if the designated constraints aren't met.
+type ServiceFlagsValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -59,22 +58,22 @@ type FlagsValidationError struct {
 }
 
 // Field function returns field value.
-func (e FlagsValidationError) Field() string { return e.field }
+func (e ServiceFlagsValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e FlagsValidationError) Reason() string { return e.reason }
+func (e ServiceFlagsValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e FlagsValidationError) Cause() error { return e.cause }
+func (e ServiceFlagsValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e FlagsValidationError) Key() bool { return e.key }
+func (e ServiceFlagsValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e FlagsValidationError) ErrorName() string { return "FlagsValidationError" }
+func (e ServiceFlagsValidationError) ErrorName() string { return "ServiceFlagsValidationError" }
 
 // Error satisfies the builtin error interface
-func (e FlagsValidationError) Error() string {
+func (e ServiceFlagsValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -86,14 +85,14 @@ func (e FlagsValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sFlags.%s: %s%s",
+		"invalid %sServiceFlags.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = FlagsValidationError{}
+var _ error = ServiceFlagsValidationError{}
 
 var _ interface {
 	Field() string
@@ -101,4 +100,72 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = FlagsValidationError{}
+} = ServiceFlagsValidationError{}
+
+// Validate checks the field values on EdgeFlags with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *EdgeFlags) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for IsTurnOnBots
+
+	// no validation rules for Secure
+
+	return nil
+}
+
+// EdgeFlagsValidationError is the validation error returned by
+// EdgeFlags.Validate if the designated constraints aren't met.
+type EdgeFlagsValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e EdgeFlagsValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e EdgeFlagsValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e EdgeFlagsValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e EdgeFlagsValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e EdgeFlagsValidationError) ErrorName() string { return "EdgeFlagsValidationError" }
+
+// Error satisfies the builtin error interface
+func (e EdgeFlagsValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sEdgeFlags.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = EdgeFlagsValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = EdgeFlagsValidationError{}

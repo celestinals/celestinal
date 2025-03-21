@@ -26,6 +26,7 @@ import (
 	"github.com/tickexvn/tickex/internal/edge/visitor"
 	"github.com/tickexvn/tickex/internal/funcs/middleware"
 	"github.com/tickexvn/tickex/internal/funcs/openapi"
+	"github.com/tickexvn/tickex/internal/funcs/secure"
 	"github.com/tickexvn/tickex/internal/funcs/watch"
 	"github.com/tickexvn/tickex/pkg/constant"
 	"github.com/tickexvn/tickex/pkg/core"
@@ -66,8 +67,8 @@ type Edge struct {
 	visitor types.IVisitor
 }
 
-// register gRPC server endpoint.
-func (e *Edge) register(ctx context.Context) error {
+// registerServer gRPC server endpoint.
+func (e *Edge) registerServer(ctx context.Context) error {
 	// Note: Make sure the gRPC server is running properly and accessible
 	// Create folder at services, inherit base package, override function,
 	// implement business logic
@@ -96,20 +97,20 @@ func (e *Edge) visit(ctx context.Context, services ...types.IService) error {
 // functions is chain of functions to use before starting the edge app
 func (e *Edge) functions(ctx context.Context) error {
 	// serve swagger ui
-	openapi.Serve(e.edge)
+	openapi.Serve(e.edge, e.config)
 
 	// watch service change on service registry
-	watch.Service(e.config)
+	watch.Serve(e.edge, e.config)
+
+	// waf secure middleware layer
+	secure.Serve(e.edge, e.config)
 
 	// new middleware handler
-	// mdw.LogRequestBody(mdw.AllowCORS(e.edge.AsMux()))
-	mdw := middleware.New(e.config)
-	e.edge.Use(mdw.AllowCORS)
-	e.edge.Use(mdw.LogRequestBody)
+	middleware.Serve(e.edge, e.config)
 
 	// log info in console and return register error if they exist
 	logger.Infof(constant.InfoHTTPServer, e.config.GetApiAddr())
-	return e.register(ctx)
+	return e.registerServer(ctx)
 }
 
 // ListenAndServe the edge/gateway app

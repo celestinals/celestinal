@@ -23,6 +23,7 @@ import (
 
 	"github.com/hashicorp/consul/api"
 	"github.com/tickexvn/tickex/api/gen/go/common/env/config/v1"
+	"github.com/tickexvn/tickex/pkg/core"
 	"github.com/tickexvn/tickex/pkg/eventq"
 	"github.com/tickexvn/tickex/pkg/logger"
 )
@@ -30,8 +31,8 @@ import (
 const timeout = time.Second * 2
 const consulNamespace = "consul"
 
-// Service is watching function consul when service info was changed
-func Service(config *config.Config) {
+// Serve is watching function consul when service info was changed
+func Serve(_ core.Edge, config *config.Config) {
 	client, err := newConsulClient(config)
 	if err != nil {
 		logger.Errorf("failed to create consul client: %v", err)
@@ -50,8 +51,7 @@ func service(client *api.Client) {
 	for {
 		services, meta, err := client.Catalog().Services(&api.QueryOptions{})
 		if err != nil {
-			logger.Debug("service event:", err)
-			continue
+			logger.Fatal("service event:", err)
 		}
 
 		if meta.LastIndex != lastIndex {

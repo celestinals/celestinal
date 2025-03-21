@@ -132,6 +132,19 @@ func Errorf(template string, message ...any) {
 	sugar.Errorf(msg)
 }
 
+// Warn logs an warn message.
+func Warn(message ...interface{}) {
+	if len(removeNil(message)) == 0 {
+		return
+	}
+
+	logger := New()
+	defer utils.CallBack(logger.Sync)
+
+	sugar := logger.WithOptions(zap.AddCallerSkip(1)).Sugar()
+	sugar.Warn(appendHeader(message...))
+}
+
 // Warnf logs an error message with a format.
 func Warnf(template string, message ...any) {
 	if len(removeNil(message)) == 0 {

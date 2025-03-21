@@ -18,7 +18,7 @@ FROM golang:1.24.0-alpine AS builder
 # Set necessary environment variables needed for our image and build the API server.
 ENV CGO_ENABLED=0 GOOS=linux GOARCH=amd64
 
-# Move to working directory (/app).
+# Move to working directory (/src).
 WORKDIR /src
 
 COPY public/ /tmp/public/

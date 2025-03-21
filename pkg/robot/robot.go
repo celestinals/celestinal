@@ -55,7 +55,7 @@ type Robot struct {
 
 // Send message to group telegram
 func (r *Robot) Send(msg *robot.Message) error {
-	flag := cli.Parse()
+	flag := cli.ParseEdge()
 	if !flag.IsTurnOnBots {
 		return nil
 	}
