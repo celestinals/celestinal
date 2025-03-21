@@ -20,7 +20,6 @@ package version
 import (
 	"fmt"
 	"runtime"
-	"strings"
 )
 
 var (
@@ -31,7 +30,7 @@ var (
 	Version = "0.0.1"
 
 	// GoVersion is Go tree's version.
-	GoVersion = strings.ToUpper(runtime.Version())
+	GoVersion = runtime.Version()
 
 	// FullName is the full name of the project.
 	FullName = "TICKEX"
@@ -40,12 +39,14 @@ var (
 	Code = "TKX"
 
 	// ASCIIArt using in console
-	ASCIIArt = `
+	asciiArt = `
  _______     __          
-/_  __(_)___/ /_______ __
- / / / / __/  '_/ -_) \ /
-/_/ /_/\__/_/\_\\__/_\_\        
+/_  __(_)___/ /_______ __	
+ / / / / __/  '_/ -_) \ /	%s
+/_/ /_/\__/_/\_\\__/_\_\	v%s - %s
 	`
+	// ASCIIArt using in console
+	ASCIIArt = fmt.Sprintf(asciiArt, Package, Version, GoVersion)
 )
 
 // Header returns the header info string.

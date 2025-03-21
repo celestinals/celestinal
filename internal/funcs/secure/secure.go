@@ -18,12 +18,34 @@
 package secure
 
 import (
+	"net/http"
+
 	"github.com/corazawaf/coraza/v3"
+	txhttp "github.com/corazawaf/coraza/v3/http"
+	"github.com/corazawaf/coraza/v3/types"
+	"google.golang.org/grpc/grpclog"
+
+	"github.com/tickexvn/tickex/api/gen/go/common/env/config/v1"
+	"github.com/tickexvn/tickex/pkg/core"
+	"github.com/tickexvn/tickex/pkg/logger"
 )
+
+// Serve the edge with WAF secure middleware layer
+func Serve(edge core.Edge, _ *config.Config) {
+	waf, err := NewWAF("./deploy/waf-rules/")
+	if err != nil {
+		logger.Warnf("init WAF secure layer err: %v", err)
+		return
+	}
+
+	edge.Use(waf.Secure)
+}
 
 // NewWAF create a new WAF middleware layer
 func NewWAF(filepath string) (*WAF, error) {
-	var wafconf = coraza.NewWAFConfig().WithDirectivesFromFile(filepath)
+	var wafconf = coraza.NewWAFConfig().
+		WithErrorCallback(logError).
+		WithDirectivesFromFile(filepath)
 
 	cozarawaf, err := coraza.NewWAF(wafconf)
 	if err != nil {
@@ -31,11 +53,23 @@ func NewWAF(filepath string) (*WAF, error) {
 	}
 
 	return &WAF{
-		cozarawaf: &cozarawaf,
+		cozarawaf: cozarawaf,
 	}, nil
 }
 
 // WAF middleware layer
 type WAF struct {
-	cozarawaf *coraza.WAF
+	cozarawaf coraza.WAF
+}
+
+// Secure HTTP middleware with Coraza WAF
+func (waf *WAF) Secure(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		txhttp.WrapHandler(waf.cozarawaf, next).ServeHTTP(w, r)
+	})
+}
+
+func logError(err types.MatchedRule) {
+	msg := err.ErrorLog()
+	grpclog.Errorf("[%s] %s\n", err.Rule().Severity(), msg)
 }
