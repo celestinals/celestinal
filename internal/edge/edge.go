@@ -26,6 +26,7 @@ import (
 	"github.com/tickexvn/tickex/internal/edge/visitor"
 	"github.com/tickexvn/tickex/internal/funcs/middleware"
 	"github.com/tickexvn/tickex/internal/funcs/openapi"
+	"github.com/tickexvn/tickex/internal/funcs/secure"
 	"github.com/tickexvn/tickex/internal/funcs/watch"
 	"github.com/tickexvn/tickex/pkg/constant"
 	"github.com/tickexvn/tickex/pkg/core"
@@ -100,6 +101,9 @@ func (e *Edge) functions(ctx context.Context) error {
 
 	// watch service change on service registry
 	watch.Serve(e.edge, e.config)
+
+	// waf secure middleware layer
+	secure.Serve(e.edge, e.config)
 
 	// new middleware handler
 	middleware.Serve(e.edge, e.config)

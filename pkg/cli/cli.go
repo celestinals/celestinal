@@ -18,10 +18,11 @@
 package cli
 
 import (
-	"flag"
 	"fmt"
+	"os"
 	"sync"
 
+	"github.com/spf13/pflag"
 	"github.com/tickexvn/tickex/api/gen/go/common/flags/v1"
 	"github.com/tickexvn/tickex/internal/version"
 )
@@ -45,19 +46,22 @@ var EdgeFlags = &flags.EdgeFlags{
 func Parse() *flags.ServiceFlags {
 	once.Do(func() {
 		if !isService {
-			flag.BoolVar(&EdgeFlags.IsTurnOnBots, "bot", EdgeFlags.GetIsTurnOnBots(), "turn on bots?")
-			flag.BoolVar(&EdgeFlags.Secure, "secure", EdgeFlags.GetSecure(), "secure api with WAF?")
+			pflag.BoolVarP(&EdgeFlags.IsTurnOnBots, "telegram", "t", EdgeFlags.GetIsTurnOnBots(), "turn on telegram system log?")
+			pflag.BoolVarP(&EdgeFlags.Secure, "secure", "s", EdgeFlags.GetSecure(), "secure api with WAF?")
+			pflag.StringSliceVarP(&EdgeFlags.Rules, "rule", "r", EdgeFlags.Rules, "OWASP CRS rules config file")
 		}
 
-		flag.StringVar(&ServiceFlags.Name, "name", ServiceFlags.GetName(), "hostname?")
-		flag.StringVar(&ServiceFlags.Address, "address", ServiceFlags.GetAddress(), "host address?")
+		pflag.StringVarP(&ServiceFlags.Name, "name", "n", ServiceFlags.GetName(), "hostname?")
+		pflag.StringVarP(&ServiceFlags.Address, "address", "a", ServiceFlags.GetAddress(), "host address?")
 
-		flag.Usage = func() {
+		pflag.Usage = func() {
 			fmt.Println(version.ASCIIArt)
 			fmt.Println("Usage: tickex [Flags]")
-			flag.PrintDefaults()
+			pflag.PrintDefaults()
+			os.Exit(0)
 		}
-		flag.Parse()
+
+		pflag.Parse()
 	})
 
 	return ServiceFlags

@@ -26,15 +26,29 @@ import (
 	"google.golang.org/grpc/grpclog"
 
 	"github.com/tickexvn/tickex/api/gen/go/common/env/config/v1"
+	"github.com/tickexvn/tickex/pkg/cli"
 	"github.com/tickexvn/tickex/pkg/core"
 	"github.com/tickexvn/tickex/pkg/logger"
 )
 
 // Serve the edge with WAF secure middleware layer
 func Serve(edge core.Edge, _ *config.Config) {
-	waf, err := NewWAF("./deploy/waf-rules/")
+	flags := cli.ParseEdge()
+	if !flags.GetSecure() {
+		if len(flags.GetRules()) > 0 {
+			logger.Warn("[HTTP] OWASP rules was't applied (--secure=false)")
+		}
+		return
+	}
+
+	if len(flags.GetRules()) == 0 {
+		logger.Warn("[HTTP] OWASP CRS .conf rules was't provided")
+		return
+	}
+
+	waf, err := NewWAF(flags.GetRules()...)
 	if err != nil {
-		logger.Warnf("init WAF secure layer err: %v", err)
+		logger.Errorf("init secure layer err: %v", err)
 		return
 	}
 
@@ -42,10 +56,13 @@ func Serve(edge core.Edge, _ *config.Config) {
 }
 
 // NewWAF create a new WAF middleware layer
-func NewWAF(filepath string) (*WAF, error) {
+func NewWAF(filepaths ...string) (*WAF, error) {
 	var wafconf = coraza.NewWAFConfig().
-		WithErrorCallback(logError).
-		WithDirectivesFromFile(filepath)
+		WithErrorCallback(logError)
+
+	for _, filepath := range filepaths {
+		wafconf = wafconf.WithDirectivesFromFile(filepath)
+	}
 
 	cozarawaf, err := coraza.NewWAF(wafconf)
 	if err != nil {

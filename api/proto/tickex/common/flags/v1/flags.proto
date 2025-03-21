@@ -28,4 +28,5 @@ message ServiceFlags {
 message EdgeFlags {
   bool is_turn_on_bots = 1;
   bool secure = 2;
+  repeated string rules = 3;
 }
