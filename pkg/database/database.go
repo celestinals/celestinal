@@ -35,13 +35,8 @@ type Repository[T any, ID comparable] interface {
 	Count(ctx context.Context) (int64, error)
 }
 
-// Entity is the interface that wraps the basic GetID method.
-type Entity[ID comparable] interface {
-	GetID() ID
-}
-
 // New create multi-layer database instance
-func New[T Entity[ID], ID comparable](
+func New[T any, ID comparable](
 	searchLayer Repository[T, ID], storageLayer Repository[T, ID]) Repository[T, ID] {
 
 	return &Database[T, ID]{
@@ -51,7 +46,7 @@ func New[T Entity[ID], ID comparable](
 }
 
 // Database database multilayer with postgre & elasticsearch
-type Database[T Entity[ID], ID comparable] struct {
+type Database[T any, ID comparable] struct {
 	search  Repository[T, ID]
 	storage Repository[T, ID]
 }
@@ -71,19 +66,14 @@ func (db *Database[T, ID]) Create(ctx context.Context, entity T) (T, error) {
 		return empty, err
 	}
 
+	// if search layer is nil, return created entity
 	if db.search == nil {
 		logger.Infof("search layer is nil, pass")
 		return createdEntity, nil
 	}
 
 	// Insert into Elasticsearch
-	_, esErr := db.search.Create(ctx, entity)
-	if esErr != nil {
-		// Rollback: delete from PostgreSQL if Elasticsearch insertion fails
-		_ = db.storage.Delete(ctx, getEntityID(entity))
-		return empty,
-			fmt.Errorf("failed to insert into first layer, rollback storage: %v", esErr)
-	}
+	_, _ = db.search.Create(ctx, entity)
 
 	return createdEntity, nil
 }
@@ -97,128 +87,138 @@ func (db *Database[T, ID]) Update(ctx context.Context, id ID, entity T) (T, erro
 		return empty, fmt.Errorf("storage layer is nil")
 	}
 
-	// Get current entity from storage for rollback purposes
-	oldEntity, err := db.storage.Get(ctx, id)
-	if err != nil {
-		return empty, fmt.Errorf("failed to retrieve old entity before update: %v", err)
-	}
-
 	// Update in PostgreSQL
 	updatedEntity, err := db.storage.Update(ctx, id, entity)
 	if err != nil {
 		return empty, err
 	}
 
+	// if search layer is nill, return updated entity
 	if db.search == nil {
 		logger.Info("search layer is nil, pass")
 		return updatedEntity, nil
 	}
 
 	// Update in Elasticsearch
-	_, esErr := db.search.Update(ctx, id, entity)
-	if esErr != nil {
-		// Rollback: Restore old entity in PostgreSQL if Elasticsearch update fails
-		_, _ = db.storage.Update(ctx, id, oldEntity)
-		return empty,
-			fmt.Errorf("failed to update in first layer, rollback storage: %v", esErr)
+	if existed, err := db.search.Exists(ctx, id); err == nil && existed {
+		_, _ = db.search.Update(ctx, id, updatedEntity)
 	}
 
 	return updatedEntity, nil
 }
 
-// Delete removes an entity from both storage (PostgreSQL) and search (Elasticsearch).
-// If Elasticsearch fails after PostgreSQL succeeds, it rolls back by restoring the deleted entity.
+// Delete removes an entity from both storage (PostgreSQL) and search
+// (Elasticsearch). If Elasticsearch fails after PostgreSQL succeeds,
+// it rolls back by restoring the deleted entity.
 func (db *Database[T, ID]) Delete(ctx context.Context, id ID) error {
 	if db.storage == nil {
 		return fmt.Errorf("storage layer is nil")
 	}
 
-	// Get the entity before deletion for rollback
-	oldEntity, err := db.storage.Get(ctx, id)
-	if err != nil {
-		return fmt.Errorf("failed to retrieve entity before deletion: %v", err)
-	}
-
-	// Delete from PostgreSQL
-	if err := db.storage.Delete(ctx, id); err != nil {
-		return err
-	}
-
+	// if search layer is nil, jump to storage layer
 	if db.search == nil {
 		logger.Info("search layer is nil, pass")
-		return nil
+		return db.storage.Delete(ctx, id)
 	}
 
-	// Delete from Elasticsearch
+	// Delete from Elasticsearch, if error, return error
 	if esErr := db.search.Delete(ctx, id); esErr != nil {
-		// Rollback: Restore deleted entity in PostgreSQL if Elasticsearch deletion fails
-		_, _ = db.storage.Create(ctx, oldEntity)
-		return fmt.Errorf("failed to delete from first layer, rollback storage: %v", esErr)
+		return fmt.Errorf("failed to delete from search: %v", esErr)
 	}
 
-	return nil
+	// after delete from search, delete from storage
+	return db.storage.Delete(ctx, id)
 }
 
 // Get retrieves an entity by ID from the search layer (Elasticsearch).
 func (db *Database[T, ID]) Get(ctx context.Context, id ID) (T, error) {
 	var empty T
+
+	// if storage layer is nil, return error
+	if db.storage == nil {
+		return empty, fmt.Errorf("storage layer is nil")
+	}
+
+	// if search layer is nil, jump to storage layer
 	if db.search == nil {
 		logger.Info("search layer is nil, pass")
-		if db.storage == nil {
-			return empty, fmt.Errorf("storage layer is nil")
-		}
-
 		return db.storage.Get(ctx, id)
 	}
 
-	return db.search.Get(ctx, id)
+	// search data in search layer
+	result, err := db.search.Get(ctx, id)
+	if err != nil {
+		// if search layer return error, get data from storage layer
+		data, err := db.storage.Get(ctx, id)
+		if err != nil {
+			return empty, fmt.Errorf("failed to get from storage: %v", err)
+		}
+
+		// not existed in search layer, create new one
+		if existed, err := db.search.Exists(ctx, id); err != nil || !existed {
+			_, _ = db.search.Create(ctx, data)
+		}
+
+		return data, nil
+	}
+
+	return result, nil
 }
 
 // GetAll retrieves all entities from the search layer (Elasticsearch).
 func (db *Database[T, ID]) GetAll(ctx context.Context) ([]T, error) {
+	if db.storage == nil {
+		return nil, fmt.Errorf("storage layer is nil")
+	}
+
 	if db.search == nil {
 		logger.Info("search layer is nil, pass")
-		if db.storage == nil {
-			return nil, fmt.Errorf("storage layer is nil")
-		}
-
 		return db.storage.GetAll(ctx)
 	}
 
-	return db.search.GetAll(ctx)
+	ts, err := db.search.GetAll(ctx)
+	if err != nil || len(ts) == 0 {
+		// if search layer return error or empty, get data from storage layer
+		return db.storage.GetAll(ctx)
+	}
+
+	return ts, nil
 }
 
 // Exists checks if an entity exists in the search layer (Elasticsearch).
 func (db *Database[T, ID]) Exists(ctx context.Context, id ID) (bool, error) {
+	if db.storage == nil {
+		return false, fmt.Errorf("storage layer is nil")
+	}
+
 	if db.search == nil {
 		logger.Info("search layer is nil, pass")
-		if db.storage == nil {
-			return false, fmt.Errorf("storage layer is nil")
-		}
-
 		return db.storage.Exists(ctx, id)
 	}
 
-	return db.search.Exists(ctx, id)
+	existed, err := db.search.Exists(ctx, id)
+	if err != nil {
+		return db.storage.Exists(ctx, id)
+	}
+
+	return existed, nil
 }
 
 // Count returns the total number of entities from the search layer (Elasticsearch).
 func (db *Database[T, ID]) Count(ctx context.Context) (int64, error) {
+	if db.storage == nil {
+		return -1, fmt.Errorf("storage layer is nil")
+	}
+
 	if db.search == nil {
 		logger.Info("search layer is nil, pass")
-		if db.storage == nil {
-			return -1, fmt.Errorf("storage layer is nil")
-		}
-
 		return db.storage.Count(ctx)
 	}
 
-	return db.search.Count(ctx)
-}
+	counter, err := db.search.Count(ctx)
+	if err != nil {
+		return db.storage.Count(ctx)
+	}
 
-// getEntityID extracts the ID from an entity (you need to customize this function)
-func getEntityID[T Entity[ID], ID comparable](entity T) ID {
-	// This function should extract the ID field from the entity.
-	// It depends on your entity structure, you may need reflection or a defined method.
-	return entity.GetID()
+	return counter, nil
 }
