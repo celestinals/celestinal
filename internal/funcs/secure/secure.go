@@ -28,7 +28,7 @@ import (
 	"github.com/tickexvn/tickex/api/gen/go/common/env/config/v1"
 	"github.com/tickexvn/tickex/pkg/cli"
 	"github.com/tickexvn/tickex/pkg/core"
-	"github.com/tickexvn/tickex/pkg/logger"
+	"github.com/tickexvn/tickex/pkg/txlog"
 )
 
 // Serve the edge with WAF secure middleware layer
@@ -36,19 +36,19 @@ func Serve(edge core.Edge, _ *config.Config) {
 	flags := cli.ParseEdge()
 	if !flags.GetSecure() {
 		if len(flags.GetRules()) > 0 {
-			logger.Warn("[HTTP] OWASP rules was't applied (--secure=false)")
+			txlog.Warn("[HTTP] OWASP rules was't applied (--secure=false)")
 		}
 		return
 	}
 
 	if len(flags.GetRules()) == 0 {
-		logger.Warn("[HTTP] OWASP CRS .conf rules was't provided")
+		txlog.Warn("[HTTP] OWASP CRS .conf rules was't provided")
 		return
 	}
 
 	waf, err := NewWAF(flags.GetRules()...)
 	if err != nil {
-		logger.Errorf("init secure layer err: %v", err)
+		txlog.Errorf("init secure layer err: %v", err)
 		return
 	}
 

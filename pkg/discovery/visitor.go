@@ -23,7 +23,7 @@ import (
 	discoverypb "github.com/tickexvn/tickex/api/gen/go/common/discovery/v1"
 	"github.com/tickexvn/tickex/api/gen/go/common/env/config/v1"
 	"github.com/tickexvn/tickex/pkg/errors"
-	"github.com/tickexvn/tickex/pkg/logger"
+	"github.com/tickexvn/tickex/pkg/txlog"
 )
 
 var discover *Discovery
@@ -39,7 +39,7 @@ func NewVisitor(conf *config.Config) Visitor {
 	if discover == nil {
 		discovery, err := New(conf)
 		if err != nil {
-			logger.Fatalf("discovery connect failed: %v", err)
+			txlog.Fatalf("discovery connect failed: %v", err)
 		}
 
 		discover = discovery

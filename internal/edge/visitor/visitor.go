@@ -23,7 +23,7 @@ import (
 	"github.com/tickexvn/tickex/internal/edge/types"
 	"github.com/tickexvn/tickex/pkg/core"
 	"github.com/tickexvn/tickex/pkg/eventq"
-	"github.com/tickexvn/tickex/pkg/logger"
+	"github.com/tickexvn/tickex/pkg/txlog"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -48,7 +48,7 @@ func (v Visitor) VisitService(ctx context.Context,
 			grpc.WithTransportCredentials(insecure.NewCredentials()),
 		}
 
-		logger.Infof("visiting %s %s", namespace, "******")
+		txlog.Infof("visiting %s %s", namespace, "******")
 		return core.RegisterService(ctx, edge, service, endpoint, opts)
 	})
 

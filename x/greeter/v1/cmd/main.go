@@ -23,8 +23,8 @@ import (
 	"github.com/tickexvn/tickex/pkg/cli"
 	"github.com/tickexvn/tickex/pkg/configs"
 	"github.com/tickexvn/tickex/pkg/core"
-	"github.com/tickexvn/tickex/pkg/logger"
 	"github.com/tickexvn/tickex/pkg/namespace"
+	"github.com/tickexvn/tickex/pkg/txlog"
 	_ "github.com/tickexvn/tickex/x/greeter/boots/init"
 	"github.com/tickexvn/tickex/x/greeter/boots/server"
 )
@@ -42,5 +42,7 @@ func main() {
 	_ = cli.Parse()
 
 	app := core.Build(server.New, configs.Default)
-	logger.Fatal(app.Start(context.Background()))
+	if err := app.Start(context.Background()); err != nil {
+		txlog.Fatal(err)
+	}
 }

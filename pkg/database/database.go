@@ -21,7 +21,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/tickexvn/tickex/pkg/logger"
+	"github.com/tickexvn/tickex/pkg/txlog"
 )
 
 // Repository provides the interface for the database.
@@ -68,7 +68,7 @@ func (db *Database[T, ID]) Create(ctx context.Context, entity T) (T, error) {
 
 	// if search layer is nil, return created entity
 	if db.search == nil {
-		logger.Infof("search layer is nil, pass")
+		txlog.Infof("search layer is nil, pass")
 		return createdEntity, nil
 	}
 
@@ -95,7 +95,7 @@ func (db *Database[T, ID]) Update(ctx context.Context, id ID, entity T) (T, erro
 
 	// if search layer is nill, return updated entity
 	if db.search == nil {
-		logger.Info("search layer is nil, pass")
+		txlog.Info("search layer is nil, pass")
 		return updatedEntity, nil
 	}
 
@@ -117,7 +117,7 @@ func (db *Database[T, ID]) Delete(ctx context.Context, id ID) error {
 
 	// if search layer is nil, jump to storage layer
 	if db.search == nil {
-		logger.Info("search layer is nil, pass")
+		txlog.Info("search layer is nil, pass")
 		return db.storage.Delete(ctx, id)
 	}
 
@@ -141,7 +141,7 @@ func (db *Database[T, ID]) Get(ctx context.Context, id ID) (T, error) {
 
 	// if search layer is nil, jump to storage layer
 	if db.search == nil {
-		logger.Info("search layer is nil, pass")
+		txlog.Info("search layer is nil, pass")
 		return db.storage.Get(ctx, id)
 	}
 
@@ -172,7 +172,7 @@ func (db *Database[T, ID]) GetAll(ctx context.Context) ([]T, error) {
 	}
 
 	if db.search == nil {
-		logger.Info("search layer is nil, pass")
+		txlog.Info("search layer is nil, pass")
 		return db.storage.GetAll(ctx)
 	}
 
@@ -192,7 +192,7 @@ func (db *Database[T, ID]) Exists(ctx context.Context, id ID) (bool, error) {
 	}
 
 	if db.search == nil {
-		logger.Info("search layer is nil, pass")
+		txlog.Info("search layer is nil, pass")
 		return db.storage.Exists(ctx, id)
 	}
 
@@ -211,7 +211,7 @@ func (db *Database[T, ID]) Count(ctx context.Context) (int64, error) {
 	}
 
 	if db.search == nil {
-		logger.Info("search layer is nil, pass")
+		txlog.Info("search layer is nil, pass")
 		return db.storage.Count(ctx)
 	}
 

@@ -19,7 +19,7 @@ package eventq
 import (
 	"context"
 
-	"github.com/tickexvn/tickex/pkg/logger"
+	"github.com/tickexvn/tickex/pkg/txlog"
 )
 
 // QueueSpace is the size of the queue
@@ -35,24 +35,24 @@ func Subscribe(ctx context.Context, namespace string, handler func(value string)
 		for {
 			select {
 			case <-ctx.Done():
-				logger.Infof("subscription to namespace %s stopped", namespace)
+				txlog.Infof("subscription to namespace %s stopped", namespace)
 				return
 			case event, ok := <-ch:
-				logger.Debugf("received event of namespace: %s", namespace)
+				txlog.Debugf("received event of namespace: %s", namespace)
 				if !ok {
-					logger.Warnf("channel for namespace %s closed", namespace)
+					txlog.Warnf("channel for namespace %s closed", namespace)
 					return
 				}
 
 				func() {
 					defer func() {
 						if r := recover(); r != nil {
-							logger.Errorf("panic in handler: %v", r)
+							txlog.Errorf("panic in handler: %v", r)
 						}
 					}()
 
 					if err := handler(event); err != nil {
-						logger.Errorf("failed to handle event: %v", err)
+						txlog.Errorf("failed to handle event: %v", err)
 					}
 				}()
 			}
@@ -66,8 +66,8 @@ func Publish(namespace string, value string) {
 
 	select {
 	case ch <- value:
-		logger.Debugf("published event to namespace: %s", namespace)
+		txlog.Debugf("published event to namespace: %s", namespace)
 	default:
-		logger.Warnf("channel for namespace %s is full, dropping event", namespace)
+		txlog.Warnf("channel for namespace %s is full, dropping event", namespace)
 	}
 }

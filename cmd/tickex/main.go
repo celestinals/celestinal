@@ -24,8 +24,8 @@ import (
 	"github.com/tickexvn/tickex/pkg/cli"
 	"github.com/tickexvn/tickex/pkg/configs"
 	"github.com/tickexvn/tickex/pkg/core"
-	"github.com/tickexvn/tickex/pkg/logger"
 	"github.com/tickexvn/tickex/pkg/namespace"
+	"github.com/tickexvn/tickex/pkg/txlog"
 )
 
 // Build and run the main application with environment variables.
@@ -53,5 +53,7 @@ func main() {
 	_ = cli.ParseEdge()
 
 	app := core.Build(edge.New, configs.Default)
-	logger.Fatal(app.Start(context.Background()))
+	if err := app.Start(context.Background()); err != nil {
+		txlog.Fatal(err)
+	}
 }

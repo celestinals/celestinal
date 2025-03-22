@@ -24,7 +24,7 @@ import (
 	"github.com/tickexvn/tickex/api/gen/go/greeter/v1"
 	"github.com/tickexvn/tickex/pkg/copier"
 	"github.com/tickexvn/tickex/pkg/errors"
-	"github.com/tickexvn/tickex/pkg/logger"
+	"github.com/tickexvn/tickex/pkg/txlog"
 	"github.com/tickexvn/tickex/x/greeter/internal/domain"
 )
 
@@ -45,7 +45,7 @@ func (g *Greeter) SayHello(
 
 	var SayHelloReq domainpb.SayHelloRequest
 	if err := copier.CopyMsg(msg, &SayHelloReq); err != nil {
-		logger.Error(err)
+		txlog.Error(err)
 
 		return nil, errors.ErrInvalidData
 	}

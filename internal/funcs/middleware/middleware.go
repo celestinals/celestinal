@@ -78,7 +78,7 @@ func (mdw *Middleware) LogRequestBody(h http.Handler) http.Handler {
 		h.ServeHTTP(lw, clonedR)
 
 		if lw.statusCode >= 400 {
-			grpclog.Errorf("http error %+v request body %+v",
+			grpclog.Errorf("http error=%+v request body=%+v",
 				lw.statusCode, string(body))
 
 			// send log to telegram

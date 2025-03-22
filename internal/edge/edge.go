@@ -30,8 +30,8 @@ import (
 	"github.com/tickexvn/tickex/internal/funcs/watch"
 	"github.com/tickexvn/tickex/pkg/constant"
 	"github.com/tickexvn/tickex/pkg/core"
-	"github.com/tickexvn/tickex/pkg/logger"
 	"github.com/tickexvn/tickex/pkg/pbtools"
+	"github.com/tickexvn/tickex/pkg/txlog"
 )
 
 var _ core.Server = (*Edge)(nil)
@@ -109,7 +109,7 @@ func (e *Edge) functions(ctx context.Context) error {
 	middleware.Serve(e.edge, e.config)
 
 	// log info in console and return register error if they exist
-	logger.Infof(constant.InfoHTTPServer, e.config.GetApiAddr())
+	txlog.Infof(constant.InfoHTTPServer, e.config.GetApiAddr())
 	return e.registerServer(ctx)
 }
 

@@ -53,3 +53,8 @@ var (
 func Header() string {
 	return fmt.Sprintf("%s >>", FullName)
 }
+
+// ASCII prints the ASCII art of the project.
+func ASCII() {
+	fmt.Println(ASCIIArt)
+}
