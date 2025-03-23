@@ -19,7 +19,6 @@ package database
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/tickexvn/tickex/pkg/errors"
 	"github.com/tickexvn/tickex/pkg/txlog"
