@@ -21,9 +21,10 @@ import (
 	"context"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"google.golang.org/grpc"
+
 	"github.com/tickexvn/tickex/internal/edge/types"
 	"github.com/tickexvn/tickex/pkg/core"
-	"google.golang.org/grpc"
 )
 
 var _ types.IService = (*Base)(nil)

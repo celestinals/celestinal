@@ -24,7 +24,7 @@ import (
 	"github.com/hashicorp/consul/api"
 	"github.com/tickexvn/tickex/api/gen/go/common/env/config/v1"
 	"github.com/tickexvn/tickex/pkg/core"
-	"github.com/tickexvn/tickex/pkg/eventq"
+	"github.com/tickexvn/tickex/internal/utils/eventq"
 	"github.com/tickexvn/tickex/pkg/txlog"
 )
 

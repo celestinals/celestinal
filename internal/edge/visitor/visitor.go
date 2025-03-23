@@ -21,8 +21,8 @@ import (
 	"context"
 
 	"github.com/tickexvn/tickex/internal/edge/types"
+	"github.com/tickexvn/tickex/internal/utils/eventq"
 	"github.com/tickexvn/tickex/pkg/core"
-	"github.com/tickexvn/tickex/pkg/eventq"
 	"github.com/tickexvn/tickex/pkg/txlog"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"

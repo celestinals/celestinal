@@ -19,7 +19,7 @@ package core
 import (
 	"context"
 
-	"github.com/tickexvn/tickex/internal/version"
+	"github.com/tickexvn/tickex/internal/utils/version"
 	"github.com/tickexvn/tickex/pkg/txlog"
 	"go.uber.org/fx"
 )
