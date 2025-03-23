@@ -77,7 +77,9 @@ func (c *TxLogCore) Info(args ...any) {
 }
 
 // Infoln logs an info message.
-func (c *TxLogCore) Infoln(args ...any) { c.Info(args...) }
+func (c *TxLogCore) Infoln(args ...any) {
+	c.Info(args...)
+}
 
 // Infof logs an info message with a format.
 func (c *TxLogCore) Infof(format string, args ...any) {
@@ -94,7 +96,9 @@ func (c *TxLogCore) Warning(args ...any) {
 }
 
 // Warningln logs a warning message.
-func (c *TxLogCore) Warningln(args ...any) { c.Warning(args...) }
+func (c *TxLogCore) Warningln(args ...any) {
+	c.Warning(args...)
+}
 
 // Warningf logs a warning message with a format.s
 func (c *TxLogCore) Warningf(format string, args ...any) {
@@ -111,7 +115,9 @@ func (c *TxLogCore) Error(args ...any) {
 }
 
 // Errorln logs an error message.
-func (c *TxLogCore) Errorln(args ...any) { c.Error(args...) }
+func (c *TxLogCore) Errorln(args ...any) {
+	c.Error(args...)
+}
 
 // Errorf logs an error message with a format.
 func (c *TxLogCore) Errorf(format string, args ...any) {

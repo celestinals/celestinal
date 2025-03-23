@@ -29,13 +29,53 @@ import (
 )
 
 var once sync.Once
-var logcore *internal.TxLogCore
 
-// New creates a new txlog.Core instance.
-func New() *internal.TxLogCore {
+var logcore = NewTxLog()
+
+var _ TxLog = (*internal.TxLogCore)(nil)
+
+// TxLog define default logger for txlog
+type TxLog interface {
+	Info(args ...any)
+	Infof(template string, args ...any)
+	Infoln(args ...any)
+
+	Debug(args ...any)
+	Debugf(template string, args ...any)
+	Debugln(args ...any)
+
+	Warning(args ...any)
+	Warningf(template string, args ...any)
+	Warningln(args ...any)
+
+	Error(args ...any)
+	Errorf(template string, args ...any)
+	Errorln(args ...any)
+
+	Fatal(args ...any)
+	Fatalf(template string, args ...any)
+	Fatalln(args ...any)
+
+	V(l int) bool
+	Sync() error
+}
+
+// TxSystemLog define system logger, include grpclog wrapped
+type TxSystemLog interface{ TxLog }
+
+// NewTxLog creates a new txlog instance.
+func NewTxLog() TxLog {
+	logger := newLogger().Sugar()
+	return internal.NewTxLogCore(logger, internal.LevelDebug)
+}
+
+// NewTxSystemLog init all system log,
+// like txlog global variable, grpclog global variable
+func NewTxSystemLog() TxSystemLog {
 	once.Do(func() {
 		logger := newLogger().Sugar()
 		logcore = internal.NewTxLogCore(logger, internal.LevelDebug)
+
 		grpclog.SetLoggerV2(internal.NewTxLogCore(logger, internal.LevelWarning))
 	})
 

@@ -32,7 +32,7 @@ func runner(lc fx.Lifecycle, srv Server) {
 	version.ASCII()
 
 	// init logger
-	txlogger := txlog.New()
+	txlogger := txlog.NewTxSystemLog()
 
 	lc.Append(fx.Hook{
 		OnStart: func(_ context.Context) error {

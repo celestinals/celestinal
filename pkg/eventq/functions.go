@@ -25,7 +25,7 @@ import (
 // QueueSpace is the size of the queue
 const QueueSpace int = 2
 
-var queue = &QueueChannel[string]{Size: QueueSpace}
+var queue = New[string](QueueSpace)
 
 // Subscribe to the event queue with a namespace and a handler function
 func Subscribe(ctx context.Context, namespace string, handler func(value string) error) {
