@@ -26,7 +26,7 @@ import (
 
 // Build builds the application.
 // The application is built by providing the constructors.
-func Build(constructors ...interface{}) Application {
+func Build(constructors ...any) Application {
 	for _, constructor := range constructors {
 		coreinternal.Provide(constructor)
 	}
