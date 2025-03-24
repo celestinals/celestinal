@@ -16,6 +16,6 @@
 
 make build.tickex
 
-./_build/tickex-edge --secure\
+./build/tickex-edge --secure\
     --rule=deploy/waf-rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf \
     --rule=deploy/waf-rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf

@@ -25,7 +25,7 @@ import (
 	"github.com/tickexvn/tickex/api/gen/go/greeter/domain/v1"
 	"github.com/tickexvn/tickex/api/gen/go/greeter/shared/v1"
 	"github.com/tickexvn/tickex/pkg/errors"
-	"github.com/tickexvn/tickex/pkg/logger"
+	"github.com/tickexvn/tickex/pkg/txlog"
 )
 
 // IGreeter defines the interface for the Greeter biz module.
@@ -43,7 +43,7 @@ func (g *Greeter) SayHello(
 	_ context.Context, msg *domain.SayHelloRequest) (*domain.SayHelloResponse, error) {
 
 	msgs, _ := json.Marshal(msg)
-	logger.Debug("Received a SayHello request" + string(msgs))
+	txlog.Debug("Received a SayHello request" + string(msgs))
 
 	name := msg.GetName()
 	t := time.Now().String()

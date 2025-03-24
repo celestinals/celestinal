@@ -21,31 +21,30 @@ import (
 	"context"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"google.golang.org/grpc"
+
 	greeterpb "github.com/tickexvn/tickex/api/gen/go/greeter/v1"
-	"github.com/tickexvn/tickex/internal/edge/services"
-	"github.com/tickexvn/tickex/internal/edge/types"
+	"github.com/tickexvn/tickex/internal/edge/services/base"
+	"github.com/tickexvn/tickex/internal/utils/visitor"
 	"github.com/tickexvn/tickex/pkg/core"
 	"github.com/tickexvn/tickex/pkg/namespace"
-	"google.golang.org/grpc"
 )
 
-var _ types.IService = (*greeter)(nil)
+var _ base.IService = (*greeter)(nil)
 
 // NewGreeter creates a new greeter service to register handler to gateway
-func NewGreeter() types.IService {
+func NewGreeter() base.IService {
 	return greeter{}
 }
 
 // greeter represents the greeter service
 type greeter struct {
-	services.Base
+	base.Base
 }
 
 // Accept accepts the greeter service
-func (g greeter) Accept(
-	ctx context.Context, edge core.Edge, v types.IVisitor) error {
-
-	return v.VisitService(ctx, namespace.GreeterV1, edge, g)
+func (g greeter) Accept(ctx context.Context, edge core.Edge) error {
+	return visitor.VisitService(ctx, namespace.GreeterV1, edge, g)
 }
 
 // Register registers the greeter service

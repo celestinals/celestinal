@@ -64,3 +64,8 @@ var (
 	// ErrInvalidData is an invalid data error
 	ErrInvalidData = status.Error(codes.InvalidArgument, invalidData)
 )
+
+// F wrapped error with format template
+func F(template string, args ...any) error {
+	return fmt.Errorf(template, args...)
+}

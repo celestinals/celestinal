@@ -24,8 +24,8 @@ import (
 	"github.com/tickexvn/tickex/api/gen/go/common/env/config/v1"
 	"github.com/tickexvn/tickex/api/gen/go/greeter/v1"
 	"github.com/tickexvn/tickex/pkg/discovery"
-	"github.com/tickexvn/tickex/pkg/logger"
 	"github.com/tickexvn/tickex/pkg/namespace"
+	"github.com/tickexvn/tickex/pkg/txlog"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -36,7 +36,7 @@ func NewGreeterClient(
 
 	endpoint, err := discovery.Visit(ctx, conf, namespace.GreeterV1)
 	if err != nil {
-		logger.Errorf("failed to connect greeter service: %v", err)
+		txlog.Errorf("failed to connect greeter service: %v", err)
 		return nil, fmt.Errorf("discovery.Visit : %v", err)
 	}
 
@@ -46,7 +46,7 @@ func NewGreeterClient(
 
 	conn, err := grpc.NewClient(endpoint, opts...)
 	if err != nil {
-		logger.Errorf("failed to create greeter client connection: %v", err)
+		txlog.Errorf("failed to create greeter client connection: %v", err)
 		return nil, fmt.Errorf("grpc.NewClient : %v", err)
 	}
 

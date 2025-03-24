@@ -24,7 +24,7 @@ import (
 
 	"github.com/spf13/pflag"
 	"github.com/tickexvn/tickex/api/gen/go/common/flags/v1"
-	"github.com/tickexvn/tickex/internal/version"
+	"github.com/tickexvn/tickex/internal/utils/version"
 )
 
 var once sync.Once

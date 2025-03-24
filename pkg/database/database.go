@@ -19,9 +19,9 @@ package database
 
 import (
 	"context"
-	"fmt"
 
-	"github.com/tickexvn/tickex/pkg/logger"
+	"github.com/tickexvn/tickex/pkg/errors"
+	"github.com/tickexvn/tickex/pkg/txlog"
 )
 
 // Repository provides the interface for the database.
@@ -35,13 +35,8 @@ type Repository[T any, ID comparable] interface {
 	Count(ctx context.Context) (int64, error)
 }
 
-// Entity is the interface that wraps the basic GetID method.
-type Entity[ID comparable] interface {
-	GetID() ID
-}
-
 // New create multi-layer database instance
-func New[T Entity[ID], ID comparable](
+func New[T any, ID comparable](
 	searchLayer Repository[T, ID], storageLayer Repository[T, ID]) Repository[T, ID] {
 
 	return &Database[T, ID]{
@@ -51,38 +46,38 @@ func New[T Entity[ID], ID comparable](
 }
 
 // Database database multilayer with postgre & elasticsearch
-type Database[T Entity[ID], ID comparable] struct {
+type Database[T any, ID comparable] struct {
 	search  Repository[T, ID]
 	storage Repository[T, ID]
 }
 
 // Create inserts a new entity into both storage (PostgreSQL) and
 // search (Elasticsearch). If Elasticsearch fails after PostgreSQL succeeds,
-// it rolls back by deleting the entity from PostgreSQL.
 func (db *Database[T, ID]) Create(ctx context.Context, entity T) (T, error) {
 	var empty T
 	if db.storage == nil {
-		return empty, fmt.Errorf("storage layer is nil")
+		txlog.Debug("[database.Create] storage layer is nil")
+		return empty, errors.F("database.Create err: storage is nil")
 	}
 
-	// Insert into PostgreSQL first
+	// insert into PostgreSQL first
 	createdEntity, err := db.storage.Create(ctx, entity)
 	if err != nil {
-		return empty, err
+		txlog.Debugf("[database.Create] storage err: %v", err)
+		return empty, errors.F("database.Create err: %v", err)
 	}
 
+	// if search layer is nil, return created entity
 	if db.search == nil {
-		logger.Infof("search layer is nil, pass")
+		txlog.Infof("[database.Create] search => pass")
 		return createdEntity, nil
 	}
 
-	// Insert into Elasticsearch
-	_, esErr := db.search.Create(ctx, entity)
-	if esErr != nil {
-		// Rollback: delete from PostgreSQL if Elasticsearch insertion fails
-		_ = db.storage.Delete(ctx, getEntityID(entity))
-		return empty,
-			fmt.Errorf("failed to insert into first layer, rollback storage: %v", esErr)
+	// insert into Elasticsearch
+	// ignore error if exist
+	_, err = db.search.Create(ctx, entity)
+	if err != nil {
+		txlog.Warnf("[database.Create] search err: %v", err)
 	}
 
 	return createdEntity, nil
@@ -90,70 +85,61 @@ func (db *Database[T, ID]) Create(ctx context.Context, entity T) (T, error) {
 
 // Update modifies an existing entity in both storage (PostgreSQL) and
 // search (Elasticsearch).If Elasticsearch fails after PostgreSQL succeeds,
-// it rolls back by restoring the old value in PostgreSQL.
 func (db *Database[T, ID]) Update(ctx context.Context, id ID, entity T) (T, error) {
 	var empty T
 	if db.storage == nil {
-		return empty, fmt.Errorf("storage layer is nil")
+		txlog.Debug("[database.Update] storage layer is nil")
+		return empty, errors.F("database.Update err: storage is nil")
 	}
 
-	// Get current entity from storage for rollback purposes
-	oldEntity, err := db.storage.Get(ctx, id)
-	if err != nil {
-		return empty, fmt.Errorf("failed to retrieve old entity before update: %v", err)
-	}
-
-	// Update in PostgreSQL
+	// update in PostgreSQL
 	updatedEntity, err := db.storage.Update(ctx, id, entity)
 	if err != nil {
-		return empty, err
+		txlog.Debugf("[database.Update] storage err: %v", err)
+		return empty, errors.F("database.Update storage err: %v", err)
 	}
 
+	// if search layer is nill, return updated entity
 	if db.search == nil {
-		logger.Info("search layer is nil, pass")
+		txlog.Info("[database.Update] search => pass")
 		return updatedEntity, nil
 	}
 
-	// Update in Elasticsearch
-	_, esErr := db.search.Update(ctx, id, entity)
-	if esErr != nil {
-		// Rollback: Restore old entity in PostgreSQL if Elasticsearch update fails
-		_, _ = db.storage.Update(ctx, id, oldEntity)
-		return empty,
-			fmt.Errorf("failed to update in first layer, rollback storage: %v", esErr)
+	// update in Elasticsearch if they are exist
+	if existed, err := db.search.Exists(ctx, id); err == nil && existed {
+		_, err = db.search.Update(ctx, id, updatedEntity)
+		if err != nil {
+			txlog.Warnf("[database.Update] search err: %v", err)
+		}
 	}
 
 	return updatedEntity, nil
 }
 
-// Delete removes an entity from both storage (PostgreSQL) and search (Elasticsearch).
-// If Elasticsearch fails after PostgreSQL succeeds, it rolls back by restoring the deleted entity.
+// Delete removes an entity from both storage (PostgreSQL) and search
+// (Elasticsearch). If Elasticsearch fails after PostgreSQL succeeds,
 func (db *Database[T, ID]) Delete(ctx context.Context, id ID) error {
 	if db.storage == nil {
-		return fmt.Errorf("storage layer is nil")
-	}
-
-	// Get the entity before deletion for rollback
-	oldEntity, err := db.storage.Get(ctx, id)
-	if err != nil {
-		return fmt.Errorf("failed to retrieve entity before deletion: %v", err)
-	}
-
-	// Delete from PostgreSQL
-	if err := db.storage.Delete(ctx, id); err != nil {
-		return err
+		txlog.Debug("[database.Delete] err: storage is nil")
+		return errors.F("database.Delete err: storage is nil")
 	}
 
 	if db.search == nil {
-		logger.Info("search layer is nil, pass")
-		return nil
+		txlog.Info("[database.Delete] search => pass")
 	}
 
-	// Delete from Elasticsearch
-	if esErr := db.search.Delete(ctx, id); esErr != nil {
-		// Rollback: Restore deleted entity in PostgreSQL if Elasticsearch deletion fails
-		_, _ = db.storage.Create(ctx, oldEntity)
-		return fmt.Errorf("failed to delete from first layer, rollback storage: %v", esErr)
+	if db.search != nil {
+		// delete from Elasticsearch, if error, return error
+		if esErr := db.search.Delete(ctx, id); esErr != nil {
+			txlog.Debugf("[database.Delete][search] err: %v", esErr)
+			return errors.F("database.Delete search err: %v", esErr)
+		}
+	}
+
+	// after delete from search, delete from storage
+	if err := db.storage.Delete(ctx, id); err != nil {
+		txlog.Debugf("[database.Delete][storage] err: %v", err)
+		return errors.F("database.Delete storage err: %v", err)
 	}
 
 	return nil
@@ -162,63 +148,118 @@ func (db *Database[T, ID]) Delete(ctx context.Context, id ID) error {
 // Get retrieves an entity by ID from the search layer (Elasticsearch).
 func (db *Database[T, ID]) Get(ctx context.Context, id ID) (T, error) {
 	var empty T
-	if db.search == nil {
-		logger.Info("search layer is nil, pass")
-		if db.storage == nil {
-			return empty, fmt.Errorf("storage layer is nil")
-		}
 
-		return db.storage.Get(ctx, id)
+	// if storage layer is nil, return error
+	if db.storage == nil {
+		txlog.Debug("[database.Get] storage layer is nil")
+		return empty, errors.F("database.Get err: storage is nil")
 	}
 
-	return db.search.Get(ctx, id)
+	if db.search == nil {
+		txlog.Info("[database.Get] search => pass")
+	}
+
+	if db.search != nil {
+		result, err := db.search.Get(ctx, id)
+		if err == nil {
+			return result, nil
+		}
+
+		txlog.Warnf("[database.Get][search] err: ", err)
+	}
+
+	data, err := db.storage.Get(ctx, id)
+	if err != nil {
+		txlog.Debugf("[database.Get][storage] err: %v", err)
+		return empty, errors.F("database.Get storage err: %v", err)
+	}
+
+	return data, nil
 }
 
 // GetAll retrieves all entities from the search layer (Elasticsearch).
 func (db *Database[T, ID]) GetAll(ctx context.Context) ([]T, error) {
-	if db.search == nil {
-		logger.Info("search layer is nil, pass")
-		if db.storage == nil {
-			return nil, fmt.Errorf("storage layer is nil")
-		}
-
-		return db.storage.GetAll(ctx)
+	if db.storage == nil {
+		txlog.Debug("[database.GetAll] err: storage is nil")
+		return nil, errors.F("database.GetAll err: storage is nil")
 	}
 
-	return db.search.GetAll(ctx)
+	if db.search == nil {
+		txlog.Info("[database.GetAll] search => pass")
+	}
+
+	if db.search != nil {
+		ts, err := db.search.GetAll(ctx)
+		if err == nil {
+			return ts, nil
+		}
+
+		txlog.Warnf("[database.GetAll][search] err: %v", err)
+	}
+
+	resp, err := db.storage.GetAll(ctx)
+	if err != nil {
+		txlog.Debugf("[database.GetAll][search] err: %v", err)
+		return nil, errors.F("database.GetAll search err: %v", err)
+	}
+
+	return resp, nil
 }
 
 // Exists checks if an entity exists in the search layer (Elasticsearch).
 func (db *Database[T, ID]) Exists(ctx context.Context, id ID) (bool, error) {
-	if db.search == nil {
-		logger.Info("search layer is nil, pass")
-		if db.storage == nil {
-			return false, fmt.Errorf("storage layer is nil")
-		}
-
-		return db.storage.Exists(ctx, id)
+	if db.storage == nil {
+		txlog.Debug("[database.Exists] storage layer is nil")
+		return false, errors.F("database.Exists storage layer is nil")
 	}
 
-	return db.search.Exists(ctx, id)
+	if db.search == nil {
+		txlog.Info("[database.Exists] search => pass")
+	}
+
+	if db.search != nil {
+		existed, err := db.search.Exists(ctx, id)
+		if err == nil {
+			return existed, nil
+		}
+
+		txlog.Warnf("[database.Exists] search err: %v", err)
+	}
+
+	existed, err := db.storage.Exists(ctx, id)
+	if err != nil {
+		txlog.Debugf("[database.Exists] storage err: ", err)
+		return false, errors.F("database.Exists storage err: %v", err)
+	}
+
+	return existed, nil
 }
 
 // Count returns the total number of entities from the search layer (Elasticsearch).
 func (db *Database[T, ID]) Count(ctx context.Context) (int64, error) {
-	if db.search == nil {
-		logger.Info("search layer is nil, pass")
-		if db.storage == nil {
-			return -1, fmt.Errorf("storage layer is nil")
-		}
-
-		return db.storage.Count(ctx)
+	if db.storage == nil {
+		txlog.Debug("[database.Count][storage] layer is nil")
+		return -1, errors.F("database.Count storage layer is nil")
 	}
 
-	return db.search.Count(ctx)
-}
+	if db.search == nil {
+		txlog.Info("[database.Exists] search => pass")
+	}
 
-// getEntityID extracts the ID from an entity (you need to customize this function)
-func getEntityID[T Entity[ID], ID comparable](entity T) ID {
-	// This function should extract the ID field from the entity.
-	// It depends on your entity structure, you may need reflection or a defined method.
-	return entity.GetID()
+	if db.search != nil {
+		count, err := db.search.Count(ctx)
+		if err == nil {
+			return count, nil
+		}
+
+		txlog.Warnf("[database.Count][search] err: %v", err)
+	}
+
+	count, err := db.storage.Count(ctx)
+	if err != nil {
+		txlog.Debugf("[database.Count][storage] err: %v", err)
+		return -1, errors.F("database.Count storage err: %v", err)
+	}
+
+	return count, nil
 }

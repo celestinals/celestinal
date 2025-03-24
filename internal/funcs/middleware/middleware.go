@@ -25,14 +25,15 @@ import (
 	"strings"
 	"time"
 
+	"google.golang.org/grpc/grpclog"
+
 	"github.com/tickexvn/tickex/api/gen/go/common/env/config/v1"
 	robotpb "github.com/tickexvn/tickex/api/gen/go/common/robot/v1"
-	"github.com/tickexvn/tickex/internal/version"
+	"github.com/tickexvn/tickex/internal/utils/version"
 	"github.com/tickexvn/tickex/pkg/cli"
 	"github.com/tickexvn/tickex/pkg/core"
 	"github.com/tickexvn/tickex/pkg/pbtools"
 	"github.com/tickexvn/tickex/pkg/robot"
-	"google.golang.org/grpc/grpclog"
 )
 
 // New middleware handler
@@ -78,7 +79,7 @@ func (mdw *Middleware) LogRequestBody(h http.Handler) http.Handler {
 		h.ServeHTTP(lw, clonedR)
 
 		if lw.statusCode >= 400 {
-			grpclog.Errorf("http error %+v request body %+v",
+			grpclog.Errorf("http error=%+v request body=%+v",
 				lw.statusCode, string(body))
 
 			// send log to telegram

@@ -27,7 +27,7 @@ import (
 	servicepb "github.com/tickexvn/tickex/api/gen/go/common/service/v1"
 	"github.com/tickexvn/tickex/pkg/core/net"
 	"github.com/tickexvn/tickex/pkg/discovery"
-	"github.com/tickexvn/tickex/pkg/logger"
+	"github.com/tickexvn/tickex/pkg/txlog"
 	"google.golang.org/grpc"
 )
 
@@ -168,7 +168,7 @@ func (s *ServiceServer) heartbeat(id string, ttl time.Duration) {
 		_, err := s.discovery.Heartbeat(
 			context.Background(), &discoverypb.HeartbeatRequest{Id: id})
 		if err != nil {
-			logger.Errorf("consul heartbeat error: %v", err)
+			txlog.Errorf("consul heartbeat error: %v", err)
 		}
 
 		<-ticker.C

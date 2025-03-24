@@ -23,9 +23,9 @@ import (
 
 	"github.com/hashicorp/consul/api"
 	"github.com/tickexvn/tickex/api/gen/go/common/env/config/v1"
+	"github.com/tickexvn/tickex/internal/utils/eventq"
 	"github.com/tickexvn/tickex/pkg/core"
-	"github.com/tickexvn/tickex/pkg/eventq"
-	"github.com/tickexvn/tickex/pkg/logger"
+	"github.com/tickexvn/tickex/pkg/txlog"
 )
 
 const timeout = time.Second * 2
@@ -35,7 +35,7 @@ const consulNamespace = "consul"
 func Serve(_ core.Edge, config *config.Config) {
 	client, err := newConsulClient(config)
 	if err != nil {
-		logger.Errorf("failed to create consul client: %v", err)
+		txlog.Errorf("[watch] failed to create consul client: %v", err)
 		return
 	}
 
@@ -51,7 +51,7 @@ func service(client *api.Client) {
 	for {
 		services, meta, err := client.Catalog().Services(&api.QueryOptions{})
 		if err != nil {
-			logger.Fatal("service event:", err)
+			txlog.Fatal("[watch] service event:", err)
 		}
 
 		if meta.LastIndex != lastIndex {
@@ -64,14 +64,14 @@ func service(client *api.Client) {
 
 				entries, _, err := client.Health().Service(serviceName, "", true, nil)
 				if err != nil {
-					logger.Debug("healthcheck service: ", err)
+					txlog.Debug("[watch] healthcheck: ", err)
 					continue
 				}
 
 				if len(entries) != 0 {
-					logger.Infof("service found: name=%s index=%d", serviceName, lastIndex)
-					eventq.Publish(serviceName,
-						fmt.Sprintf("%s:%d", entries[0].Service.Address, entries[0].Service.Port))
+					txlog.Infof("[watch] found: name=%s index=%d", serviceName, lastIndex)
+					eventq.Publish(serviceName, fmt.Sprintf(
+						"%s:%d", entries[0].Service.Address, entries[0].Service.Port))
 				}
 			}
 		}

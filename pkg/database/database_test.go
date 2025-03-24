@@ -88,9 +88,9 @@ func TestUpdate(t *testing.T) {
 	// Assume updating Authors with ID = 123 with new information
 	updatedAuthor := internal.Authors{ID: 123}
 	// Set up expectation for
-	storageLayer.
-		On("Get", mock.Anything, int64(123)).
-		Return(internal.Authors{ID: 123}, nil)
+	// storageLayer.
+	// 	On("Get", mock.Anything, int64(123)).
+	// 	Return(internal.Authors{ID: 123}, nil)
 	storageLayer.
 		On("Update", mock.Anything, int64(123), updatedAuthor).
 		Return(updatedAuthor, nil)
@@ -109,9 +109,9 @@ func TestUpdate(t *testing.T) {
 func TestDelete(t *testing.T) {
 	storageLayer := mocks.NewIAuthors(t)
 	// Set up expectation for Delete
-	storageLayer.
-		On("Get", mock.Anything, int64(123)).
-		Return(internal.Authors{ID: 123}, nil)
+	// storageLayer.
+	// 	On("Get", mock.Anything, int64(123)).
+	// 	Return(internal.Authors{ID: 123}, nil)
 	storageLayer.
 		On("Delete", mock.Anything, int64(123)).
 		Return(nil)

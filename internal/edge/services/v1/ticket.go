@@ -24,29 +24,27 @@ import (
 	"google.golang.org/grpc"
 
 	ticketpb "github.com/tickexvn/tickex/api/gen/go/ticket/v1"
-	"github.com/tickexvn/tickex/internal/edge/services"
-	"github.com/tickexvn/tickex/internal/edge/types"
+	"github.com/tickexvn/tickex/internal/edge/services/base"
+	"github.com/tickexvn/tickex/internal/utils/visitor"
 	"github.com/tickexvn/tickex/pkg/core"
 	"github.com/tickexvn/tickex/pkg/namespace"
 )
 
-var _ types.IService = (*ticket)(nil)
+var _ base.IService = (*ticket)(nil)
 
 // NewTicket creates a new ticket service to register handler to gateway
-func NewTicket() types.IService {
+func NewTicket() base.IService {
 	return ticket{}
 }
 
 // ticket represents the ticket service
 type ticket struct {
-	services.Base
+	base.Base
 }
 
 // Accept accepts the ticket service
-func (t ticket) Accept(
-	ctx context.Context, edge core.Edge, v types.IVisitor) error {
-
-	return v.VisitService(ctx, namespace.TicketV1, edge, t)
+func (t ticket) Accept(ctx context.Context, edge core.Edge) error {
+	return visitor.VisitService(ctx, namespace.TicketV1, edge, t)
 }
 
 // Register registers the ticket service

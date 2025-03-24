@@ -19,8 +19,8 @@ package constant
 
 const (
 	// InfoGrpcServer gRPC server listening on [PORT]
-	InfoGrpcServer = "[gRPC] listen on %s"
+	InfoGrpcServer = "[gRPC] Listen on %s"
 
 	// InfoHTTPServer HTTP server listening on [PORT]
-	InfoHTTPServer = "[HTTP] listen on %s"
+	InfoHTTPServer = "[HTTP] Listen on %s"
 )

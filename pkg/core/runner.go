@@ -18,22 +18,28 @@ package core
 
 import (
 	"context"
-	"fmt"
 
-	"github.com/tickexvn/tickex/internal/version"
+	"github.com/tickexvn/tickex/internal/utils/version"
+	"github.com/tickexvn/tickex/pkg/txlog"
 	"go.uber.org/fx"
 )
 
 // runner functions called by fx.Invoke.
 // when the application starts, it will start the server
 func runner(lc fx.Lifecycle, srv Server) {
-	fmt.Println(version.ASCIIArt)
+
+	// log ASCII art
+	version.ASCII()
+
+	// init logger
+	txlogger := txlog.NewTxSystemLog()
+
 	lc.Append(fx.Hook{
 		OnStart: func(_ context.Context) error {
 			return srv.ListenAndServe()
 		},
 		OnStop: func(_ context.Context) error {
-			return nil
+			return txlogger.Sync()
 		},
 	})
 }

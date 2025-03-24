@@ -36,6 +36,3 @@ type IAuthors interface {
 type Authors struct {
 	ID int64
 }
-
-// GetID return id of obj
-func (a Authors) GetID() int64 { return a.ID }

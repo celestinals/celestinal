@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-// Package logger provides the logger for the service.
-package logger
+// Package txlog provides the logger for the service.
+package txlog
 
 import (
 	"testing"
-
-	"github.com/tickexvn/tickex/internal/version"
 )
 
 func TestInfo(_ *testing.T) {
@@ -48,30 +46,4 @@ func TestFatal(_ *testing.T) {
 	// To test Fatal, you might need to mock os.Exit or run it in a separate process.
 	// Here, we just demonstrate the call.
 	// Fatal("This is a fatal message")
-}
-
-func TestRemoveNil(t *testing.T) {
-	input := []interface{}{nil, "test", nil, 123}
-	expected := []interface{}{"test", 123}
-	result := removeNil(input)
-
-	if len(result) != len(expected) {
-		t.Errorf("Expected length %d, got %d", len(expected), len(result))
-	}
-
-	for i, v := range result {
-		if v != expected[i] {
-			t.Errorf("Expected %v, got %v", expected[i], v)
-		}
-	}
-}
-
-func TestAppendHeader(t *testing.T) {
-	message := "test message"
-	expected := version.Header() + " " + message
-	result := appendHeader(message)
-
-	if result != expected {
-		t.Errorf("Expected %s, got %s", expected, result)
-	}
 }
