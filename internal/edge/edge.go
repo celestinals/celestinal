@@ -21,9 +21,8 @@ import (
 	"context"
 
 	configpb "github.com/tickexvn/tickex/api/gen/go/common/env/config/v1"
+	servicebase "github.com/tickexvn/tickex/internal/edge/services/base"
 	"github.com/tickexvn/tickex/internal/edge/services/v1"
-	"github.com/tickexvn/tickex/internal/edge/types"
-	"github.com/tickexvn/tickex/internal/edge/visitor"
 	"github.com/tickexvn/tickex/internal/funcs/middleware"
 	"github.com/tickexvn/tickex/internal/funcs/openapi"
 	"github.com/tickexvn/tickex/internal/funcs/secure"
@@ -39,9 +38,8 @@ var _ core.Server = (*Edge)(nil)
 // New creates a new gateway app
 func New(conf *configpb.Config) core.Server {
 	return &Edge{
-		edge:    core.NewEdge(),
-		visitor: visitor.New(),
-		config:  conf,
+		edge:   core.NewEdge(),
+		config: conf,
 	}
 }
 
@@ -61,10 +59,6 @@ type Edge struct {
 	// edge is the core edge server, manage http.ServeMux,
 	// runtime.ServeMux and HTTP server
 	edge core.Edge
-
-	// visitor is the visitor to visit all services by visitor pattern
-	// and register them to the edge server
-	visitor types.IVisitor
 }
 
 // registerServer gRPC server endpoint.
@@ -73,7 +67,7 @@ func (e *Edge) registerServer(ctx context.Context) error {
 	// Create folder at services, inherit base package, override function,
 	// implement business logic
 	// See: services/v1/greeter
-	serviceList := []types.IService{
+	serviceList := []servicebase.IService{
 		// Example: register the greeter service to the gateway
 		services.NewGreeter(),
 		// add more service here ...
@@ -84,9 +78,9 @@ func (e *Edge) registerServer(ctx context.Context) error {
 }
 
 // visit all service by Accept function
-func (e *Edge) visit(ctx context.Context, services ...types.IService) error {
+func (e *Edge) visit(ctx context.Context, services ...servicebase.IService) error {
 	for _, service := range services {
-		if err := service.Accept(ctx, e.edge, e.visitor); err != nil {
+		if err := service.Accept(ctx, e.edge); err != nil {
 			return err
 		}
 	}

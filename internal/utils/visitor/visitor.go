@@ -20,7 +20,7 @@ package visitor
 import (
 	"context"
 
-	"github.com/tickexvn/tickex/internal/edge/types"
+	"github.com/tickexvn/tickex/internal/edge/services/base"
 	"github.com/tickexvn/tickex/internal/utils/eventq"
 	"github.com/tickexvn/tickex/pkg/core"
 	"github.com/tickexvn/tickex/pkg/txlog"
@@ -28,27 +28,16 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-// New returns a new visitor.
-func New() types.IVisitor {
-	return &Visitor{}
-}
-
-// implement types.IVisitor interfaces bellows
-var _ types.IVisitor = (*Visitor)(nil)
-
-// Visitor represents the visitor interface.
-type Visitor struct{}
-
 // VisitService visits the greeter service.
-func (v Visitor) VisitService(ctx context.Context,
-	namespace string, edge core.Edge, service types.IService) error {
+func VisitService(ctx context.Context, namespace string, edge core.Edge,
+	service base.IService) error {
 
 	eventq.Subscribe(ctx, namespace, func(endpoint string) error {
 		opts := []grpc.DialOption{
 			grpc.WithTransportCredentials(insecure.NewCredentials()),
 		}
 
-		txlog.Infof("visiting %s %s", namespace, "******")
+		txlog.Infof("[visitor.VisitService] %s %s", namespace, "******")
 		return core.RegisterService(ctx, edge, service, endpoint, opts)
 	})
 

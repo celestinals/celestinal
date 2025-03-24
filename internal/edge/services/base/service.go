@@ -14,22 +14,36 @@
  * limitations under the License.
  */
 
-// Package types provides the types for the gateway.
-package types
+// Package base provides the base service.
+package base
 
 import (
 	"context"
 
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"google.golang.org/grpc"
+
 	"github.com/tickexvn/tickex/pkg/core"
 )
+
+var _ IService = (*Base)(nil)
 
 // IService represents the service gRPC interface.
 type IService interface {
 	core.GRPCService
-	Accept(context.Context, core.Edge, IVisitor) error
+	Accept(context.Context, core.Edge) error
 }
 
-// IVisitor represents the visitor interface.
-type IVisitor interface {
-	VisitService(ctx context.Context, namespace string, edge core.Edge, service IService) error
+// Base represents the base service
+type Base struct{}
+
+// Register registers the base service
+func (b Base) Register(_ context.Context, _ *runtime.ServeMux, _ string,
+	_ []grpc.DialOption) error {
+	panic("unimplemented")
+}
+
+// Accept accepts the base service
+func (b Base) Accept(_ context.Context, _ core.Edge) error {
+	panic("unimplemented")
 }
