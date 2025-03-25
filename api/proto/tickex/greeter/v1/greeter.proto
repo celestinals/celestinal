@@ -16,8 +16,8 @@ syntax = "proto3";
 
 package tickex.greeter.v1;
 
-import "tickex/common/meta/v1/meta.proto";
-import "tickex/greeter/shared/v1/greeter_shared.proto";
+import "tickex/stdx/v1/meta.proto";
+import "tickex/greeter/shared/v1/greeter.proto";
 
 import "protoc-gen-openapiv2/options/annotations.proto";
 import "buf/validate/validate.proto";
@@ -66,7 +66,7 @@ service GreeterService {
 }
 
 message SayHelloRequest {
-  tickex.common.meta.v1.Pages page = 1;
+  tickex.stdx.v1.Pages page = 1;
   string name = 2 [(buf.validate.field).string.min_len = 1];
 }
 

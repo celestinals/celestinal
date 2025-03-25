@@ -16,7 +16,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             v3.21.12
-// source: authzcentre.proto
+// source: tickex/authzcentre/v1/authzcentre.proto
 
 package authzcentre
 
@@ -169,5 +169,5 @@ var AuthzCentreService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "authzcentre.proto",
+	Metadata: "tickex/authzcentre/v1/authzcentre.proto",
 }

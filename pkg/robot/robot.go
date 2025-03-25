@@ -21,8 +21,7 @@ import (
 	"fmt"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
-	"github.com/tickexvn/tickex/api/gen/go/common/env/config/v1"
-	"github.com/tickexvn/tickex/api/gen/go/common/robot/v1"
+	"github.com/tickexvn/tickex/api/gen/go/stdx/v1"
 	"github.com/tickexvn/tickex/pkg/cli"
 	"github.com/tickexvn/tickex/pkg/pbtools"
 )
@@ -30,7 +29,7 @@ import (
 var _ IRobot = (*Robot)(nil)
 
 // New Telegram bot
-func New(conf *config.Config) (IRobot, error) {
+func New(conf *stdx.Config) (IRobot, error) {
 	bot, err := tgbotapi.NewBotAPI(conf.GetBotToken())
 	if err != nil {
 		return &Robot{}, err
@@ -44,17 +43,17 @@ func New(conf *config.Config) (IRobot, error) {
 
 // IRobot telegram bot interface
 type IRobot interface {
-	Send(msg *robot.Message) error
+	Send(msg *stdx.RobotMessage) error
 }
 
 // Robot Telegram bot
 type Robot struct {
 	bot  *tgbotapi.BotAPI
-	conf *config.Config
+	conf *stdx.Config
 }
 
 // Send message to group telegram
-func (r *Robot) Send(msg *robot.Message) error {
+func (r *Robot) Send(msg *stdx.RobotMessage) error {
 	flag := cli.ParseEdge()
 	if !flag.IsTurnOnBots {
 		return nil

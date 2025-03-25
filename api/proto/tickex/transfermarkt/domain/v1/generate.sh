@@ -28,16 +28,15 @@ if [[ "$CURRENT_DIR" != *"$GOPATH_DIR"* ]]; then
 fi
 
 TKXPATH=$GOPATH/src/github.com/tickexvn/tickex
-TKXPROTOPATH=*.proto
 TKXOUT=$GOPATH/src
 
-protoc -I. \
-  --proto_path=$TKXPATH \
-  -I$TKXPATH/api/proto \
-  -I$TKXPATH/_submodules/googleapis \
-  -I$TKXPATH/_submodules/grpc-gateway \
-  -I$TKXPATH/_submodules/protovalidate/proto/protovalidate \
-  --go_out=$TKXOUT \
-  --go-grpc_out=$TKXOUT \
+protoc \
+  -I"$TKXPATH"/api/proto \
+  -I"$TKXPATH"/_submodules/googleapis \
+  -I"$TKXPATH"/_submodules/grpc-gateway \
+  -I"$TKXPATH"/_submodules/protovalidate/proto/protovalidate \
+  --grpc-gateway_out="$TKXOUT" \
+  --go_out="$TKXOUT" \
+  --go-grpc_out="$TKXOUT" \
   --validate_out="lang=go,paths=:$TKXOUT" \
-  $TKXPROTOPATH
+  "$(pwd)"/*.proto

@@ -22,7 +22,7 @@ import (
 	"time"
 
 	"github.com/hashicorp/consul/api"
-	"github.com/tickexvn/tickex/api/gen/go/common/env/config/v1"
+	"github.com/tickexvn/tickex/api/gen/go/stdx/v1"
 	"github.com/tickexvn/tickex/internal/utils/eventq"
 	"github.com/tickexvn/tickex/pkg/core"
 	"github.com/tickexvn/tickex/pkg/txlog"
@@ -32,7 +32,7 @@ const timeout = time.Second * 2
 const consulNamespace = "consul"
 
 // Serve is watching function consul when service info was changed
-func Serve(_ core.Edge, config *config.Config) {
+func Serve(_ core.Edge, config *stdx.Config) {
 	client, err := newConsulClient(config)
 	if err != nil {
 		txlog.Errorf("[watch] failed to create consul client: %v", err)
@@ -80,7 +80,7 @@ func service(client *api.Client) {
 	}
 }
 
-func newConsulClient(config *config.Config) (*api.Client, error) {
+func newConsulClient(config *stdx.Config) (*api.Client, error) {
 	conf := api.DefaultConfig()
 	conf.Address = config.GetServiceRegistryAddr()
 	return api.NewClient(conf)

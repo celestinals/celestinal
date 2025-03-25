@@ -16,7 +16,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             v3.21.12
-// source: transfermarkt.proto
+// source: tickex/transfermarkt/v1/transfermarkt.proto
 
 package transfermarkt
 
@@ -169,5 +169,5 @@ var TransfermarktService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "transfermarkt.proto",
+	Metadata: "tickex/transfermarkt/v1/transfermarkt.proto",
 }
