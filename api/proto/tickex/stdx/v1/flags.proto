@@ -20,9 +20,10 @@ import "buf/validate/validate.proto";
 
 option go_package = "github.com/tickexvn/tickex/api/gen/go/stdx/v1;stdx";
 
-message FlagService {
+message Flag {
   string name = 1;
   string address = 2 [(buf.validate.field).string.pattern = "^[a-zA-Z0-9.-]+:[0-9]{1,5}$"];
+  string mode = 3 [(buf.validate.field).string.pattern = "^(dev|prod|sandbox)$"];
 }
 
 message FlagEdge {

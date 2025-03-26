@@ -47,6 +47,7 @@ type GRPCService interface {
 type IServiceServer interface {
 	AsServer() *grpc.Server
 	Serve(info *ServiceInfo) error
+	Shutdown(ctx context.Context) error
 }
 
 // service is register Properties
@@ -77,6 +78,12 @@ type ServiceInfo struct {
 type ServiceServer struct {
 	server    *grpc.Server
 	discovery stdx.DiscoveryServiceServer
+}
+
+// Shutdown implements IServiceServer.
+func (s *ServiceServer) Shutdown(_ context.Context) error {
+	s.server.GracefulStop()
+	return nil
 }
 
 // AsServer returns the underlying gRPC server.

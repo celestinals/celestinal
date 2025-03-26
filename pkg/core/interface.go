@@ -30,5 +30,6 @@ type Application interface {
 
 // Server represents the HTTP/gRPC server interface.
 type Server interface {
-	ListenAndServe() error
+	ListenAndServe(ctx context.Context) error
+	Shutdown(ctx context.Context) error
 }

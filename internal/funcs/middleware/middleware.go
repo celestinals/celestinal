@@ -129,7 +129,7 @@ func (mdw *Middleware) notify(statusCode int, body string) {
 	monitor, _ := robot.New(mdw.conf)
 
 	footer := fmt.Sprintf("%s<%s<<%s<<<%s<<<<<<<<<<<<<<<<<<\nGITHUB<COM<<TICKEXVN<<<TICKEX<<<<<<<<<<<<<<<\n",
-		"I", version.FullName, version.Version, version.GoVersion)
+		"I", version.Name, version.Version, version.GoVersion)
 	_ = monitor.Send(&stdx.RobotMessage{
 		Metadata: &stdx.RobotMessageMetadata{
 			CreatedAt: pbtools.ToTime(time.Now().Local()),

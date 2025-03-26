@@ -17,6 +17,7 @@
 package core
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
@@ -27,6 +28,7 @@ import (
 // default port is 9000
 type Edge interface {
 	Listen(address string) error
+	Shutdown(ctx context.Context) error
 	AsRuntimeMux() *runtime.ServeMux
 	AsMux() *http.ServeMux
 	Use(handler func(http.Handler) http.Handler)
@@ -50,6 +52,9 @@ type edge struct {
 
 	// middlewares for the http server
 	middlewares []func(http.Handler) http.Handler
+
+	// http server
+	server *http.Server
 }
 
 // handler wraps the http handler with the middlewares. middlewares
@@ -80,12 +85,12 @@ func (e *edge) Listen(address string) error {
 
 	// create http server with address and http.Handler
 	// httpMux was wrapped with the middlewares
-	server := &http.Server{
+	e.server = &http.Server{
 		Addr:    address,
 		Handler: e.handler(e.httpMux),
 	}
 
-	return server.ListenAndServe()
+	return e.server.ListenAndServe()
 }
 
 // AsRuntimeMux returns the underlying runtime mux.
@@ -96,4 +101,9 @@ func (e *edge) AsRuntimeMux() *runtime.ServeMux {
 // AsMux returns the underlying http mux
 func (e *edge) AsMux() *http.ServeMux {
 	return e.httpMux
+}
+
+// Shutdown implements Edge.
+func (e *edge) Shutdown(ctx context.Context) error {
+	return e.server.Shutdown(ctx)
 }

@@ -37,32 +37,39 @@ func (c *container) Start(ctx context.Context) error {
 	sig := make(chan os.Signal, 1)
 	signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM)
 
-	defer close(err)
-	defer close(sig)
+	// defer close(err)
+	// defer close(sig)
 
 	// fork the goroutine 1 for start the app
-	go c.start(ctx, err)
+	go c.onStart(ctx, err)
 
 	// fork the goroutine 2 for stop the app
-	go c.stop(ctx, sig, err)
+	go c.onStop(ctx, sig, err)
 
 	// wait for the error from the goroutine 1 or 2, end the app
 	return <-err
 }
 
-// start the app with the given context.
-func (c *container) start(ctx context.Context, err chan<- error) {
+// onStart the app with the given context.
+func (c *container) onStart(ctx context.Context, errChan chan<- error) {
 	// if the error is not nil, return the error to err channel end goroutine 1
-	err <- c.engine.Start(ctx)
+	if err := c.engine.Start(ctx); err != nil {
+		errChan <- err
+	}
 }
 
-// stop the app with the given context.
-func (c *container) stop(
-	ctx context.Context, sig <-chan os.Signal, err chan<- error) {
+// onStop the app with the given context.
+func (c *container) onStop(
+	ctx context.Context, sigChan <-chan os.Signal, errChan chan<- error) {
 
 	// wait for the signal interrupt from the OS
-	<-sig
+	<-sigChan
 
 	// if the error is not nil, return the error to err channel, end goroutine 2
-	err <- c.engine.Stop(ctx)
+	if err := c.engine.Stop(ctx); err != nil {
+		errChan <- err
+	}
+
+	// if stop the app successfully, return nil to err channel, end goroutine 2
+	errChan <- nil
 }

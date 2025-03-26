@@ -49,7 +49,7 @@ import (
 //	make run.tickex // start tickex edge
 //	make run.x.<service> // start service
 func main() {
-	cli.ServiceFlags.Name = namespace.Edge
+	cli.Flags.Name = namespace.Edge
 	_ = cli.ParseEdge()
 
 	app := core.Build(edge.New, configs.Default)

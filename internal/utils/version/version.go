@@ -22,37 +22,39 @@ import (
 	"runtime"
 )
 
+const asciiArt = `
+ _______     __          
+/_  __(_)___/ /_______ __	%s
+ / / / / __/  '_/ -_) \ /	------------
+/_/ /_/\__/_/\_\\__/_\_\	%s
+`
+
 var (
+
 	// Package is filled at linking time
 	Package = "github.com/tickexvn/tickex"
 
 	// Version holds the complete version number. Filled in at linking time.
-	Version = "0.0.1"
+	Version = "v0.0.1-beta"
 
 	// GoVersion is Go tree's version.
 	GoVersion = runtime.Version()
 
-	// FullName is the full name of the project.
-	FullName = "TICKEX"
+	// Name is the full name of the project.
+	Name = "TICKEX"
+
+	// BrandName is the brand name of the project.s
+	BrandName = "TICKEX // TX"
 
 	// Code is the code of the project.
-	Code = "TKX"
+	Code = "TX"
 
 	// ASCIIArt using in console
-	asciiArt = `
- _______     __          
-/_  __(_)___/ /_______ __	
- / / / / __/  '_/ -_) \ /	%s
-/_/ /_/\__/_/\_\\__/_\_\	v%s - %s
-	`
-	// ASCIIArt using in console
-	ASCIIArt = fmt.Sprintf(asciiArt, Package, Version, GoVersion)
+	ASCIIArt = fmt.Sprintf(asciiArt,
+		BrandName,
+		Version,
+	)
 )
-
-// Header returns the header info string.
-func Header() string {
-	return fmt.Sprintf("%s >>", FullName)
-}
 
 // ASCII prints the ASCII art of the project.
 func ASCII() {

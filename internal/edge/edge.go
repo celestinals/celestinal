@@ -102,25 +102,27 @@ func (e *Edge) functions(ctx context.Context) error {
 	// new middleware handler
 	middleware.Serve(e.edge, e.config)
 
-	// log info in console and return register error if they exist
-	txlog.Infof(constant.InfoHTTPServer, e.config.GetApiAddr())
 	return e.registerServer(ctx)
 }
 
 // ListenAndServe the edge/gateway app
-func (e *Edge) ListenAndServe() error {
+func (e *Edge) ListenAndServe(ctx context.Context) error {
 	if err := pbtools.Validate(e.config); err != nil {
 		return err
 	}
-
-	ctx := context.Background()
-	ctx, cancel := context.WithCancel(ctx)
-	defer cancel()
 
 	if err := e.functions(ctx); err != nil {
 		return err
 	}
 
 	// Listen HTTP server (and edge calls to gRPC server endpoint)
+	// log info in console and return register error if they exist
+	txlog.Infof(constant.InfoHTTPServer, e.config.GetApiAddr())
 	return e.edge.Listen(e.config.GetApiAddr())
+	// return errors.F("edge: failed to listen and serve")
+}
+
+// Shutdown implements core.Server.
+func (e *Edge) Shutdown(ctx context.Context) error {
+	return e.edge.Shutdown(ctx)
 }

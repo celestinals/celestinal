@@ -30,10 +30,11 @@ import (
 var once sync.Once
 var isService = true
 
-// ServiceFlags global variable
-var ServiceFlags = &stdx.FlagService{
+// Flags global variable
+var Flags = &stdx.Flag{
 	Name:    "Tickex mesh server",
 	Address: "0.0.0.0:9000",
+	Mode:    "dev",
 }
 
 // EdgeFlags global variable
@@ -43,20 +44,21 @@ var EdgeFlags = &stdx.FlagEdge{
 }
 
 // Parse flag args
-func Parse() *stdx.FlagService {
+func Parse() *stdx.Flag {
 	once.Do(func() {
 		if !isService {
-			pflag.BoolVarP(&EdgeFlags.IsTurnOnBots, "telegram", "t", EdgeFlags.GetIsTurnOnBots(), "turn on telegram system log?")
-			pflag.BoolVarP(&EdgeFlags.Secure, "secure", "s", EdgeFlags.GetSecure(), "secure api with WAF?")
-			pflag.StringSliceVarP(&EdgeFlags.Rules, "rule", "r", EdgeFlags.Rules, "OWASP CRS rules config file")
+			pflag.BoolVarP(&EdgeFlags.IsTurnOnBots, "telegram", "t", EdgeFlags.GetIsTurnOnBots(), "turn on telegram system log ?")
+			pflag.BoolVarP(&EdgeFlags.Secure, "secure", "s", EdgeFlags.GetSecure(), "secure api with WAF ?")
+			pflag.StringSliceVarP(&EdgeFlags.Rules, "rule", "r", EdgeFlags.Rules, "owasp crs rules config file")
 		}
 
-		pflag.StringVarP(&ServiceFlags.Name, "name", "n", ServiceFlags.GetName(), "hostname?")
-		pflag.StringVarP(&ServiceFlags.Address, "address", "a", ServiceFlags.GetAddress(), "host address?")
+		pflag.StringVarP(&Flags.Name, "name", "n", Flags.GetName(), "hostname ?")
+		pflag.StringVarP(&Flags.Address, "address", "a", Flags.GetAddress(), "host address ?")
+		pflag.StringVarP(&Flags.Mode, "mode", "m", Flags.GetMode(), "run mode (dev|prod|sandbox) ?")
 
 		pflag.Usage = func() {
 			fmt.Println(version.ASCIIArt)
-			fmt.Println("Usage: tickex [Flags]")
+			fmt.Println("Usage: tickex-<service> [Flags]")
 			pflag.PrintDefaults()
 			os.Exit(0)
 		}
@@ -64,7 +66,7 @@ func Parse() *stdx.FlagService {
 		pflag.Parse()
 	})
 
-	return ServiceFlags
+	return Flags
 }
 
 // ParseEdge flag args for edge service

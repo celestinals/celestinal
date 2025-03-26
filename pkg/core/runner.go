@@ -18,28 +18,50 @@ package core
 
 import (
 	"context"
+	"time"
 
 	"github.com/tickexvn/tickex/internal/utils/version"
+	"github.com/tickexvn/tickex/pkg/cli"
+	"github.com/tickexvn/tickex/pkg/pbtools"
 	"github.com/tickexvn/tickex/pkg/txlog"
 	"go.uber.org/fx"
 )
+
+const timeout = 500 * time.Millisecond // 500 millisecondss
 
 // runner functions called by fx.Invoke.
 // when the application starts, it will start the server
 func runner(lc fx.Lifecycle, srv Server) {
 
-	// log ASCII art
-	version.ASCII()
-
 	// init logger
 	txlogger := txlog.NewTxSystemLog()
 
 	lc.Append(fx.Hook{
-		OnStart: func(_ context.Context) error {
-			return srv.ListenAndServe()
+		OnStart: func(ctx context.Context) error {
+			errChan := make(chan error, 1)
+			go func() {
+				version.ASCII() // log ASCII art
+				txlog.Info("[runner] starting application ... done")
+
+				if err := srv.ListenAndServe(ctx); err != nil {
+					txlog.Infof("[runner] %+v", err)
+					errChan <- err
+				}
+			}()
+
+			select {
+			case err := <-errChan:
+				return err
+			case <-time.After(timeout):
+				return pbtools.Validate(cli.Parse())
+			}
+
 		},
-		OnStop: func(_ context.Context) error {
-			return txlogger.Sync()
+		OnStop: func(ctx context.Context) error {
+			txlog.Info("[runner] stopping application ... done")
+			_ = txlogger.Sync()
+
+			return srv.Shutdown(ctx)
 		},
 	})
 }
