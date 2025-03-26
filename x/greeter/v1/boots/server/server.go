@@ -18,6 +18,8 @@
 package server
 
 import (
+	"context"
+
 	"github.com/tickexvn/tickex/api/gen/go/greeter/v1"
 	"github.com/tickexvn/tickex/api/gen/go/stdx/v1"
 	"github.com/tickexvn/tickex/pkg/cli"
@@ -46,7 +48,7 @@ type Greeter struct {
 }
 
 // ListenAndServe implements IGreeter.
-func (g *Greeter) ListenAndServe() error {
+func (g *Greeter) ListenAndServe(_ context.Context) error {
 	if err := pbtools.Validate(g.config); err != nil {
 		return err
 	}

@@ -12,6 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+.PHONY: default
+
+default: build.tickex build.x.greeter
+	@echo "building edge .... done"
+	@echo "building greeter ... done"
+
 test:
 	@go test ./... -cover
 

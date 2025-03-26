@@ -18,6 +18,10 @@
 package internal
 
 import (
+	"fmt"
+
+	"github.com/tickexvn/tickex/internal/utils/version"
+	"github.com/tickexvn/tickex/pkg/color"
 	"go.uber.org/zap"
 )
 
@@ -38,6 +42,8 @@ const (
 	LevelFatal = 4
 )
 
+var header = fmt.Sprintf("%s > ", color.Green.Add(fmt.Sprintf("[%s]", version.Name)))
+
 // TxLogCore is the logger for the package.
 type TxLogCore struct {
 	Verbosity int
@@ -45,11 +51,11 @@ type TxLogCore struct {
 }
 
 func (c *TxLogCore) addPrefix(args ...any) []any {
-	return append([]any{"[TICKEX] > "}, args...)
+	return append([]any{header}, args...)
 }
 
 func (c *TxLogCore) addPrefixFormat(format string) string {
-	return "[TICKEX] > " + format
+	return header + format
 }
 
 // Debug logs a debug message.

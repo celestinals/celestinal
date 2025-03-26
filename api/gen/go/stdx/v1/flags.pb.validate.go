@@ -33,10 +33,9 @@ var (
 	_ = anypb.Any{}
 )
 
-// Validate checks the field values on FlagService with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *FlagService) Validate() error {
+// Validate checks the field values on Flag with the rules defined in the proto
+// definition for this message. If any rules are violated, an error is returned.
+func (m *Flag) Validate() error {
 	if m == nil {
 		return nil
 	}
@@ -45,12 +44,14 @@ func (m *FlagService) Validate() error {
 
 	// no validation rules for Address
 
+	// no validation rules for Mode
+
 	return nil
 }
 
-// FlagServiceValidationError is the validation error returned by
-// FlagService.Validate if the designated constraints aren't met.
-type FlagServiceValidationError struct {
+// FlagValidationError is the validation error returned by Flag.Validate if the
+// designated constraints aren't met.
+type FlagValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -58,22 +59,22 @@ type FlagServiceValidationError struct {
 }
 
 // Field function returns field value.
-func (e FlagServiceValidationError) Field() string { return e.field }
+func (e FlagValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e FlagServiceValidationError) Reason() string { return e.reason }
+func (e FlagValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e FlagServiceValidationError) Cause() error { return e.cause }
+func (e FlagValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e FlagServiceValidationError) Key() bool { return e.key }
+func (e FlagValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e FlagServiceValidationError) ErrorName() string { return "FlagServiceValidationError" }
+func (e FlagValidationError) ErrorName() string { return "FlagValidationError" }
 
 // Error satisfies the builtin error interface
-func (e FlagServiceValidationError) Error() string {
+func (e FlagValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -85,14 +86,14 @@ func (e FlagServiceValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sFlagService.%s: %s%s",
+		"invalid %sFlag.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = FlagServiceValidationError{}
+var _ error = FlagValidationError{}
 
 var _ interface {
 	Field() string
@@ -100,7 +101,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = FlagServiceValidationError{}
+} = FlagValidationError{}
 
 // Validate checks the field values on FlagEdge with the rules defined in the
 // proto definition for this message. If any rules are violated, an error is returned.
