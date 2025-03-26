@@ -20,13 +20,13 @@ package cache
 import (
 	"net/http"
 
-	"github.com/tickexvn/tickex/api/gen/go/common/env/config/v1"
+	"github.com/tickexvn/tickex/api/gen/go/stdx/v1"
 	"github.com/tickexvn/tickex/pkg/core"
 )
 
 // Serve is a middleware that serves the cache response for the same
 // request in the future.
-func Serve(edge core.Edge, _ *config.Config) {
+func Serve(edge core.Edge, _ *stdx.Config) {
 	edge.Use(cache)
 }
 

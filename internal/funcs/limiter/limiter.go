@@ -20,13 +20,13 @@ package limiter
 import (
 	"net/http"
 
-	"github.com/tickexvn/tickex/api/gen/go/common/env/config/v1"
+	"github.com/tickexvn/tickex/api/gen/go/stdx/v1"
 	"github.com/tickexvn/tickex/pkg/core"
 )
 
 // Serve is a middleware that limits the number of requests
 // that can be made to the server in a given time period.
-func Serve(edge core.Edge, _ *config.Config) {
+func Serve(edge core.Edge, _ *stdx.Config) {
 	edge.Use(limit)
 }
 

@@ -19,12 +19,12 @@ package configs
 import (
 	"testing"
 
-	"github.com/tickexvn/tickex/api/gen/go/common/env/config/v1"
+	"github.com/tickexvn/tickex/api/gen/go/stdx/v1"
 	"github.com/tickexvn/tickex/pkg/pbtools"
 )
 
 func TestConfig(t *testing.T) {
-	conf := config.Config{
+	conf := stdx.Config{
 		ServiceRegistryAddr: "0.0.0.0:8500",
 		ApiAddr:             "0.0.0.0:9000",
 		Env:                 "prod",

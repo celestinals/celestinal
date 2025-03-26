@@ -21,8 +21,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/tickexvn/tickex/api/gen/go/common/env/config/v1"
 	"github.com/tickexvn/tickex/api/gen/go/greeter/v1"
+	"github.com/tickexvn/tickex/api/gen/go/stdx/v1"
 	"github.com/tickexvn/tickex/pkg/discovery"
 	"github.com/tickexvn/tickex/pkg/namespace"
 	"github.com/tickexvn/tickex/pkg/txlog"
@@ -32,7 +32,7 @@ import (
 
 // NewGreeterClient creates a new greeter grpc client.
 func NewGreeterClient(
-	ctx context.Context, conf *config.Config) (greeter.GreeterServiceClient, error) {
+	ctx context.Context, conf *stdx.Config) (greeter.GreeterServiceClient, error) {
 
 	endpoint, err := discovery.Visit(ctx, conf, namespace.GreeterV1)
 	if err != nil {

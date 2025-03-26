@@ -16,7 +16,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             v3.21.12
-// source: greeter.proto
+// source: tickex/greeter/v1/greeter.proto
 
 package greeter
 
@@ -169,5 +169,5 @@ var GreeterService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "greeter.proto",
+	Metadata: "tickex/greeter/v1/greeter.proto",
 }

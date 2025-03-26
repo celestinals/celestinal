@@ -22,16 +22,14 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/consul/api"
-	"github.com/tickexvn/tickex/api/gen/go/common/discovery/v1"
-	configpb "github.com/tickexvn/tickex/api/gen/go/common/env/config/v1"
-	servicepb "github.com/tickexvn/tickex/api/gen/go/common/service/v1"
+	"github.com/tickexvn/tickex/api/gen/go/stdx/v1"
 	"github.com/tickexvn/tickex/pkg/pbtools"
 )
 
-var _ discovery.DiscoveryServiceServer = (*Discovery)(nil)
+var _ stdx.DiscoveryServiceServer = (*Discovery)(nil)
 
 // New provide service registry of Tickex microservice network
-func New(conf *configpb.Config) (*Discovery, error) {
+func New(conf *stdx.Config) (*Discovery, error) {
 	if err := pbtools.Validate(conf); err != nil {
 		return nil, err
 	}
@@ -51,13 +49,13 @@ func New(conf *configpb.Config) (*Discovery, error) {
 
 // Discovery implements the ServiceRegistryService.
 type Discovery struct {
-	discovery.UnimplementedDiscoveryServiceServer
+	stdx.UnimplementedDiscoveryServiceServer
 	client *api.Client
 }
 
 // Register implements the Register method of the ServiceRegistryService.
 func (d *Discovery) Register(
-	ctx context.Context, req *discovery.RegisterRequest) (*discovery.RegisterResponse, error) {
+	ctx context.Context, req *stdx.RegisterRequest) (*stdx.RegisterResponse, error) {
 
 	_ = ctx
 	if err := pbtools.Validate(req); err != nil {
@@ -83,7 +81,7 @@ func (d *Discovery) Register(
 
 // Discover implements the Discover method of the ServiceRegistryService.
 func (d *Discovery) Discover(
-	ctx context.Context, req *discovery.DiscoverRequest) (*discovery.DiscoverResponse, error) {
+	ctx context.Context, req *stdx.DiscoverRequest) (*stdx.DiscoverResponse, error) {
 	_ = ctx
 	if err := pbtools.Validate(req); err != nil {
 		return nil, err
@@ -98,9 +96,9 @@ func (d *Discovery) Discover(
 		return nil, fmt.Errorf("service %s not found", req.GetName())
 	}
 
-	var resp discovery.DiscoverResponse
+	var resp stdx.DiscoverResponse
 	for _, service := range services {
-		resp.Services = append(resp.Services, &servicepb.Service{
+		resp.Services = append(resp.Services, &stdx.Service{
 			Id:   service.Service.ID,
 			Name: service.Service.Service,
 			Host: service.Service.Address,
@@ -114,7 +112,7 @@ func (d *Discovery) Discover(
 
 // Heartbeat implements the Heartbeat method of the ServiceRegistryService.
 func (d *Discovery) Heartbeat(
-	ctx context.Context, req *discovery.HeartbeatRequest) (*discovery.HeartbeatResponse, error) {
+	ctx context.Context, req *stdx.HeartbeatRequest) (*stdx.HeartbeatResponse, error) {
 
 	_ = ctx
 	if err := pbtools.Validate(req); err != nil {
@@ -124,7 +122,7 @@ func (d *Discovery) Heartbeat(
 	err := d.client.Agent().
 		UpdateTTL("service:"+req.GetId(), "Service is healthy", api.HealthPassing)
 
-	return &discovery.HeartbeatResponse{
+	return &stdx.HeartbeatResponse{
 		Success: err == nil,
 	}, err
 }

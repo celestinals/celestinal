@@ -23,7 +23,7 @@ import (
 	"sync"
 
 	"github.com/spf13/pflag"
-	"github.com/tickexvn/tickex/api/gen/go/common/flags/v1"
+	"github.com/tickexvn/tickex/api/gen/go/stdx/v1"
 	"github.com/tickexvn/tickex/internal/utils/version"
 )
 
@@ -31,19 +31,19 @@ var once sync.Once
 var isService = true
 
 // ServiceFlags global variable
-var ServiceFlags = &flags.ServiceFlags{
+var ServiceFlags = &stdx.FlagService{
 	Name:    "Tickex mesh server",
 	Address: "0.0.0.0:9000",
 }
 
 // EdgeFlags global variable
-var EdgeFlags = &flags.EdgeFlags{
+var EdgeFlags = &stdx.FlagEdge{
 	IsTurnOnBots: false,
 	Secure:       false,
 }
 
 // Parse flag args
-func Parse() *flags.ServiceFlags {
+func Parse() *stdx.FlagService {
 	once.Do(func() {
 		if !isService {
 			pflag.BoolVarP(&EdgeFlags.IsTurnOnBots, "telegram", "t", EdgeFlags.GetIsTurnOnBots(), "turn on telegram system log?")
@@ -68,7 +68,7 @@ func Parse() *flags.ServiceFlags {
 }
 
 // ParseEdge flag args for edge service
-func ParseEdge() *flags.EdgeFlags {
+func ParseEdge() *stdx.FlagEdge {
 	isService = false
 
 	_ = Parse()

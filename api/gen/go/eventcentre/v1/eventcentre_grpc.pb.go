@@ -16,7 +16,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             v3.21.12
-// source: eventcentre.proto
+// source: tickex/eventcentre/v1/eventcentre.proto
 
 package eventcentre
 
@@ -169,5 +169,5 @@ var EventCentreService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "eventcentre.proto",
+	Metadata: "tickex/eventcentre/v1/eventcentre.proto",
 }
