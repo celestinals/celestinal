@@ -28,14 +28,13 @@ import (
 // when the application starts, it will start the server
 func runner(lc fx.Lifecycle, srv Server) {
 
-	// log ASCII art
-	version.ASCII()
-
 	// init logger
 	txlogger := txlog.NewTxSystemLog()
 
 	lc.Append(fx.Hook{
 		OnStart: func(_ context.Context) error {
+			version.ASCII() // log ASCII art
+
 			return srv.ListenAndServe()
 		},
 		OnStop: func(_ context.Context) error {

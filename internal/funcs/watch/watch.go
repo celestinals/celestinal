@@ -51,7 +51,10 @@ func service(client *api.Client) {
 	for {
 		services, meta, err := client.Catalog().Services(&api.QueryOptions{})
 		if err != nil {
-			txlog.Fatal("[watch] service event:", err)
+			txlog.Errorf("[watch] service event: %v", err)
+			<-ticker.C
+
+			continue
 		}
 
 		if meta.LastIndex != lastIndex {

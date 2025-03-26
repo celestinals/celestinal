@@ -20,6 +20,8 @@ package version
 import (
 	"fmt"
 	"runtime"
+
+	"github.com/tickexvn/tickex/pkg/color"
 )
 
 var (
@@ -32,8 +34,11 @@ var (
 	// GoVersion is Go tree's version.
 	GoVersion = runtime.Version()
 
-	// FullName is the full name of the project.
-	FullName = "TICKEX"
+	// Name is the full name of the project.
+	Name = "TICKEX"
+
+	// BrandName is the brand name of the project.s
+	BrandName = "Tickex on the Cloud"
 
 	// Code is the code of the project.
 	Code = "TKX"
@@ -41,17 +46,21 @@ var (
 	// ASCIIArt using in console
 	asciiArt = `
  _______     __          
-/_  __(_)___/ /_______ __	
+/_  __(_)___/ /_______ __	%s
  / / / / __/  '_/ -_) \ /	%s
-/_/ /_/\__/_/\_\\__/_\_\	v%s - %s
+/_/ /_/\__/_/\_\\__/_\_\	%s
 	`
 	// ASCIIArt using in console
-	ASCIIArt = fmt.Sprintf(asciiArt, Package, Version, GoVersion)
+	ASCIIArt = fmt.Sprintf(asciiArt,
+		BrandName,
+		Package,
+		fmt.Sprintf("v%s - %s", Version, color.Cyan.Add(GoVersion)),
+	)
 )
 
 // Header returns the header info string.
 func Header() string {
-	return fmt.Sprintf("%s >>", FullName)
+	return fmt.Sprintf("%s >>", Name)
 }
 
 // ASCII prints the ASCII art of the project.

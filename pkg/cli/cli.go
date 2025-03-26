@@ -48,7 +48,7 @@ func Parse() *stdx.FlagService {
 		if !isService {
 			pflag.BoolVarP(&EdgeFlags.IsTurnOnBots, "telegram", "t", EdgeFlags.GetIsTurnOnBots(), "turn on telegram system log?")
 			pflag.BoolVarP(&EdgeFlags.Secure, "secure", "s", EdgeFlags.GetSecure(), "secure api with WAF?")
-			pflag.StringSliceVarP(&EdgeFlags.Rules, "rule", "r", EdgeFlags.Rules, "OWASP CRS rules config file")
+			pflag.StringSliceVarP(&EdgeFlags.Rules, "rule", "r", EdgeFlags.Rules, "owasp crs rules config file")
 		}
 
 		pflag.StringVarP(&ServiceFlags.Name, "name", "n", ServiceFlags.GetName(), "hostname?")
