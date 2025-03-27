@@ -44,7 +44,7 @@ func runner(lc fx.Lifecycle, srv Server) {
 				txlog.Info("[runner] starting application ... done")
 
 				if err := srv.ListenAndServe(ctx); err != nil {
-					txlog.Infof("[runner] %+v", err)
+					txlog.Warnf("[runner] %+v", err)
 					errChan <- err
 				}
 			}()

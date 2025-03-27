@@ -19,7 +19,7 @@ default: default.print \
 	build.x.greeter
 
 default.print:
-	@echo "[BUILD] TICKEX: build tickex"
+	@echo "[BUILD] TICKEX: build tickex and x services"
 
 test.cover:
 	@go test ./... -cover
@@ -50,26 +50,26 @@ updaterule:
 
 build.tickex: TKX_OUT ?= tickex-edge
 build.tickex:
-	@go build -ldflags="-s -w" -o ./build/$(TKX_OUT) ./cmd/tickex
+	@go build -ldflags="-s -w" -o ./bin/$(TKX_OUT) ./cmd/tickex
 	@echo "[DONE]  TICKEX: edge ... ok"
 
 
-build.x.greeter: TKX_OUT ?= tickex-x-greeter-v1
+build.x.greeter: TKX_OUT ?= tickex-greeter
 build.x.greeter:
-	@cd ./x/greeter/v1 && go build -ldflags="-s -w" -o ../../../build/$(TKX_OUT) ./cmd
+	@cd ./x/greeter/v1 && go build -ldflags="-s -w" -o ../../../bin/$(TKX_OUT) ./cmd
 	@echo "[DONE]  TICKEX: greeter.v1 ... ok"
 
 #####################################################################
 
 run.tickex: TKX_OUT ?= tickex-edge
 run.tickex:
-	@go build -ldflags="-s -w" -o ./build/$(TKX_OUT) ./cmd/tickex && \
- 	./build/$(TKX_OUT)
+	@go build -ldflags="-s -w" -o ./bin/$(TKX_OUT) ./cmd/tickex && \
+ 	./bin/$(TKX_OUT)
 
-run.x.greeter: TKX_OUT ?= tickex-x-greeter-v1
+run.x.greeter: TKX_OUT ?= tickex-greeter
 run.x.greeter:
-	@cd ./x/greeter/v1 && go build -ldflags="-s -w" -o ../../../build/$(TKX_OUT) ./cmd
-	@./build/$(TKX_OUT)
+	@cd ./x/greeter/v1 && go build -ldflags="-s -w" -o ../../../bin/$(TKX_OUT) ./cmd
+	@./bin/$(TKX_OUT)
 
 #####################################################################
 # Docker build commands

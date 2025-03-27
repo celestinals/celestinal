@@ -64,6 +64,7 @@ docker-compose.secret.yaml
 out/
 build
 dist
+bin
 
 # vercel
 .vercel
