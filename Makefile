@@ -14,11 +14,14 @@
 
 .PHONY: default
 
-default: build.tickex build.x.greeter
-	@echo "building edge .... done"
-	@echo "building greeter ... done"
+default: default.print \
+	build.tickex \
+	build.x.greeter
 
-test:
+default.print:
+	@echo "[BUILD] TICKEX: build tickex"
+
+test.cover:
 	@go test ./... -cover
 
 #####################################################################
@@ -48,10 +51,13 @@ updaterule:
 build.tickex: TKX_OUT ?= tickex-edge
 build.tickex:
 	@go build -ldflags="-s -w" -o ./build/$(TKX_OUT) ./cmd/tickex
+	@echo "[DONE]  TICKEX: edge ... ok"
+
 
 build.x.greeter: TKX_OUT ?= tickex-x-greeter-v1
 build.x.greeter:
 	@cd ./x/greeter/v1 && go build -ldflags="-s -w" -o ../../../build/$(TKX_OUT) ./cmd
+	@echo "[DONE]  TICKEX: greeter.v1 ... ok"
 
 #####################################################################
 

@@ -30,10 +30,10 @@ import (
 	"github.com/tickexvn/tickex/pkg/namespace"
 )
 
-var _ base.IService = (*ticket)(nil)
+var _ core.GRPCServer = (*ticket)(nil)
 
 // NewTicket creates a new ticket service to register handler to gateway
-func NewTicket() base.IService {
+func NewTicket() core.GRPCServer {
 	return ticket{}
 }
 
@@ -43,8 +43,8 @@ type ticket struct {
 }
 
 // Accept accepts the ticket service
-func (t ticket) Accept(ctx context.Context, edge core.Edge) error {
-	return visitor.VisitService(ctx, namespace.TicketV1, edge, t)
+func (t ticket) Accept(ctx context.Context, server core.HTTPServer) error {
+	return visitor.VisitService(ctx, namespace.TicketV1, server, t)
 }
 
 // Register registers the ticket service

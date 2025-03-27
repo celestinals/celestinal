@@ -32,7 +32,7 @@ import (
 )
 
 // Serve the edge with WAF secure middleware layer
-func Serve(edge core.Edge, _ *stdx.Config) {
+func Serve(server core.HTTPServer, _ *stdx.Config) {
 	flags := cli.ParseEdge()
 	if !flags.GetSecure() {
 		if len(flags.GetRules()) > 0 {
@@ -52,7 +52,7 @@ func Serve(edge core.Edge, _ *stdx.Config) {
 		return
 	}
 
-	edge.Use(waf.Secure)
+	server.Use(waf.Secure)
 }
 
 // NewWAF create a new WAF middleware layer

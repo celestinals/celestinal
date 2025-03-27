@@ -33,37 +33,37 @@ func TestErrors(t *testing.T) {
 	}{
 		{
 			name:     "ErrUnspecified",
-			err:      ErrUnspecified,
+			err:      StatusUnspecified,
 			code:     codes.Unknown,
 			expected: unspecified,
 		},
 		{
 			name:     "ErrInternalError",
-			err:      ErrInternalError,
+			err:      StatusInternalError,
 			code:     codes.Internal,
 			expected: internalError,
 		},
 		{
 			name:     "ErrNotFound",
-			err:      ErrNotFound,
+			err:      StatusNotFound,
 			code:     codes.NotFound,
 			expected: notFound,
 		},
 		{
 			name:     "ErrUnauthorized",
-			err:      ErrUnauthorized,
+			err:      StatusUnauthorized,
 			code:     codes.Unauthenticated,
 			expected: unauthorized,
 		},
 		{
 			name:     "ErrForbidden",
-			err:      ErrForbidden,
+			err:      StatusForbidden,
 			code:     codes.PermissionDenied,
 			expected: forbidden,
 		},
 		{
 			name:     "ErrInvalidData",
-			err:      ErrInvalidData,
+			err:      StatusInvalidData,
 			code:     codes.InvalidArgument,
 			expected: invalidData,
 		},

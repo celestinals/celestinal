@@ -25,11 +25,11 @@ import (
 )
 
 // Serve return api json and swagger ui
-func Serve(edge core.Edge, _ *stdx.Config) {
+func Serve(server core.HTTPServer, _ *stdx.Config) {
 	fs := http.FileServer(http.Dir("public/swagger/"))
-	edge.AsMux().Handle("/swagger/", http.StripPrefix("/swagger/", fs))
+	server.HTTPMux().Handle("/swagger/", http.StripPrefix("/swagger/", fs))
 
-	edge.AsMux().HandleFunc("/swagger",
+	server.HTTPMux().HandleFunc("/swagger",
 		func(writer http.ResponseWriter, request *http.Request) {
 			http.Redirect(writer, request, "/swagger/", http.StatusMovedPermanently)
 		})

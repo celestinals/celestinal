@@ -18,6 +18,7 @@
 package errors
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/tickexvn/tickex/api/gen/go/stdx/v1"
@@ -43,26 +44,37 @@ var (
 
 	invalidData = fmt.Sprintf("TICKEX-%d: %s",
 		stdx.Errors_ERRORS_INVALID_DATA, stdx.Errors_ERRORS_INVALID_DATA.String())
+
+	unimplemented = fmt.Sprintf("TICKEX-%d: %s",
+		stdx.Errors_ERRORS_UNIMPLEMENTED, stdx.Errors_ERRORS_UNIMPLEMENTED.String())
 )
 
 var (
-	// ErrUnspecified is a generic error
-	ErrUnspecified = status.Error(codes.Unknown, unspecified)
+	// StatusUnspecified is a generic error
+	StatusUnspecified = status.Error(codes.Unknown, unspecified)
 
-	// ErrInternalError is an internal error
-	ErrInternalError = status.Error(codes.Internal, internalError)
+	// StatusInternalError is an internal error
+	StatusInternalError = status.Error(codes.Internal, internalError)
 
-	// ErrNotFound is a not found error
-	ErrNotFound = status.Error(codes.NotFound, notFound)
+	// StatusNotFound is a not found error
+	StatusNotFound = status.Error(codes.NotFound, notFound)
 
-	// ErrUnauthorized is an unauthorized error
-	ErrUnauthorized = status.Error(codes.Unauthenticated, unauthorized)
+	// StatusUnauthorized is an unauthorized error
+	StatusUnauthorized = status.Error(codes.Unauthenticated, unauthorized)
 
-	// ErrForbidden is a forbidden error
-	ErrForbidden = status.Error(codes.PermissionDenied, forbidden)
+	// StatusForbidden is a forbidden error
+	StatusForbidden = status.Error(codes.PermissionDenied, forbidden)
 
-	// ErrInvalidData is an invalid data error
-	ErrInvalidData = status.Error(codes.InvalidArgument, invalidData)
+	// StatusInvalidData is an invalid data error
+	StatusInvalidData = status.Error(codes.InvalidArgument, invalidData)
+
+	// StatusUnimplemented is a not implemented error
+	StatusUnimplemented = status.Error(codes.Unimplemented, unimplemented)
+)
+
+var (
+	// ErrUnimplemented is a generic error
+	ErrUnimplemented = errors.New(unimplemented)
 )
 
 // F wrapped error with format template

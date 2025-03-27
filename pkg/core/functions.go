@@ -52,11 +52,11 @@ func Build(constructors ...any) Application {
 //
 // - github.com/grpc-ecosystem/grpc-gateway/v2/runtime
 func RegisterService(
-	ctx context.Context, edge Edge, service GRPCService, endpoint string,
+	ctx context.Context, httpServer HTTPServer, grpcServer GRPCServer, endpoint string,
 	opts []grpc.DialOption) error {
 
-	if err := service.Register(
-		ctx, edge.AsRuntimeMux(), endpoint, opts); err != nil {
+	if err := grpcServer.Register(
+		ctx, httpServer.RuntimeMux(), endpoint, opts); err != nil {
 		return err
 	}
 

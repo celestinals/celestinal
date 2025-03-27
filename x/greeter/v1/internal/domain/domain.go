@@ -49,7 +49,7 @@ func (g *Greeter) SayHello(
 	t := time.Now().String()
 
 	if name == "error" {
-		return nil, errors.ErrForbidden
+		return nil, errors.StatusForbidden
 	}
 
 	return &domain.SayHelloResponse{

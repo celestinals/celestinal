@@ -22,32 +22,41 @@ import (
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/tickexvn/tickex/pkg/cli"
+	"github.com/tickexvn/tickex/pkg/errors"
 )
 
-// Edge is an interface for a runtime mux with http server.
+var (
+	// Ensure httpServer implements Server.
+	_ Server = (*httpServer)(nil)
+
+	// Ensure httpServer implements HttpServer.
+	_ HTTPServer = (*httpServer)(nil)
+)
+
+// HTTPServer is an interface for a http server.
 // default port is 9000
-type Edge interface {
+type HTTPServer interface {
 	Listen(address string) error
 	Shutdown(ctx context.Context) error
-	AsRuntimeMux() *runtime.ServeMux
-	AsMux() *http.ServeMux
+	RuntimeMux() *runtime.ServeMux
+	HTTPMux() *http.ServeMux
 	Use(handler func(http.Handler) http.Handler)
 }
 
-// NewEdge creates a new http server.
-func NewEdge(opts ...runtime.ServeMuxOption) Edge {
-	return &edge{
-		mux:     runtime.NewServeMux(opts...),
-		httpMux: http.NewServeMux(),
+// NewHTTPServer creates a new http server.
+func NewHTTPServer(opts ...runtime.ServeMuxOption) HTTPServer {
+	return &httpServer{
+		runtimeMux: runtime.NewServeMux(opts...),
+		httpMux:    http.NewServeMux(),
 	}
 }
 
-// edge is a http server with http serve mux and grpc-gateway serve mux.
-type edge struct {
+// httpServer is a http server with http serve mux and grpc-gateway serve mux.
+type httpServer struct {
 	// grpc-gateway runtime mux
-	mux *runtime.ServeMux
+	runtimeMux *runtime.ServeMux
 
-	// http server mux
+	// http mux
 	httpMux *http.ServeMux
 
 	// middlewares for the http server
@@ -57,10 +66,16 @@ type edge struct {
 	server *http.Server
 }
 
+// ListenAndServe implements Server.
+func (h *httpServer) ListenAndServe(ctx context.Context) error {
+	_ = ctx
+	return errors.ErrUnimplemented
+}
+
 // handler wraps the http handler with the middlewares. middlewares
 // will be executed in the order they are added, top to bottom.
-func (e *edge) handler(httpHandler http.Handler) http.Handler {
-	for _, middleware := range e.middlewares {
+func (h *httpServer) handler(httpHandler http.Handler) http.Handler {
+	for _, middleware := range h.middlewares {
 		httpHandler = middleware(httpHandler)
 	}
 	return httpHandler
@@ -69,41 +84,41 @@ func (e *edge) handler(httpHandler http.Handler) http.Handler {
 // Use middleware for the http server. Middleware will be called
 // in the order they are added, top to bottom. the middleware will
 // be executed before the http handler.
-func (e *edge) Use(handler func(http.Handler) http.Handler) {
-	e.middlewares = append(e.middlewares, handler)
+func (h *httpServer) Use(handler func(http.Handler) http.Handler) {
+	h.middlewares = append(h.middlewares, handler)
 }
 
 // Listen starts the runtime mux.
-func (e *edge) Listen(address string) error {
+func (h *httpServer) Listen(address string) error {
 	if address == "" {
 		address = cli.Parse().GetAddress()
 	}
 
 	// handler runtime.Mux with http.ServeMux
 	// serve grpc-gateway mux on the root path
-	e.httpMux.Handle("/", e.mux)
+	h.httpMux.Handle("/", h.runtimeMux)
 
 	// create http server with address and http.Handler
 	// httpMux was wrapped with the middlewares
-	e.server = &http.Server{
+	h.server = &http.Server{
 		Addr:    address,
-		Handler: e.handler(e.httpMux),
+		Handler: h.handler(h.httpMux),
 	}
 
-	return e.server.ListenAndServe()
+	return h.server.ListenAndServe()
 }
 
-// AsRuntimeMux returns the underlying runtime mux.
-func (e *edge) AsRuntimeMux() *runtime.ServeMux {
-	return e.mux
+// RuntimeMux returns the underlying runtime mux.
+func (h *httpServer) RuntimeMux() *runtime.ServeMux {
+	return h.runtimeMux
 }
 
-// AsMux returns the underlying http mux
-func (e *edge) AsMux() *http.ServeMux {
-	return e.httpMux
+// HTTPMux returns the underlying http mux
+func (h *httpServer) HTTPMux() *http.ServeMux {
+	return h.httpMux
 }
 
-// Shutdown implements Edge.
-func (e *edge) Shutdown(ctx context.Context) error {
-	return e.server.Shutdown(ctx)
+// Shutdown implements HttpServer.
+func (h *httpServer) Shutdown(ctx context.Context) error {
+	return h.server.Shutdown(ctx)
 }

@@ -24,15 +24,10 @@ import (
 	"google.golang.org/grpc"
 
 	"github.com/tickexvn/tickex/pkg/core"
+	"github.com/tickexvn/tickex/pkg/errors"
 )
 
-var _ IService = (*Base)(nil)
-
-// IService represents the service gRPC interface.
-type IService interface {
-	core.GRPCService
-	Accept(context.Context, core.Edge) error
-}
+var _ core.GRPCServer = (*Base)(nil)
 
 // Base represents the base service
 type Base struct{}
@@ -40,10 +35,10 @@ type Base struct{}
 // Register registers the base service
 func (b Base) Register(_ context.Context, _ *runtime.ServeMux, _ string,
 	_ []grpc.DialOption) error {
-	panic("unimplemented")
+	return errors.ErrUnimplemented
 }
 
 // Accept accepts the base service
-func (b Base) Accept(_ context.Context, _ core.Edge) error {
-	panic("unimplemented")
+func (b Base) Accept(_ context.Context, _ core.HTTPServer) error {
+	return errors.ErrUnimplemented
 }

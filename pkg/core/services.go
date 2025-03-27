@@ -25,22 +25,23 @@ import (
 	"github.com/tickexvn/tickex/api/gen/go/stdx/v1"
 	"github.com/tickexvn/tickex/pkg/core/net"
 	"github.com/tickexvn/tickex/pkg/discovery"
+	"github.com/tickexvn/tickex/pkg/errors"
 	"github.com/tickexvn/tickex/pkg/txlog"
 	"google.golang.org/grpc"
 )
 
-var _ IServiceServer = (*ServiceServer)(nil)
+var (
+	// Ensure ServiceServer implements IServiceServer.
+	_ IServiceServer = (*ServiceServer)(nil)
 
-// GRPCService is an interface for registering a gRPC service.
-//
-// usage:
-//
-//	type IService interface {
-//		core.GRPCService
-//	}
-type GRPCService interface {
-	Register(ctx context.Context,
-		mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) error
+	// Ensure ServiceServer implements Server.
+	_ Server = (*ServiceServer)(nil)
+)
+
+// GRPCServer is an interface for registering a gRPC service.
+type GRPCServer interface {
+	Accept(context.Context, HTTPServer) error
+	Register(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) error
 }
 
 // IServiceServer is a gRPC service server.
@@ -78,6 +79,12 @@ type ServiceInfo struct {
 type ServiceServer struct {
 	server    *grpc.Server
 	discovery stdx.DiscoveryServiceServer
+}
+
+// ListenAndServe implements Server.
+func (s *ServiceServer) ListenAndServe(ctx context.Context) error {
+	_ = ctx
+	return errors.ErrUnimplemented
 }
 
 // Shutdown implements IServiceServer.
@@ -132,6 +139,7 @@ func (s *ServiceServer) register(conf *stdx.Config, service service) error {
 	return s.registerConsul(service)
 }
 
+// registerConsul registers the service with the consul service discovery.
 func (s *ServiceServer) registerConsul(service service) error {
 	if s.discovery == nil {
 		return nil
@@ -163,6 +171,8 @@ func (s *ServiceServer) registerConsul(service service) error {
 	return nil
 }
 
+// heartbeat sends a heartbeat to the consul service discovery.
+// check the service is still alive.
 func (s *ServiceServer) heartbeat(id string, ttl time.Duration) {
 	if s.discovery == nil {
 		return
