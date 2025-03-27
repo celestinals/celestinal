@@ -26,8 +26,8 @@ import (
 
 // Serve is a middleware that limits the number of requests
 // that can be made to the server in a given time period.
-func Serve(edge core.Edge, _ *stdx.Config) {
-	edge.Use(limit)
+func Serve(server core.HTTPServer, _ *stdx.Config) {
+	server.Use(limit)
 }
 
 // limit is a middleware that limits the number of requests

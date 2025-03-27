@@ -43,13 +43,13 @@ func New(conf *stdx.Config) *Middleware {
 }
 
 // Serve middleware handler for http handler in edge server
-func Serve(edge core.Edge, conf *stdx.Config) {
+func Serve(server core.HTTPServer, conf *stdx.Config) {
 	// new middleware handler
 	mdw := New(conf)
 
 	// mdw.LogRequestBody(mdw.AllowCORS(e.edge.AsMux()))
-	edge.Use(mdw.AllowCORS)
-	edge.Use(mdw.LogRequestBody)
+	server.Use(mdw.AllowCORS)
+	server.Use(mdw.LogRequestBody)
 }
 
 // Middleware for http handler in grpc gateway

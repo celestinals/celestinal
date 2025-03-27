@@ -32,7 +32,7 @@ const timeout = time.Second * 2
 const consulNamespace = "consul"
 
 // Serve is watching function consul when service info was changed
-func Serve(_ core.Edge, config *stdx.Config) {
+func Serve(_ core.HTTPServer, config *stdx.Config) {
 	client, err := newConsulClient(config)
 	if err != nil {
 		txlog.Errorf("[watch] failed to create consul client: %v", err)

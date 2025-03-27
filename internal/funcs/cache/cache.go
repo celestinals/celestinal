@@ -26,8 +26,8 @@ import (
 
 // Serve is a middleware that serves the cache response for the same
 // request in the future.
-func Serve(edge core.Edge, _ *stdx.Config) {
-	edge.Use(cache)
+func Serve(server core.HTTPServer, _ *stdx.Config) {
+	server.Use(cache)
 }
 
 // cache is a middleware that caches the response of the request

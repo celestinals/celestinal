@@ -20,7 +20,6 @@ package visitor
 import (
 	"context"
 
-	"github.com/tickexvn/tickex/internal/edge/services/base"
 	"github.com/tickexvn/tickex/internal/utils/eventq"
 	"github.com/tickexvn/tickex/pkg/core"
 	"github.com/tickexvn/tickex/pkg/txlog"
@@ -29,8 +28,8 @@ import (
 )
 
 // VisitService visits the greeter service.
-func VisitService(ctx context.Context, namespace string, edge core.Edge,
-	service base.IService) error {
+func VisitService(ctx context.Context, namespace string, server core.HTTPServer,
+	service core.GRPCServer) error {
 
 	eventq.Subscribe(ctx, namespace, func(endpoint string) error {
 		opts := []grpc.DialOption{
@@ -38,7 +37,7 @@ func VisitService(ctx context.Context, namespace string, edge core.Edge,
 		}
 
 		txlog.Infof("[visitor.VisitService] %s %s", namespace, "******")
-		return core.RegisterService(ctx, edge, service, endpoint, opts)
+		return core.RegisterService(ctx, server, service, endpoint, opts)
 	})
 
 	return nil

@@ -47,7 +47,7 @@ func (g *Greeter) SayHello(
 	if err := copier.CopyMsg(msg, &SayHelloReq); err != nil {
 		txlog.Error(err)
 
-		return nil, errors.ErrInvalidData
+		return nil, errors.StatusInvalidData
 	}
 
 	sayHelloResp, err := g.domain.SayHello(ctx, &SayHelloReq)

@@ -30,10 +30,10 @@ import (
 	"github.com/tickexvn/tickex/pkg/namespace"
 )
 
-var _ base.IService = (*greeter)(nil)
+var _ core.GRPCServer = (*greeter)(nil)
 
 // NewGreeter creates a new greeter service to register handler to gateway
-func NewGreeter() base.IService {
+func NewGreeter() core.GRPCServer {
 	return greeter{}
 }
 
@@ -43,8 +43,8 @@ type greeter struct {
 }
 
 // Accept accepts the greeter service
-func (g greeter) Accept(ctx context.Context, edge core.Edge) error {
-	return visitor.VisitService(ctx, namespace.GreeterV1, edge, g)
+func (g greeter) Accept(ctx context.Context, server core.HTTPServer) error {
+	return visitor.VisitService(ctx, namespace.GreeterV1, server, g)
 }
 
 // Register registers the greeter service

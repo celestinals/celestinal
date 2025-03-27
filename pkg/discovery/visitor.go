@@ -49,9 +49,10 @@ func NewVisitor(conf *stdx.Config) Visitor {
 
 type visitor struct{}
 
+// Visit visits the service with the given namespace.
 func (v visitor) Visit(ctx context.Context, namespace string) (string, error) {
 	if discover == nil {
-		return "", errors.ErrNotFound
+		return "", errors.StatusNotFound
 	}
 
 	services, err := discover.Discover(ctx, &stdx.DiscoverRequest{
