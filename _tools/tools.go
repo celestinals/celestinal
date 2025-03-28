@@ -1,6 +1,10 @@
 //go:build tools
 // +build tools
 
+// Package tools contains tool dependencies.
+//
+//	go mod tidy
+//	go install ./...
 package tools
 
 import (

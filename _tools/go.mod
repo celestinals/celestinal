@@ -1,13 +1,17 @@
-module github.com/tickexvn/tickex/_tools
+module github.com/tickexvn/tickex/tools
 
-go 1.24
+go 1.24.0
+
+replace github.com/tickexvn/tickex/api => ../api
 
 require (
 	github.com/bufbuild/buf v1.50.1
 	github.com/codesenberg/bombardier v1.2.6
 	github.com/golangci/golangci-lint v1.64.7
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.26.1
+	github.com/tickexvn/tickex/api v0.0.0-00010101000000-000000000000
 	github.com/vektra/mockery/v2 v2.53.2
+	google.golang.org/grpc v1.70.0
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.5.1
 	google.golang.org/protobuf v1.36.5
 )
@@ -16,7 +20,7 @@ require (
 	4d63.com/gocheckcompilerdirectives v1.3.0 // indirect
 	4d63.com/gochecknoglobals v0.2.2 // indirect
 	buf.build/gen/go/bufbuild/bufplugin/protocolbuffers/go v1.36.4-20250121211742-6d880cc6cc8d.1 // indirect
-	buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go v1.36.4-20241127180247-a33202765966.1 // indirect
+	buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go v1.36.5-20250219170025-d39267d9df8f.1 // indirect
 	buf.build/gen/go/bufbuild/registry/connectrpc/go v1.18.1-20250116203702-1c024d64352b.1 // indirect
 	buf.build/gen/go/bufbuild/registry/protocolbuffers/go v1.36.4-20250116203702-1c024d64352b.1 // indirect
 	buf.build/gen/go/pluginrpc/pluginrpc/protocolbuffers/go v1.36.4-20241007202033-cf42259fcbfc.1 // indirect
@@ -285,9 +289,8 @@ require (
 	golang.org/x/term v0.30.0 // indirect
 	golang.org/x/text v0.23.0 // indirect
 	golang.org/x/tools v0.31.0 // indirect
-	google.golang.org/genproto/googleapis/api v0.0.0-20250204164813-702378808489 // indirect
+	google.golang.org/genproto/googleapis/api v0.0.0-20250219182151-9fdb1cabc7b2 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250219182151-9fdb1cabc7b2 // indirect
-	google.golang.org/grpc v1.70.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect

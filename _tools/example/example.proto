@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package example;
+
+import "google/protobuf/descriptor.proto";
+import "google/protobuf/empty.proto";
+
+option go_package = "/example";
+
+
+extend google.protobuf.MethodOptions {
+  Options option = 50001;
+}
+
+message Options {
+  repeated Role roles = 1;
+}
+
+enum Role {
+  ROLE_UNSPECIFIED = 0;
+  ROLE_CUSTOMER = 1;
+  ROLE_SELLER = 2;
+  ROLE_ADMIN = 3;
+}
+message Hello {
+
+}
+
+service ExampleService {
+  rpc Create(google.protobuf.Empty) returns (google.protobuf.Empty) {
+    option (option) = {
+      roles: [ROLE_CUSTOMER],
+    };
+  }
+
+  rpc Delete(google.protobuf.Empty) returns (google.protobuf.Empty) {
+    option (option) = {
+      roles: [ROLE_ADMIN],
+    };
+  }
+}
