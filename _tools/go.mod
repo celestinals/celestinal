@@ -2,7 +2,9 @@ module github.com/tickexvn/tickex/tools
 
 go 1.24.0
 
-replace github.com/tickexvn/tickex/api => ../api
+replace (
+	github.com/tickexvn/tickex/api => ../api
+)
 
 require (
 	github.com/bufbuild/buf v1.50.1

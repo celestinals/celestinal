@@ -20,7 +20,6 @@ import (
 	"context"
 	"time"
 
-	"github.com/tickexvn/tickex/internal/utils/version"
 	"github.com/tickexvn/tickex/pkg/cli"
 	"github.com/tickexvn/tickex/pkg/pbtools"
 	"github.com/tickexvn/tickex/pkg/txlog"
@@ -40,9 +39,6 @@ func runner(lc fx.Lifecycle, srv Server) {
 		OnStart: func(ctx context.Context) error {
 			errChan := make(chan error, 1)
 			go func() {
-				version.ASCII() // log ASCII art
-				txlog.Info("[runner] starting application ... done")
-
 				if err := srv.ListenAndServe(ctx); err != nil {
 					txlog.Warnf("[runner] %+v", err)
 					errChan <- err
@@ -58,7 +54,6 @@ func runner(lc fx.Lifecycle, srv Server) {
 
 		},
 		OnStop: func(ctx context.Context) error {
-			txlog.Info("[runner] stopping application ... done")
 			_ = txlogger.Sync()
 
 			return srv.Shutdown(ctx)

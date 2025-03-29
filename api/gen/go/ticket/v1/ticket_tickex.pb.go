@@ -4,8 +4,23 @@
 package ticket
 
 import (
+	"fmt"
+
 	"github.com/tickexvn/tickex/api/gen/go/stdx/v1"
 )
+
+const ascii = `
+ _______     __          
+/_  __(_)___/ /_______ __	TICKEX // TICKET
+ / / / / __/  '_/ -_) \ /	--------------
+/_/ /_/\__/_/\_\\__/_\_\	tickex.ticket.v1
+
+`
+
+// PrintASCII the ASCII art to the console.
+func PrintASCII() {
+	fmt.Print(ascii)
+}
 
 // StdxOptsOfTicketService_Status get options from service method
 func StdxOptsOfTicketService_Status() *stdx.Options {

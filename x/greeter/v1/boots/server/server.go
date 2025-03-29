@@ -49,6 +49,7 @@ type Greeter struct {
 
 // ListenAndServe implements IGreeter.
 func (g *Greeter) ListenAndServe(_ context.Context) error {
+	greeter.PrintASCII()
 	if err := pbtools.Validate(g.config); err != nil {
 		return err
 	}

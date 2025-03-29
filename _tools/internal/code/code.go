@@ -17,6 +17,9 @@
 package code
 
 import (
+	"fmt"
+	"strings"
+
 	"github.com/tickexvn/tickex/api/gen/go/stdx/v1"
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/proto"
@@ -32,42 +35,70 @@ func GenerateFile(gen *protogen.Plugin, file *protogen.File) *protogen.Generated
 
 	g.P("package ", file.GoPackageName)
 	g.P("\n")
-	//g.P("import (\n\t\"google.golang.org/protobuf/proto\"\n)")
-	g.P("import (\n\t\"github.com/tickexvn/tickex/api/gen/go/stdx/v1\"\n)")
+	g.P("import (")
+	g.P("\t\"fmt\"\n")
+	g.P()
+	g.P("\t\"github.com/tickexvn/tickex/api/gen/go/stdx/v1\"\n")
+	g.P(")")
 	g.P("\n")
+
+	ascii(g, file)
 
 	for _, service := range file.Services {
 		for _, method := range service.Methods {
-			optVal := proto.GetExtension(method.Desc.Options(), stdx.E_Option)
-			if optVal == nil {
-				continue
-			}
-
-			otp, ok := optVal.(*stdx.Options)
-			if !ok {
-				continue
-			}
-
-			g.P("// StdxOptsOf", service.GoName, "_", method.GoName, " get options from service method")
-			g.P("func StdxOptsOf", service.GoName, "_", method.GoName, "() *stdx.Options {")
-			g.P("\toptions := stdx.Options{}")
-
-			if otp.GetRoles() != nil {
-				roleOpt := "[]stdx.Role{"
-				for _, role := range otp.GetRoles() {
-					roleOpt += "stdx.Role_" + role.String() + ", "
-				}
-				roleOpt = roleOpt[:len(roleOpt)-2]
-				roleOpt += "}"
-
-				g.P("\toptions.Roles = ", roleOpt)
-			}
-
-			g.P("\treturn &options")
-			g.P("}")
-			g.P("\n")
+			stdxOptsOf(g, service, method)
 		}
 	}
 
 	return g
+}
+
+func ascii(g *protogen.GeneratedFile, file *protogen.File) {
+	const asciiArt = `
+ _______     __          
+/_  __(_)___/ /_______ __	%s
+ / / / / __/  '_/ -_) \ /	--------------
+/_/ /_/\__/_/\_\\__/_\_\	%s
+`
+	n := "TICKEX // " + strings.ToUpper(string(file.GoPackageName))
+	s := fmt.Sprintf(asciiArt, n, *file.Proto.Package)
+	g.P("const ascii = `", s, "\n`")
+	g.P("\n")
+
+	g.P("// PrintASCII the ASCII art to the console.")
+	g.P("func PrintASCII() {")
+	g.P("\tfmt.Print(ascii)")
+	g.P("}")
+	g.P("\n")
+}
+
+func stdxOptsOf(g *protogen.GeneratedFile, service *protogen.Service, method *protogen.Method) {
+	optVal := proto.GetExtension(method.Desc.Options(), stdx.E_Option)
+	if optVal == nil {
+		return
+	}
+
+	otp, ok := optVal.(*stdx.Options)
+	if !ok {
+		return
+	}
+
+	g.P("// StdxOptsOf", service.GoName, "_", method.GoName, " get options from service method")
+	g.P("func StdxOptsOf", service.GoName, "_", method.GoName, "() *stdx.Options {")
+	g.P("\toptions := stdx.Options{}")
+
+	if otp.GetRoles() != nil {
+		roleOpt := "[]stdx.Role{"
+		for _, role := range otp.GetRoles() {
+			roleOpt += "stdx.Role_" + role.String() + ", "
+		}
+		roleOpt = roleOpt[:len(roleOpt)-2]
+		roleOpt += "}"
+
+		g.P("\toptions.Roles = ", roleOpt)
+	}
+
+	g.P("\treturn &options")
+	g.P("}")
+	g.P("\n")
 }
