@@ -9,6 +9,10 @@ import (
 	"github.com/tickexvn/tickex/api/gen/go/stdx/v1"
 )
 
+var (
+	_ stdx.Empty
+)
+
 const ascii = `
  _______     __          
 /_  __(_)___/ /_______ __	TICKEX // GREETER
@@ -20,16 +24,4 @@ const ascii = `
 // PrintASCII the ASCII art to the console.
 func PrintASCII() {
 	fmt.Print(ascii)
-}
-
-// StdxOptsOfGreeterService_SayHello get options from service method
-func StdxOptsOfGreeterService_SayHello() *stdx.Options {
-	options := stdx.Options{}
-	return &options
-}
-
-// StdxOptsOfGreeterService_Status get options from service method
-func StdxOptsOfGreeterService_Status() *stdx.Options {
-	options := stdx.Options{}
-	return &options
 }

@@ -36,6 +36,7 @@ const _ = grpc.SupportPackageIsVersion9
 const (
 	TicketService_Status_FullMethodName       = "/tickex.ticket.v1.TicketService/Status"
 	TicketService_CreateTicket_FullMethodName = "/tickex.ticket.v1.TicketService/CreateTicket"
+	TicketService_EditTicket_FullMethodName   = "/tickex.ticket.v1.TicketService/EditTicket"
 )
 
 // TicketServiceClient is the client API for TicketService service.
@@ -44,6 +45,7 @@ const (
 type TicketServiceClient interface {
 	Status(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*StatusResponse, error)
 	CreateTicket(ctx context.Context, in *CreateTicketRequest, opts ...grpc.CallOption) (*CreateTicketResponse, error)
+	EditTicket(ctx context.Context, in *EditTicketRequest, opts ...grpc.CallOption) (*EditTicketResponse, error)
 }
 
 type ticketServiceClient struct {
@@ -74,12 +76,23 @@ func (c *ticketServiceClient) CreateTicket(ctx context.Context, in *CreateTicket
 	return out, nil
 }
 
+func (c *ticketServiceClient) EditTicket(ctx context.Context, in *EditTicketRequest, opts ...grpc.CallOption) (*EditTicketResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(EditTicketResponse)
+	err := c.cc.Invoke(ctx, TicketService_EditTicket_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // TicketServiceServer is the server API for TicketService service.
 // All implementations must embed UnimplementedTicketServiceServer
 // for forward compatibility.
 type TicketServiceServer interface {
 	Status(context.Context, *emptypb.Empty) (*StatusResponse, error)
 	CreateTicket(context.Context, *CreateTicketRequest) (*CreateTicketResponse, error)
+	EditTicket(context.Context, *EditTicketRequest) (*EditTicketResponse, error)
 	mustEmbedUnimplementedTicketServiceServer()
 }
 
@@ -95,6 +108,9 @@ func (UnimplementedTicketServiceServer) Status(context.Context, *emptypb.Empty) 
 }
 func (UnimplementedTicketServiceServer) CreateTicket(context.Context, *CreateTicketRequest) (*CreateTicketResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateTicket not implemented")
+}
+func (UnimplementedTicketServiceServer) EditTicket(context.Context, *EditTicketRequest) (*EditTicketResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method EditTicket not implemented")
 }
 func (UnimplementedTicketServiceServer) mustEmbedUnimplementedTicketServiceServer() {}
 func (UnimplementedTicketServiceServer) testEmbeddedByValue()                       {}
@@ -153,6 +169,24 @@ func _TicketService_CreateTicket_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TicketService_EditTicket_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EditTicketRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TicketServiceServer).EditTicket(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TicketService_EditTicket_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TicketServiceServer).EditTicket(ctx, req.(*EditTicketRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // TicketService_ServiceDesc is the grpc.ServiceDesc for TicketService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -167,6 +201,10 @@ var TicketService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateTicket",
 			Handler:    _TicketService_CreateTicket_Handler,
+		},
+		{
+			MethodName: "EditTicket",
+			Handler:    _TicketService_EditTicket_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

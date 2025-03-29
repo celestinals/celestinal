@@ -72,6 +72,36 @@
         "tags": [
           "TicketService"
         ]
+      },
+      "put": {
+        "operationId": "TicketService_EditTicket",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1EditTicketResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1EditTicketRequest"
+            }
+          }
+        ],
+        "tags": [
+          "TicketService"
+        ]
       }
     }
   },
@@ -116,6 +146,12 @@
       }
     },
     "v1CreateTicketRequest": {
+      "type": "object"
+    },
+    "v1EditTicketRequest": {
+      "type": "object"
+    },
+    "v1EditTicketResponse": {
       "type": "object"
     },
     "v1StatusResponse": {

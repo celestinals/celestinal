@@ -9,6 +9,10 @@ import (
 	"github.com/tickexvn/tickex/api/gen/go/stdx/v1"
 )
 
+var (
+	_ stdx.Empty
+)
+
 const ascii = `
  _______     __          
 /_  __(_)___/ /_______ __	TICKEX // EVENTCENTRE
@@ -22,14 +26,12 @@ func PrintASCII() {
 	fmt.Print(ascii)
 }
 
-// StdxOptsOfEventCentreService_SayHello get options from service method
-func StdxOptsOfEventCentreService_SayHello() *stdx.Options {
-	options := stdx.Options{}
-	return &options
+// HasRoleAtEventCentreService_SayHello checks if the role has access to the method
+func HasRoleAtEventCentreService_SayHello(role stdx.Role) bool {
+	return true
 }
 
-// StdxOptsOfEventCentreService_Status get options from service method
-func StdxOptsOfEventCentreService_Status() *stdx.Options {
-	options := stdx.Options{}
-	return &options
+// HasRoleAtEventCentreService_Status checks if the role has access to the method
+func HasRoleAtEventCentreService_Status(role stdx.Role) bool {
+	return true
 }

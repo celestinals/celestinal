@@ -16,23 +16,6 @@ syntax = "proto3";
 
 package tickex.stdx.v1;
 
-import "tickex/stdx/v1/role.proto";
-import "tickex/stdx/v1/permission.proto";
-
-import "google/protobuf/descriptor.proto";
-
 option go_package = "github.com/tickexvn/tickex/api/gen/go/stdx/v1;stdx";
 
-extend google.protobuf.MethodOptions {
-  TickexMethodOptions options = 50001;
-}
-
-message TickexMethodOptions {
-  bool ignore = 1;
-  repeated Require require = 2;
-}
-
-message Require {
-  Role role = 1;
-  Permission permission = 2;
-}
+message Empty {}

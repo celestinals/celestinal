@@ -4,19 +4,78 @@
 package example
 
 import (
+	"fmt"
+
 	"github.com/tickexvn/tickex/api/gen/go/stdx/v1"
 )
 
-// StdxOptsOfExampleService_Create get options from service method
-func StdxOptsOfExampleService_Create() *stdx.Options {
-	options := stdx.Options{}
-	options.Roles = []stdx.Role{stdx.Role_ROLE_CUSTOMER}
-	return &options
+var (
+	_ stdx.Empty
+)
+
+const ascii = `
+ _______     __          
+/_  __(_)___/ /_______ __	TICKEX // EXAMPLE
+ / / / / __/  '_/ -_) \ /	--------------
+/_/ /_/\__/_/\_\\__/_\_\	example
+
+`
+
+// PrintASCII the ASCII art to the console.
+func PrintASCII() {
+	fmt.Print(ascii)
 }
 
-// StdxOptsOfExampleService_Delete get options from service method
-func StdxOptsOfExampleService_Delete() *stdx.Options {
-	options := stdx.Options{}
-	options.Roles = []stdx.Role{stdx.Role_ROLE_ADMIN}
-	return &options
+// HasRoleAtExampleService_Create checks if the role has access to the method
+func HasRoleAtExampleService_Create(role stdx.Role) bool {
+	roleMap := make(map[stdx.Role]bool, 1)
+	roleMap[stdx.Role_ROLE_ADMIN] = true
+
+	hasRole, ok := roleMap[role]
+	if !ok {
+		return false
+	}
+
+	return hasRole
+}
+
+// HasPermissionAtExampleService_Create checks if the permission has access to the method
+func HasPermissionAtExampleService_Create(permission stdx.Permission) bool {
+	permissionMap := make(map[stdx.Permission]bool, 1)
+	permissionMap[stdx.Permission_PERMISSION_CREATE] = true
+
+	hasPermission, ok := permissionMap[permission]
+	if !ok {
+		return false
+	}
+
+	return hasPermission
+}
+
+// HasRoleAtExampleService_Delete checks if the role has access to the method
+func HasRoleAtExampleService_Delete(role stdx.Role) bool {
+	roleMap := make(map[stdx.Role]bool, 2)
+	roleMap[stdx.Role_ROLE_ADMIN] = true
+	roleMap[stdx.Role_ROLE_SELLER] = true
+
+	hasRole, ok := roleMap[role]
+	if !ok {
+		return false
+	}
+
+	return hasRole
+}
+
+// HasPermissionAtExampleService_Delete checks if the permission has access to the method
+func HasPermissionAtExampleService_Delete(permission stdx.Permission) bool {
+	permissionMap := make(map[stdx.Permission]bool, 2)
+	permissionMap[stdx.Permission_PERMISSION_UPDATE_ANY] = true
+	permissionMap[stdx.Permission_PERMISSION_UPDATE_OWN] = true
+
+	hasPermission, ok := permissionMap[permission]
+	if !ok {
+		return false
+	}
+
+	return hasPermission
 }

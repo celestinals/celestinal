@@ -41,12 +41,16 @@ func GenerateFile(gen *protogen.Plugin, file *protogen.File) *protogen.Generated
 	g.P("\t\"github.com/tickexvn/tickex/api/gen/go/stdx/v1\"\n")
 	g.P(")")
 	g.P("\n")
+	g.P("var (")
+	g.P("\t_ stdx.Empty")
+	g.P(")")
+	g.P("\n")
 
 	ascii(g, file)
 
 	for _, service := range file.Services {
 		for _, method := range service.Methods {
-			stdxOptsOf(g, service, method)
+			tickexMethodOpt(g, service, method)
 		}
 	}
 
@@ -72,33 +76,65 @@ func ascii(g *protogen.GeneratedFile, file *protogen.File) {
 	g.P("\n")
 }
 
-func stdxOptsOf(g *protogen.GeneratedFile, service *protogen.Service, method *protogen.Method) {
-	optVal := proto.GetExtension(method.Desc.Options(), stdx.E_Option)
+func tickexMethodOpt(g *protogen.GeneratedFile, service *protogen.Service, method *protogen.Method) {
+	optVal := proto.GetExtension(method.Desc.Options(), stdx.E_Options)
 	if optVal == nil {
 		return
 	}
 
-	otp, ok := optVal.(*stdx.Options)
-	if !ok {
+	methodOpt, ok := optVal.(*stdx.TickexMethodOptions)
+	if !ok || methodOpt.GetIgnore() {
 		return
 	}
 
-	g.P("// StdxOptsOf", service.GoName, "_", method.GoName, " get options from service method")
-	g.P("func StdxOptsOf", service.GoName, "_", method.GoName, "() *stdx.Options {")
-	g.P("\toptions := stdx.Options{}")
+	g.P("// HasRoleAt", service.GoName, "_", method.GoName, " checks if the role has access to the method")
+	g.P("func HasRoleAt", service.GoName, "_", method.GoName, "(role stdx.Role) bool {")
 
-	if otp.GetRoles() != nil {
-		roleOpt := "[]stdx.Role{"
-		for _, role := range otp.GetRoles() {
-			roleOpt += "stdx.Role_" + role.String() + ", "
-		}
-		roleOpt = roleOpt[:len(roleOpt)-2]
-		roleOpt += "}"
-
-		g.P("\toptions.Roles = ", roleOpt)
+	if len(methodOpt.GetRequire()) == 0 {
+		g.P("\treturn true")
+		g.P("}")
+		g.P("\n")
+		return
 	}
 
-	g.P("\treturn &options")
+	g.P("\troleMap := make(map[stdx.Role]bool, ", len(methodOpt.GetRequire()), ")")
+	requires := methodOpt.GetRequire()
+	for _, require := range requires {
+		g.P("\troleMap[stdx.Role_", require.GetRole().String(), "] = true")
+	}
+
+	g.P()
+	g.P("\thasRole, ok := roleMap[role]")
+	g.P("\tif !ok {")
+	g.P("\t\treturn false")
+	g.P("\t}")
+	g.P()
+	g.P("\treturn ", "hasRole")
+	g.P("}")
+	g.P("\n")
+
+	g.P("// HasPermissionAt", service.GoName, "_", method.GoName, " checks if the permission has access to the method")
+	g.P("func HasPermissionAt", service.GoName, "_", method.GoName, "(permission stdx.Permission) bool {")
+
+	if len(methodOpt.GetRequire()) == 0 {
+		g.P("\treturn true")
+		g.P("}")
+		g.P("\n")
+		return
+	}
+
+	g.P("\tpermissionMap := make(map[stdx.Permission]bool, ", len(methodOpt.GetRequire()), ")")
+	for _, require := range methodOpt.GetRequire() {
+		g.P("\tpermissionMap[stdx.Permission_", require.GetPermission().String(), "] = true")
+	}
+
+	g.P()
+	g.P("\thasPermission, ok := permissionMap[permission]")
+	g.P("\tif !ok {")
+	g.P("\t\treturn false")
+	g.P("\t}")
+	g.P()
+	g.P("\treturn ", "hasPermission")
 	g.P("}")
 	g.P("\n")
 }

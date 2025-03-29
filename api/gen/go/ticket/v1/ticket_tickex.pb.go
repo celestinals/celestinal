@@ -9,6 +9,10 @@ import (
 	"github.com/tickexvn/tickex/api/gen/go/stdx/v1"
 )
 
+var (
+	_ stdx.Empty
+)
+
 const ascii = `
  _______     __          
 /_  __(_)___/ /_______ __	TICKEX // TICKET
@@ -22,15 +26,56 @@ func PrintASCII() {
 	fmt.Print(ascii)
 }
 
-// StdxOptsOfTicketService_Status get options from service method
-func StdxOptsOfTicketService_Status() *stdx.Options {
-	options := stdx.Options{}
-	return &options
+// HasRoleAtTicketService_CreateTicket checks if the role has access to the method
+func HasRoleAtTicketService_CreateTicket(role stdx.Role) bool {
+	roleMap := make(map[stdx.Role]bool, 1)
+	roleMap[stdx.Role_ROLE_ADMIN] = true
+
+	hasRole, ok := roleMap[role]
+	if !ok {
+		return false
+	}
+
+	return hasRole
 }
 
-// StdxOptsOfTicketService_CreateTicket get options from service method
-func StdxOptsOfTicketService_CreateTicket() *stdx.Options {
-	options := stdx.Options{}
-	options.Roles = []stdx.Role{stdx.Role_ROLE_CUSTOMER, stdx.Role_ROLE_ADMIN}
-	return &options
+// HasPermissionAtTicketService_CreateTicket checks if the permission has access to the method
+func HasPermissionAtTicketService_CreateTicket(permission stdx.Permission) bool {
+	permissionMap := make(map[stdx.Permission]bool, 1)
+	permissionMap[stdx.Permission_PERMISSION_CREATE] = true
+
+	hasPermission, ok := permissionMap[permission]
+	if !ok {
+		return false
+	}
+
+	return hasPermission
+}
+
+// HasRoleAtTicketService_EditTicket checks if the role has access to the method
+func HasRoleAtTicketService_EditTicket(role stdx.Role) bool {
+	roleMap := make(map[stdx.Role]bool, 2)
+	roleMap[stdx.Role_ROLE_ADMIN] = true
+	roleMap[stdx.Role_ROLE_SELLER] = true
+
+	hasRole, ok := roleMap[role]
+	if !ok {
+		return false
+	}
+
+	return hasRole
+}
+
+// HasPermissionAtTicketService_EditTicket checks if the permission has access to the method
+func HasPermissionAtTicketService_EditTicket(permission stdx.Permission) bool {
+	permissionMap := make(map[stdx.Permission]bool, 2)
+	permissionMap[stdx.Permission_PERMISSION_UPDATE_ANY] = true
+	permissionMap[stdx.Permission_PERMISSION_UPDATE_OWN] = true
+
+	hasPermission, ok := permissionMap[permission]
+	if !ok {
+		return false
+	}
+
+	return hasPermission
 }

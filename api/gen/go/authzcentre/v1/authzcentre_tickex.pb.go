@@ -9,6 +9,10 @@ import (
 	"github.com/tickexvn/tickex/api/gen/go/stdx/v1"
 )
 
+var (
+	_ stdx.Empty
+)
+
 const ascii = `
  _______     __          
 /_  __(_)___/ /_______ __	TICKEX // AUTHZCENTRE
@@ -22,14 +26,12 @@ func PrintASCII() {
 	fmt.Print(ascii)
 }
 
-// StdxOptsOfAuthzCentreService_SayHello get options from service method
-func StdxOptsOfAuthzCentreService_SayHello() *stdx.Options {
-	options := stdx.Options{}
-	return &options
+// HasRoleAtAuthzCentreService_SayHello checks if the role has access to the method
+func HasRoleAtAuthzCentreService_SayHello(role stdx.Role) bool {
+	return true
 }
 
-// StdxOptsOfAuthzCentreService_Status get options from service method
-func StdxOptsOfAuthzCentreService_Status() *stdx.Options {
-	options := stdx.Options{}
-	return &options
+// HasRoleAtAuthzCentreService_Status checks if the role has access to the method
+func HasRoleAtAuthzCentreService_Status(role stdx.Role) bool {
+	return true
 }

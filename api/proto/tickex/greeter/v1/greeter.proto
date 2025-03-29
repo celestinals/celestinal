@@ -18,6 +18,7 @@ package tickex.greeter.v1;
 
 import "tickex/stdx/v1/meta.proto";
 import "tickex/greeter/shared/v1/greeter.proto";
+import "tickex/stdx/v1/options.proto";
 
 import "protoc-gen-openapiv2/options/annotations.proto";
 import "buf/validate/validate.proto";
@@ -56,12 +57,16 @@ service GreeterService {
     option (google.api.http) = {
       get: "/say"
     };
+
+    option (tickex.stdx.v1.options) = {ignore: true};
   }
 
   rpc Status(StatusRequest) returns (StatusResponse) {
     option (google.api.http) = {
       get: "/status"
     };
+
+    option (tickex.stdx.v1.options) = {ignore: true};
   }
 }
 
