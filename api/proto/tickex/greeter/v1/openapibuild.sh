@@ -40,6 +40,7 @@ protoc \
   --go_out="$TKXOUT" \
   --go-grpc_out="$TKXOUT" \
   --validate_out="lang=go,paths=:$TKXOUT" \
+  --go-tickex_out="$TKXOUT" \
   "$(pwd)"/*.proto || exit 1
 
 OLDPWD=$(pwd)

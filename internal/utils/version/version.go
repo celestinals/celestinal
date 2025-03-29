@@ -25,7 +25,7 @@ import (
 const asciiArt = `
  _______     __          
 /_  __(_)___/ /_______ __	%s
- / / / / __/  '_/ -_) \ /	------------
+ / / / / __/  '_/ -_) \ /	--------------
 /_/ /_/\__/_/\_\\__/_\_\	%s
 `
 
@@ -44,7 +44,7 @@ var (
 	Name = "TICKEX"
 
 	// BrandName is the brand name of the project.s
-	BrandName = "TICKEX // TX"
+	BrandName = "TICKEX // EDGE"
 
 	// Code is the code of the project.
 	Code = "TX"

@@ -8,6 +8,7 @@ _tools/
 _dumpdata/
 dumpdata/
 
+bin/
 build/
 docs/
 third_party/

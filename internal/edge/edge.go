@@ -26,6 +26,7 @@ import (
 	"github.com/tickexvn/tickex/internal/funcs/openapi"
 	"github.com/tickexvn/tickex/internal/funcs/secure"
 	"github.com/tickexvn/tickex/internal/funcs/watch"
+	"github.com/tickexvn/tickex/internal/utils/version"
 	"github.com/tickexvn/tickex/pkg/constant"
 	"github.com/tickexvn/tickex/pkg/core"
 	"github.com/tickexvn/tickex/pkg/pbtools"
@@ -106,10 +107,13 @@ func (e *Edge) functions(ctx context.Context) error {
 
 // ListenAndServe the edge/gateway app
 func (e *Edge) ListenAndServe(ctx context.Context) error {
+	// service ascii art banner
+	version.ASCII()
 	if err := pbtools.Validate(e.config); err != nil {
 		return err
 	}
 
+	// add chain functions handler request
 	if err := e.functions(ctx); err != nil {
 		return err
 	}
