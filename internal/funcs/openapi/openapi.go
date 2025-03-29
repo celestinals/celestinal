@@ -20,12 +20,12 @@ package openapi
 import (
 	"net/http"
 
-	"github.com/tickexvn/tickex/api/gen/go/stdx/v1"
+	"github.com/tickexvn/tickex/api/gen/go/tickex/v1"
 	"github.com/tickexvn/tickex/pkg/core"
 )
 
 // Serve return api json and swagger ui
-func Serve(server core.HTTPServer, _ *stdx.Config) {
+func Serve(server core.HTTPServer, _ *tickex.Config) {
 	fs := http.FileServer(http.Dir("public/swagger/"))
 	server.HTTPMux().Handle("/swagger/", http.StripPrefix("/swagger/", fs))
 

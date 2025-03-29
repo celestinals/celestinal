@@ -16,7 +16,7 @@ syntax = "proto3";
 
 package tickex.eventcentre.shared.v1;
 
-option go_package = "github.com/tickexvn/tickex/api/gen/go/eventcentre/shared/v1;shared";
+option go_package = "github.com/tickexvn/tickex/api/gen/go/tickex/eventcentre/shared/v1;shared";
 
 message SayHelloResponse {
   string message = 1;

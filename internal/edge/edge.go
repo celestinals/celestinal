@@ -20,7 +20,7 @@ package edge
 import (
 	"context"
 
-	"github.com/tickexvn/tickex/api/gen/go/stdx/v1"
+	"github.com/tickexvn/tickex/api/gen/go/tickex/v1"
 	"github.com/tickexvn/tickex/internal/edge/services/v1"
 	"github.com/tickexvn/tickex/internal/funcs/middleware"
 	"github.com/tickexvn/tickex/internal/funcs/openapi"
@@ -35,7 +35,7 @@ import (
 var _ core.Server = (*Edge)(nil)
 
 // New creates a new gateway app
-func New(conf *stdx.Config) core.Server {
+func New(conf *tickex.Config) core.Server {
 	return &Edge{
 		server: core.NewHTTPServer(),
 		config: conf,
@@ -53,9 +53,9 @@ func New(conf *stdx.Config) core.Server {
 type Edge struct {
 	// config is the configuration of the edge app, load environment
 	// variables from .env file
-	config *stdx.Config
+	config *tickex.Config
 
-	// server is the core server server, manage http.ServeMux,
+	// server is the core server, manage http.ServeMux,
 	// runtime.ServeMux and HTTP server
 	server core.HTTPServer
 }

@@ -20,6 +20,7 @@ package main
 import (
 	"context"
 
+	"github.com/tickexvn/tickex/api/gen/go/tickex/greeter/v1"
 	"github.com/tickexvn/tickex/pkg/config"
 	"github.com/tickexvn/tickex/pkg/core"
 	"github.com/tickexvn/tickex/pkg/flag"
@@ -37,8 +38,9 @@ import (
 //
 // _ = core.Inject(controllers.New)
 func main() {
-	flag.Flags.Name = namespace.GreeterV1
-	flag.Flags.Address = "127.0.0.1:0"
+	flag.SetDefault(namespace.GreeterV1, "127.0.0.1:0", "dev")
+	flag.SetConsole(greeter.ASCII)
+
 	_ = flag.Parse()
 
 	app := core.Build(server.New, config.Default)

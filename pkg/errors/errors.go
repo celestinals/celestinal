@@ -21,32 +21,32 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/tickexvn/tickex/api/gen/go/stdx/v1"
+	"github.com/tickexvn/tickex/api/gen/go/tickex/v1"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
 
 var (
 	forbidden = fmt.Sprintf("TICKEX-%d: %s",
-		stdx.Errors_ERRORS_FORBIDDEN, stdx.Errors_ERRORS_FORBIDDEN.String())
+		tickex.Errors_ERRORS_FORBIDDEN, tickex.Errors_ERRORS_FORBIDDEN.String())
 
 	unspecified = fmt.Sprintf("TICKEX-%d: %s",
-		stdx.Errors_ERRORS_UNSPECIFIED, stdx.Errors_ERRORS_UNSPECIFIED.String())
+		tickex.Errors_ERRORS_UNSPECIFIED, tickex.Errors_ERRORS_UNSPECIFIED.String())
 
 	internalError = fmt.Sprintf("TICKEX-%d: %s",
-		stdx.Errors_ERRORS_INTERNAL_ERROR, stdx.Errors_ERRORS_INTERNAL_ERROR.String())
+		tickex.Errors_ERRORS_INTERNAL_ERROR, tickex.Errors_ERRORS_INTERNAL_ERROR.String())
 
 	notFound = fmt.Sprintf("TICKEX-%d: %s",
-		stdx.Errors_ERRORS_NOT_FOUND, stdx.Errors_ERRORS_NOT_FOUND.String())
+		tickex.Errors_ERRORS_NOT_FOUND, tickex.Errors_ERRORS_NOT_FOUND.String())
 
 	unauthorized = fmt.Sprintf("TICKEX-%d: %s",
-		stdx.Errors_ERRORS_UNAUTHORIZED, stdx.Errors_ERRORS_UNAUTHORIZED.String())
+		tickex.Errors_ERRORS_UNAUTHORIZED, tickex.Errors_ERRORS_UNAUTHORIZED.String())
 
 	invalidData = fmt.Sprintf("TICKEX-%d: %s",
-		stdx.Errors_ERRORS_INVALID_DATA, stdx.Errors_ERRORS_INVALID_DATA.String())
+		tickex.Errors_ERRORS_INVALID_DATA, tickex.Errors_ERRORS_INVALID_DATA.String())
 
 	unimplemented = fmt.Sprintf("TICKEX-%d: %s",
-		stdx.Errors_ERRORS_UNIMPLEMENTED, stdx.Errors_ERRORS_UNIMPLEMENTED.String())
+		tickex.Errors_ERRORS_UNIMPLEMENTED, tickex.Errors_ERRORS_UNIMPLEMENTED.String())
 )
 
 var (

@@ -22,7 +22,7 @@ import "tickex/ticket/shared/v1/ticket.proto";
 // import "buf/validate/validate.proto";
 import "google/protobuf/empty.proto";
 
-option go_package = "github.com/tickexvn/tickex/api/gen/go/ticket/domain/v1;domain";
+option go_package = "github.com/tickexvn/tickex/api/gen/go/tickex/ticket/domain/v1;domain";
 
 service TicketDomainService {
   rpc CreateTicket(CreateTicketRequest) returns (tickex.ticket.shared.v1.CreateTicketResponse){}

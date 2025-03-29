@@ -18,7 +18,7 @@ package tickex.ticket.shared.inter.v1;
 
 import "tickex/ticket/metadata/v1/ticket.proto";
 
-option go_package = "github.com/tickexvn/tickex/api/gen/go/ticket/shared/inter/v1;inter";
+option go_package = "github.com/tickexvn/tickex/api/gen/go/tickex/ticket/shared/inter/v1;inter";
 
 message Event {
   ticket.metadata.v1.Metadata metadata = 1;

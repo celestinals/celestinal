@@ -20,7 +20,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/tickexvn/tickex/api/gen/go/stdx/v1"
+	"github.com/tickexvn/tickex/api/gen/go/tickex/v1"
 	"github.com/tickexvn/tickex/pkg/errors"
 	"github.com/tickexvn/tickex/pkg/txlog"
 )
@@ -34,7 +34,7 @@ type Visitor interface {
 
 // NewVisitor returns a new Visitor. It uses the discovery service to
 // discover the service.
-func NewVisitor(conf *stdx.Config) Visitor {
+func NewVisitor(conf *tickex.Config) Visitor {
 	if discover == nil {
 		discovery, err := New(conf)
 		if err != nil {
@@ -55,7 +55,7 @@ func (v visitor) Visit(ctx context.Context, namespace string) (string, error) {
 		return "", errors.StatusNotFound
 	}
 
-	services, err := discover.Discover(ctx, &stdx.DiscoverRequest{
+	services, err := discover.Discover(ctx, &tickex.DiscoverRequest{
 		Name: namespace,
 	})
 	if err != nil {
@@ -69,7 +69,7 @@ func (v visitor) Visit(ctx context.Context, namespace string) (string, error) {
 }
 
 // Visit namespace on consul and get endpoint of service
-func Visit(ctx context.Context, conf *stdx.Config, namespace string) (string, error) {
+func Visit(ctx context.Context, conf *tickex.Config, namespace string) (string, error) {
 	vst := NewVisitor(conf)
 
 	return vst.Visit(ctx, namespace)

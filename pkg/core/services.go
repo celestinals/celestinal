@@ -22,7 +22,7 @@ import (
 	"time"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	"github.com/tickexvn/tickex/api/gen/go/stdx/v1"
+	"github.com/tickexvn/tickex/api/gen/go/tickex/v1"
 	"github.com/tickexvn/tickex/pkg/core/net"
 	"github.com/tickexvn/tickex/pkg/discovery"
 	"github.com/tickexvn/tickex/pkg/errors"
@@ -61,7 +61,7 @@ type service struct {
 
 // ServiceInfo is Serve method properties
 type ServiceInfo struct {
-	Config *stdx.Config
+	Config *tickex.Config
 	Addr   string
 	Tags   []string
 	Name   string
@@ -78,7 +78,7 @@ type ServiceInfo struct {
 //	}
 type ServiceServer struct {
 	server    *grpc.Server
-	discovery stdx.DiscoveryServiceServer
+	discovery tickex.DiscoveryServiceServer
 }
 
 // ListenAndServe implements Server.
@@ -129,7 +129,7 @@ func (s *ServiceServer) Serve(info *ServiceInfo) error {
 }
 
 // register registers the service with the service discovery.
-func (s *ServiceServer) register(conf *stdx.Config, service service) error {
+func (s *ServiceServer) register(conf *tickex.Config, service service) error {
 	discover, err := discovery.New(conf)
 	if err != nil {
 		return err
@@ -149,13 +149,13 @@ func (s *ServiceServer) registerConsul(service service) error {
 	ttl := time.Second * 5
 
 	if _, err := s.discovery.Register(
-		context.Background(), &stdx.RegisterRequest{
-			ServiceCheck: &stdx.ServiceCheck{
+		context.Background(), &tickex.RegisterRequest{
+			ServiceCheck: &tickex.ServiceCheck{
 				Ttl:                            ttl.String(),
 				TlsSkipVerify:                  true,
 				DeregisterCriticalServiceAfter: ttl.String(),
 			},
-			Service: &stdx.Service{
+			Service: &tickex.Service{
 				Id:   serviceID,
 				Name: service.Name,
 				Host: service.Host,
@@ -181,7 +181,7 @@ func (s *ServiceServer) heartbeat(id string, ttl time.Duration) {
 	ticker := time.NewTicker(ttl)
 	for {
 		_, err := s.discovery.Heartbeat(
-			context.Background(), &stdx.HeartbeatRequest{Id: id})
+			context.Background(), &tickex.HeartbeatRequest{Id: id})
 		if err != nil {
 			txlog.Errorf("consul heartbeat error: %v", err)
 		}

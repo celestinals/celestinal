@@ -16,4 +16,4 @@ syntax = "proto3";
 
 package tickex.ticket.shared.x.v1;
 
-option go_package = "github.com/tickexvn/tickex/api/gen/go/ticket/shared/x/v1;sharedx";
+option go_package = "github.com/tickexvn/tickex/api/gen/go/tickex/ticket/shared/x/v1;sharedx";

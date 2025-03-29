@@ -22,14 +22,14 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/consul/api"
-	"github.com/tickexvn/tickex/api/gen/go/stdx/v1"
+	"github.com/tickexvn/tickex/api/gen/go/tickex/v1"
 	"github.com/tickexvn/tickex/pkg/protobuf"
 )
 
-var _ stdx.DiscoveryServiceServer = (*Discovery)(nil)
+var _ tickex.DiscoveryServiceServer = (*Discovery)(nil)
 
 // New provide service registry of Tickex microservice network
-func New(conf *stdx.Config) (*Discovery, error) {
+func New(conf *tickex.Config) (*Discovery, error) {
 	if err := protobuf.Validate(conf); err != nil {
 		return nil, err
 	}
@@ -49,13 +49,13 @@ func New(conf *stdx.Config) (*Discovery, error) {
 
 // Discovery implements the ServiceRegistryService.
 type Discovery struct {
-	stdx.UnimplementedDiscoveryServiceServer
+	tickex.UnimplementedDiscoveryServiceServer
 	client *api.Client
 }
 
 // Register implements the Register method of the ServiceRegistryService.
 func (d *Discovery) Register(
-	ctx context.Context, req *stdx.RegisterRequest) (*stdx.RegisterResponse, error) {
+	ctx context.Context, req *tickex.RegisterRequest) (*tickex.RegisterResponse, error) {
 
 	_ = ctx
 	if err := protobuf.Validate(req); err != nil {
@@ -81,7 +81,7 @@ func (d *Discovery) Register(
 
 // Discover implements the Discover method of the ServiceRegistryService.
 func (d *Discovery) Discover(
-	ctx context.Context, req *stdx.DiscoverRequest) (*stdx.DiscoverResponse, error) {
+	ctx context.Context, req *tickex.DiscoverRequest) (*tickex.DiscoverResponse, error) {
 	_ = ctx
 	if err := protobuf.Validate(req); err != nil {
 		return nil, err
@@ -96,9 +96,9 @@ func (d *Discovery) Discover(
 		return nil, fmt.Errorf("service %s not found", req.GetName())
 	}
 
-	var resp stdx.DiscoverResponse
+	var resp tickex.DiscoverResponse
 	for _, service := range services {
-		resp.Services = append(resp.Services, &stdx.Service{
+		resp.Services = append(resp.Services, &tickex.Service{
 			Id:   service.Service.ID,
 			Name: service.Service.Service,
 			Host: service.Service.Address,
@@ -112,7 +112,7 @@ func (d *Discovery) Discover(
 
 // Heartbeat implements the Heartbeat method of the ServiceRegistryService.
 func (d *Discovery) Heartbeat(
-	ctx context.Context, req *stdx.HeartbeatRequest) (*stdx.HeartbeatResponse, error) {
+	ctx context.Context, req *tickex.HeartbeatRequest) (*tickex.HeartbeatResponse, error) {
 
 	_ = ctx
 	if err := protobuf.Validate(req); err != nil {
@@ -122,7 +122,7 @@ func (d *Discovery) Heartbeat(
 	err := d.client.Agent().
 		UpdateTTL("service:"+req.GetId(), "Service is healthy", api.HealthPassing)
 
-	return &stdx.HeartbeatResponse{
+	return &tickex.HeartbeatResponse{
 		Success: err == nil,
 	}, err
 }

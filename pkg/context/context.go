@@ -20,7 +20,7 @@ package context
 import (
 	"context"
 
-	"github.com/tickexvn/tickex/api/gen/go/stdx/v1"
+	"github.com/tickexvn/tickex/api/gen/go/tickex/v1"
 	"github.com/tickexvn/tickex/pkg/protobuf/proto"
 )
 
@@ -30,9 +30,9 @@ type Key int
 const contextKey Key = 0
 
 // New returns a new context with the given message
-func New(msg *stdx.Context) context.Context {
+func New(msg *tickex.Context) context.Context {
 	if msg == nil {
-		msg = &stdx.Context{}
+		msg = &tickex.Context{}
 	}
 
 	ctx := context.Background()
@@ -42,13 +42,13 @@ func New(msg *stdx.Context) context.Context {
 }
 
 // Value returns the context value.
-func Value(ctx context.Context) (*stdx.Context, bool) {
+func Value(ctx context.Context) (*tickex.Context, bool) {
 	msgBin, ok := ctx.Value(contextKey).([]byte)
 	if !ok {
 		return nil, false
 	}
 
-	var msg stdx.Context
+	var msg tickex.Context
 	if err := proto.Unmarshal(msgBin, &msg); err != nil {
 		return nil, false
 	}

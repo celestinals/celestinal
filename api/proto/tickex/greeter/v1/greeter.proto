@@ -16,15 +16,15 @@ syntax = "proto3";
 
 package tickex.greeter.v1;
 
-import "tickex/stdx/v1/meta.proto";
+import "tickex/v1/meta.proto";
 import "tickex/greeter/shared/v1/greeter.proto";
-import "tickex/stdx/v1/options.proto";
+import "tickex/v1/options.proto";
 
 import "protoc-gen-openapiv2/options/annotations.proto";
 import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
 
-option go_package = "github.com/tickexvn/tickex/api/gen/go/greeter/v1;greeter";
+option go_package = "github.com/tickexvn/tickex/api/gen/go/tickex/greeter/v1;greeter";
 
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
   info: {
@@ -58,7 +58,7 @@ service GreeterService {
       get: "/say"
     };
 
-    option (tickex.stdx.v1.options) = {ignore: true};
+    option (tickex.v1.options) = {ignore: true};
   }
 
   rpc Status(StatusRequest) returns (StatusResponse) {
@@ -66,12 +66,12 @@ service GreeterService {
       get: "/status"
     };
 
-    option (tickex.stdx.v1.options) = {ignore: true};
+    option (tickex.v1.options) = {ignore: true};
   }
 }
 
 message SayHelloRequest {
-  tickex.stdx.v1.Pages page = 1;
+  tickex.v1.Pages page = 1;
   string name = 2 [(buf.validate.field).string.min_len = 1];
 }
 

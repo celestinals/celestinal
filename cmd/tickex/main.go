@@ -21,6 +21,7 @@ import (
 	"context"
 
 	"github.com/tickexvn/tickex/internal/edge"
+	"github.com/tickexvn/tickex/internal/utils/version"
 	"github.com/tickexvn/tickex/pkg/config"
 	"github.com/tickexvn/tickex/pkg/core"
 	"github.com/tickexvn/tickex/pkg/flag"
@@ -49,7 +50,9 @@ import (
 //	make run.tickex // start tickex edge
 //	make run.x.<service> // start service
 func main() {
-	flag.Flags.Name = namespace.Edge
+	flag.SetDefault(namespace.Edge, "0.0.0.0:9000", "dev")
+	flag.SetConsole(version.ASCIIArt)
+
 	_ = flag.ParseEdge()
 
 	app := core.Build(edge.New, config.Default)

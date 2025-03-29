@@ -23,7 +23,7 @@ import (
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
 
-	greeterpb "github.com/tickexvn/tickex/api/gen/go/greeter/v1"
+	greeterpb "github.com/tickexvn/tickex/api/gen/go/tickex/greeter/v1"
 	"github.com/tickexvn/tickex/internal/edge/services/base"
 	"github.com/tickexvn/tickex/internal/utils/visitor"
 	"github.com/tickexvn/tickex/pkg/core"

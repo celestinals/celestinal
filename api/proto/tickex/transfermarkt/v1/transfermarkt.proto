@@ -16,14 +16,14 @@ syntax = "proto3";
 
 package tickex.transfermarkt.v1;
 
-import "tickex/stdx/v1/meta.proto";
+import "tickex/v1/meta.proto";
 import "tickex/transfermarkt/shared/v1/transfermarkt.proto";
 
 import "protoc-gen-openapiv2/options/annotations.proto";
 import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
 
-option go_package = "github.com/tickexvn/tickex/api/gen/go/transfermarkt/v1;transfermarkt";
+option go_package = "github.com/tickexvn/tickex/api/gen/go/tickex/transfermarkt/v1;transfermarkt";
 
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
   info: {
@@ -66,7 +66,7 @@ service TransfermarktService {
 }
 
 message SayHelloRequest {
-  tickex.stdx.v1.Pages page = 1;
+  tickex.v1.Pages page = 1;
   string name = 2 [(buf.validate.field).string.min_len = 1];
 }
 

@@ -18,7 +18,7 @@ package tickex.ticket.metadata.v1;
 
 import "google/protobuf/timestamp.proto";
 
-option go_package = "github.com/tickexvn/tickex/api/gen/go/ticket/metadata/v1;metadata";
+option go_package = "github.com/tickexvn/tickex/api/gen/go/tickex/ticket/metadata/v1;metadata";
 
 enum TicketType {
     TICKET_TYPE_UNSPECIFIED = 0;
