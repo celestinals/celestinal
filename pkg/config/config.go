@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-// Package configs provides the configs for the service.
-package configs
+// Package config provides the configs for the service.
+package config
 
 import (
 	"os"

@@ -19,12 +19,12 @@ package edge
 import (
 	"testing"
 
-	"github.com/tickexvn/tickex/pkg/configs"
+	"github.com/tickexvn/tickex/pkg/config"
 )
 
 func BenchmarkEdgeToService(b *testing.B) {
 	b.ReportAllocs()
 	for i := 0; i < b.N; i++ {
-		_ = New(configs.Default())
+		_ = New(config.Default())
 	}
 }

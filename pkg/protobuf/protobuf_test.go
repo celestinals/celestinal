@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-// Package pbtools provides utilities for working with protobuf messages.
-package pbtools
+// Package protobuf provides utilities for working with protobuf messages.
+package protobuf
 
 import (
 	"testing"

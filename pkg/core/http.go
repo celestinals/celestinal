@@ -21,8 +21,8 @@ import (
 	"net/http"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	"github.com/tickexvn/tickex/pkg/cli"
 	"github.com/tickexvn/tickex/pkg/errors"
+	"github.com/tickexvn/tickex/pkg/flag"
 )
 
 var (
@@ -91,7 +91,7 @@ func (h *httpServer) Use(handler func(http.Handler) http.Handler) {
 // Listen starts the runtime mux.
 func (h *httpServer) Listen(address string) error {
 	if address == "" {
-		address = cli.Parse().GetAddress()
+		address = flag.Parse().GetAddress()
 	}
 
 	// handler runtime.Mux with http.ServeMux

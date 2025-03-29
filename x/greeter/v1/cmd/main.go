@@ -20,9 +20,9 @@ package main
 import (
 	"context"
 
-	"github.com/tickexvn/tickex/pkg/cli"
-	"github.com/tickexvn/tickex/pkg/configs"
+	"github.com/tickexvn/tickex/pkg/config"
 	"github.com/tickexvn/tickex/pkg/core"
+	"github.com/tickexvn/tickex/pkg/flag"
 	"github.com/tickexvn/tickex/pkg/namespace"
 	"github.com/tickexvn/tickex/pkg/txlog"
 	_ "github.com/tickexvn/tickex/x/greeter/boots/init"
@@ -37,11 +37,11 @@ import (
 //
 // _ = core.Inject(controllers.New)
 func main() {
-	cli.Flags.Name = namespace.GreeterV1
-	cli.Flags.Address = "127.0.0.1:0"
-	_ = cli.Parse()
+	flag.Flags.Name = namespace.GreeterV1
+	flag.Flags.Address = "127.0.0.1:0"
+	_ = flag.Parse()
 
-	app := core.Build(server.New, configs.Default)
+	app := core.Build(server.New, config.Default)
 	if err := app.Start(context.Background()); err != nil {
 		txlog.Fatal(err)
 	}

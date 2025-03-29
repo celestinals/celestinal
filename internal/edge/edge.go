@@ -27,9 +27,8 @@ import (
 	"github.com/tickexvn/tickex/internal/funcs/secure"
 	"github.com/tickexvn/tickex/internal/funcs/watch"
 	"github.com/tickexvn/tickex/internal/utils/version"
-	"github.com/tickexvn/tickex/pkg/constant"
 	"github.com/tickexvn/tickex/pkg/core"
-	"github.com/tickexvn/tickex/pkg/pbtools"
+	"github.com/tickexvn/tickex/pkg/protobuf"
 	"github.com/tickexvn/tickex/pkg/txlog"
 )
 
@@ -109,7 +108,7 @@ func (e *Edge) functions(ctx context.Context) error {
 func (e *Edge) ListenAndServe(ctx context.Context) error {
 	// service ascii art banner
 	version.ASCII()
-	if err := pbtools.Validate(e.config); err != nil {
+	if err := protobuf.Validate(e.config); err != nil {
 		return err
 	}
 
@@ -120,7 +119,7 @@ func (e *Edge) ListenAndServe(ctx context.Context) error {
 
 	// Listen HTTP server (and edge calls to gRPC server endpoint)
 	// log info in console and return register error if they exist
-	txlog.Infof(constant.InfoHTTPServer, e.config.GetApiAddr())
+	txlog.Infof("[http] starting server %s", e.config.GetApiAddr())
 	return e.server.Listen(e.config.GetApiAddr())
 	// return errors.F("edge: failed to listen and serve")
 }

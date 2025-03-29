@@ -22,10 +22,10 @@ import (
 
 	"github.com/tickexvn/tickex/api/gen/go/greeter/v1"
 	"github.com/tickexvn/tickex/api/gen/go/stdx/v1"
-	"github.com/tickexvn/tickex/pkg/cli"
 	"github.com/tickexvn/tickex/pkg/core"
+	"github.com/tickexvn/tickex/pkg/flag"
 	"github.com/tickexvn/tickex/pkg/namespace"
-	"github.com/tickexvn/tickex/pkg/pbtools"
+	"github.com/tickexvn/tickex/pkg/protobuf"
 	"github.com/tickexvn/tickex/x/greeter/internal/controllers"
 )
 
@@ -50,7 +50,7 @@ type Greeter struct {
 // ListenAndServe implements IGreeter.
 func (g *Greeter) ListenAndServe(_ context.Context) error {
 	greeter.PrintASCII()
-	if err := pbtools.Validate(g.config); err != nil {
+	if err := protobuf.Validate(g.config); err != nil {
 		return err
 	}
 
@@ -58,7 +58,7 @@ func (g *Greeter) ListenAndServe(_ context.Context) error {
 
 	return g.Serve(&core.ServiceInfo{
 		Config: g.config,
-		Addr:   cli.Parse().GetAddress(),
+		Addr:   flag.Parse().GetAddress(),
 		Tags:   []string{"greeter", namespace.GreeterV1},
 		Name:   namespace.GreeterV1,
 	})

@@ -20,8 +20,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/tickexvn/tickex/pkg/cli"
-	"github.com/tickexvn/tickex/pkg/pbtools"
+	"github.com/tickexvn/tickex/pkg/flag"
+	"github.com/tickexvn/tickex/pkg/protobuf"
 	"github.com/tickexvn/tickex/pkg/txlog"
 	"go.uber.org/fx"
 )
@@ -49,7 +49,7 @@ func runner(lc fx.Lifecycle, srv Server) {
 			case err := <-errChan:
 				return err
 			case <-time.After(timeout):
-				return pbtools.Validate(cli.Parse())
+				return protobuf.Validate(flag.Parse())
 			}
 
 		},

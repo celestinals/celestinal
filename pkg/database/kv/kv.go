@@ -14,13 +14,5 @@
  * limitations under the License.
  */
 
-// Package constant contain log message title with format
-package constant
-
-const (
-	// InfoGrpcServer gRPC server listening on [PORT]
-	InfoGrpcServer = "[grpc] starting server %s"
-
-	// InfoHTTPServer HTTP server listening on [PORT]
-	InfoHTTPServer = "[http] starting server %s"
-)
+// Package kv implement key-value storage base on postgresql
+package kv

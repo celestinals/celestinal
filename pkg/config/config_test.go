@@ -14,32 +14,41 @@
  * limitations under the License.
  */
 
-// Package copier provides functions to copy objects.
-package copier
+package config
 
 import (
-	"encoding/json"
+	"testing"
 
-	"github.com/tickexvn/tickex/pkg/pbtools/proto"
-	google "google.golang.org/protobuf/proto"
+	"github.com/tickexvn/tickex/api/gen/go/stdx/v1"
+	"github.com/tickexvn/tickex/pkg/protobuf"
 )
 
-// CopyMsg copies the src message to the dst message.
-func CopyMsg(src, dst google.Message) error {
-	bytes, err := proto.Marshal(src)
-	if err != nil {
-		return err
+func TestConfig(t *testing.T) {
+	conf := stdx.Config{
+		ServiceRegistryAddr: "0.0.0.0:8500",
+		ApiAddr:             "0.0.0.0:9000",
+		Env:                 "prod",
 	}
 
-	return proto.Unmarshal(bytes, dst)
+	if err := protobuf.Validate(&conf); err != nil {
+		t.Error(err)
+	}
 }
 
-// Copy copies the src object to the dst object.
-func Copy(src, dst interface{}) error {
-	bytes, err := json.Marshal(src)
-	if err != nil {
-		return err
+func TestConfigEnv(t *testing.T) {
+	conf := Default()
+
+	if err := protobuf.Validate(conf); err != nil {
+		return
 	}
 
-	return json.Unmarshal(bytes, dst)
+	t.Error("should not validate env")
+}
+
+func BenchmarkConfigHeapAllocation(b *testing.B) {
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		_ = Default()
+	}
 }

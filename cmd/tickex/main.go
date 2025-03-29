@@ -21,9 +21,9 @@ import (
 	"context"
 
 	"github.com/tickexvn/tickex/internal/edge"
-	"github.com/tickexvn/tickex/pkg/cli"
-	"github.com/tickexvn/tickex/pkg/configs"
+	"github.com/tickexvn/tickex/pkg/config"
 	"github.com/tickexvn/tickex/pkg/core"
+	"github.com/tickexvn/tickex/pkg/flag"
 	"github.com/tickexvn/tickex/pkg/namespace"
 	"github.com/tickexvn/tickex/pkg/txlog"
 )
@@ -49,10 +49,10 @@ import (
 //	make run.tickex // start tickex edge
 //	make run.x.<service> // start service
 func main() {
-	cli.Flags.Name = namespace.Edge
-	_ = cli.ParseEdge()
+	flag.Flags.Name = namespace.Edge
+	_ = flag.ParseEdge()
 
-	app := core.Build(edge.New, configs.Default)
+	app := core.Build(edge.New, config.Default)
 	if err := app.Start(context.Background()); err != nil {
 		txlog.Fatal(err)
 	}
