@@ -9,6 +9,10 @@ import (
 	"github.com/tickexvn/tickex/api/gen/go/stdx/v1"
 )
 
+var (
+	_ stdx.Empty
+)
+
 const ascii = `
  _______     __          
 /_  __(_)___/ /_______ __	TICKEX // TRANSFERMARKT
@@ -22,14 +26,12 @@ func PrintASCII() {
 	fmt.Print(ascii)
 }
 
-// StdxOptsOfTransfermarktService_SayHello get options from service method
-func StdxOptsOfTransfermarktService_SayHello() *stdx.Options {
-	options := stdx.Options{}
-	return &options
+// HasRoleAtTransfermarktService_SayHello checks if the role has access to the method
+func HasRoleAtTransfermarktService_SayHello(role stdx.Role) bool {
+	return true
 }
 
-// StdxOptsOfTransfermarktService_Status get options from service method
-func StdxOptsOfTransfermarktService_Status() *stdx.Options {
-	options := stdx.Options{}
-	return &options
+// HasRoleAtTransfermarktService_Status checks if the role has access to the method
+func HasRoleAtTransfermarktService_Status(role stdx.Role) bool {
+	return true
 }

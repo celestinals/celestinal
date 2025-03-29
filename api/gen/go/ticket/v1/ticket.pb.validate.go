@@ -33,6 +33,140 @@ var (
 	_ = anypb.Any{}
 )
 
+// Validate checks the field values on EditTicketRequest with the rules defined
+// in the proto definition for this message. If any rules are violated, an
+// error is returned.
+func (m *EditTicketRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// EditTicketRequestValidationError is the validation error returned by
+// EditTicketRequest.Validate if the designated constraints aren't met.
+type EditTicketRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e EditTicketRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e EditTicketRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e EditTicketRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e EditTicketRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e EditTicketRequestValidationError) ErrorName() string {
+	return "EditTicketRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e EditTicketRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sEditTicketRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = EditTicketRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = EditTicketRequestValidationError{}
+
+// Validate checks the field values on EditTicketResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *EditTicketResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// EditTicketResponseValidationError is the validation error returned by
+// EditTicketResponse.Validate if the designated constraints aren't met.
+type EditTicketResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e EditTicketResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e EditTicketResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e EditTicketResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e EditTicketResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e EditTicketResponseValidationError) ErrorName() string {
+	return "EditTicketResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e EditTicketResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sEditTicketResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = EditTicketResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = EditTicketResponseValidationError{}
+
 // Validate checks the field values on StatusResponse with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
 // is returned.
