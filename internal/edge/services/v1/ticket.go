@@ -23,7 +23,7 @@ import (
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
 
-	ticketpb "github.com/tickexvn/tickex/api/gen/go/ticket/v1"
+	ticketpb "github.com/tickexvn/tickex/api/gen/go/tickex/ticket/v1"
 	"github.com/tickexvn/tickex/internal/edge/services/base"
 	"github.com/tickexvn/tickex/internal/utils/visitor"
 	"github.com/tickexvn/tickex/pkg/core"

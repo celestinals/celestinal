@@ -20,8 +20,8 @@ package controllers
 import (
 	"context"
 
-	domainpb "github.com/tickexvn/tickex/api/gen/go/greeter/domain/v1"
-	"github.com/tickexvn/tickex/api/gen/go/greeter/v1"
+	domainpb "github.com/tickexvn/tickex/api/gen/go/tickex/greeter/domain/v1"
+	"github.com/tickexvn/tickex/api/gen/go/tickex/greeter/v1"
 	"github.com/tickexvn/tickex/pkg/copier"
 	"github.com/tickexvn/tickex/pkg/errors"
 	"github.com/tickexvn/tickex/pkg/txlog"

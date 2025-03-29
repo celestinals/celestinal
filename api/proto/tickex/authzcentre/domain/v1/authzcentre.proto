@@ -18,17 +18,17 @@ package tickex.authzcentre.domain.v1;
 
 import "buf/validate/validate.proto";
 
-import "tickex/stdx/v1/meta.proto";
+import "tickex/v1/meta.proto";
 import "tickex/authzcentre/shared/v1/authzcentre.proto";
 
-option go_package = "github.com/tickexvn/tickex/api/gen/go/authzcentre/domain/v1;domain";
+option go_package = "github.com/tickexvn/tickex/api/gen/go/tickex/authzcentre/domain/v1;domain";
 
 service AuthzCentreDomainService {
   rpc SayHello(SayHelloRequest) returns (SayHelloResponse) {}
 }
 
 message SayHelloRequest {
-  tickex.stdx.v1.Pages page = 1;
+  tickex.v1.Pages page = 1;
   string name = 2 [(buf.validate.field).string.min_len = 1];
 }
 

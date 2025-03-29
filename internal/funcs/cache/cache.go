@@ -20,13 +20,13 @@ package cache
 import (
 	"net/http"
 
-	"github.com/tickexvn/tickex/api/gen/go/stdx/v1"
+	tickex "github.com/tickexvn/tickex/api/gen/go/tickex/v1"
 	"github.com/tickexvn/tickex/pkg/core"
 )
 
 // Serve is a middleware that serves the cache response for the same
 // request in the future.
-func Serve(server core.HTTPServer, _ *stdx.Config) {
+func Serve(server core.HTTPServer, _ *tickex.Config) {
 	server.Use(cache)
 }
 

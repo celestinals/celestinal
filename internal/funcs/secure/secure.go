@@ -25,14 +25,14 @@ import (
 	"github.com/corazawaf/coraza/v3/types"
 	"google.golang.org/grpc/grpclog"
 
-	"github.com/tickexvn/tickex/api/gen/go/stdx/v1"
+	"github.com/tickexvn/tickex/api/gen/go/tickex/v1"
 	"github.com/tickexvn/tickex/pkg/core"
 	"github.com/tickexvn/tickex/pkg/flag"
 	"github.com/tickexvn/tickex/pkg/txlog"
 )
 
 // Serve the edge with WAF secure middleware layer
-func Serve(server core.HTTPServer, _ *stdx.Config) {
+func Serve(server core.HTTPServer, _ *tickex.Config) {
 	flags := flag.ParseEdge()
 	if !flags.GetSecure() {
 		if len(flags.GetRules()) > 0 {

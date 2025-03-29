@@ -22,8 +22,8 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/tickexvn/tickex/api/gen/go/greeter/domain/v1"
-	"github.com/tickexvn/tickex/api/gen/go/greeter/shared/v1"
+	"github.com/tickexvn/tickex/api/gen/go/tickex/greeter/domain/v1"
+	"github.com/tickexvn/tickex/api/gen/go/tickex/greeter/shared/v1"
 	"github.com/tickexvn/tickex/pkg/errors"
 	"github.com/tickexvn/tickex/pkg/txlog"
 )

@@ -23,41 +23,48 @@ import (
 	"sync"
 
 	"github.com/spf13/pflag"
-	"github.com/tickexvn/tickex/api/gen/go/stdx/v1"
+	"github.com/tickexvn/tickex/api/gen/go/tickex/v1"
 	"github.com/tickexvn/tickex/internal/utils/version"
 )
 
-var once sync.Once
-var isService = true
+var (
+	once sync.Once
+)
 
-// Flags global variable
-var Flags = &stdx.Flag{
-	Name:    "Tickex mesh server",
+var (
+	// ascii art use in console with --help option
+	asciiConsole = version.ASCIIArt
+	isService    = true
+)
+
+// flags global variable
+var flags = &tickex.Flag{
+	Name:    "tickex.server.default",
 	Address: "0.0.0.0:9000",
 	Mode:    "dev",
 }
 
 // EdgeFlags global variable
-var EdgeFlags = &stdx.FlagEdge{
+var edgeFlags = &tickex.FlagEdge{
 	IsTurnOnBots: false,
 	Secure:       false,
 }
 
 // Parse flag args
-func Parse() *stdx.Flag {
+func Parse() *tickex.Flag {
 	once.Do(func() {
 		if !isService {
-			pflag.BoolVarP(&EdgeFlags.IsTurnOnBots, "telegram", "t", EdgeFlags.GetIsTurnOnBots(), "turn on telegram system log ?")
-			pflag.BoolVarP(&EdgeFlags.Secure, "secure", "s", EdgeFlags.GetSecure(), "secure api with WAF ?")
-			pflag.StringSliceVarP(&EdgeFlags.Rules, "rule", "r", EdgeFlags.Rules, "owasp crs rules config file")
+			pflag.BoolVarP(&edgeFlags.IsTurnOnBots, "telegram", "t", edgeFlags.GetIsTurnOnBots(), "turn on telegram system log ?")
+			pflag.BoolVarP(&edgeFlags.Secure, "secure", "s", edgeFlags.GetSecure(), "secure api with WAF ?")
+			pflag.StringSliceVarP(&edgeFlags.Rules, "rule", "r", edgeFlags.Rules, "owasp crs rules config file")
 		}
 
-		pflag.StringVarP(&Flags.Name, "name", "n", Flags.GetName(), "hostname ?")
-		pflag.StringVarP(&Flags.Address, "address", "a", Flags.GetAddress(), "host address ?")
-		pflag.StringVarP(&Flags.Mode, "mode", "m", Flags.GetMode(), "run mode (dev|prod|sandbox) ?")
+		pflag.StringVarP(&flags.Name, "name", "n", flags.GetName(), "hostname ?")
+		pflag.StringVarP(&flags.Address, "address", "a", flags.GetAddress(), "host address ?")
+		pflag.StringVarP(&flags.Mode, "mode", "m", flags.GetMode(), "run mode (dev|prod|sandbox) ?")
 
 		pflag.Usage = func() {
-			fmt.Println(version.ASCIIArt)
+			fmt.Println(asciiConsole)
 			fmt.Println("Usage: tickex-<service> [Flags]")
 			pflag.PrintDefaults()
 			os.Exit(0)
@@ -66,14 +73,26 @@ func Parse() *stdx.Flag {
 		pflag.Parse()
 	})
 
-	return Flags
+	return flags
 }
 
 // ParseEdge flag args for edge service
-func ParseEdge() *stdx.FlagEdge {
+func ParseEdge() *tickex.FlagEdge {
 	isService = false
 
 	_ = Parse()
 
-	return EdgeFlags
+	return edgeFlags
+}
+
+// SetDefault set default flag values
+func SetDefault(name, address, mode string) {
+	flags.Name = name
+	flags.Address = address
+	flags.Mode = mode
+}
+
+// SetConsole set console log when --help or -h option
+func SetConsole(ascii string) {
+	asciiConsole = ascii
 }

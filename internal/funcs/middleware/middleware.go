@@ -27,7 +27,7 @@ import (
 
 	"google.golang.org/grpc/grpclog"
 
-	"github.com/tickexvn/tickex/api/gen/go/stdx/v1"
+	"github.com/tickexvn/tickex/api/gen/go/tickex/v1"
 	"github.com/tickexvn/tickex/internal/utils/version"
 	"github.com/tickexvn/tickex/pkg/core"
 	"github.com/tickexvn/tickex/pkg/flag"
@@ -36,14 +36,14 @@ import (
 )
 
 // New middleware handler
-func New(conf *stdx.Config) *Middleware {
+func New(conf *tickex.Config) *Middleware {
 	return &Middleware{
 		conf: conf,
 	}
 }
 
 // Serve middleware handler for http handler in edge server
-func Serve(server core.HTTPServer, conf *stdx.Config) {
+func Serve(server core.HTTPServer, conf *tickex.Config) {
 	// new middleware handler
 	mdw := New(conf)
 
@@ -54,7 +54,7 @@ func Serve(server core.HTTPServer, conf *stdx.Config) {
 
 // Middleware for http handler in grpc gateway
 type Middleware struct {
-	conf *stdx.Config
+	conf *tickex.Config
 }
 
 // LogRequestBody logs the request body when the response status code is not 200.
@@ -130,8 +130,8 @@ func (mdw *Middleware) notify(statusCode int, body string) {
 
 	footer := fmt.Sprintf("%s<%s<<%s<<<%s<<<<<<<<<<<<<<<<<<\nGITHUB<COM<<TICKEXVN<<<TICKEX<<<<<<<<<<<<<<<\n",
 		"I", version.Name, version.Version, version.GoVersion)
-	_ = monitor.Send(&stdx.RobotMessage{
-		Metadata: &stdx.RobotMessageMetadata{
+	_ = monitor.Send(&tickex.RobotMessage{
+		Metadata: &tickex.RobotMessageMetadata{
 			CreatedAt: protobuf.ToTime(time.Now().Local()),
 			Author:    flag.Parse().GetName(),
 		},

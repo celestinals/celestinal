@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/tickexvn/tickex/api/gen/go/stdx/v1"
+	"github.com/tickexvn/tickex/api/gen/go/tickex/v1"
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/proto"
 )
@@ -38,11 +38,11 @@ func GenerateFile(gen *protogen.Plugin, file *protogen.File) *protogen.Generated
 	g.P("import (")
 	g.P("\t\"fmt\"\n")
 	g.P()
-	g.P("\t\"github.com/tickexvn/tickex/api/gen/go/stdx/v1\"\n")
+	g.P("\t\"github.com/tickexvn/tickex/api/gen/go/tickex/v1\"\n")
 	g.P(")")
 	g.P("\n")
 	g.P("var (")
-	g.P("\t_ stdx.Empty")
+	g.P("\t_ tickex.Empty")
 	g.P(")")
 	g.P("\n")
 
@@ -66,29 +66,29 @@ func ascii(g *protogen.GeneratedFile, file *protogen.File) {
 `
 	n := "TICKEX // " + strings.ToUpper(string(file.GoPackageName))
 	s := fmt.Sprintf(asciiArt, n, *file.Proto.Package)
-	g.P("const ascii = `", s, "\n`")
+	g.P("const ASCII = `", s, "\n`")
 	g.P("\n")
 
 	g.P("// PrintASCII the ASCII art to the console.")
 	g.P("func PrintASCII() {")
-	g.P("\tfmt.Print(ascii)")
+	g.P("\tfmt.Print(ASCII)")
 	g.P("}")
 	g.P("\n")
 }
 
 func tickexMethodOpt(g *protogen.GeneratedFile, service *protogen.Service, method *protogen.Method) {
-	optVal := proto.GetExtension(method.Desc.Options(), stdx.E_Options)
+	optVal := proto.GetExtension(method.Desc.Options(), tickex.E_Options)
 	if optVal == nil {
 		return
 	}
 
-	methodOpt, ok := optVal.(*stdx.TickexMethodOptions)
+	methodOpt, ok := optVal.(*tickex.TickexMethodOptions)
 	if !ok || methodOpt.GetIgnore() {
 		return
 	}
 
 	g.P("// HasRoleAt", service.GoName, "_", method.GoName, " checks if the role has access to the method")
-	g.P("func HasRoleAt", service.GoName, "_", method.GoName, "(role stdx.Role) bool {")
+	g.P("func HasRoleAt", service.GoName, "_", method.GoName, "(role tickex.Role) bool {")
 
 	if len(methodOpt.GetRequire()) == 0 {
 		g.P("\treturn true")
@@ -97,10 +97,10 @@ func tickexMethodOpt(g *protogen.GeneratedFile, service *protogen.Service, metho
 		return
 	}
 
-	g.P("\troleMap := make(map[stdx.Role]bool, ", len(methodOpt.GetRequire()), ")")
+	g.P("\troleMap := make(map[tickex.Role]bool, ", len(methodOpt.GetRequire()), ")")
 	requires := methodOpt.GetRequire()
 	for _, require := range requires {
-		g.P("\troleMap[stdx.Role_", require.GetRole().String(), "] = true")
+		g.P("\troleMap[tickex.Role_", require.GetRole().String(), "] = true")
 	}
 
 	g.P()
@@ -114,7 +114,7 @@ func tickexMethodOpt(g *protogen.GeneratedFile, service *protogen.Service, metho
 	g.P("\n")
 
 	g.P("// HasPermissionAt", service.GoName, "_", method.GoName, " checks if the permission has access to the method")
-	g.P("func HasPermissionAt", service.GoName, "_", method.GoName, "(permission stdx.Permission) bool {")
+	g.P("func HasPermissionAt", service.GoName, "_", method.GoName, "(permission tickex.Permission) bool {")
 
 	if len(methodOpt.GetRequire()) == 0 {
 		g.P("\treturn true")
@@ -123,9 +123,9 @@ func tickexMethodOpt(g *protogen.GeneratedFile, service *protogen.Service, metho
 		return
 	}
 
-	g.P("\tpermissionMap := make(map[stdx.Permission]bool, ", len(methodOpt.GetRequire()), ")")
+	g.P("\tpermissionMap := make(map[tickex.Permission]bool, ", len(methodOpt.GetRequire()), ")")
 	for _, require := range methodOpt.GetRequire() {
-		g.P("\tpermissionMap[stdx.Permission_", require.GetPermission().String(), "] = true")
+		g.P("\tpermissionMap[tickex.Permission_", require.GetPermission().String(), "] = true")
 	}
 
 	g.P()

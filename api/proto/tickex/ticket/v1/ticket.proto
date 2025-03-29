@@ -17,14 +17,14 @@ syntax = "proto3";
 package tickex.ticket.v1;
 
 import "tickex/ticket/shared/v1/ticket.proto";
-import "tickex/stdx/v1/options.proto";
+import "tickex/v1/options.proto";
 
 import "protoc-gen-openapiv2/options/annotations.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
 // import "buf/validate/validate.proto";
 
-option go_package = "github.com/tickexvn/tickex/api/gen/go/ticket/v1;ticket";
+option go_package = "github.com/tickexvn/tickex/api/gen/go/tickex/ticket/v1;ticket";
 
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
   info: {
@@ -58,7 +58,7 @@ service TicketService {
       get: "/status"
     };
 
-    option (tickex.stdx.v1.options) = {ignore: true};
+    option (tickex.v1.options) = {ignore: true};
   }
 
   rpc CreateTicket(CreateTicketRequest) returns (CreateTicketResponse) {
@@ -67,7 +67,7 @@ service TicketService {
       body: "*",
     };
 
-    option (tickex.stdx.v1.options) = {
+    option (tickex.v1.options) = {
       require: { role: ROLE_ADMIN, permission: PERMISSION_CREATE }
     };
   }
@@ -78,7 +78,7 @@ service TicketService {
       body: "*",
     };
 
-    option (tickex.stdx.v1.options) = {
+    option (tickex.v1.options) = {
       require: [
         { role: ROLE_ADMIN, permission: PERMISSION_UPDATE_ANY },
         { role: ROLE_SELLER, permission: PERMISSION_UPDATE_OWN }

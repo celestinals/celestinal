@@ -16,14 +16,14 @@ syntax = "proto3";
 
 package tickex.authzcentre.v1;
 
-import "tickex/stdx/v1/meta.proto";
+import "tickex/v1/meta.proto";
 import "tickex/authzcentre/shared/v1/authzcentre.proto";
 
 import "protoc-gen-openapiv2/options/annotations.proto";
 import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
 
-option go_package = "github.com/tickexvn/tickex/api/gen/go/authzcentre/v1;authzcentre";
+option go_package = "github.com/tickexvn/tickex/api/gen/go/tickex/authzcentre/v1;authzcentre";
 
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
   info: {
@@ -66,7 +66,7 @@ service AuthzCentreService {
 }
 
 message SayHelloRequest {
-  tickex.stdx.v1.Pages page = 1;
+  tickex.v1.Pages page = 1;
   string name = 2 [(buf.validate.field).string.min_len = 1];
 }
 
