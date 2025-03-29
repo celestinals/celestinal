@@ -23,14 +23,14 @@ import (
 
 	"github.com/hashicorp/consul/api"
 	"github.com/tickexvn/tickex/api/gen/go/stdx/v1"
-	"github.com/tickexvn/tickex/pkg/pbtools"
+	"github.com/tickexvn/tickex/pkg/protobuf"
 )
 
 var _ stdx.DiscoveryServiceServer = (*Discovery)(nil)
 
 // New provide service registry of Tickex microservice network
 func New(conf *stdx.Config) (*Discovery, error) {
-	if err := pbtools.Validate(conf); err != nil {
+	if err := protobuf.Validate(conf); err != nil {
 		return nil, err
 	}
 
@@ -58,7 +58,7 @@ func (d *Discovery) Register(
 	ctx context.Context, req *stdx.RegisterRequest) (*stdx.RegisterResponse, error) {
 
 	_ = ctx
-	if err := pbtools.Validate(req); err != nil {
+	if err := protobuf.Validate(req); err != nil {
 		return nil, err
 	}
 
@@ -83,7 +83,7 @@ func (d *Discovery) Register(
 func (d *Discovery) Discover(
 	ctx context.Context, req *stdx.DiscoverRequest) (*stdx.DiscoverResponse, error) {
 	_ = ctx
-	if err := pbtools.Validate(req); err != nil {
+	if err := protobuf.Validate(req); err != nil {
 		return nil, err
 	}
 
@@ -115,7 +115,7 @@ func (d *Discovery) Heartbeat(
 	ctx context.Context, req *stdx.HeartbeatRequest) (*stdx.HeartbeatResponse, error) {
 
 	_ = ctx
-	if err := pbtools.Validate(req); err != nil {
+	if err := protobuf.Validate(req); err != nil {
 		return nil, err
 	}
 

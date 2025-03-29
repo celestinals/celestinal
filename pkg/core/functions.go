@@ -19,8 +19,8 @@ package core
 import (
 	"context"
 
-	"github.com/tickexvn/tickex/pkg/cli"
 	coreinternal "github.com/tickexvn/tickex/pkg/core/internal"
+	"github.com/tickexvn/tickex/pkg/flag"
 	"go.uber.org/fx"
 	"google.golang.org/grpc"
 )
@@ -33,7 +33,7 @@ func Build(constructors ...any) Application {
 	}
 
 	// disable log: use fx.NopLogger
-	if cli.Parse().GetMode() != "dev" {
+	if flag.Parse().GetMode() != "dev" {
 		return &container{
 			engine: fx.New(
 				coreinternal.Option(), fx.Invoke(runner), fx.NopLogger),

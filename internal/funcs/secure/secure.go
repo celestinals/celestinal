@@ -26,14 +26,14 @@ import (
 	"google.golang.org/grpc/grpclog"
 
 	"github.com/tickexvn/tickex/api/gen/go/stdx/v1"
-	"github.com/tickexvn/tickex/pkg/cli"
 	"github.com/tickexvn/tickex/pkg/core"
+	"github.com/tickexvn/tickex/pkg/flag"
 	"github.com/tickexvn/tickex/pkg/txlog"
 )
 
 // Serve the edge with WAF secure middleware layer
 func Serve(server core.HTTPServer, _ *stdx.Config) {
-	flags := cli.ParseEdge()
+	flags := flag.ParseEdge()
 	if !flags.GetSecure() {
 		if len(flags.GetRules()) > 0 {
 			txlog.Warn("[HTTP] OWASP rules was't applied (--secure=false)")

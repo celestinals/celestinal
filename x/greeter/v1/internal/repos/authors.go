@@ -22,7 +22,7 @@ import (
 	"github.com/jackc/pgx/v5"
 
 	"github.com/tickexvn/tickex/pkg/database"
-	"github.com/tickexvn/tickex/pkg/database/pg"
+	"github.com/tickexvn/tickex/pkg/database/sql"
 	"github.com/tickexvn/tickex/x/greeter/internal/models/gen/authors"
 )
 
@@ -43,21 +43,21 @@ type IAuthors interface {
 
 // NewAuthor creates a new database repository.
 func NewAuthor(pgCon *pgx.Conn) *Authors {
-	storage := pg.NewStorageLayer[authors.Author, int64](pgCon, "authors")
+	storage := sql.NewStorageLayer[authors.Author, int64](pgCon, "authors")
 
 	return &Authors{
-		BaseStorageLayer: storage,
-		query:            authors.New(pgCon),
+		StorageLayer: storage,
+		query:        authors.New(pgCon),
 	}
 }
 
 // Authors repository
 type Authors struct {
-	*pg.BaseStorageLayer[authors.Author, int64]
+	*sql.StorageLayer[authors.Author, int64]
 	query *authors.Queries
 }
 
-// Create method implement BaseStorageLayer.Create
+// Create method implement SQLStorageLayer.Create
 func (a *Authors) Create(ctx context.Context, entity authors.Author) (authors.Author, error) {
 	resp, err := a.query.Create(ctx, authors.CreateParams{
 		Name: entity.Name,

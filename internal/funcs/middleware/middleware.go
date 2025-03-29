@@ -29,9 +29,9 @@ import (
 
 	"github.com/tickexvn/tickex/api/gen/go/stdx/v1"
 	"github.com/tickexvn/tickex/internal/utils/version"
-	"github.com/tickexvn/tickex/pkg/cli"
 	"github.com/tickexvn/tickex/pkg/core"
-	"github.com/tickexvn/tickex/pkg/pbtools"
+	"github.com/tickexvn/tickex/pkg/flag"
+	"github.com/tickexvn/tickex/pkg/protobuf"
 	"github.com/tickexvn/tickex/pkg/robot"
 )
 
@@ -132,8 +132,8 @@ func (mdw *Middleware) notify(statusCode int, body string) {
 		"I", version.Name, version.Version, version.GoVersion)
 	_ = monitor.Send(&stdx.RobotMessage{
 		Metadata: &stdx.RobotMessageMetadata{
-			CreatedAt: pbtools.ToTime(time.Now().Local()),
-			Author:    cli.Parse().GetName(),
+			CreatedAt: protobuf.ToTime(time.Now().Local()),
+			Author:    flag.Parse().GetName(),
 		},
 		Header: fmt.Sprintf("http error %+v ", statusCode),
 		Body:   fmt.Sprintf("http error %+v request body %+v", statusCode, string(body)),

@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-// Package cli provide flag variable props
-package cli
+// Package flag provide flag variable props
+package flag
 
 import (
 	"fmt"

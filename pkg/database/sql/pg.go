@@ -14,19 +14,21 @@
  * limitations under the License.
  */
 
-// Package pg provides an implementation of the database using PostgreSQL.
-package pg
+// Package sql provides an implementation of the database using PostgreSQL.
+package sql
 
 import (
 	"context"
 	"errors"
 	"fmt"
 
+	pkgerrors "github.com/tickexvn/tickex/pkg/errors"
+
 	"github.com/jackc/pgx/v5"
 )
 
-// BaseStorageLayer is a generic repository for PostgreSQL using pgx.
-type BaseStorageLayer[T any, ID comparable] struct {
+// StorageLayer is a generic repository for PostgreSQL using pgx.
+type StorageLayer[T any, ID comparable] struct {
 	db        *pgx.Conn
 	tableName string
 }
@@ -35,22 +37,22 @@ type BaseStorageLayer[T any, ID comparable] struct {
 // StorageLayer is a generic repository for PostgreSQL using pgx.
 // Must be implemented Create method by the user.
 func NewStorageLayer[T any, ID comparable](
-	db *pgx.Conn, tableName string) *BaseStorageLayer[T, ID] {
+	db *pgx.Conn, tableName string) *StorageLayer[T, ID] {
 
-	return &BaseStorageLayer[T, ID]{db: db, tableName: tableName}
+	return &StorageLayer[T, ID]{db: db, tableName: tableName}
 }
 
 // Create inserts a new record into the database.
-func (s *BaseStorageLayer[T, ID]) Create(ctx context.Context, entity T) (T, error) {
+func (s *StorageLayer[T, ID]) Create(ctx context.Context, entity T) (T, error) {
 
 	_ = ctx
 	_ = entity
 
-	panic("not implemented")
+	return entity, pkgerrors.ErrUnimplemented
 }
 
 // Get retrieves a record by ID.
-func (s *BaseStorageLayer[T, ID]) Get(ctx context.Context, id ID) (T, error) {
+func (s *StorageLayer[T, ID]) Get(ctx context.Context, id ID) (T, error) {
 	query := fmt.Sprintf("SELECT * FROM %s WHERE id = $1", s.tableName)
 	row := s.db.QueryRow(ctx, query, id)
 
@@ -67,7 +69,7 @@ func (s *BaseStorageLayer[T, ID]) Get(ctx context.Context, id ID) (T, error) {
 }
 
 // GetAll retrieves all records from the table.
-func (s *BaseStorageLayer[T, ID]) GetAll(ctx context.Context) ([]T, error) {
+func (s *StorageLayer[T, ID]) GetAll(ctx context.Context) ([]T, error) {
 	query := fmt.Sprintf("SELECT * FROM %s", s.tableName)
 	rows, err := s.db.Query(ctx, query)
 	if err != nil {
@@ -89,20 +91,16 @@ func (s *BaseStorageLayer[T, ID]) GetAll(ctx context.Context) ([]T, error) {
 }
 
 // Update modifies a record by ID.
-func (s *BaseStorageLayer[T, ID]) Update(ctx context.Context, id ID, entity T) (T, error) {
-	query := fmt.Sprintf("UPDATE %s SET data = $2 WHERE id = $1 RETURNING *", s.tableName)
-	row := s.db.QueryRow(ctx, query, id, entity)
+func (s *StorageLayer[T, ID]) Update(ctx context.Context, id ID, entity T) (T, error) {
+	_ = ctx
+	_ = id
+	_ = entity
 
-	var updatedEntity T
-	if err := row.Scan(&updatedEntity); err != nil {
-		return updatedEntity, err
-	}
-
-	return updatedEntity, nil
+	return entity, pkgerrors.ErrUnimplemented
 }
 
 // Delete removes a record by ID.
-func (s *BaseStorageLayer[T, ID]) Delete(ctx context.Context, id ID) error {
+func (s *StorageLayer[T, ID]) Delete(ctx context.Context, id ID) error {
 	query := fmt.Sprintf("DELETE FROM %s WHERE id = $1", s.tableName)
 	_, err := s.db.Exec(ctx, query, id)
 
@@ -110,7 +108,7 @@ func (s *BaseStorageLayer[T, ID]) Delete(ctx context.Context, id ID) error {
 }
 
 // Exists checks if a record exists by ID.
-func (s *BaseStorageLayer[T, ID]) Exists(ctx context.Context, id ID) (bool, error) {
+func (s *StorageLayer[T, ID]) Exists(ctx context.Context, id ID) (bool, error) {
 	query := fmt.Sprintf("SELECT 1 FROM %s WHERE id = $1", s.tableName)
 	row := s.db.QueryRow(ctx, query, id)
 
@@ -124,7 +122,7 @@ func (s *BaseStorageLayer[T, ID]) Exists(ctx context.Context, id ID) (bool, erro
 }
 
 // Count returns the total number of records in the table.
-func (s *BaseStorageLayer[T, ID]) Count(ctx context.Context) (int64, error) {
+func (s *StorageLayer[T, ID]) Count(ctx context.Context) (int64, error) {
 	query := fmt.Sprintf("SELECT COUNT(*) FROM %s", s.tableName)
 	row := s.db.QueryRow(ctx, query)
 

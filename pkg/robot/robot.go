@@ -22,8 +22,8 @@ import (
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/tickexvn/tickex/api/gen/go/stdx/v1"
-	"github.com/tickexvn/tickex/pkg/cli"
-	"github.com/tickexvn/tickex/pkg/pbtools"
+	"github.com/tickexvn/tickex/pkg/flag"
+	"github.com/tickexvn/tickex/pkg/protobuf"
 )
 
 var _ IRobot = (*Robot)(nil)
@@ -54,7 +54,7 @@ type Robot struct {
 
 // Send message to group telegram
 func (r *Robot) Send(msg *stdx.RobotMessage) error {
-	flag := cli.ParseEdge()
+	flag := flag.ParseEdge()
 	if !flag.IsTurnOnBots {
 		return nil
 	}
@@ -66,7 +66,7 @@ func (r *Robot) Send(msg *stdx.RobotMessage) error {
 			"`%s`\n\n"+
 			"*body*\n```%s```\n\n"+
 			"`%s`\n",
-		pbtools.FromTime(msg.Metadata.CreatedAt).String(),
+		protobuf.FromTime(msg.Metadata.CreatedAt).String(),
 		msg.Metadata.Author,
 		msg.Header,
 		msg.Body,

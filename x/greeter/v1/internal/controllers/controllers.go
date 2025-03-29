@@ -44,7 +44,7 @@ func (g *Greeter) SayHello(
 	ctx context.Context, msg *greeter.SayHelloRequest) (*greeter.SayHelloResponse, error) {
 
 	var SayHelloReq domainpb.SayHelloRequest
-	if err := copier.CopyMsg(msg, &SayHelloReq); err != nil {
+	if err := copier.CopyProtoMessage(msg, &SayHelloReq); err != nil {
 		txlog.Error(err)
 
 		return nil, errors.StatusInvalidData
