@@ -28,7 +28,6 @@ import (
 	"google.golang.org/grpc/grpclog"
 
 	"github.com/tickexvn/tickex/api/gen/go/tickex/v1"
-	"github.com/tickexvn/tickex/internal/utils/version"
 	"github.com/tickexvn/tickex/pkg/core"
 	"github.com/tickexvn/tickex/pkg/flag"
 	"github.com/tickexvn/tickex/pkg/protobuf"
@@ -128,8 +127,6 @@ func (mdw *Middleware) preflightHandler(w http.ResponseWriter, r *http.Request) 
 func (mdw *Middleware) notify(statusCode int, body string) {
 	monitor, _ := robot.New(mdw.conf)
 
-	footer := fmt.Sprintf("%s<%s<<%s<<<%s<<<<<<<<<<<<<<<<<<\nGITHUB<COM<<TICKEXVN<<<TICKEX<<<<<<<<<<<<<<<\n",
-		"I", version.Name, version.Version, version.GoVersion)
 	_ = monitor.Send(&tickex.RobotMessage{
 		Metadata: &tickex.RobotMessageMetadata{
 			CreatedAt: protobuf.ToTime(time.Now().Local()),
@@ -137,6 +134,6 @@ func (mdw *Middleware) notify(statusCode int, body string) {
 		},
 		Header: fmt.Sprintf("http error %+v ", statusCode),
 		Body:   fmt.Sprintf("http error %+v request body %+v", statusCode, string(body)),
-		Footer: footer,
+		Footer: "TICKEX // EDGE",
 	})
 }

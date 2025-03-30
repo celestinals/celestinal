@@ -15,7 +15,7 @@
 .PHONY: default
 
 default: default.print \
-	build.tickex \
+	build.edge \
 	build.x.greeter
 
 default.print:
@@ -48,27 +48,29 @@ updaterule:
 #####################################################################
 #####################################################################
 
-build.tickex: TKX_OUT ?= tickex-edge
-build.tickex:
-	@go build -ldflags="-s -w" -o ./bin/$(TKX_OUT) ./cmd/tickex
+build.edge: TKX_OUT ?= tickex-edge
+build.edge:
+	@go build -ldflags="-s -w" -o ./bin/$(TKX_OUT) ./cmd/edge
 	@echo "[DONE]  TICKEX: edge ... ok"
 
 
 build.x.greeter: TKX_OUT ?= tickex-greeter
 build.x.greeter:
-	@cd ./x/greeter/v1 && go build -ldflags="-s -w" -o ../../../bin/$(TKX_OUT) ./cmd
+	@cd ./x/greeter/v1 && \
+		go build -ldflags="-s -w" -o ../../../bin/$(TKX_OUT) ./cmd
 	@echo "[DONE]  TICKEX: greeter.v1 ... ok"
 
 #####################################################################
 
-run.tickex: TKX_OUT ?= tickex-edge
-run.tickex:
-	@go build -ldflags="-s -w" -o ./bin/$(TKX_OUT) ./cmd/tickex && \
+run.edge: TKX_OUT ?= tickex-edge
+run.edge:
+	@go build -ldflags="-s -w" -o ./bin/$(TKX_OUT) ./cmd/edge && \
  	./bin/$(TKX_OUT)
 
 run.x.greeter: TKX_OUT ?= tickex-greeter
 run.x.greeter:
-	@cd ./x/greeter/v1 && go build -ldflags="-s -w" -o ../../../bin/$(TKX_OUT) ./cmd
+	@cd ./x/greeter/v1 && \
+		go build -ldflags="-s -w" -o ../../../bin/$(TKX_OUT) ./cmd
 	@./bin/$(TKX_OUT)
 
 #####################################################################
@@ -78,10 +80,10 @@ mesh:
 	@docker compose -f ./deploy/docker/mesh/docker-compose.yaml \
     -f ./deploy/docker/resource/docker-compose.resources.yaml up -d
 
-build.d.tickex: TAG ?= tickexvn/tickex
-build.d.tickex:
-	docker buildx build -f ./cmd/tickex/Dockerfile -t $(TAG):latest .
+build.image.edge: TAG ?= tickexvn/edge
+build.image.edge:
+	docker buildx build -f ./cmd/edge/Dockerfile -t $(TAG):latest .
 
-build.d.x.greeter: TAG ?= tickexvn/tickex.x.greeter
-build.d.x.greeter:
+build.image.x.greeter: TAG ?= tickexvn/tickex.x.greeter
+build.image.x.greeter:
 	docker buildx build -f ./x/greeter/v1/Dockerfile -t $(TAG):latest .

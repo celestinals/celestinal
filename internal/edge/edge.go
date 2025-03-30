@@ -21,8 +21,8 @@ import (
 	"context"
 
 	"github.com/tickexvn/tickex/api/gen/go/tickex/v1"
+	"github.com/tickexvn/tickex/internal/edge/middleware"
 	"github.com/tickexvn/tickex/internal/edge/services/v1"
-	"github.com/tickexvn/tickex/internal/funcs/middleware"
 	"github.com/tickexvn/tickex/internal/funcs/openapi"
 	"github.com/tickexvn/tickex/internal/funcs/secure"
 	"github.com/tickexvn/tickex/internal/funcs/watch"
@@ -60,8 +60,8 @@ type Edge struct {
 	server core.HTTPServer
 }
 
-// registerServer gRPC server endpoint.
-func (e *Edge) registerServer(ctx context.Context) error {
+// registerServiceServer gRPC server endpoint.
+func (edge *Edge) registerServiceServer(ctx context.Context) error {
 	// Note: Make sure the gRPC server is running properly and accessible
 	// Create folder at services, inherit base package, override function,
 	// implement business logic
@@ -73,13 +73,13 @@ func (e *Edge) registerServer(ctx context.Context) error {
 		services.NewTicket(),
 	}
 
-	return e.visit(ctx, serviceList...)
+	return edge.visit(ctx, serviceList...)
 }
 
 // visit all service by Accept function
-func (e *Edge) visit(ctx context.Context, services ...core.GRPCServer) error {
+func (edge *Edge) visit(ctx context.Context, services ...core.GRPCServer) error {
 	for _, service := range services {
-		if err := service.Accept(ctx, e.server); err != nil {
+		if err := service.Accept(ctx, edge.server); err != nil {
 			return err
 		}
 	}
@@ -87,44 +87,50 @@ func (e *Edge) visit(ctx context.Context, services ...core.GRPCServer) error {
 	return nil
 }
 
+// use is a chain of functions to use when accepting the request
+// serve is a function to use when accepting the request
+func (edge *Edge) use(serve func(core.HTTPServer, *tickex.Config)) {
+	serve(edge.server, edge.config)
+}
+
 // functions is chain of functions to use before starting the edge app
-func (e *Edge) functions(ctx context.Context) error {
+func (edge *Edge) functions(ctx context.Context) error {
+	// new middleware handler
+	edge.use(middleware.Serve)
+
 	// serve swagger ui
-	openapi.Serve(e.server, e.config)
+	edge.use(openapi.Serve)
 
 	// watch service change on service registry
-	watch.Serve(e.server, e.config)
+	edge.use(watch.Serve)
 
 	// waf secure middleware layer
-	secure.Serve(e.server, e.config)
+	edge.use(secure.Serve)
 
-	// new middleware handler
-	middleware.Serve(e.server, e.config)
-
-	return e.registerServer(ctx)
+	return edge.registerServiceServer(ctx)
 }
 
 // ListenAndServe the edge/gateway app
-func (e *Edge) ListenAndServe(ctx context.Context) error {
+func (edge *Edge) ListenAndServe(ctx context.Context) error {
 	// service ascii art banner
 	version.ASCII()
-	if err := protobuf.Validate(e.config); err != nil {
+	if err := protobuf.Validate(edge.config); err != nil {
 		return err
 	}
 
 	// add chain functions handler request
-	if err := e.functions(ctx); err != nil {
+	if err := edge.functions(ctx); err != nil {
 		return err
 	}
 
 	// Listen HTTP server (and edge calls to gRPC server endpoint)
 	// log info in console and return register error if they exist
-	txlog.Infof("[http] starting server %s", e.config.GetApiAddr())
-	return e.server.Listen(e.config.GetApiAddr())
+	txlog.Infof("[http] starting server %s", edge.config.GetApiAddr())
+	return edge.server.Listen(edge.config.GetApiAddr())
 	// return errors.F("edge: failed to listen and serve")
 }
 
 // Shutdown implements core.Server.
-func (e *Edge) Shutdown(ctx context.Context) error {
-	return e.server.Shutdown(ctx)
+func (edge *Edge) Shutdown(ctx context.Context) error {
+	return edge.server.Shutdown(ctx)
 }

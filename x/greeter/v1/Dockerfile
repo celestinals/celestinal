@@ -15,7 +15,7 @@
 #FROM ghcr.io/tickexvn/tickex/tkx.go:1.24-alpine AS builder
 FROM golang:1.24.0-alpine AS builder
 
-# Move to working directory (/app).
+# Move to working directory (/src).
 WORKDIR /src
 
 COPY . ./
@@ -26,11 +26,12 @@ RUN apk --no-cache add ca-certificates tzdata
 RUN apk add --no-cache git
 RUN go mod tidy
 
-WORKDIR /src/
+WORKDIR /src/x/greeter/v1
 
 # Set necessary environment variables needed for our image and build the API server.
 ENV CGO_ENABLED=0 GOOS=linux GOARCH=amd64
-# Build the application
+
+RUN go mod tidy
 RUN go build -ldflags="-s -w" -o /bin/main ./cmd
 
 # Remove all source code files
@@ -40,7 +41,7 @@ RUN go clean -modcache
 
 # Stage run
 #FROM ghcr.io/tickexvn/tickex/tkx.alpine:edge AS runner
-FROM alpine:edge AS runner
+FROM alpine AS runner
 WORKDIR /app
 
 COPY --from=builder /bin/main /bin/main

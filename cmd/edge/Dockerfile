@@ -31,7 +31,7 @@ RUN apk add --no-cache git
 RUN go mod tidy
 
 # Build the application
-RUN go build -ldflags="-s -w" -o /bin/tickex ./cmd/tickex
+RUN go build -ldflags="-s -w" -o /bin/main ./cmd/edge
 
 # Remove all source code files
 RUN rm -r *
@@ -41,13 +41,13 @@ RUN go clean -modcache
 
 # Stage run
 #FROM ghcr.io/tickexvn/tickex/tkx.alpine:edge AS runner
-FROM alpine:edge AS runner
+FROM alpine AS runner
 WORKDIR /app
 
-COPY --from=builder /bin/tickex ./tickex
+COPY --from=builder /bin/main ./main
 COPY --from=builder /tmp/public ./public
 
 # Set the timezone and install CA certificates
 RUN apk --no-cache add ca-certificates tzdata
 
-CMD [ "./tickex" ]
+CMD [ "./main" ]
