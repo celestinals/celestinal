@@ -29,7 +29,7 @@ import (
 
 // VisitService visits the greeter service.
 func VisitService(ctx context.Context, namespace string, server core.HTTPServer,
-	service core.GRPCServer) error {
+	service core.ServiceRegistrar) error {
 
 	eventq.Subscribe(ctx, namespace, func(endpoint string) error {
 		opts := []grpc.DialOption{

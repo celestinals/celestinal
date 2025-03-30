@@ -29,26 +29,26 @@ import (
 	"github.com/tickexvn/tickex/pkg/utils"
 )
 
-// BaseSearchLayer is a generic Elasticsearch repository.
-type BaseSearchLayer[T any, ID comparable] struct {
+// ElasticSearch is a generic Elasticsearch repository.
+type ElasticSearch[T any, ID comparable] struct {
 	client    *elasticsearch.Client
 	indexName string
 }
 
-// NewSearchLayer initializes a new SearchLayer with Elasticsearch.
+// New initializes a new SearchLayer with Elasticsearch.
 // SearchLayer is a generic Elasticsearch repository.
 // Must be implemented Create, Get method by the user.
-func NewSearchLayer[T any, ID comparable](
-	client *elasticsearch.Client, indexName string) *BaseSearchLayer[T, ID] {
+func New[T any, ID comparable](
+	client *elasticsearch.Client, indexName string) *ElasticSearch[T, ID] {
 
-	return &BaseSearchLayer[T, ID]{
+	return &ElasticSearch[T, ID]{
 		client:    client,
 		indexName: indexName,
 	}
 }
 
 // Create inserts a new document into Elasticsearch.
-func (s *BaseSearchLayer[T, ID]) Create(ctx context.Context, entity T) (T, error) {
+func (es *ElasticSearch[T, ID]) Create(ctx context.Context, entity T) (T, error) {
 	_ = ctx
 	_ = entity
 
@@ -56,7 +56,7 @@ func (s *BaseSearchLayer[T, ID]) Create(ctx context.Context, entity T) (T, error
 }
 
 // Get retrieves a document from Elasticsearch by ID.
-func (s *BaseSearchLayer[T, ID]) Get(ctx context.Context, id ID) (T, error) {
+func (es *ElasticSearch[T, ID]) Get(ctx context.Context, id ID) (T, error) {
 	_ = ctx
 	_ = id
 
@@ -64,14 +64,14 @@ func (s *BaseSearchLayer[T, ID]) Get(ctx context.Context, id ID) (T, error) {
 }
 
 // GetAll retrieves all documents from the index.
-func (s *BaseSearchLayer[T, ID]) GetAll(ctx context.Context) ([]T, error) {
+func (es *ElasticSearch[T, ID]) GetAll(ctx context.Context) ([]T, error) {
 	query := `{"query": {"match_all": {}}}`
 
-	res, err := s.client.Search(
-		s.client.Search.WithContext(ctx),
-		s.client.Search.WithIndex(s.indexName),
-		s.client.Search.WithBody(strings.NewReader(query)),
-		s.client.Search.WithSize(1000),
+	res, err := es.client.Search(
+		es.client.Search.WithContext(ctx),
+		es.client.Search.WithIndex(es.indexName),
+		es.client.Search.WithBody(strings.NewReader(query)),
+		es.client.Search.WithSize(1000),
 	)
 
 	if err != nil {
@@ -102,7 +102,7 @@ func (s *BaseSearchLayer[T, ID]) GetAll(ctx context.Context) ([]T, error) {
 }
 
 // Update modifies an existing document in Elasticsearch by ID.
-func (s *BaseSearchLayer[T, ID]) Update(ctx context.Context, id ID, entity T) (T, error) {
+func (es *ElasticSearch[T, ID]) Update(ctx context.Context, id ID, entity T) (T, error) {
 	_ = ctx
 	data, err := json.Marshal(map[string]interface{}{
 		"doc": entity,
@@ -112,7 +112,7 @@ func (s *BaseSearchLayer[T, ID]) Update(ctx context.Context, id ID, entity T) (T
 	}
 
 	// Send the update request
-	res, err := s.client.Update(s.indexName, fmt.Sprintf("%v", id), bytes.NewReader(data))
+	res, err := es.client.Update(es.indexName, fmt.Sprintf("%v", id), bytes.NewReader(data))
 	if err != nil {
 		return entity, err
 	}
@@ -127,9 +127,9 @@ func (s *BaseSearchLayer[T, ID]) Update(ctx context.Context, id ID, entity T) (T
 }
 
 // Delete removes a document from Elasticsearch by ID.
-func (s *BaseSearchLayer[T, ID]) Delete(ctx context.Context, id ID) error {
+func (es *ElasticSearch[T, ID]) Delete(ctx context.Context, id ID) error {
 	_ = ctx
-	res, err := s.client.Delete(s.indexName, fmt.Sprintf("%v", id))
+	res, err := es.client.Delete(es.indexName, fmt.Sprintf("%v", id))
 	if err != nil {
 		return err
 	}
@@ -143,9 +143,9 @@ func (s *BaseSearchLayer[T, ID]) Delete(ctx context.Context, id ID) error {
 }
 
 // Exists checks if a document exists in Elasticsearch.
-func (s *BaseSearchLayer[T, ID]) Exists(ctx context.Context, id ID) (bool, error) {
+func (es *ElasticSearch[T, ID]) Exists(ctx context.Context, id ID) (bool, error) {
 	_ = ctx
-	res, err := s.client.Exists(s.indexName, fmt.Sprintf("%v", id))
+	res, err := es.client.Exists(es.indexName, fmt.Sprintf("%v", id))
 	if err != nil {
 		return false, err
 	}
@@ -155,9 +155,9 @@ func (s *BaseSearchLayer[T, ID]) Exists(ctx context.Context, id ID) (bool, error
 }
 
 // Count returns the number of documents in the Elasticsearch index.
-func (s *BaseSearchLayer[T, ID]) Count(ctx context.Context) (int64, error) {
+func (es *ElasticSearch[T, ID]) Count(ctx context.Context) (int64, error) {
 	_ = ctx
-	res, err := s.client.Count(s.client.Count.WithIndex(s.indexName))
+	res, err := es.client.Count(es.client.Count.WithIndex(es.indexName))
 	if err != nil {
 		return 0, err
 	}

@@ -14,26 +14,5 @@
  * limitations under the License.
  */
 
-// Package internal provides the internal function for the core.
-package internal
-
-import (
-	"go.uber.org/fx"
-)
-
-var options = fx.Provide()
-
-// Provide provides the given constructors.
-func Provide(constructors ...any) {
-	options = fx.Options(options, fx.Provide(constructors...))
-}
-
-// Option returns the internal option.
-func Option() fx.Option {
-	return options
-}
-
-// Invoke invokes the given constructors.
-func Invoke(constructors ...any) {
-	options = fx.Options(options, fx.Invoke(constructors...))
-}
+// Package se implement search engine
+package se

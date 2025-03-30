@@ -30,10 +30,10 @@ import (
 	"github.com/tickexvn/tickex/pkg/namespace"
 )
 
-var _ core.GRPCServer = (*ticket)(nil)
+var _ core.ServiceRegistrar = (*ticket)(nil)
 
 // NewTicket creates a new ticket service to register handler to gateway
-func NewTicket() core.GRPCServer {
+func NewTicket() core.ServiceRegistrar {
 	return ticket{}
 }
 

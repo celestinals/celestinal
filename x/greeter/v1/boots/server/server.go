@@ -29,6 +29,8 @@ import (
 	"github.com/tickexvn/tickex/x/greeter/internal/controllers"
 )
 
+// make sure Greeter implement core.Server
+// it will start by core.runner through core.Server
 var _ core.Server = (*Greeter)(nil)
 
 // New creates a new Greeter module.
@@ -42,12 +44,12 @@ func New(srv controllers.IGreeter, conf *tickex.Config) core.Server {
 
 // Greeter implements GreeterServiceServer.
 type Greeter struct {
-	*core.ServiceServer
-	config *tickex.Config
-	srv    greeter.GreeterServiceServer
+	*core.ServiceServer // inherit core.ServiceServer
+	config              *tickex.Config
+	srv                 greeter.GreeterServiceServer
 }
 
-// ListenAndServe implements IGreeter.
+// ListenAndServe implements IGreeter, override core.ServiceServer.ListenAndServe
 func (g *Greeter) ListenAndServe(_ context.Context) error {
 	greeter.PrintASCII()
 	if err := protobuf.Validate(g.config); err != nil {

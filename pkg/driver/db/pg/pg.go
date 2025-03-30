@@ -14,33 +14,36 @@
  * limitations under the License.
  */
 
-// Package copier provides functions to copy objects.
-package copier
+package pg
 
 import (
-	"encoding/json"
-
-	google "google.golang.org/protobuf/proto"
-
-	"github.com/tickexvn/tickex/pkg/protobuf/proto"
+	"context"
+	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/tickexvn/tickex/api/gen/go/tickex/v1"
+	"github.com/tickexvn/tickex/pkg/driver/db"
+	"github.com/tickexvn/tickex/pkg/utils"
 )
 
-// CopyProtoMessage copies the src message to the dst message.
-func CopyProtoMessage(src, dst google.Message) error {
-	bytes, err := proto.Marshal(src)
+var _ db.Driver[int] = (*Driver[int])(nil)
+
+func New[T any](conf *tickex.Config) (*Driver[T], error) {
+	pool, err := utils.NewPgxPool(conf)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return proto.Unmarshal(bytes, dst)
+	return &Driver[T]{pool: pool}, nil
 }
 
-// CopyJSON copies the src object to the dst object.
-func CopyJSON(src, dst any) error {
-	bytes, err := json.Marshal(src)
+type Driver[T any] struct {
+	pool *pgxpool.Pool
+}
+
+func (d *Driver[T]) Query(ctx context.Context, sql string, args ...any) (db.Rows[T], error) {
+	pgRows, err := d.pool.Query(ctx, sql, args...)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return json.Unmarshal(bytes, dst)
+	return &dbRows[T]{rows: pgRows}, nil
 }

@@ -19,7 +19,7 @@ package core
 import (
 	"context"
 
-	coreinternal "github.com/tickexvn/tickex/pkg/core/internal"
+	"github.com/tickexvn/tickex/pkg/core/internal"
 
 	"go.uber.org/fx"
 )
@@ -32,7 +32,7 @@ func UseBefore(fn func(ctx context.Context) error) {
 		})
 	}
 
-	coreinternal.Invoke(function)
+	internal.Invoke(function)
 }
 
 // UseAfter adds a hook to be executed after the application has stopped.
@@ -43,7 +43,7 @@ func UseAfter(fn func(ctx context.Context) error) {
 		})
 	}
 
-	coreinternal.Invoke(function)
+	internal.Invoke(function)
 }
 
 // InjectLifeCycle injects the given constructor into the application with
@@ -66,13 +66,13 @@ func InjectLifeCycle[T any](
 		return ins
 	}
 
-	coreinternal.Provide(decorateConstructor)
+	internal.Provide(decorateConstructor)
 
 	return constructor
 }
 
 // Inject injects the given constructor into the application.
 func Inject[fn any](constructor fn) fn {
-	coreinternal.Provide(constructor)
+	internal.Provide(constructor)
 	return constructor
 }

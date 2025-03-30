@@ -19,6 +19,8 @@ package core
 
 import (
 	"context"
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"google.golang.org/grpc"
 )
 
 // Application represents the application when all constructor was build
@@ -32,4 +34,10 @@ type Application interface {
 type Server interface {
 	ListenAndServe(ctx context.Context) error
 	Shutdown(ctx context.Context) error
+}
+
+// ServiceRegistrar is an interface for registering a gRPC service. Not a server !!!
+type ServiceRegistrar interface {
+	Accept(context.Context, HTTPServer) error
+	Register(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) error
 }

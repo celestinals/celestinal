@@ -32,9 +32,11 @@ import (
 	"github.com/tickexvn/tickex/pkg/txlog"
 )
 
+// make sure edge implement core.Server
+// core.runner will be start application through core.Server interface
 var _ core.Server = (*Edge)(nil)
 
-// New creates a new gateway app
+// New creates a new gateway app, return core.Server interface
 func New(conf *tickex.Config) core.Server {
 	return &Edge{
 		server: core.NewHTTPServer(),
@@ -62,11 +64,11 @@ type Edge struct {
 
 // registerServiceServer gRPC server endpoint.
 func (edge *Edge) registerServiceServer(ctx context.Context) error {
-	// Note: Make sure the gRPC server is running properly and accessible
+	// NOTE: Make sure the gRPC server is running properly and accessible
 	// Create folder at services, inherit base package, override function,
 	// implement business logic
 	// See: services/v1/greeter
-	serviceList := []core.GRPCServer{
+	serviceList := []core.ServiceRegistrar{
 		// Example: register the greeter service to the gateway
 		services.NewGreeter(),
 		// add more service here ...
@@ -77,7 +79,7 @@ func (edge *Edge) registerServiceServer(ctx context.Context) error {
 }
 
 // visit all service by Accept function
-func (edge *Edge) visit(ctx context.Context, services ...core.GRPCServer) error {
+func (edge *Edge) visit(ctx context.Context, services ...core.ServiceRegistrar) error {
 	for _, service := range services {
 		if err := service.Accept(ctx, edge.server); err != nil {
 			return err

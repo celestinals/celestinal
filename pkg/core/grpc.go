@@ -21,7 +21,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/tickexvn/tickex/api/gen/go/tickex/v1"
 	"github.com/tickexvn/tickex/pkg/core/net"
 	"github.com/tickexvn/tickex/pkg/discovery"
@@ -37,12 +36,6 @@ var (
 	// Ensure ServiceServer implements Server.
 	_ Server = (*ServiceServer)(nil)
 )
-
-// GRPCServer is an interface for registering a gRPC service.
-type GRPCServer interface {
-	Accept(context.Context, HTTPServer) error
-	Register(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) error
-}
 
 // IServiceServer is a gRPC service server.
 type IServiceServer interface {
@@ -68,8 +61,7 @@ type ServiceInfo struct {
 }
 
 // ServiceServer is a gRPC server that registers services.
-//
-// usage:
+// inherit in <Service>ServiceServer:
 //
 //	type Greeter struct {
 //		*core.ServiceServer
@@ -136,11 +128,11 @@ func (s *ServiceServer) register(conf *tickex.Config, service service) error {
 	}
 
 	s.discovery = discover
-	return s.registerConsul(service)
+	return s.toConsul(service)
 }
 
-// registerConsul registers the service with the consul service discovery.
-func (s *ServiceServer) registerConsul(service service) error {
+// toConsul registers the service with the consul service discovery.
+func (s *ServiceServer) toConsul(service service) error {
 	if s.discovery == nil {
 		return nil
 	}

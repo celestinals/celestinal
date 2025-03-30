@@ -14,26 +14,24 @@
  * limitations under the License.
  */
 
-// Package internal provides the internal function for the core.
-package internal
+package db
 
-import (
-	"go.uber.org/fx"
-)
-
-var options = fx.Provide()
-
-// Provide provides the given constructors.
-func Provide(constructors ...any) {
-	options = fx.Options(options, fx.Provide(constructors...))
-}
-
-// Option returns the internal option.
-func Option() fx.Option {
-	return options
-}
-
-// Invoke invokes the given constructors.
-func Invoke(constructors ...any) {
-	options = fx.Options(options, fx.Invoke(constructors...))
-}
+//func TestNewDriver(t *testing.T) {
+//	type authors struct{}
+//
+//	drivers, err := pg.New[authors](nil)
+//	if err != nil {
+//		t.Fatal(err)
+//	}
+//
+//	rows, err := drivers.Query(context.Background(), "SELECT * FROM authors")
+//	if err != nil {
+//		t.Fatal(err)
+//	}
+//
+//	_authors, _ := rows.CollectAll()
+//	_author, _ := rows.CollectOne()
+//
+//	_ = _authors
+//	_ = _author
+//}
