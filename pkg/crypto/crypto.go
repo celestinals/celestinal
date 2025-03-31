@@ -14,4 +14,5 @@
  * limitations under the License.
  */
 
+// Package crypto provides a simple crypto library for the application.
 package crypto

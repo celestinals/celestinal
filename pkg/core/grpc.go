@@ -167,15 +167,15 @@ func (s *GRPCServer) heartbeat(id string, ttl time.Duration) {
 
 }
 
-// New returns a new service registrar.
+// NewGRPCServer returns a new service registrar.
 // opts are the gRPC server options.
-func New(opts ...grpc.ServerOption) *GRPCServer {
+func NewGRPCServer(opts ...grpc.ServerOption) *GRPCServer {
 	return &GRPCServer{
 		server: grpc.NewServer(opts...),
 	}
 }
 
-// NewDefault returns a new service registrar with default options.
-func NewDefault() *GRPCServer {
-	return New()
+// NewGRPCServerDefault returns a new service registrar with default options.
+func NewGRPCServerDefault() *GRPCServer {
+	return NewGRPCServer()
 }

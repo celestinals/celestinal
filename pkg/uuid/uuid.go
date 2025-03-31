@@ -14,4 +14,5 @@
  * limitations under the License.
  */
 
+// Package uuid provides a simple UUID generator.
 package uuid

@@ -17,6 +17,7 @@
 // Package namespace provide name of all service at tickex
 package namespace
 
+// Namespace is a type that represents the namespace of a service.
 type Namespace string
 
 func (ns Namespace) String() string {

@@ -19,6 +19,7 @@ package kv
 
 import (
 	"context"
+
 	"github.com/jackc/pgx/v5"
 	"github.com/tickexvn/tickex/api/gen/go/tickex/v1"
 
@@ -29,6 +30,7 @@ var _ KeyValue = (*KV)(nil)
 
 // New creates a new KeyValue instance.
 func New(tableName string, conf *tickex.Config) KeyValue {
+	_ = conf
 	return &KV{
 		tableName: tableName,
 	}
@@ -53,35 +55,48 @@ type KV struct {
 
 // Count implements KeyValue.
 func (k *KV) Count(ctx context.Context) (int64, error) {
+	_ = ctx
 	panic("unimplemented")
 }
 
 // Create implements KeyValue.
 func (k *KV) Create(ctx context.Context, entity google.Message) (google.Message, error) {
+	_ = ctx
+	_ = entity
 	panic("unimplemented")
 }
 
 // Delete implements KeyValue.
 func (k *KV) Delete(ctx context.Context, id string) error {
+	_ = ctx
+	_ = id
 	panic("unimplemented")
 }
 
 // Exists implements KeyValue.
 func (k *KV) Exists(ctx context.Context, id string) (bool, error) {
+	_ = ctx
+	_ = id
 	panic("unimplemented")
 }
 
 // Get implements KeyValue.
 func (k *KV) Get(ctx context.Context, id string) (google.Message, error) {
+	_ = ctx
+	_ = id
 	panic("unimplemented")
 }
 
 // GetAll implements KeyValue.
 func (k *KV) GetAll(ctx context.Context) ([]google.Message, error) {
+	_ = ctx
 	panic("unimplemented")
 }
 
 // Update implements KeyValue.
 func (k *KV) Update(ctx context.Context, id string, entity google.Message) (google.Message, error) {
+	_ = ctx
+	_ = id
+	_ = entity
 	panic("unimplemented")
 }

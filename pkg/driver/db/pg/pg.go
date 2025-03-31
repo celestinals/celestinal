@@ -14,18 +14,22 @@
  * limitations under the License.
  */
 
+// Package pg implement database driver for PostgreSQL using pgxpool
 package pg
 
 import (
 	"context"
+
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/tickexvn/tickex/api/gen/go/tickex/v1"
 	"github.com/tickexvn/tickex/pkg/driver/db"
 	"github.com/tickexvn/tickex/pkg/utils"
 )
 
+// make sure Driver implement db.Driver
 var _ db.Driver[int] = (*Driver[int])(nil)
 
+// New creates a new PostgreSQL driver instance.
 func New[T any](conf *tickex.Config) (*Driver[T], error) {
 	pool, err := utils.NewPgxPool(conf)
 	if err != nil {
@@ -35,10 +39,12 @@ func New[T any](conf *tickex.Config) (*Driver[T], error) {
 	return &Driver[T]{pool: pool}, nil
 }
 
+// Driver is a PostgreSQL driver that implements db.Driver interface.
 type Driver[T any] struct {
 	pool *pgxpool.Pool
 }
 
+// Query executes a SQL query and returns the result as db.Rows.
 func (d *Driver[T]) Query(ctx context.Context, sql string, args ...any) (db.Rows[T], error) {
 	pgRows, err := d.pool.Query(ctx, sql, args...)
 	if err != nil {

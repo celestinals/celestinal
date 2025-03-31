@@ -36,7 +36,7 @@ var _ core.Server = (*Greeter)(nil)
 // New creates a new Greeter module.
 func New(srv controllers.IGreeter, conf *tickex.Config) core.Server {
 	return &Greeter{
-		GRPCServer: core.NewDefault(),
+		GRPCServer: core.NewGRPCServerDefault(),
 		srv:        srv,
 		config:     conf,
 	}

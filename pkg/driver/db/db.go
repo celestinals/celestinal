@@ -21,10 +21,12 @@ import (
 	"context"
 )
 
+// Driver is an interface for database driver.
 type Driver[T any] interface {
 	Query(ctx context.Context, sql string, args ...any) (Rows[T], error)
 }
 
+// Rows is an interface for database rows.
 type Rows[T any] interface {
 	CollectOne() (T, error)
 	CollectAll() ([]T, error)
