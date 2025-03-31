@@ -27,7 +27,7 @@ import (
 	"github.com/tickexvn/tickex/pkg/errors"
 )
 
-var _ core.GRPCServer = (*Base)(nil)
+var _ core.ServiceRegistrar = (*Base)(nil)
 
 // Base represents the base service
 type Base struct{}

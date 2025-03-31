@@ -9,7 +9,10 @@
 # Tickex Edge & framework
 /cmd/ @kyerand
 /internal/ @kyerand
-/pkg/ @kyerand
+/pkg/core @kyerand
+/pkg/txlog @kyerand
+/pkg/driver @kyerand
+/pkg/database @kyerand
 
 # Ticket Protocol Buffer
 /api/proto/tickex/common/ @kyerand

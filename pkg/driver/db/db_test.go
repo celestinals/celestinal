@@ -14,23 +14,24 @@
  * limitations under the License.
  */
 
-// Package namespace provide name of all service at tickex
-package namespace
+package db
 
-// Namespace is a type that represents the namespace of a service.
-type Namespace string
-
-func (ns Namespace) String() string {
-	return string(ns)
-}
-
-const (
-	// Edge namespace info
-	Edge Namespace = "tickex.edge"
-
-	// GreeterV1 namespace info
-	GreeterV1 Namespace = "tickex.x.greeter.v1"
-
-	// TicketV1 namespace info
-	TicketV1 Namespace = "tickex.x.ticket.v1"
-)
+//func TestNewDriver(t *testing.T) {
+//	type authors struct{}
+//
+//	drivers, err := pg.New[authors](nil)
+//	if err != nil {
+//		t.Fatal(err)
+//	}
+//
+//	rows, err := drivers.Query(context.Background(), "SELECT * FROM authors")
+//	if err != nil {
+//		t.Fatal(err)
+//	}
+//
+//	_authors, _ := rows.CollectAll()
+//	_author, _ := rows.CollectOne()
+//
+//	_ = _authors
+//	_ = _author
+//}

@@ -28,19 +28,19 @@ const QueueSpace int = 2
 var queue = New[string](QueueSpace)
 
 // Subscribe to the event queue with a namespace and a handler function
-func Subscribe(ctx context.Context, namespace string, handler func(value string) error) {
+func Subscribe(ctx context.Context, ns string, handler func(value string) error) {
 	go func() {
-		ch := queue.Get(namespace)
+		ch := queue.Get(ns)
 
 		for {
 			select {
 			case <-ctx.Done():
-				txlog.Infof("subscription to namespace %s stopped", namespace)
+				txlog.Infof("subscription to namespace %s stopped", ns)
 				return
 			case event, ok := <-ch:
-				txlog.Debugf("received event of namespace: %s", namespace)
+				txlog.Debugf("received event of namespace: %s", ns)
 				if !ok {
-					txlog.Warnf("channel for namespace %s closed", namespace)
+					txlog.Warnf("channel for namespace %s closed", ns)
 					return
 				}
 
@@ -61,13 +61,13 @@ func Subscribe(ctx context.Context, namespace string, handler func(value string)
 }
 
 // Publish to the event queue with a namespace and a value
-func Publish(namespace string, value string) {
-	ch := queue.Get(namespace)
+func Publish(ns string, value string) {
+	ch := queue.Get(ns)
 
 	select {
 	case ch <- value:
-		txlog.Debugf("published event to namespace: %s", namespace)
+		txlog.Debugf("published event to namespace: %s", ns)
 	default:
-		txlog.Warnf("channel for namespace %s is full, dropping event", namespace)
+		txlog.Warnf("channel for namespace %s is full, dropping event", ns)
 	}
 }

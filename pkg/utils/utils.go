@@ -17,7 +17,34 @@
 // Package utils provides utility functions for the service.
 package utils
 
+import (
+	"context"
+	"fmt"
+
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/tickexvn/tickex/api/gen/go/tickex/v1"
+)
+
 // CallBack calls the function and ignores the error.
 func CallBack(fn func() error) {
 	_ = fn()
+}
+
+// NewPgxPool create new pool connection for multiple query
+func NewPgxPool(conf *tickex.Config) (*pgxpool.Pool, error) {
+	_ = conf
+	dsn := fmt.Sprintf("postgres://%s:%s@%s:%s/%s",
+		"config.DbUser", "config.DbPassword", "config.DbHost", "config.DbPort", "config.DbName")
+
+	return pgxpool.New(context.Background(), dsn)
+}
+
+// NewPgxConn create new connection for single query
+func NewPgxConn(ctx context.Context, conf *tickex.Config) (*pgx.Conn, error) {
+	_ = conf
+	dsn := fmt.Sprintf("postgres://%s:%s@%s:%s/%s",
+		"config.DbUser", "config.DbPassword", "config.DbHost", "config.DbPort", "config.DbName")
+
+	return pgx.Connect(ctx, dsn)
 }

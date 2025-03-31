@@ -40,14 +40,14 @@ import (
 // This is the Tickex edge application, it will automatically connect to
 // other services via gRPC. Start the application along with other services
 // in the x/ directory.The application provides APIs for users through a
-// single HTTP gateway following the RESTful API standard. The application
+// single HTTP gateway following the REST API standard. The application
 // uses gRPC to connect to other services.Additionally, the system provides
 // a Swagger UI interface for users to easily interact with the system
 // through a web interface.
 //
 // Start the application using the Makefile command
 //
-//	make run.tickex // start tickex edge
+//	make run.edge // start tickex edge
 //	make run.x.<service> // start service
 func main() {
 	flag.SetDefault(namespace.Edge, "0.0.0.0:9000", "dev")

@@ -14,33 +14,20 @@
  * limitations under the License.
  */
 
-// Package copier provides functions to copy objects.
-package copier
+// Package db implement database driver
+package db
 
 import (
-	"encoding/json"
-
-	google "google.golang.org/protobuf/proto"
-
-	"github.com/tickexvn/tickex/pkg/protobuf/proto"
+	"context"
 )
 
-// CopyProtoMessage copies the src message to the dst message.
-func CopyProtoMessage(src, dst google.Message) error {
-	bytes, err := proto.Marshal(src)
-	if err != nil {
-		return err
-	}
-
-	return proto.Unmarshal(bytes, dst)
+// Driver is an interface for database driver.
+type Driver[T any] interface {
+	Query(ctx context.Context, sql string, args ...any) (Rows[T], error)
 }
 
-// CopyJSON copies the src object to the dst object.
-func CopyJSON(src, dst any) error {
-	bytes, err := json.Marshal(src)
-	if err != nil {
-		return err
-	}
-
-	return json.Unmarshal(bytes, dst)
+// Rows is an interface for database rows.
+type Rows[T any] interface {
+	CollectOne() (T, error)
+	CollectAll() ([]T, error)
 }

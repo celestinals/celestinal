@@ -14,33 +14,22 @@
  * limitations under the License.
  */
 
-// Package copier provides functions to copy objects.
-package copier
+package core
 
-import (
-	"encoding/json"
+import "github.com/tickexvn/tickex/api/gen/go/tickex/v1"
 
-	google "google.golang.org/protobuf/proto"
-
-	"github.com/tickexvn/tickex/pkg/protobuf/proto"
-)
-
-// CopyProtoMessage copies the src message to the dst message.
-func CopyProtoMessage(src, dst google.Message) error {
-	bytes, err := proto.Marshal(src)
-	if err != nil {
-		return err
-	}
-
-	return proto.Unmarshal(bytes, dst)
+// service is register properties
+type service struct {
+	Host string
+	Port uint32
+	Name string
+	Tags []string
 }
 
-// CopyJSON copies the src object to the dst object.
-func CopyJSON(src, dst any) error {
-	bytes, err := json.Marshal(src)
-	if err != nil {
-		return err
-	}
-
-	return json.Unmarshal(bytes, dst)
+// ServiceInfo is Serve method properties
+type ServiceInfo struct {
+	Config *tickex.Config
+	Addr   string
+	Tags   []string
+	Name   string
 }

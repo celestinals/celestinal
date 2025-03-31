@@ -30,10 +30,10 @@ import (
 	"github.com/tickexvn/tickex/pkg/namespace"
 )
 
-var _ core.GRPCServer = (*greeter)(nil)
+var _ core.ServiceRegistrar = (*greeter)(nil)
 
 // NewGreeter creates a new greeter service to register handler to gateway
-func NewGreeter() core.GRPCServer {
+func NewGreeter() core.ServiceRegistrar {
 	return greeter{}
 }
 

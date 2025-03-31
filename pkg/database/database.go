@@ -45,14 +45,14 @@ func New[T any, ID comparable](
 	}
 }
 
-// Database database multilayer with postgre & elasticsearch
+// Database multilayer with postgres & elasticsearch
 type Database[T any, ID comparable] struct {
 	search  Repository[T, ID]
 	storage Repository[T, ID]
 }
 
-// Create inserts a new entity into both storage (PostgreSQL) and
-// search (Elasticsearch). If Elasticsearch fails after PostgreSQL succeeds,
+// Create inserts a new entity into both storage (PostgresSQL) and
+// search (Elasticsearch). If Elasticsearch fails after PostgresSQL succeeds,
 func (db *Database[T, ID]) Create(ctx context.Context, entity T) (T, error) {
 	var empty T
 	if db.storage == nil {
@@ -60,7 +60,7 @@ func (db *Database[T, ID]) Create(ctx context.Context, entity T) (T, error) {
 		return empty, errors.F("database.Create err: storage is nil")
 	}
 
-	// insert into PostgreSQL first
+	// insert into PostgresSQL first
 	createdEntity, err := db.storage.Create(ctx, entity)
 	if err != nil {
 		txlog.Debugf("[database.Create] storage err: %v", err)
@@ -83,8 +83,8 @@ func (db *Database[T, ID]) Create(ctx context.Context, entity T) (T, error) {
 	return createdEntity, nil
 }
 
-// Update modifies an existing entity in both storage (PostgreSQL) and
-// search (Elasticsearch).If Elasticsearch fails after PostgreSQL succeeds,
+// Update modifies an existing entity in both storage (PostgresSQL) and
+// search (Elasticsearch).If Elasticsearch fails after PostgresSQL succeeds,
 func (db *Database[T, ID]) Update(ctx context.Context, id ID, entity T) (T, error) {
 	var empty T
 	if db.storage == nil {
@@ -92,14 +92,14 @@ func (db *Database[T, ID]) Update(ctx context.Context, id ID, entity T) (T, erro
 		return empty, errors.F("database.Update err: storage is nil")
 	}
 
-	// update in PostgreSQL
+	// update in PostgresSQL
 	updatedEntity, err := db.storage.Update(ctx, id, entity)
 	if err != nil {
 		txlog.Debugf("[database.Update] storage err: %v", err)
 		return empty, errors.F("database.Update storage err: %v", err)
 	}
 
-	// if search layer is nill, return updated entity
+	// if search layer is nil, return updated entity
 	if db.search == nil {
 		txlog.Info("[database.Update] search => pass")
 		return updatedEntity, nil
@@ -116,8 +116,8 @@ func (db *Database[T, ID]) Update(ctx context.Context, id ID, entity T) (T, erro
 	return updatedEntity, nil
 }
 
-// Delete removes an entity from both storage (PostgreSQL) and search
-// (Elasticsearch). If Elasticsearch fails after PostgreSQL succeeds,
+// Delete removes an entity from both storage (PostgresSQL) and search
+// (Elasticsearch). If Elasticsearch fails after PostgresSQL succeeds,
 func (db *Database[T, ID]) Delete(ctx context.Context, id ID) error {
 	if db.storage == nil {
 		txlog.Debug("[database.Delete] err: storage is nil")
@@ -165,7 +165,7 @@ func (db *Database[T, ID]) Get(ctx context.Context, id ID) (T, error) {
 			return result, nil
 		}
 
-		txlog.Warnf("[database.Get][search] err: ", err)
+		txlog.Warnf("[database.Get][search] err: %v", err)
 	}
 
 	data, err := db.storage.Get(ctx, id)
@@ -228,7 +228,7 @@ func (db *Database[T, ID]) Exists(ctx context.Context, id ID) (bool, error) {
 
 	existed, err := db.storage.Exists(ctx, id)
 	if err != nil {
-		txlog.Debugf("[database.Exists] storage err: ", err)
+		txlog.Debugf("[database.Exists] storage err: %v", err)
 		return false, errors.F("database.Exists storage err: %v", err)
 	}
 

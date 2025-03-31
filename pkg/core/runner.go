@@ -26,14 +26,13 @@ import (
 	"go.uber.org/fx"
 )
 
-const timeout = 500 * time.Millisecond // 500 millisecondss
+const timeout = 500 * time.Millisecond // 500 milliseconds
 
 // runner functions called by fx.Invoke.
 // when the application starts, it will start the server
 func runner(lc fx.Lifecycle, srv Server) {
-
 	// init logger
-	txlogger := txlog.NewTxSystemLog()
+	logger := txlog.NewTxSystemLog()
 
 	lc.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {
@@ -54,7 +53,7 @@ func runner(lc fx.Lifecycle, srv Server) {
 
 		},
 		OnStop: func(ctx context.Context) error {
-			_ = txlogger.Sync()
+			_ = logger.Sync()
 
 			return srv.Shutdown(ctx)
 		},

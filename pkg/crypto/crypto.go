@@ -14,5 +14,5 @@
  * limitations under the License.
  */
 
-// Package mem use to save data to local memory
-package mem
+// Package crypto provides a simple crypto library for the application.
+package crypto

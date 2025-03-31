@@ -14,33 +14,28 @@
  * limitations under the License.
  */
 
-// Package copier provides functions to copy objects.
-package copier
+package pg
 
 import (
-	"encoding/json"
-
-	google "google.golang.org/protobuf/proto"
-
-	"github.com/tickexvn/tickex/pkg/protobuf/proto"
+	"github.com/jackc/pgx/v5"
+	"github.com/tickexvn/tickex/pkg/driver/db"
 )
 
-// CopyProtoMessage copies the src message to the dst message.
-func CopyProtoMessage(src, dst google.Message) error {
-	bytes, err := proto.Marshal(src)
-	if err != nil {
-		return err
-	}
+// make sure dbRows implement db.Rows
+var _ db.Rows[int] = (*dbRows[int])(nil)
 
-	return proto.Unmarshal(bytes, dst)
+type dbRows[T any] struct {
+	rows pgx.Rows
 }
 
-// CopyJSON copies the src object to the dst object.
-func CopyJSON(src, dst any) error {
-	bytes, err := json.Marshal(src)
-	if err != nil {
-		return err
-	}
+// CollectOne collects a single row from the database and maps it
+// to the specified type.
+func (r *dbRows[T]) CollectOne() (T, error) {
+	return pgx.CollectOneRow[T](r.rows, pgx.RowToStructByName[T])
+}
 
-	return json.Unmarshal(bytes, dst)
+// CollectAll collects all rows from the database and maps them
+// to a slice of the specified type.
+func (r *dbRows[T]) CollectAll() ([]T, error) {
+	return pgx.CollectRows[T](r.rows, pgx.RowToStructByName[T])
 }

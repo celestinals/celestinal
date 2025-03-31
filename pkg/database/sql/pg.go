@@ -27,23 +27,23 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-// StorageLayer is a generic repository for PostgreSQL using pgx.
-type StorageLayer[T any, ID comparable] struct {
+// SQL is a generic repository for PostgresSQL using pgx.
+type SQL[T any, ID comparable] struct {
 	db        *pgx.Conn
 	tableName string
 }
 
-// NewStorageLayer initializes a new StorageLayer with PostgreSQL.
-// StorageLayer is a generic repository for PostgreSQL using pgx.
+// New initializes a new SQLStorage with PostgresSQL.
+// SQLStorage is a generic repository for PostgresSQL using pgx.
 // Must be implemented Create method by the user.
-func NewStorageLayer[T any, ID comparable](
-	db *pgx.Conn, tableName string) *StorageLayer[T, ID] {
+func New[T any, ID comparable](
+	db *pgx.Conn, tableName string) *SQL[T, ID] {
 
-	return &StorageLayer[T, ID]{db: db, tableName: tableName}
+	return &SQL[T, ID]{db: db, tableName: tableName}
 }
 
 // Create inserts a new record into the database.
-func (s *StorageLayer[T, ID]) Create(ctx context.Context, entity T) (T, error) {
+func (s *SQL[T, ID]) Create(ctx context.Context, entity T) (T, error) {
 
 	_ = ctx
 	_ = entity
@@ -52,7 +52,7 @@ func (s *StorageLayer[T, ID]) Create(ctx context.Context, entity T) (T, error) {
 }
 
 // Get retrieves a record by ID.
-func (s *StorageLayer[T, ID]) Get(ctx context.Context, id ID) (T, error) {
+func (s *SQL[T, ID]) Get(ctx context.Context, id ID) (T, error) {
 	query := fmt.Sprintf("SELECT * FROM %s WHERE id = $1", s.tableName)
 	row := s.db.QueryRow(ctx, query, id)
 
@@ -69,7 +69,7 @@ func (s *StorageLayer[T, ID]) Get(ctx context.Context, id ID) (T, error) {
 }
 
 // GetAll retrieves all records from the table.
-func (s *StorageLayer[T, ID]) GetAll(ctx context.Context) ([]T, error) {
+func (s *SQL[T, ID]) GetAll(ctx context.Context) ([]T, error) {
 	query := fmt.Sprintf("SELECT * FROM %s", s.tableName)
 	rows, err := s.db.Query(ctx, query)
 	if err != nil {
@@ -91,7 +91,7 @@ func (s *StorageLayer[T, ID]) GetAll(ctx context.Context) ([]T, error) {
 }
 
 // Update modifies a record by ID.
-func (s *StorageLayer[T, ID]) Update(ctx context.Context, id ID, entity T) (T, error) {
+func (s *SQL[T, ID]) Update(ctx context.Context, id ID, entity T) (T, error) {
 	_ = ctx
 	_ = id
 	_ = entity
@@ -100,7 +100,7 @@ func (s *StorageLayer[T, ID]) Update(ctx context.Context, id ID, entity T) (T, e
 }
 
 // Delete removes a record by ID.
-func (s *StorageLayer[T, ID]) Delete(ctx context.Context, id ID) error {
+func (s *SQL[T, ID]) Delete(ctx context.Context, id ID) error {
 	query := fmt.Sprintf("DELETE FROM %s WHERE id = $1", s.tableName)
 	_, err := s.db.Exec(ctx, query, id)
 
@@ -108,7 +108,7 @@ func (s *StorageLayer[T, ID]) Delete(ctx context.Context, id ID) error {
 }
 
 // Exists checks if a record exists by ID.
-func (s *StorageLayer[T, ID]) Exists(ctx context.Context, id ID) (bool, error) {
+func (s *SQL[T, ID]) Exists(ctx context.Context, id ID) (bool, error) {
 	query := fmt.Sprintf("SELECT 1 FROM %s WHERE id = $1", s.tableName)
 	row := s.db.QueryRow(ctx, query, id)
 
@@ -122,7 +122,7 @@ func (s *StorageLayer[T, ID]) Exists(ctx context.Context, id ID) (bool, error) {
 }
 
 // Count returns the total number of records in the table.
-func (s *StorageLayer[T, ID]) Count(ctx context.Context) (int64, error) {
+func (s *SQL[T, ID]) Count(ctx context.Context) (int64, error) {
 	query := fmt.Sprintf("SELECT COUNT(*) FROM %s", s.tableName)
 	row := s.db.QueryRow(ctx, query)
 

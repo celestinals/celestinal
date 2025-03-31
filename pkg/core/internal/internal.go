@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-// Package coreinternal provides the internal function for the core.
-package coreinternal
+// Package internal provides the internal function for the core.
+package internal
 
 import (
 	"go.uber.org/fx"
@@ -24,7 +24,7 @@ import (
 var options = fx.Provide()
 
 // Provide provides the given constructors.
-func Provide(constructors ...interface{}) {
+func Provide(constructors ...any) {
 	options = fx.Options(options, fx.Provide(constructors...))
 }
 
@@ -34,6 +34,6 @@ func Option() fx.Option {
 }
 
 // Invoke invokes the given constructors.
-func Invoke(constructors ...interface{}) {
+func Invoke(constructors ...any) {
 	options = fx.Options(options, fx.Invoke(constructors...))
 }

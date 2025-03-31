@@ -21,7 +21,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/tickexvn/tickex/api/gen/go/tickex/v1"
 	"github.com/tickexvn/tickex/pkg/core/net"
 	"github.com/tickexvn/tickex/pkg/discovery"
@@ -31,77 +30,54 @@ import (
 )
 
 var (
-	// Ensure ServiceServer implements IServiceServer.
-	_ IServiceServer = (*ServiceServer)(nil)
+	// Ensure GRPCServer implements ServiceServer.
+	_ ServiceServer = (*GRPCServer)(nil)
 
-	// Ensure ServiceServer implements Server.
-	_ Server = (*ServiceServer)(nil)
+	// Ensure GRPCServer implements Server.
+	_ Server = (*GRPCServer)(nil)
 )
 
-// GRPCServer is an interface for registering a gRPC service.
-type GRPCServer interface {
-	Accept(context.Context, HTTPServer) error
-	Register(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) error
-}
-
-// IServiceServer is a gRPC service server.
-type IServiceServer interface {
+// ServiceServer is a gRPC service server.
+type ServiceServer interface {
 	AsServer() *grpc.Server
 	Serve(info *ServiceInfo) error
 	Shutdown(ctx context.Context) error
 }
 
-// service is register Properties
-type service struct {
-	Host string
-	Port uint32
-	Name string
-	Tags []string
-}
-
-// ServiceInfo is Serve method properties
-type ServiceInfo struct {
-	Config *tickex.Config
-	Addr   string
-	Tags   []string
-	Name   string
-}
-
-// ServiceServer is a gRPC server that registers services.
-//
-// usage:
+// GRPCServer is a gRPC server that registers services.
+// inherit in <Service>GRPCServer:
 //
 //	type Greeter struct {
-//		*core.ServiceServer
+//		*core.GRPCServer
 //		config *types.Config
 //		srv    greeter.GreeterServiceServer
 //	}
-type ServiceServer struct {
+type GRPCServer struct {
 	server    *grpc.Server
 	discovery tickex.DiscoveryServiceServer
 }
 
 // ListenAndServe implements Server.
-func (s *ServiceServer) ListenAndServe(ctx context.Context) error {
+func (s *GRPCServer) ListenAndServe(ctx context.Context) error {
 	_ = ctx
 	return errors.ErrUnimplemented
 }
 
-// Shutdown implements IServiceServer.
-func (s *ServiceServer) Shutdown(_ context.Context) error {
+// Shutdown implements ServiceServer.
+func (s *GRPCServer) Shutdown(_ context.Context) error {
 	s.server.GracefulStop()
 	return nil
 }
 
 // AsServer returns the underlying gRPC server.
 // return the underlying gRPC server.
-func (s *ServiceServer) AsServer() *grpc.Server {
+func (s *GRPCServer) AsServer() *grpc.Server {
 	return s.server
 }
 
 // Serve starts the http server.
 // return error if the http server fails to start.
-func (s *ServiceServer) Serve(info *ServiceInfo) error {
+func (s *GRPCServer) Serve(info *ServiceInfo) error {
 	if info == nil {
 		return fmt.Errorf("info is nil")
 	}
@@ -129,18 +105,18 @@ func (s *ServiceServer) Serve(info *ServiceInfo) error {
 }
 
 // register registers the service with the service discovery.
-func (s *ServiceServer) register(conf *tickex.Config, service service) error {
+func (s *GRPCServer) register(conf *tickex.Config, service service) error {
 	discover, err := discovery.New(conf)
 	if err != nil {
 		return err
 	}
 
 	s.discovery = discover
-	return s.registerConsul(service)
+	return s.toConsul(service)
 }
 
-// registerConsul registers the service with the consul service discovery.
-func (s *ServiceServer) registerConsul(service service) error {
+// toConsul registers the service with the consul service discovery.
+func (s *GRPCServer) toConsul(service service) error {
 	if s.discovery == nil {
 		return nil
 	}
@@ -173,7 +149,7 @@ func (s *ServiceServer) registerConsul(service service) error {
 
 // heartbeat sends a heartbeat to the consul service discovery.
 // check the service is still alive.
-func (s *ServiceServer) heartbeat(id string, ttl time.Duration) {
+func (s *GRPCServer) heartbeat(id string, ttl time.Duration) {
 	if s.discovery == nil {
 		return
 	}
@@ -191,15 +167,15 @@ func (s *ServiceServer) heartbeat(id string, ttl time.Duration) {
 
 }
 
-// New returns a new service registrar.
+// NewGRPCServer returns a new service registrar.
 // opts are the gRPC server options.
-func New(opts ...grpc.ServerOption) *ServiceServer {
-	return &ServiceServer{
+func NewGRPCServer(opts ...grpc.ServerOption) *GRPCServer {
+	return &GRPCServer{
 		server: grpc.NewServer(opts...),
 	}
 }
 
-// NewDefault returns a new service registrar with default options.
-func NewDefault() *ServiceServer {
-	return New()
+// NewGRPCServerDefault returns a new service registrar with default options.
+func NewGRPCServerDefault() *GRPCServer {
+	return NewGRPCServer()
 }

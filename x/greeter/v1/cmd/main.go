@@ -34,7 +34,7 @@ import (
 // Remember to inject all layers of the application by
 // core.Inject() function
 //
-// # Example:
+// Example:
 //
 // _ = core.Inject(controllers.New)
 func main() {

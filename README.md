@@ -43,7 +43,7 @@ To build and run the service using `make`, use the following commands:
 
 - **Build the Tickex Edge (included API Gateway):**
   ```sh
-  make run.tickex
+  make run.edge
   ```
 
 - **Run the service:**

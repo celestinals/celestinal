@@ -19,7 +19,7 @@ package core
 import (
 	"context"
 
-	coreinternal "github.com/tickexvn/tickex/pkg/core/internal"
+	"github.com/tickexvn/tickex/pkg/core/internal"
 	"github.com/tickexvn/tickex/pkg/flag"
 	"go.uber.org/fx"
 	"google.golang.org/grpc"
@@ -29,19 +29,19 @@ import (
 // The application is built by providing the constructors.
 func Build(constructors ...any) Application {
 	for _, constructor := range constructors {
-		coreinternal.Provide(constructor)
+		internal.Provide(constructor)
 	}
 
 	// disable log: use fx.NopLogger
 	if flag.Parse().GetMode() != "dev" {
 		return &container{
 			engine: fx.New(
-				coreinternal.Option(), fx.Invoke(runner), fx.NopLogger),
+				internal.Option(), fx.Invoke(runner), fx.NopLogger),
 		}
 	}
 
 	return &container{
-		engine: fx.New(coreinternal.Option(), fx.Invoke(runner)),
+		engine: fx.New(internal.Option(), fx.Invoke(runner)),
 	}
 }
 
@@ -52,10 +52,10 @@ func Build(constructors ...any) Application {
 //
 // - github.com/grpc-ecosystem/grpc-gateway/v2/runtime
 func RegisterService(
-	ctx context.Context, httpServer HTTPServer, grpcServer GRPCServer, endpoint string,
+	ctx context.Context, httpServer HTTPServer, service ServiceRegistrar, endpoint string,
 	opts []grpc.DialOption) error {
 
-	if err := grpcServer.Register(
+	if err := service.Register(
 		ctx, httpServer.RuntimeMux(), endpoint, opts); err != nil {
 		return err
 	}

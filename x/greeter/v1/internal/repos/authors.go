@@ -43,25 +43,37 @@ type IAuthors interface {
 
 // NewAuthor creates a new database repository.
 func NewAuthor(pgCon *pgx.Conn) *Authors {
-	storage := sql.NewStorageLayer[authors.Author, int64](pgCon, "authors")
+	storage := sql.New[authors.Author, int64](pgCon, "authors")
 
 	return &Authors{
-		StorageLayer: storage,
-		query:        authors.New(pgCon),
+		SQL:   storage,
+		query: authors.New(pgCon),
 	}
 }
 
 // Authors repository
 type Authors struct {
-	*sql.StorageLayer[authors.Author, int64]
+	*sql.SQL[authors.Author, int64]
 	query *authors.Queries
 }
 
-// Create method implement SQLStorageLayer.Create
+// Create method implement sql.SQL.Create
 func (a *Authors) Create(ctx context.Context, entity authors.Author) (authors.Author, error) {
 	resp, err := a.query.Create(ctx, authors.CreateParams{
 		Name: entity.Name,
 		Bio:  entity.Bio,
 	})
+
+	return resp, err
+}
+
+// Update method implement sql.SQL.Update
+func (a *Authors) Update(ctx context.Context, id int64, author authors.Author) (authors.Author, error) {
+	resp, err := a.query.Update(ctx, authors.UpdateParams{
+		ID:   id,
+		Name: author.Name,
+		Bio:  author.Bio,
+	})
+
 	return resp, err
 }

@@ -22,6 +22,7 @@ import (
 
 	"github.com/tickexvn/tickex/api/gen/go/tickex/v1"
 	"github.com/tickexvn/tickex/pkg/errors"
+	"github.com/tickexvn/tickex/pkg/namespace"
 	"github.com/tickexvn/tickex/pkg/txlog"
 )
 
@@ -29,7 +30,7 @@ var discover *Discovery
 
 // Visitor is the interface that wraps the Visit method.
 type Visitor interface {
-	Visit(ctx context.Context, namespace string) (string, error)
+	Visit(ctx context.Context, ns namespace.Namespace) (string, error)
 }
 
 // NewVisitor returns a new Visitor. It uses the discovery service to
@@ -50,13 +51,13 @@ func NewVisitor(conf *tickex.Config) Visitor {
 type visitor struct{}
 
 // Visit visits the service with the given namespace.
-func (v visitor) Visit(ctx context.Context, namespace string) (string, error) {
+func (v visitor) Visit(ctx context.Context, ns namespace.Namespace) (string, error) {
 	if discover == nil {
 		return "", errors.StatusNotFound
 	}
 
 	services, err := discover.Discover(ctx, &tickex.DiscoverRequest{
-		Name: namespace,
+		Name: ns.String(),
 	})
 	if err != nil {
 		return "", err
@@ -69,8 +70,8 @@ func (v visitor) Visit(ctx context.Context, namespace string) (string, error) {
 }
 
 // Visit namespace on consul and get endpoint of service
-func Visit(ctx context.Context, conf *tickex.Config, namespace string) (string, error) {
+func Visit(ctx context.Context, conf *tickex.Config, ns namespace.Namespace) (string, error) {
 	vst := NewVisitor(conf)
 
-	return vst.Visit(ctx, namespace)
+	return vst.Visit(ctx, ns)
 }
