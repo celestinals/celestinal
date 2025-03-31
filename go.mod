@@ -9,7 +9,7 @@ require (
 	github.com/corazawaf/coraza/v3 v3.3.3
 	github.com/elastic/go-elasticsearch/v8 v8.17.1
 	github.com/go-telegram-bot-api/telegram-bot-api/v5 v5.5.1
-	github.com/google/go-cmp v0.6.0
+	github.com/google/go-cmp v0.7.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.26.1
 	github.com/hashicorp/consul/api v1.31.2
 	github.com/jackc/pgx/v5 v5.7.2
