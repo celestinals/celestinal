@@ -22,21 +22,22 @@ import (
 
 	"github.com/tickexvn/tickex/internal/utils/eventq"
 	"github.com/tickexvn/tickex/pkg/core"
+	"github.com/tickexvn/tickex/pkg/namespace"
 	"github.com/tickexvn/tickex/pkg/txlog"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
 
 // VisitService visits the greeter service.
-func VisitService(ctx context.Context, namespace string, server core.HTTPServer,
+func VisitService(ctx context.Context, ns namespace.Namespace, server core.HTTPServer,
 	service core.ServiceRegistrar) error {
 
-	eventq.Subscribe(ctx, namespace, func(endpoint string) error {
+	eventq.Subscribe(ctx, ns.String(), func(endpoint string) error {
 		opts := []grpc.DialOption{
 			grpc.WithTransportCredentials(insecure.NewCredentials()),
 		}
 
-		txlog.Infof("[visitor.VisitService] %s %s", namespace, "******")
+		txlog.Infof("[visitor.VisitService] %s %s", ns.String(), "******")
 		return core.RegisterService(ctx, server, service, endpoint, opts)
 	})
 

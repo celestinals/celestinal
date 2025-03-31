@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-// Package namespace provide name of all service at tickex
-package namespace
+package core
 
-type Namespace string
+import "github.com/tickexvn/tickex/api/gen/go/tickex/v1"
 
-func (ns Namespace) String() string {
-	return string(ns)
+// service is register properties
+type service struct {
+	Host string
+	Port uint32
+	Name string
+	Tags []string
 }
 
-const (
-	// Edge namespace info
-	Edge Namespace = "tickex.edge"
-
-	// GreeterV1 namespace info
-	GreeterV1 Namespace = "tickex.x.greeter.v1"
-
-	// TicketV1 namespace info
-	TicketV1 Namespace = "tickex.x.ticket.v1"
-)
+// ServiceInfo is Serve method properties
+type ServiceInfo struct {
+	Config *tickex.Config
+	Addr   string
+	Tags   []string
+	Name   string
+}

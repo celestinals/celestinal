@@ -25,6 +25,7 @@ import (
 	"github.com/spf13/pflag"
 	"github.com/tickexvn/tickex/api/gen/go/tickex/v1"
 	"github.com/tickexvn/tickex/internal/utils/version"
+	"github.com/tickexvn/tickex/pkg/namespace"
 )
 
 var (
@@ -86,8 +87,8 @@ func ParseEdge() *tickex.FlagEdge {
 }
 
 // SetDefault set default flag values
-func SetDefault(name, address, mode string) {
-	flags.Name = name
+func SetDefault(name namespace.Namespace, address, mode string) {
+	flags.Name = name.String()
 	flags.Address = address
 	flags.Mode = mode
 }
