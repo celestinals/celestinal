@@ -2,6 +2,8 @@ module github.com/tickexvn/tickex
 
 go 1.24.0
 
+toolchain go1.24.1
+
 replace github.com/tickexvn/tickex/api => ./api
 
 require (
@@ -11,7 +13,7 @@ require (
 	github.com/go-telegram-bot-api/telegram-bot-api/v5 v5.5.1
 	github.com/google/go-cmp v0.6.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.26.1
-	github.com/hashicorp/consul/api v1.31.2
+	github.com/hashicorp/consul/api v1.32.0
 	github.com/jackc/pgx/v5 v5.7.2
 	github.com/joho/godotenv v1.5.1
 	github.com/spf13/pflag v1.0.6
