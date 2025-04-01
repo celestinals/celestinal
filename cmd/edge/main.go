@@ -38,14 +38,14 @@ import (
 //	_ = core.Inject(controllers.New)
 //
 // This is the Tickex edge application, it will automatically connect to
-// other services via gRPC. Start the application along with other services
+// other services via gRPC. Run the application along with other services
 // in the x/ directory.The application provides APIs for users through a
 // single HTTP gateway following the REST API standard. The application
 // uses gRPC to connect to other services.Additionally, the system provides
 // a Swagger UI interface for users to easily interact with the system
 // through a web interface.
 //
-// Start the application using the Makefile command
+// Run the application using the Makefile command
 //
 //	make run.edge // start tickex edge
 //	make run.x.<service> // start service
@@ -56,7 +56,7 @@ func main() {
 	_ = flag.ParseEdge()
 
 	app := core.Build(edge.New, config.Default)
-	if err := app.Start(context.Background()); err != nil {
+	if err := app.Run(context.Background()); err != nil {
 		txlog.Fatal(err)
 	}
 }

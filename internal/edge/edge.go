@@ -46,7 +46,7 @@ func New(conf *tickex.Config) core.Server {
 
 // Edge represents the tickex app The edge application is the main
 // entry point for the Tickex. It will automatically connect to other
-// services via gRPC. Start the application along with other services
+// services via gRPC. Run the application along with other services
 // in the x/ directory. The application provides APIs for users through
 // a single HTTP gateway following the REST API standard. The application
 // uses gRPC to connect to other services. Additionally, the system provides
@@ -112,8 +112,8 @@ func (edge *Edge) functions(ctx context.Context) error {
 	return edge.registerServiceServer(ctx)
 }
 
-// ListenAndServe the edge/gateway app
-func (edge *Edge) ListenAndServe(ctx context.Context) error {
+// Start the edge/gateway app
+func (edge *Edge) Start(ctx context.Context) error {
 	// service ascii art banner
 	version.ASCII()
 	if err := protobuf.Validate(edge.config); err != nil {

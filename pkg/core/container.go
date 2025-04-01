@@ -31,8 +31,8 @@ type container struct {
 	engine *fx.App
 }
 
-// Start the app with the given context.
-func (c *container) Start(ctx context.Context) error {
+// Run the app with the given context.
+func (c *container) Run(ctx context.Context) error {
 	err := make(chan error)
 	sig := make(chan os.Signal, 1)
 	signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM)

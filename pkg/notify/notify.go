@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-// Package robot provide functions log by telegram bot
-package robot
+// Package notify provide functions log by telegram bot
+package notify
 
 import (
 	"fmt"
@@ -43,7 +43,7 @@ func New(conf *tickex.Config) (IRobot, error) {
 
 // IRobot telegram bot interface
 type IRobot interface {
-	Send(msg *tickex.RobotMessage) error
+	Send(msg *tickex.TelegramMessage) error
 }
 
 // Robot Telegram bot
@@ -52,8 +52,8 @@ type Robot struct {
 	conf *tickex.Config
 }
 
-// Send message to group telegram
-func (r *Robot) Send(msg *tickex.RobotMessage) error {
+// Send notify to group telegram
+func (r *Robot) Send(msg *tickex.TelegramMessage) error {
 	flags := flag.ParseEdge()
 	if !flags.IsTurnOnBots {
 		return nil

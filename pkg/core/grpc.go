@@ -57,8 +57,8 @@ type GRPCServer struct {
 	discovery tickex.DiscoveryServiceServer
 }
 
-// ListenAndServe implements Server.
-func (s *GRPCServer) ListenAndServe(ctx context.Context) error {
+// Start implements Server.
+func (s *GRPCServer) Start(ctx context.Context) error {
 	_ = ctx
 	return errors.ErrUnimplemented
 }

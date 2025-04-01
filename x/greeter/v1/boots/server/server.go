@@ -49,8 +49,8 @@ type Greeter struct {
 	srv              greeter.GreeterServiceServer
 }
 
-// ListenAndServe implements IGreeter, override core.GRPCServer.ListenAndServe
-func (g *Greeter) ListenAndServe(_ context.Context) error {
+// Start implements IGreeter, override core.GRPCServer.Start
+func (g *Greeter) Start(_ context.Context) error {
 	greeter.PrintASCII()
 	if err := protobuf.Validate(g.config); err != nil {
 		return err

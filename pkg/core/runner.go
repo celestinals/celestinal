@@ -38,7 +38,7 @@ func runner(lc fx.Lifecycle, srv Server) {
 		OnStart: func(ctx context.Context) error {
 			errChan := make(chan error, 1)
 			go func() {
-				if err := srv.ListenAndServe(ctx); err != nil {
+				if err := srv.Start(ctx); err != nil {
 					txlog.Warnf("[runner] %+v", err)
 					errChan <- err
 				}

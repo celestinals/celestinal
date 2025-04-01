@@ -67,7 +67,7 @@ type httpServer struct {
 }
 
 // ListenAndServe implements Server.
-func (h *httpServer) ListenAndServe(ctx context.Context) error {
+func (h *httpServer) Start(ctx context.Context) error {
 	_ = ctx
 	return errors.ErrUnimplemented
 }

@@ -20,13 +20,13 @@ import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/tickexvn/tickex/api/gen/go/tickex/v1;tickex";
 
-message RobotMessageMetadata {
+message TelegramMessageMetadata {
   google.protobuf.Timestamp created_at = 1;
   string author = 2;
 }
 
-message RobotMessage {
-  RobotMessageMetadata metadata = 1;
+message TelegramMessage {
+  TelegramMessageMetadata metadata = 1;
   string header = 2;
   string body = 3;
   string footer = 4;

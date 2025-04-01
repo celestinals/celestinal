@@ -13,7 +13,7 @@ var (
 	_ tickex.Empty
 )
 
-const ascii = `
+const ASCII = `
  _______     __          
 /_  __(_)___/ /_______ __	TICKEX // TICKET
  / / / / __/  '_/ -_) \ /	--------------
@@ -23,7 +23,7 @@ const ascii = `
 
 // PrintASCII the ASCII art to the console.
 func PrintASCII() {
-	fmt.Print(ascii)
+	fmt.Print(ASCII)
 }
 
 // HasRoleAtTicketService_CreateTicket checks if the role has access to the method

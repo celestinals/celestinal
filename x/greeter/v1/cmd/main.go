@@ -44,7 +44,7 @@ func main() {
 	_ = flag.Parse()
 
 	app := core.Build(server.New, config.Default)
-	if err := app.Start(context.Background()); err != nil {
+	if err := app.Run(context.Background()); err != nil {
 		txlog.Fatal(err)
 	}
 }

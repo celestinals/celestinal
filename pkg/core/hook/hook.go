@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-package core
+// Package hook provides a way to add hooks to the application lifecycle.
+package hook
 
 import (
 	"context"
@@ -44,35 +45,4 @@ func UseAfter(fn func(ctx context.Context) error) {
 	}
 
 	internal.Invoke(function)
-}
-
-// InjectLifeCycle injects the given constructor into the application with
-// lifecycle hooks.
-func InjectLifeCycle[T any](
-	constructor func() T, onStart func(T) error, onStop func(T) error) func() T {
-
-	decorateConstructor := func(lc fx.Lifecycle) T {
-		ins := constructor()
-
-		lc.Append(fx.Hook{
-			OnStart: func(_ context.Context) error {
-				return onStart(ins)
-			},
-			OnStop: func(_ context.Context) error {
-				return onStop(ins)
-			},
-		})
-
-		return ins
-	}
-
-	internal.Provide(decorateConstructor)
-
-	return constructor
-}
-
-// Inject injects the given constructor into the application.
-func Inject[fn any](constructor fn) fn {
-	internal.Provide(constructor)
-	return constructor
 }

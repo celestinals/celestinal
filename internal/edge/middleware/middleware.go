@@ -30,8 +30,8 @@ import (
 	"github.com/tickexvn/tickex/api/gen/go/tickex/v1"
 	"github.com/tickexvn/tickex/pkg/core"
 	"github.com/tickexvn/tickex/pkg/flag"
+	"github.com/tickexvn/tickex/pkg/notify"
 	"github.com/tickexvn/tickex/pkg/protobuf"
-	"github.com/tickexvn/tickex/pkg/robot"
 )
 
 // New middleware handler
@@ -125,10 +125,10 @@ func (mdw *Middleware) preflightHandler(w http.ResponseWriter, r *http.Request) 
 }
 
 func (mdw *Middleware) notify(statusCode int, body string) {
-	monitor, _ := robot.New(mdw.conf)
+	monitor, _ := notify.New(mdw.conf)
 
-	_ = monitor.Send(&tickex.RobotMessage{
-		Metadata: &tickex.RobotMessageMetadata{
+	_ = monitor.Send(&tickex.TelegramMessage{
+		Metadata: &tickex.TelegramMessageMetadata{
 			CreatedAt: protobuf.ToTime(time.Now().Local()),
 			Author:    flag.Parse().GetName(),
 		},

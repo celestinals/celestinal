@@ -28,12 +28,12 @@ import (
 // by core.Build() start the app, it will start the server and provide all
 // constructor needed
 type Application interface {
-	Start(ctx context.Context) error
+	Run(ctx context.Context) error
 }
 
 // Server represents the HTTP/gRPC server interface.
 type Server interface {
-	ListenAndServe(ctx context.Context) error
+	Start(ctx context.Context) error
 	Shutdown(ctx context.Context) error
 }
 
