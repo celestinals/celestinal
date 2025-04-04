@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright 2025 The Tickex Authors.
+# Copyright 2025 The Celestinal Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,8 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-make build.tickex
+make build.cest
 
-./build/tickex-edge --secure --mode=sandbox \
-    --rule=deploy/waf-rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf \
-    --rule=deploy/waf-rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf
+./build/edge --mode=sandbox 

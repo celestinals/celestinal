@@ -1,32 +1,32 @@
 services:
-  tickex.redis:
+  celestinal.redis:
     image: redis
-    container_name: tickex.redis
-    hostname: tickex.redis
+    container_name: celestinal.redis
+    hostname: celestinal.redis
     ports:
       - "6379:6379"
     command: /bin/sh -c "redis-server --requirepass password"
     volumes:
       - ./_dumpdata/redis:/data
     networks:
-      - tickex-network
+      - celestinal-network
 
-  tickex.postgres:
+  celestinal.postgres:
     image: postgres:latest
-    hostname: tickex.postgres
-    container_name: tickex.postgres
+    hostname: celestinal.postgres
+    container_name: celestinal.postgres
     ports:
       - "5432:5432"
     restart: on-failure:3
     volumes:
       - ./_dumpdata/postgres:/var/lib/postgresql/data
     networks:
-      - tickex-network
+      - celestinal-network
 
-  tickex.consul:
+  celestinal.consul:
     image: hashicorp/consul:latest
-    container_name: tickex.consul
-    hostname: tickex.consul
+    container_name: celestinal.consul
+    hostname: celestinal.consul
     restart: unless-stopped
     ports:
       - "8500:8500"   # UI & API
@@ -35,11 +35,11 @@ services:
     volumes:
       - ./_dumpdata:/consul/data
     networks:
-      - tickex-network
+      - celestinal-network
 
 volumes:
   _dumpdata:
 
 networks:
-  tickex-network:
+  celestinal-network:
     driver: bridge

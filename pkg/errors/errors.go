@@ -1,52 +1,50 @@
-/*
- * Copyright 2025 The Tickex Authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2025 The Celestinal Authors.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
-// Package errors provide all type of error in tickex universal
-package errors
+// Package cesterr provide all type of error in celestinal universal
+package cesterr
 
 import (
 	"errors"
 	"fmt"
 
-	"github.com/tickexvn/tickex/api/gen/go/tickex/v1"
+	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
 
 var (
-	forbidden = fmt.Sprintf("TICKEX-%d: %s",
-		tickex.Errors_ERRORS_FORBIDDEN, tickex.Errors_ERRORS_FORBIDDEN.String())
+	forbidden = fmt.Sprintf("CEST-%d: %s",
+		celestinal.Errors_ERRORS_FORBIDDEN, celestinal.Errors_ERRORS_FORBIDDEN.String())
 
-	unspecified = fmt.Sprintf("TICKEX-%d: %s",
-		tickex.Errors_ERRORS_UNSPECIFIED, tickex.Errors_ERRORS_UNSPECIFIED.String())
+	unspecified = fmt.Sprintf("CEST-%d: %s",
+		celestinal.Errors_ERRORS_UNSPECIFIED, celestinal.Errors_ERRORS_UNSPECIFIED.String())
 
-	internalError = fmt.Sprintf("TICKEX-%d: %s",
-		tickex.Errors_ERRORS_INTERNAL_ERROR, tickex.Errors_ERRORS_INTERNAL_ERROR.String())
+	internalError = fmt.Sprintf("CEST-%d: %s",
+		celestinal.Errors_ERRORS_INTERNAL_ERROR, celestinal.Errors_ERRORS_INTERNAL_ERROR.String())
 
-	notFound = fmt.Sprintf("TICKEX-%d: %s",
-		tickex.Errors_ERRORS_NOT_FOUND, tickex.Errors_ERRORS_NOT_FOUND.String())
+	notFound = fmt.Sprintf("CEST-%d: %s",
+		celestinal.Errors_ERRORS_NOT_FOUND, celestinal.Errors_ERRORS_NOT_FOUND.String())
 
-	unauthorized = fmt.Sprintf("TICKEX-%d: %s",
-		tickex.Errors_ERRORS_UNAUTHORIZED, tickex.Errors_ERRORS_UNAUTHORIZED.String())
+	unauthorized = fmt.Sprintf("CEST-%d: %s",
+		celestinal.Errors_ERRORS_UNAUTHORIZED, celestinal.Errors_ERRORS_UNAUTHORIZED.String())
 
-	invalidData = fmt.Sprintf("TICKEX-%d: %s",
-		tickex.Errors_ERRORS_INVALID_DATA, tickex.Errors_ERRORS_INVALID_DATA.String())
+	invalidData = fmt.Sprintf("CEST-%d: %s",
+		celestinal.Errors_ERRORS_INVALID_DATA, celestinal.Errors_ERRORS_INVALID_DATA.String())
 
-	unimplemented = fmt.Sprintf("TICKEX-%d: %s",
-		tickex.Errors_ERRORS_UNIMPLEMENTED, tickex.Errors_ERRORS_UNIMPLEMENTED.String())
+	unimplemented = fmt.Sprintf("CEST-%d: %s",
+		celestinal.Errors_ERRORS_UNIMPLEMENTED, celestinal.Errors_ERRORS_UNIMPLEMENTED.String())
 )
 
 var (

@@ -1,7 +1,7 @@
 {
-  "name": "tickex",
+  "name": "celestinal",
   "version": "0.0.1",
-  "description": "Buying, selling, exchanging, and sharing all types of tickets and game cards.",
+  "description": "Distributed Log Aggregator",
   "private": true,
   "scripts": {
     "build": "turbo build",
@@ -10,8 +10,8 @@
     "format": "prettier --write \"**/*.{ts,tsx}\""
   },
   "devDependencies": {
-    "@tickex/eslint-config": "workspace:*",
-    "@tickex/typescript-config": "workspace:*",
+    "@celestinal/eslint-config": "workspace:*",
+    "@celestinal/typescript-config": "workspace:*",
     "prettier": "^3.2.5",
     "turbo": "^2.4.4",
     "typescript": "5.5.4"
@@ -25,15 +25,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tickexvn/tickex.git"
+    "url": "git+https://github.com/celestinals/celestinal.git"
   },
   "keywords": [
     "tkx-web"
   ],
-  "author": "Tickex Labs",
+  "author": "Celestinal Labs",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/tickexvn/tickex/issues"
+    "url": "https://github.com/celestinals/celestinal/issues"
   },
-  "homepage": "https://github.com/tickexvn/tickex#readme"
+  "homepage": "https://github.com/celestinals/celestinal#readme"
 }

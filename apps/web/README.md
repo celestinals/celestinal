@@ -1,12 +1,12 @@
-<img src="assets/tkx.png" alt="tickex logo" width="120" height="120">
+<img src="assets/cest.png" alt="celestinal logo" width="120" height="120">
 
 ![Node.js](https://img.shields.io/badge/node-%3E%3D20.x-green.svg)
 ![PNPM](https://img.shields.io/badge/pnpm-%3E%3D9.x-yellow.svg)
 ![Turborepo](https://img.shields.io/badge/turbo-monorepo-orange.svg)
 
-# 🌐 Tickex
+# 🌐 Celestinal
 
-Welcome to the **web monorepo** for Tickex! Built with:
+Welcome to the **web monorepo** for Celestinal! Built with:
 
 - ⚛️ **Next.js 15**
 - 🎨 **Tailwind CSS**
@@ -30,7 +30,7 @@ Enjoy a modern, scalable development workflow with shared resources and optimize
 
 ## 🚀 Getting Started
 
-Set up the web monorepo for Tickex and start building your applications with ease. Leverage shared components, utilities, and configurations to accelerate your workflow.
+Set up the web monorepo for Celestinal and start building your applications with ease. Leverage shared components, utilities, and configurations to accelerate your workflow.
 
 ---
 
@@ -52,7 +52,7 @@ Ensure the following tools are installed:
 Clone the project repository to your local machine:
 
 ```bash
-git clone https://github.com/tickexvn/tickex-website.git
+git clone https://github.com/celestinals/celestinal-website.git
 cd web
 ```
 
@@ -69,8 +69,8 @@ pnpm install
 Set up environment variables by creating a `.env.local` file in the root directory and populating it as follows:
 
 ```bash
-NEXT_PUBLIC_API_URL=https://api.tickex.com
-NEXT_PUBLIC_APP_NAME=tickex
+NEXT_PUBLIC_API_URL=https://api.celestinal.com
+NEXT_PUBLIC_APP_NAME=Celestinal
 ```
 
 ### 4. Run the Development Server

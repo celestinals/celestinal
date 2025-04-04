@@ -1,1 +1,1 @@
-Internal package of Tickex Gateway
+Internal package of Celestinal

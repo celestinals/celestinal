@@ -1,1 +1,1 @@
-This directory contains the GRPC API definitions for Tickex.
+This directory contains the GRPC API definitions for Celestinal.

@@ -27,7 +27,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/tickexgreeterv1SayHelloResponse"
+              "$ref": "#/definitions/celestinalgreeterv1SayHelloResponse"
             }
           },
           "default": {
@@ -94,6 +94,14 @@
     }
   },
   "definitions": {
+    "celestinalgreeterv1SayHelloResponse": {
+      "type": "object",
+      "properties": {
+        "response": {
+          "$ref": "#/definitions/greetersharedv1SayHelloResponse"
+        }
+      }
+    },
     "googlerpcStatus": {
       "type": "object",
       "properties": {
@@ -129,14 +137,6 @@
         }
       },
       "additionalProperties": {}
-    },
-    "tickexgreeterv1SayHelloResponse": {
-      "type": "object",
-      "properties": {
-        "response": {
-          "$ref": "#/definitions/greetersharedv1SayHelloResponse"
-        }
-      }
     },
     "v1Pages": {
       "type": "object",

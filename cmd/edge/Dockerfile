@@ -1,4 +1,4 @@
-# Copyright 2025 The Tickex Authors.
+# Copyright 2025 The Celestinal Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#FROM ghcr.io/tickexvn/tickex/tkx.go:1.24-alpine AS builder
 FROM golang:1.24.0-alpine AS builder
 
 # Set necessary environment variables needed for our image and build the API server.
@@ -40,7 +39,6 @@ RUN rm -r *
 RUN go clean -modcache
 
 # Stage run
-#FROM ghcr.io/tickexvn/tickex/tkx.alpine:edge AS runner
 FROM alpine AS runner
 WORKDIR /app
 

@@ -4,8 +4,8 @@
   "rsc": true,
   "tsx": true,
   "tailwind": {
-    "config": "../../packages/tickex-ui/tailwind.config.ts",
-    "css": "../../packages/tickex-ui/src/styles/globals.css",
+    "config": "../../packages/celestinal-ui/tailwind.config.ts",
+    "css": "../../packages/celestinal-ui/src/styles/globals.css",
     "baseColor": "zinc",
     "cssVariables": true
   },
@@ -14,7 +14,7 @@
     "components": "@/components",
     "hooks": "@/hooks",
     "lib": "@/lib",
-    "utils": "@tickex/ui/lib/utils",
-    "ui": "@tickex/ui/components"
+    "utils": "@celestinal/ui/lib/utils",
+    "ui": "@celestinal/ui/components"
   }
 }

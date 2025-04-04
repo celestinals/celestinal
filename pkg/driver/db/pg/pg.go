@@ -1,37 +1,36 @@
-/*
- * Copyright 2025 The Tickex Authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2025 The Celestinal Authors.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
-// Package pg implement database driver for PostgreSQL using pgxpool
+// Package pg implement cestdb cestdriver for PostgreSQL using pgxpool
 package pg
 
 import (
 	"context"
 
+	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
+	"github.com/celestinals/celestinal/pkg/driver/db"
+	cestutils "github.com/celestinals/celestinal/pkg/utils"
+
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/tickexvn/tickex/api/gen/go/tickex/v1"
-	"github.com/tickexvn/tickex/pkg/driver/db"
-	"github.com/tickexvn/tickex/pkg/utils"
 )
 
 // make sure Driver implement db.Driver
 var _ db.Driver[int] = (*Driver[int])(nil)
 
-// New creates a new PostgreSQL driver instance.
-func New[T any](conf *tickex.Config) (*Driver[T], error) {
-	pool, err := utils.NewPgxPool(conf)
+// New creates a new PostgreSQL cestdriver instance.
+func New[T any](conf *celestinal.Config) (*Driver[T], error) {
+	pool, err := cestutils.NewPgxPool(conf)
 	if err != nil {
 		return nil, err
 	}
@@ -39,7 +38,7 @@ func New[T any](conf *tickex.Config) (*Driver[T], error) {
 	return &Driver[T]{pool: pool}, nil
 }
 
-// Driver is a PostgreSQL driver that implements db.Driver interface.
+// Driver is a PostgreSQL cestdriver that implements db.Driver interface.
 type Driver[T any] struct {
 	pool *pgxpool.Pool
 }

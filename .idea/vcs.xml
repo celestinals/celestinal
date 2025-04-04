@@ -2,7 +2,6 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/_submodules/coreruleset" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/_submodules/googleapis" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/_submodules/grpc-gateway" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/_submodules/protovalidate" vcs="Git" />

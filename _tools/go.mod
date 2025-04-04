@@ -1,17 +1,15 @@
-module github.com/tickexvn/tickex/tools
+module github.com/celestinals/celestinal/tools
 
-go 1.24.0
+go 1.24.2
 
-replace (
-	github.com/tickexvn/tickex/api => ../api
-)
+replace github.com/celestinals/celestinal/api => ../api
 
 require (
 	github.com/bufbuild/buf v1.50.1
+	github.com/celestinals/celestinal/api v0.0.0-00010101000000-000000000000
 	github.com/codesenberg/bombardier v1.2.6
 	github.com/golangci/golangci-lint v1.64.7
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.26.1
-	github.com/tickexvn/tickex/api v0.0.0-00010101000000-000000000000
 	github.com/vektra/mockery/v2 v2.53.2
 	google.golang.org/grpc v1.70.0
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.5.1

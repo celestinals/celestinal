@@ -1,31 +1,31 @@
-/*
- * Copyright 2025 The Tickex Authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2025 The Celestinal Authors.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
-// Package flag provide flag variable props
-package flag
+// Package cestflag provide cestflag variable props
+package cestflag
 
 import (
 	"fmt"
 	"os"
 	"sync"
 
+	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
+	"github.com/celestinals/celestinal/internal/utils/version"
+
+	cestns "github.com/celestinals/celestinal/pkg/ns"
+
 	"github.com/spf13/pflag"
-	"github.com/tickexvn/tickex/api/gen/go/tickex/v1"
-	"github.com/tickexvn/tickex/internal/utils/version"
-	"github.com/tickexvn/tickex/pkg/namespace"
 )
 
 var (
@@ -39,25 +39,22 @@ var (
 )
 
 // flags global variable
-var flags = &tickex.Flag{
-	Name:    "tickex.server.default",
+var flags = &celestinal.Flag{
+	Name:    "celestinal.server.default",
 	Address: "0.0.0.0:9000",
 	Mode:    "dev",
 }
 
 // EdgeFlags global variable
-var edgeFlags = &tickex.FlagEdge{
-	IsTurnOnBots: false,
-	Secure:       false,
+var edgeFlags = &celestinal.FlagEdge{
+	Telegram: false,
 }
 
-// Parse flag args
-func Parse() *tickex.Flag {
+// Parse cestflag args
+func Parse() *celestinal.Flag {
 	once.Do(func() {
 		if !isService {
-			pflag.BoolVarP(&edgeFlags.IsTurnOnBots, "telegram", "t", edgeFlags.GetIsTurnOnBots(), "turn on telegram system log ?")
-			pflag.BoolVarP(&edgeFlags.Secure, "secure", "s", edgeFlags.GetSecure(), "secure api with WAF ?")
-			pflag.StringSliceVarP(&edgeFlags.Rules, "rule", "r", edgeFlags.Rules, "owasp crs rules config file")
+			pflag.BoolVarP(&edgeFlags.Telegram, "telegram", "t", edgeFlags.GetTelegram(), "turn on telegram system log ?")
 		}
 
 		pflag.StringVarP(&flags.Name, "name", "n", flags.GetName(), "hostname ?")
@@ -66,7 +63,7 @@ func Parse() *tickex.Flag {
 
 		pflag.Usage = func() {
 			fmt.Println(asciiConsole)
-			fmt.Println("Usage: tickex-<service> [Flags]")
+			fmt.Println("Usage: <service> [Flags]")
 			pflag.PrintDefaults()
 			os.Exit(0)
 		}
@@ -77,8 +74,8 @@ func Parse() *tickex.Flag {
 	return flags
 }
 
-// ParseEdge flag args for edge service
-func ParseEdge() *tickex.FlagEdge {
+// ParseEdge cestflag args for edge service
+func ParseEdge() *celestinal.FlagEdge {
 	isService = false
 
 	_ = Parse()
@@ -86,8 +83,8 @@ func ParseEdge() *tickex.FlagEdge {
 	return edgeFlags
 }
 
-// SetDefault set default flag values
-func SetDefault(name namespace.Namespace, address, mode string) {
+// SetDefault set default cestflag values
+func SetDefault(name cestns.Namespace, address, mode string) {
 	flags.Name = name.String()
 	flags.Address = address
 	flags.Mode = mode
