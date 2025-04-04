@@ -1,14 +1,12 @@
 # Contributors' Guide
-This guide will assist contributors to the `tickexvn/tickex` repository.
+This guide will assist contributors to the `celestinals/celestinal` repository.
 
 ## Prerequisites
 
 ### Applications used in this project
 
-- Design: Lottiefiles & Figma
 - Backend Go & Protobuf: GoLand
 - Frontend: Visual Studio Code or any preferred IDE
-- Mobile: Android Studio or Visual Studio Code with Flutter framework
 
 ### Go Coding Style
 
@@ -39,7 +37,7 @@ All pull requests to the main branch must adhere to Conventional Commits. Otherw
 Ensure that you have added the license header to each file you create, including `.go`, `makefile`, `.sh`, `Dockerfile`, etc.
 
 ```
-Copyright 2025 The Tickex Authors.
+Copyright 2025 The Celestinal Authors.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -116,7 +114,6 @@ If you set your `user.name` and `user.email` git configs, you can sign your comm
 - `internal`: Internal packages, not exported.
 - `packages`: Shared packages across apps
 - `pkg`: Common packages, shared with external modules.
-- `x`: "Extend" services, all built on a microservice network.
 
 **Every folder with prefix "_" not related to the main source code.**
 - `_submodules`: All repo submodules needed to generate go code from proto file

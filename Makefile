@@ -1,4 +1,4 @@
-# Copyright 2025 The Tickex Authors.
+# Copyright 2025 The Celestinal Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 
 default: default.print \
 	build.edge \
-	build.x.greeter
+	build.greeter
 
 default.print:
-	@echo "[BUILD] TICKEX: build tickex and x services"
+	@echo "[BUILD] CELESTINAL: build celestinal and services"
 
 test.cover:
 	@go test ./... -cover
@@ -48,30 +48,28 @@ updaterule:
 #####################################################################
 #####################################################################
 
-build.edge: TKX_OUT ?= tickex-edge
+build.edge: CELESTINAL_OUT ?= edge
 build.edge:
-	@go build -ldflags="-s -w" -o ./bin/$(TKX_OUT) ./cmd/edge
-	@echo "[DONE]  TICKEX: edge ... ok"
+	@go build -ldflags="-s -w" -o ./bin/$(CELESTINAL_OUT) ./cmd/edge
+	@echo "[DONE]  CELESTINAL: edge ... ok"
 
 
-build.x.greeter: TKX_OUT ?= tickex-greeter
-build.x.greeter:
-	@cd ./x/greeter/v1 && \
-		go build -ldflags="-s -w" -o ../../../bin/$(TKX_OUT) ./cmd
-	@echo "[DONE]  TICKEX: greeter.v1 ... ok"
+build.greeter: CELESTINAL_OUT ?= greeter
+build.greeter:
+	@go build -ldflags="-s -w" -o ./bin/$(CELESTINAL_OUT) ./cmd/greeter/v1
+	@echo "[DONE]  CELESTINAL: greeter.v1 ... ok"
 
 #####################################################################
 
-run.edge: TKX_OUT ?= tickex-edge
+run.edge: CELESTINAL_OUT ?= edge
 run.edge:
-	@go build -ldflags="-s -w" -o ./bin/$(TKX_OUT) ./cmd/edge && \
- 	./bin/$(TKX_OUT)
+	@go build -ldflags="-s -w" -o ./bin/$(CELESTINAL_OUT) ./cmd/edge && \
+ 	./bin/$(CELESTINAL_OUT)
 
-run.x.greeter: TKX_OUT ?= tickex-greeter
-run.x.greeter:
-	@cd ./x/greeter/v1 && \
-		go build -ldflags="-s -w" -o ../../../bin/$(TKX_OUT) ./cmd
-	@./bin/$(TKX_OUT)
+run.greeter: CELESTINAL_OUT ?= greeter
+run.greeter:
+	@go build -ldflags="-s -w" -o ./bin/$(CELESTINAL_OUT) ./cmd/greeter/v1 && \
+	./bin/$(CELESTINAL_OUT)
 
 #####################################################################
 # Docker build commands
@@ -80,10 +78,10 @@ mesh:
 	@docker compose -f ./deploy/docker/mesh/docker-compose.yaml \
     -f ./deploy/docker/resource/docker-compose.resources.yaml up -d
 
-build.image.edge: TAG ?= tickexvn/edge
+build.image.edge: TAG ?= celestinals/celestinal
 build.image.edge:
 	docker buildx build -f ./cmd/edge/Dockerfile -t $(TAG):latest .
 
-build.image.x.greeter: TAG ?= tickexvn/tickex.x.greeter
+build.image.x.greeter: TAG ?= celestinals/celestinal.greeter
 build.image.x.greeter:
 	docker buildx build -f ./x/greeter/v1/Dockerfile -t $(TAG):latest .

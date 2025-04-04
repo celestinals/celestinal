@@ -1,18 +1,16 @@
-/*
- * Copyright 2025 The Tickex Authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2025 The Celestinal Authors.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 // Package middleware provide http handler - net/http
 package middleware
@@ -27,22 +25,22 @@ import (
 
 	"google.golang.org/grpc/grpclog"
 
-	"github.com/tickexvn/tickex/api/gen/go/tickex/v1"
-	"github.com/tickexvn/tickex/pkg/core"
-	"github.com/tickexvn/tickex/pkg/flag"
-	"github.com/tickexvn/tickex/pkg/notify"
-	"github.com/tickexvn/tickex/pkg/protobuf"
+	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
+	"github.com/celestinals/celestinal/pkg/cestcore"
+	cestflag "github.com/celestinals/celestinal/pkg/flag"
+	cestnoti "github.com/celestinals/celestinal/pkg/noti"
+	cestpb "github.com/celestinals/celestinal/pkg/pb"
 )
 
 // New middleware handler
-func New(conf *tickex.Config) *Middleware {
+func New(conf *celestinal.Config) *Middleware {
 	return &Middleware{
 		conf: conf,
 	}
 }
 
 // Serve middleware handler for http handler in edge server
-func Serve(server core.HTTPServer, conf *tickex.Config) {
+func Serve(server cestcore.HTTPServer, conf *celestinal.Config) {
 	// new middleware handler
 	mdw := New(conf)
 
@@ -53,7 +51,7 @@ func Serve(server core.HTTPServer, conf *tickex.Config) {
 
 // Middleware for http handler in grpc gateway
 type Middleware struct {
-	conf *tickex.Config
+	conf *celestinal.Config
 }
 
 // LogRequestBody logs the request body when the response status code is not 200.
@@ -125,15 +123,15 @@ func (mdw *Middleware) preflightHandler(w http.ResponseWriter, r *http.Request) 
 }
 
 func (mdw *Middleware) notify(statusCode int, body string) {
-	monitor, _ := notify.New(mdw.conf)
+	monitor, _ := cestnoti.New(mdw.conf)
 
-	_ = monitor.Send(&tickex.TelegramMessage{
-		Metadata: &tickex.TelegramMessageMetadata{
-			CreatedAt: protobuf.ToTime(time.Now().Local()),
-			Author:    flag.Parse().GetName(),
+	_ = monitor.Send(&celestinal.TelegramMessage{
+		Metadata: &celestinal.TelegramMessageMetadata{
+			CreatedAt: cestpb.ToTime(time.Now().Local()),
+			Author:    cestflag.Parse().GetName(),
 		},
 		Header: fmt.Sprintf("http error %+v ", statusCode),
 		Body:   fmt.Sprintf("http error %+v request body %+v", statusCode, string(body)),
-		Footer: "TICKEX // EDGE",
+		Footer: "CELESTINAL // EDGE",
 	})
 }

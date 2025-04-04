@@ -1,20 +1,20 @@
 services:
-  tickex.edge:
-    container_name: tickex.edge
-    hostname: tickex.edge
-    image: tickexvn/tickex:latest
+  celestinal.edge:
+    container_name: celestinal.edge
+    hostname: celestinal.edge
+    image: celestinalvn/celestinal:latest
     ports:
       - "9000:9000"
     networks:
-      - tickex-network
+      - celestinal-network
 
-  tickex.x.greeter.v1:
-    container_name: tickex.x.greeter.v1
-    hostname: tickex.x.greeter.v1
-    image: tickexvn/tickex.x.greeter:latest
+  celestinal.greeter.v1:
+    container_name: celestinal.greeter.v1
+    hostname: celestinal.greeter.v1
+    image: celestinals/celestinal.greeter:latest
     networks:
-      - tickex-network
+      - celestinal-network
 
 networks:
-  tickex-network:
+  celestinal-network:
     driver: bridge

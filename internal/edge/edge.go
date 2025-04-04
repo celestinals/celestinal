@@ -1,51 +1,50 @@
-/*
- * Copyright 2025 The Tickex Authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2025 The Celestinal Authors.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
-// Package edge provides the tickex-edge
+// Package edge provides the edge
 package edge
 
 import (
 	"context"
 
-	"github.com/tickexvn/tickex/api/gen/go/tickex/v1"
-	"github.com/tickexvn/tickex/internal/edge/middleware"
-	"github.com/tickexvn/tickex/internal/edge/services/v1"
-	"github.com/tickexvn/tickex/internal/funcs/openapi"
-	"github.com/tickexvn/tickex/internal/funcs/secure"
-	"github.com/tickexvn/tickex/internal/funcs/watch"
-	"github.com/tickexvn/tickex/internal/utils/version"
-	"github.com/tickexvn/tickex/pkg/core"
-	"github.com/tickexvn/tickex/pkg/protobuf"
-	"github.com/tickexvn/tickex/pkg/txlog"
+	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
+
+	"github.com/celestinals/celestinal/internal/edge/funcs/openapi"
+	"github.com/celestinals/celestinal/internal/edge/funcs/watcher"
+	"github.com/celestinals/celestinal/internal/edge/middleware"
+	"github.com/celestinals/celestinal/internal/edge/services/v1"
+	"github.com/celestinals/celestinal/internal/utils/version"
+
+	"github.com/celestinals/celestinal/pkg/cestcore"
+	cestlog "github.com/celestinals/celestinal/pkg/log"
+	cestpb "github.com/celestinals/celestinal/pkg/pb"
 )
 
-// make sure edge implement core.Server
-// core.runner will be start application through core.Server interface
-var _ core.Server = (*Edge)(nil)
+// make sure edge implement cestcore.Server
+// cestcore.runner will be start application through cestcore.Server interface
+var _ cestcore.Server = (*Edge)(nil)
 
-// New creates a new gateway app, return core.Server interface
-func New(conf *tickex.Config) core.Server {
+// New creates a new gateway app, return cestcore.Server interface
+func New(conf *celestinal.Config) cestcore.Server {
 	return &Edge{
-		server: core.NewHTTPServer(),
+		server: cestcore.NewHTTPServer(),
 		config: conf,
 	}
 }
 
-// Edge represents the tickex app The edge application is the main
-// entry point for the Tickex. It will automatically connect to other
+// Edge represents the celestinal app The edge application is the main
+// entry point for the Celestinal. It will automatically connect to other
 // services via gRPC. Run the application along with other services
 // in the x/ directory. The application provides APIs for users through
 // a single HTTP gateway following the REST API standard. The application
@@ -55,11 +54,11 @@ func New(conf *tickex.Config) core.Server {
 type Edge struct {
 	// config is the configuration of the edge app, load environment
 	// variables from .env file
-	config *tickex.Config
+	config *celestinal.Config
 
-	// server is the core server, manage http.ServeMux,
+	// server is the cestcore server, manage http.ServeMux,
 	// runtime.ServeMux and HTTP server
-	server core.HTTPServer
+	server cestcore.HTTPServer
 }
 
 // registerServiceServer gRPC server endpoint.
@@ -68,18 +67,17 @@ func (edge *Edge) registerServiceServer(ctx context.Context) error {
 	// Create folder at services, inherit base package, override function,
 	// implement business logic
 	// See: services/v1/greeter
-	serviceList := []core.ServiceRegistrar{
+	serviceList := []cestcore.ServiceRegistrar{
 		// Example: register the greeter service to the gateway
 		services.NewGreeter(),
 		// add more service here ...
-		services.NewTicket(),
 	}
 
 	return edge.visit(ctx, serviceList...)
 }
 
 // visit all service by Accept function
-func (edge *Edge) visit(ctx context.Context, services ...core.ServiceRegistrar) error {
+func (edge *Edge) visit(ctx context.Context, services ...cestcore.ServiceRegistrar) error {
 	for _, service := range services {
 		if err := service.Accept(ctx, edge.server); err != nil {
 			return err
@@ -91,7 +89,7 @@ func (edge *Edge) visit(ctx context.Context, services ...core.ServiceRegistrar) 
 
 // use is a chain of functions to use when accepting the request
 // serve is a function to use when accepting the request
-func (edge *Edge) use(serve func(core.HTTPServer, *tickex.Config)) {
+func (edge *Edge) use(serve func(cestcore.HTTPServer, *celestinal.Config)) {
 	serve(edge.server, edge.config)
 }
 
@@ -104,10 +102,7 @@ func (edge *Edge) functions(ctx context.Context) error {
 	edge.use(openapi.Serve)
 
 	// watch service change on service registry
-	edge.use(watch.Serve)
-
-	// waf secure middleware layer
-	edge.use(secure.Serve)
+	edge.use(watcher.Serve)
 
 	return edge.registerServiceServer(ctx)
 }
@@ -116,7 +111,7 @@ func (edge *Edge) functions(ctx context.Context) error {
 func (edge *Edge) Start(ctx context.Context) error {
 	// service ascii art banner
 	version.ASCII()
-	if err := protobuf.Validate(edge.config); err != nil {
+	if err := cestpb.Validate(edge.config); err != nil {
 		return err
 	}
 
@@ -127,12 +122,12 @@ func (edge *Edge) Start(ctx context.Context) error {
 
 	// Listen HTTP server (and edge calls to gRPC server endpoint)
 	// log info in console and return register error if they exist
-	txlog.Infof("[http] starting server %s", edge.config.GetApiAddr())
+	cestlog.Infof("[http] starting server %s", edge.config.GetApiAddr())
 	return edge.server.Listen(edge.config.GetApiAddr())
-	// return errors.F("edge: failed to listen and serve")
+	// return cesterrors.F("edge: failed to listen and serve")
 }
 
-// Shutdown implements core.Server.
+// Shutdown implements cestcore.Server.
 func (edge *Edge) Shutdown(ctx context.Context) error {
 	return edge.server.Shutdown(ctx)
 }

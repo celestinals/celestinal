@@ -1,62 +1,43 @@
-![ico](public/assets/favicon.ico)
 
-# 🎫 Tickex
+<p align="center">
+    <img src="public/assets/cest.png" alt="celestinal" width="130px">
+</p>
 
-[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
+<p align="center">
+    Distributed Log Aggregator
+</p>
 
-Buying, selling, exchanging, and sharing all types of tickets and game cards.
+<p align="center">
+    <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">
+        <img src="https://img.shields.io/badge/license-Apache%202.0-blue.svg" alt="LICENSE 2.0" />
+    </a>
+</p>
 
-Tickex is a platform that allows users to buy, sell, exchange, and share various types of tickets and game cards easily and securely. Our goal is to provide a seamless experience for ticket enthusiasts while ensuring transparency and trust among users.
+# Celestinal
 
-## Requirement
 
-- Docker engine
-- Go 1.24.0
-- Protocol Buffer
+A system that centralizes logs from multiple microservices in a Cloud Native environment.
+
+
+**Requirement**:
+- Go 1.24.2, Protocol Buffer
 - Make (for running commands efficiently)
 
-## Installation
+**Main features**:
+- Distributed log collector (pull/push and agent-based)
+- Filter and display logs by namespace, service
+- Alert when logs containing critical errors are detected
 
-**Run the command below to clone all project's source code or Clone code with SSH Key** 
-- HTTPs
-    ```sh
-    git clone --recurse-submodules -j8 https://github.com/tickexvn/tickex.git $GOPATH/src/github.com/tickexvn/tickex
-    ```
-- SSH Key
-    ```sh
-    git clone --recurse-submodules -j8 git@github.com:tickexvn/tickex.git $GOPATH/src/github.com/tickexvn/tickex
-    ```
-
-If you have already cloned the repo, you can initialize the submodule with:
-```sh
-git submodule update --init --recursive
-```
-
-**Navigate to the project directory**
-```sh
-cd $GOPATH/src/github.com/tickexvn/tickex
-```
-
-## Running the Service
-
-To build and run the service using `make`, use the following commands:
-
-- **Build the Tickex Edge (included API Gateway):**
-  ```sh
-  make run.edge
-  ```
-
-- **Run the service:**
-  ```sh
-  make run.x.<service>
-  ```
+**Extensions**:
+- Support tracing with OpenTelemetry
+- Provide an API to query logs using SQL-like language
 
 ## License
 
-Copyright (c) Tickex Labs. All rights reserved.
+Copyright (c) Celestinal Labs. All rights reserved.
 
 Licensed under the [Apache 2.0](LICENSE) license.
 
-#
+##
 
 Made in 🇻🇳 🚀

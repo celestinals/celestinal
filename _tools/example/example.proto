@@ -9,7 +9,7 @@ option go_package = "/example";
 
 
 extend google.protobuf.MethodOptions {
-  TickexMethodOptions options = 50001;
+  CelestinalMethodOptions options = 50001;
 }
 
 enum Role {
@@ -19,7 +19,7 @@ enum Role {
   ROLE_ADMIN = 3;
 }
 
-message TickexMethodOptions {
+message CelestinalMethodOptions {
   bool ignore = 1;
   repeated Require require = 2;
 }

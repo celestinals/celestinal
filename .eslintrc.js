@@ -2,7 +2,7 @@
 /** @type {import("eslint").Linter.Config} */
 module.exports = {
   ignorePatterns: ["apps/**", "packages/**"],
-  extends: ["@tickex/eslint-config/library.js"],
+  extends: ["@celestinal/eslint-cestconf/library.js"],
   parser: "@typescript-eslint/parser",
   parserOptions: {
     project: true,

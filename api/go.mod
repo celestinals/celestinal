@@ -1,6 +1,6 @@
-module github.com/tickexvn/tickex/api
+module github.com/celestinals/celestinal/api
 
-go 1.24.0
+go 1.24.2
 
 require (
 	buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go v1.36.5-20250219170025-d39267d9df8f.1

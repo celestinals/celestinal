@@ -1,10 +1,10 @@
 {
-  "extends": "@tickex/typescript-config/nextjs.json",
+  "extends": "@celestinal/typescript-config/nextjs.json",
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
       "@/*": ["./*"],
-      "@tickex/ui/*": ["../../packages/tickex-ui/src/*"]
+      "@celestinal/ui/*": ["../../packages/celestinal-ui/src/*"]
     },
     "plugins": [
       {

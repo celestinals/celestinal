@@ -1,18 +1,16 @@
-/*
- * Copyright 2025 The Tickex Authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2025 The Celestinal Authors.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 // Package eventq provides the event queue for the edge app
 package eventq
@@ -26,13 +24,13 @@ func New[T any](size int) *QueueChannel[T] {
 	return &QueueChannel[T]{Size: size}
 }
 
-// QueueChannel is a queue with size and mapping of namespace to channel
+// QueueChannel is a queue with size and mapping of cestns to channel
 type QueueChannel[T any] struct {
 	Size     int
 	channels sync.Map
 }
 
-// Get channel queue with namespace key, queue supports string type only
+// Get channel queue with cestns key, queue supports string type only
 func (q *QueueChannel[T]) Get(namespace string) chan T {
 	if q == nil {
 		return nil
@@ -43,7 +41,7 @@ func (q *QueueChannel[T]) Get(namespace string) chan T {
 	return ch.(chan T)
 }
 
-// Close channel queue with namespace key
+// Close channel queue with cestns key
 func (q *QueueChannel[T]) Close(namespace string) {
 	if q == nil {
 		return
