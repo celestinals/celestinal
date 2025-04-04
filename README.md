@@ -1,6 +1,6 @@
 
 <p align="center">
-    <img src="public/assets/cest.png" alt="celestinal" width="130px">
+    <img src="public/assets/cest.png" alt="celestinal" width="160px">
 </p>
 
 <p align="center">
