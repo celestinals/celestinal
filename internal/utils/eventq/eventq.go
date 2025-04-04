@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package eventq provides the event queue for the edge app
+// Package eventq provides the event queue for the apigateway app
 package eventq
 
 import (

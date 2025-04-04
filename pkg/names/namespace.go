@@ -12,39 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package cestconf
+// Package cestns provide name of all service at celestinal
+package cestns
 
-import (
-	"testing"
+// Namespace is a type that represents the cestns of a service.
+type Namespace string
 
-	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
-	cestpb "github.com/celestinals/celestinal/pkg/protobuf"
+func (ns Namespace) String() string {
+	return string(ns)
+}
+
+const (
+	// Edge cestns info
+	Edge Namespace = "celestinal.apigateway"
+
+	// GreeterV1 cestns info
+	GreeterV1 Namespace = "celestinal.greeter.v1"
 )
-
-func TestConfig(t *testing.T) {
-	conf := celestinal.Config{
-		ApiAddr: "0.0.0.0:9000",
-	}
-
-	if err := cestpb.Validate(&conf); err != nil {
-		t.Error(err)
-	}
-}
-
-func TestConfigEnv(t *testing.T) {
-	conf := Default()
-
-	if err := cestpb.Validate(conf); err != nil {
-		return
-	}
-
-	t.Error("should not validate env")
-}
-
-func BenchmarkConfigHeapAllocation(b *testing.B) {
-	b.ReportAllocs()
-
-	for i := 0; i < b.N; i++ {
-		_ = Default()
-	}
-}

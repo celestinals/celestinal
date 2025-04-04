@@ -20,7 +20,7 @@ import (
 
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
 	cestflag "github.com/celestinals/celestinal/pkg/flag"
-	cestpb "github.com/celestinals/celestinal/pkg/pb"
+	cestpb "github.com/celestinals/celestinal/pkg/protobuf"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )

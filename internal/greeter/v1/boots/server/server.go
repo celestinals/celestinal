@@ -22,10 +22,10 @@ import (
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
 	"github.com/celestinals/celestinal/internal/greeter/v1/controllers"
 
-	"github.com/celestinals/celestinal/pkg/cestcore"
+	cestcore "github.com/celestinals/celestinal/pkg/core"
 	cestflag "github.com/celestinals/celestinal/pkg/flag"
-	cestns "github.com/celestinals/celestinal/pkg/ns"
-	cestpb "github.com/celestinals/celestinal/pkg/pb"
+	cestns "github.com/celestinals/celestinal/pkg/names"
+	cestpb "github.com/celestinals/celestinal/pkg/protobuf"
 )
 
 // make sure Greeter implement cestcore.Server

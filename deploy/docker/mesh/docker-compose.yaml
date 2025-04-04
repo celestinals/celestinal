@@ -1,7 +1,7 @@
 services:
   celestinal.edge:
-    container_name: celestinal.edge
-    hostname: celestinal.edge
+    container_name: celestinal.apigateway
+    hostname: celestinal.apigateway
     image: celestinalvn/celestinal:latest
     ports:
       - "9000:9000"

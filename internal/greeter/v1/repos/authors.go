@@ -20,8 +20,8 @@ import (
 	"github.com/jackc/pgx/v5"
 
 	"github.com/celestinals/celestinal/internal/greeter/v1/models/gen/authors"
-	cestdb "github.com/celestinals/celestinal/pkg/db"
-	"github.com/celestinals/celestinal/pkg/db/sql"
+	cestdb "github.com/celestinals/celestinal/pkg/database"
+	"github.com/celestinals/celestinal/pkg/database/sql"
 )
 
 // Check valid Object with Interface

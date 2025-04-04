@@ -25,7 +25,7 @@ import (
 
 	cestcopier "github.com/celestinals/celestinal/pkg/copier"
 	cesterr "github.com/celestinals/celestinal/pkg/errors"
-	cestlog "github.com/celestinals/celestinal/pkg/log"
+	cestlog "github.com/celestinals/celestinal/pkg/logger"
 )
 
 // IGreeter defines the interface for the Greeter controller.

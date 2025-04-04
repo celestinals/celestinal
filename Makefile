@@ -15,7 +15,7 @@
 .PHONY: default
 
 default: default.print \
-	build.edge \
+	build.apigateway \
 	build.greeter
 
 default.print:
@@ -42,10 +42,10 @@ updaterule:
 #####################################################################
 #####################################################################
 
-build.edge: CELESTINAL_OUT ?= edge
-build.edge:
-	@go build -ldflags="-s -w" -o ./bin/$(CELESTINAL_OUT) ./cmd/edge
-	@echo "[DONE]  CELESTINAL: edge ... ok"
+build.apigateway: CELESTINAL_OUT ?= apigateway
+build.apigateway:
+	@go build -ldflags="-s -w" -o ./bin/$(CELESTINAL_OUT) ./cmd/apigateway
+	@echo "[DONE]  CELESTINAL: apigateway ... ok"
 
 
 build.greeter: CELESTINAL_OUT ?= greeter
@@ -55,9 +55,9 @@ build.greeter:
 
 #####################################################################
 
-run.edge: CELESTINAL_OUT ?= edge
-run.edge:
-	@go build -ldflags="-s -w" -o ./bin/$(CELESTINAL_OUT) ./cmd/edge && \
+run.apigateway: CELESTINAL_OUT ?= apigateway
+run.apigateway:
+	@go build -ldflags="-s -w" -o ./bin/$(CELESTINAL_OUT) ./cmd/apigateway && \
  	./bin/$(CELESTINAL_OUT)
 
 run.greeter: CELESTINAL_OUT ?= greeter
@@ -72,9 +72,9 @@ mesh:
 	@docker compose -f ./deploy/docker/mesh/docker-compose.yaml \
     -f ./deploy/docker/resource/docker-compose.resources.yaml up -d
 
-build.image.edge: TAG ?= celestinals/celestinal
-build.image.edge:
-	docker buildx build -f ./cmd/edge/Dockerfile -t $(TAG):latest .
+build.image.apigateway: TAG ?= celestinals/celestinal
+build.image.apigateway:
+	docker buildx build -f ./cmd/apigateway/Dockerfile -t $(TAG):latest .
 
 build.image.greeter: TAG ?= celestinals/celestinal.greeter
 build.image.greeter:

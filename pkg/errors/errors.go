@@ -20,30 +20,31 @@ import (
 	"fmt"
 
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
+	"github.com/celestinals/celestinal/internal/utils/version"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
 
 var (
-	forbidden = fmt.Sprintf("CEST-%d: %s",
+	forbidden = fmt.Sprintf("%s-%d: %s", version.Code,
 		celestinal.Errors_ERRORS_FORBIDDEN, celestinal.Errors_ERRORS_FORBIDDEN.String())
 
-	unspecified = fmt.Sprintf("CEST-%d: %s",
+	unspecified = fmt.Sprintf("%s-%d: %s", version.Code,
 		celestinal.Errors_ERRORS_UNSPECIFIED, celestinal.Errors_ERRORS_UNSPECIFIED.String())
 
-	internalError = fmt.Sprintf("CEST-%d: %s",
+	internalError = fmt.Sprintf("%s-%d: %s", version.Code,
 		celestinal.Errors_ERRORS_INTERNAL_ERROR, celestinal.Errors_ERRORS_INTERNAL_ERROR.String())
 
-	notFound = fmt.Sprintf("CEST-%d: %s",
+	notFound = fmt.Sprintf("%s-%d: %s", version.Code,
 		celestinal.Errors_ERRORS_NOT_FOUND, celestinal.Errors_ERRORS_NOT_FOUND.String())
 
-	unauthorized = fmt.Sprintf("CEST-%d: %s",
+	unauthorized = fmt.Sprintf("%s-%d: %s", version.Code,
 		celestinal.Errors_ERRORS_UNAUTHORIZED, celestinal.Errors_ERRORS_UNAUTHORIZED.String())
 
-	invalidData = fmt.Sprintf("CEST-%d: %s",
+	invalidData = fmt.Sprintf("%s-%d: %s", version.Code,
 		celestinal.Errors_ERRORS_INVALID_DATA, celestinal.Errors_ERRORS_INVALID_DATA.String())
 
-	unimplemented = fmt.Sprintf("CEST-%d: %s",
+	unimplemented = fmt.Sprintf("%s-%d: %s", version.Code,
 		celestinal.Errors_ERRORS_UNIMPLEMENTED, celestinal.Errors_ERRORS_UNIMPLEMENTED.String())
 )
 
