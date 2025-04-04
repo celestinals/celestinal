@@ -1,23 +1,16 @@
-
-<p align="center">
-    <img src="public/assets/cest.png" alt="celestinal" width="160px">
-</p>
-
-<p align="center">
-    Distributed Log Aggregator
-</p>
-
-<p align="center">
-    <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">
-        <img src="https://img.shields.io/badge/license-Apache%202.0-blue.svg" alt="LICENSE 2.0" />
-    </a>
-</p>
-
 # Celestinal
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
+
+<img src="https://avatars.githubusercontent.com/u/198875718" alt="celestinal" width="120px">
+
+----
+
+Distributed Log Aggregator
 
 A system that centralizes logs from multiple microservices in a Cloud Native environment.
 
+----
 
 **Requirement**:
 - Go 1.24.2, Protocol Buffer

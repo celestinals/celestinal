@@ -35,12 +35,6 @@ lint.go:
 lint.proto:
 	@cd ./api && buf lint
 
-#####################################################################
-# lint external modules
-#####################################################################
-lint.x.greeter.v1: 
-	cd ./x/greeter/v1 && golangci-lint run
-
 updaterule:
 	@echo "Updating the core ruleset"
 
@@ -82,6 +76,6 @@ build.image.edge: TAG ?= celestinals/celestinal
 build.image.edge:
 	docker buildx build -f ./cmd/edge/Dockerfile -t $(TAG):latest .
 
-build.image.x.greeter: TAG ?= celestinals/celestinal.greeter
-build.image.x.greeter:
-	docker buildx build -f ./x/greeter/v1/Dockerfile -t $(TAG):latest .
+build.image.greeter: TAG ?= celestinals/celestinal.greeter
+build.image.greeter:
+	docker buildx build -f ./cmd/greeter/v1/Dockerfile -t $(TAG):latest .

@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM golang:1.24.0-alpine AS builder
+FROM golang:1.24.2-alpine AS builder
 
 # Move to working directory (/src).
 WORKDIR /src
@@ -31,7 +31,7 @@ WORKDIR /src
 ENV CGO_ENABLED=0 GOOS=linux GOARCH=amd64
 
 RUN go mod tidy
-RUN go build -ldflags="-s -w" -o /bin/main ./cmd
+RUN go build -ldflags="-s -w" -o /bin/main ./cmd/greeter/v1
 
 # Remove all source code files
 RUN rm -r *
