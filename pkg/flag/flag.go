@@ -23,7 +23,7 @@ import (
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
 	"github.com/celestinals/celestinal/internal/utils/version"
 
-	cestns "github.com/celestinals/celestinal/pkg/ns"
+	cestns "github.com/celestinals/celestinal/pkg/names"
 
 	"github.com/spf13/pflag"
 )
@@ -74,7 +74,7 @@ func Parse() *celestinal.Flag {
 	return flags
 }
 
-// ParseEdge cestflag args for edge service
+// ParseEdge cestflag args for apigateway service
 func ParseEdge() *celestinal.FlagEdge {
 	isService = false
 

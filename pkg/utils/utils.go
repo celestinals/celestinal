@@ -33,7 +33,7 @@ func CallBack(fn func() error) {
 func NewPgxPool(conf *celestinal.Config) (*pgxpool.Pool, error) {
 	_ = conf
 	dsn := fmt.Sprintf("postgres://%s:%s@%s:%s/%s",
-		"cestconf.DbUser", "cestconf.DbPassword", "cestconf.DbHost", "cestconf.DbPort", "cestconf.DbName")
+		"conf.DbUser", "conf.DbPassword", "conf.DbHost", "conf.DbPort", "conf.DbName")
 
 	return pgxpool.New(context.Background(), dsn)
 }
@@ -42,7 +42,7 @@ func NewPgxPool(conf *celestinal.Config) (*pgxpool.Pool, error) {
 func NewPgxConn(ctx context.Context, conf *celestinal.Config) (*pgx.Conn, error) {
 	_ = conf
 	dsn := fmt.Sprintf("postgres://%s:%s@%s:%s/%s",
-		"cestconf.DbUser", "cestconf.DbPassword", "cestconf.DbHost", "cestconf.DbPort", "cestconf.DbName")
+		"conf.DbUser", "conf.DbPassword", "conf.DbHost", "conf.DbPort", "conf.DbName")
 
 	return pgx.Connect(ctx, dsn)
 }

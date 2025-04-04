@@ -50,10 +50,10 @@ func GenerateFile(gen *protogen.Plugin, file *protogen.File) *protogen.Generated
 
 func ascii(g *protogen.GeneratedFile, file *protogen.File) {
 	const asciiArt = `
-  _____          __ 
- / ___/___  ___ / /_	%s
-/ /__ / -_)(_-</ __/	-------
-\___/ \__//___/\__/ 	%s
+  _____ ____ ____ ______
+ / ___// __// __//_  __/	%s
+/ /__ / _/ _\ \   / /   	-------
+\___//___//___/  /_/    	%s      
 `
 	n := "CELESTINAL // " + strings.ToUpper(string(file.GoPackageName))
 	s := fmt.Sprintf(asciiArt, n, *file.Proto.Package)

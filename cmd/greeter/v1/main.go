@@ -23,11 +23,11 @@ import (
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/greeter/v1"
 	_ "github.com/celestinals/celestinal/internal/greeter/v1/boots/init"
 
-	"github.com/celestinals/celestinal/pkg/cestcore"
 	cestconf "github.com/celestinals/celestinal/pkg/config"
+	cestcore "github.com/celestinals/celestinal/pkg/core"
 	cestflag "github.com/celestinals/celestinal/pkg/flag"
-	cestlog "github.com/celestinals/celestinal/pkg/log"
-	cestns "github.com/celestinals/celestinal/pkg/ns"
+	cestlog "github.com/celestinals/celestinal/pkg/logger"
+	cestns "github.com/celestinals/celestinal/pkg/names"
 )
 
 // Build and run main application with environment variable

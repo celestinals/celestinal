@@ -19,7 +19,7 @@ import (
 	"context"
 
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
-	"github.com/celestinals/celestinal/pkg/pb/proto"
+	"github.com/celestinals/celestinal/pkg/protobuf/proto"
 )
 
 // Key is the key type for the context.

@@ -24,7 +24,7 @@ import (
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/greeter/shared/v1"
 
 	cesterr "github.com/celestinals/celestinal/pkg/errors"
-	cestlog "github.com/celestinals/celestinal/pkg/log"
+	cestlog "github.com/celestinals/celestinal/pkg/logger"
 )
 
 // IGreeter defines the interface for the Greeter biz module.

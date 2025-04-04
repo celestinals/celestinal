@@ -12,25 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package init provides the initialization logic for the greeter service.
-package init
+// Package base provides the base service.
+package base
 
 import (
-	"github.com/celestinals/celestinal/internal/greeter/v1/controllers"
-	"github.com/celestinals/celestinal/internal/greeter/v1/domain"
+	"context"
+
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"google.golang.org/grpc"
+
 	cestcore "github.com/celestinals/celestinal/pkg/core"
+	cesterr "github.com/celestinals/celestinal/pkg/errors"
 )
 
-var (
-	// handlers/controllers layer
-	_ = cestcore.Inject(controllers.New)
+var _ cestcore.ServiceRegistrar = (*Base)(nil)
 
-	// domain layer
-	_ = cestcore.Inject(domain.New)
+// Base represents the base service
+type Base struct{}
 
-	// repo layer
-	//_ = cestcore.Inject(repos.NewAuthor)
+// Register registers the base service
+func (b Base) Register(_ context.Context, _ *runtime.ServeMux, _ string,
+	_ []grpc.DialOption) error {
+	return cesterr.ErrUnimplemented
+}
 
-	// data layer
-	//_ = cestcore.Inject(authors.New)
-)
+// Accept accepts the base service
+func (b Base) Accept(_ context.Context, _ cestcore.HTTPServer) error {
+	return cesterr.ErrUnimplemented
+}

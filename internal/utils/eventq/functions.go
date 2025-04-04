@@ -17,7 +17,7 @@ package eventq
 import (
 	"context"
 
-	cestlog "github.com/celestinals/celestinal/pkg/log"
+	cestlog "github.com/celestinals/celestinal/pkg/logger"
 )
 
 // QueueSpace is the size of the queue

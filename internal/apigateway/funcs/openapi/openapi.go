@@ -12,39 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package cestconf
+// Package openapi serve cestcore.Edge to host swagger ui
+package openapi
 
 import (
-	"testing"
+	"net/http"
 
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
-	cestpb "github.com/celestinals/celestinal/pkg/protobuf"
+	cestcore "github.com/celestinals/celestinal/pkg/core"
 )
 
-func TestConfig(t *testing.T) {
-	conf := celestinal.Config{
-		ApiAddr: "0.0.0.0:9000",
-	}
+// Serve return api json and swagger ui
+func Serve(server cestcore.HTTPServer, _ *celestinal.Config) {
+	fs := http.FileServer(http.Dir("public/swagger/"))
+	server.HTTPMux().Handle("/swagger/", http.StripPrefix("/swagger/", fs))
 
-	if err := cestpb.Validate(&conf); err != nil {
-		t.Error(err)
-	}
-}
-
-func TestConfigEnv(t *testing.T) {
-	conf := Default()
-
-	if err := cestpb.Validate(conf); err != nil {
-		return
-	}
-
-	t.Error("should not validate env")
-}
-
-func BenchmarkConfigHeapAllocation(b *testing.B) {
-	b.ReportAllocs()
-
-	for i := 0; i < b.N; i++ {
-		_ = Default()
-	}
+	server.HTTPMux().HandleFunc("/swagger",
+		func(writer http.ResponseWriter, request *http.Request) {
+			http.Redirect(writer, request, "/swagger/", http.StatusMovedPermanently)
+		})
 }

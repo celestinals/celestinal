@@ -20,9 +20,9 @@ import (
 
 	"github.com/celestinals/celestinal/internal/utils/eventq"
 
-	"github.com/celestinals/celestinal/pkg/cestcore"
-	cestlog "github.com/celestinals/celestinal/pkg/log"
-	cestns "github.com/celestinals/celestinal/pkg/ns"
+	cestcore "github.com/celestinals/celestinal/pkg/core"
+	cestlog "github.com/celestinals/celestinal/pkg/logger"
+	cestns "github.com/celestinals/celestinal/pkg/names"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )

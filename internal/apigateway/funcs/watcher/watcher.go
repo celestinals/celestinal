@@ -12,39 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package cestconf
+// Package watcher is watching service registry when service info was changed
+package watcher
 
 import (
-	"testing"
+	"time"
 
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
-	cestpb "github.com/celestinals/celestinal/pkg/protobuf"
+	cestcore "github.com/celestinals/celestinal/pkg/core"
 )
 
-func TestConfig(t *testing.T) {
-	conf := celestinal.Config{
-		ApiAddr: "0.0.0.0:9000",
-	}
+const timeout = time.Second * 2
 
-	if err := cestpb.Validate(&conf); err != nil {
-		t.Error(err)
-	}
+// Serve is watching function consul when service info was changed
+func Serve(_ cestcore.HTTPServer, config *celestinal.Config) {
+
+	go service()
 }
 
-func TestConfigEnv(t *testing.T) {
-	conf := Default()
+func service() {
+	ticker := time.NewTicker(timeout)
+	defer ticker.Stop()
 
-	if err := cestpb.Validate(conf); err != nil {
-		return
-	}
+	for {
 
-	t.Error("should not validate env")
-}
-
-func BenchmarkConfigHeapAllocation(b *testing.B) {
-	b.ReportAllocs()
-
-	for i := 0; i < b.N; i++ {
-		_ = Default()
+		<-ticker.C
 	}
 }

@@ -27,25 +27,25 @@ if [[ "$CURRENT_DIR" != *"$GOPATH_DIR"* ]]; then
   exit 1
 fi
 
-TKXPATH=$GOPATH/src/github.com/celestinals/celestinal
-TKXOUT=$GOPATH/src
+CELESTINAL_PATH=$GOPATH/src/github.com/celestinals/celestinal
+CELESTINAL_GEN_OUT=$GOPATH/src
 
 protoc \
-  -I"$TKXPATH"/api/proto \
-  -I"$TKXPATH"/_submodules/googleapis \
-  -I"$TKXPATH"/_submodules/grpc-gateway \
-  -I"$TKXPATH"/_submodules/protovalidate/proto/protovalidate \
-  --openapiv2_out="$TKXPATH"/public/swagger/api/v1 \
-  --grpc-gateway_out="$TKXOUT" \
-  --go_out="$TKXOUT" \
-  --go-grpc_out="$TKXOUT" \
-  --validate_out="lang=go,paths=:$TKXOUT" \
-  --go-celestinal_out="$TKXOUT" \
+  -I"$CELESTINAL_PATH"/api/proto \
+  -I"$CELESTINAL_PATH"/_submodules/googleapis \
+  -I"$CELESTINAL_PATH"/_submodules/grpc-gateway \
+  -I"$CELESTINAL_PATH"/_submodules/protovalidate/proto/protovalidate \
+  --openapiv2_out="$CELESTINAL_PATH"/public/swagger/api/v1 \
+  --grpc-gateway_out="$CELESTINAL_GEN_OUT" \
+  --go_out="$CELESTINAL_GEN_OUT" \
+  --go-grpc_out="$CELESTINAL_GEN_OUT" \
+  --validate_out="lang=go,paths=:$CELESTINAL_GEN_OUT" \
+  --go-celestinal_out="$CELESTINAL_GEN_OUT" \
   "$(pwd)"/*.proto || exit 1
 
 OLDPWD=$(pwd)
 
-cd "$TKXPATH/public/swagger/api/v1" || exit 1
+cd "$CELESTINAL_PATH/public/swagger/api/v1" || exit 1
 find . -mindepth 2 -type f -name "*.json" -exec mv {} ./ \; || exit 1
 rm -rf ./celestinal || exit 1
 cd "$OLDPWD" || exit 1

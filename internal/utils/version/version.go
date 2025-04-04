@@ -21,10 +21,10 @@ import (
 )
 
 const asciiArt = `
-  _____          __ 
- / ___/___  ___ / /_	%s
-/ /__ / -_)(_-</ __/	-------
-\___/ \__//___/\__/ 	%s
+  _____ ____ ____ ______
+ / ___// __// __//_  __/	%s
+/ /__ / _/ _\ \   / /   	-------
+\___//___//___/  /_/    	%s      
 `
 
 var (
@@ -42,7 +42,7 @@ var (
 	Name = "CELESTINAL"
 
 	// BrandName is the brand name of the project.s
-	BrandName = "CELESTINAL // EDGE"
+	BrandName = "CELESTINAL // API GATEWAY"
 
 	// Code is the code of the project.
 	Code = "CEST"
@@ -50,7 +50,7 @@ var (
 	// ASCIIArt using in console
 	ASCIIArt = fmt.Sprintf(asciiArt,
 		BrandName,
-		Version,
+		"celestial.apigateway",
 	)
 )
 

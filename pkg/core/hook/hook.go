@@ -12,33 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package cestcopier provides functions to copy objects.
-package cestcopier
+// Package hook provides a way to add hooks to the application lifecycle.
+package hook
 
 import (
-	"encoding/json"
+	"context"
 
-	google "google.golang.org/protobuf/proto"
+	"github.com/celestinals/celestinal/pkg/core/internal"
 
-	"github.com/celestinals/celestinal/pkg/protobuf/proto"
+	"go.uber.org/fx"
 )
 
-// CopyProtoMessage copies the src message to the dst message.
-func CopyProtoMessage(src, dst google.Message) error {
-	bytes, err := proto.Marshal(src)
-	if err != nil {
-		return err
+// UseBefore uses the given function before the application starts.
+func UseBefore(fn func(ctx context.Context) error) {
+	function := func(lc fx.Lifecycle) {
+		lc.Append(fx.Hook{
+			OnStart: fn,
+		})
 	}
 
-	return proto.Unmarshal(bytes, dst)
+	internal.Invoke(function)
 }
 
-// CopyJSON copies the src object to the dst object.
-func CopyJSON(src, dst any) error {
-	bytes, err := json.Marshal(src)
-	if err != nil {
-		return err
+// UseAfter adds a hook to be executed after the application has stopped.
+func UseAfter(fn func(ctx context.Context) error) {
+	function := func(lc fx.Lifecycle) {
+		lc.Append(fx.Hook{
+			OnStop: fn,
+		})
 	}
 
-	return json.Unmarshal(bytes, dst)
+	internal.Invoke(function)
 }

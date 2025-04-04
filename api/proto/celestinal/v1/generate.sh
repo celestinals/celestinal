@@ -27,15 +27,15 @@ if [[ "$CURRENT_DIR" != *"$GOPATH_DIR"* ]]; then
   exit 1
 fi
 
-TKXPATH=$GOPATH/src/github.com/celestinals/celestinal
-TKXOUT=$GOPATH/src
+CELESTINAL_PATH=$GOPATH/src/github.com/celestinals/celestinal
+CELESTINAL_GEN_OUT=$GOPATH/src
 
 protoc \
-  -I"$TKXPATH"/api/proto \
-  -I"$TKXPATH"/_submodules/googleapis \
-  -I"$TKXPATH"/_submodules/grpc-gateway \
-  -I"$TKXPATH"/_submodules/protovalidate/proto/protovalidate \
-  --go_out="$TKXOUT" \
-  --go-grpc_out="$TKXOUT" \
-  --validate_out="lang=go,paths=:$TKXOUT" \
+  -I"$CELESTINAL_PATH"/api/proto \
+  -I"$CELESTINAL_PATH"/_submodules/googleapis \
+  -I"$CELESTINAL_PATH"/_submodules/grpc-gateway \
+  -I"$CELESTINAL_PATH"/_submodules/protovalidate/proto/protovalidate \
+  --go_out="$CELESTINAL_GEN_OUT" \
+  --go-grpc_out="$CELESTINAL_GEN_OUT" \
+  --validate_out="lang=go,paths=:$CELESTINAL_GEN_OUT" \
   "$(pwd)"/*.proto

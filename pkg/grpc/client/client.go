@@ -22,7 +22,7 @@ import (
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/greeter/v1"
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
 
-	cestlog "github.com/celestinals/celestinal/pkg/log"
+	cestlog "github.com/celestinals/celestinal/pkg/logger"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
