@@ -1,12 +1,10 @@
 module github.com/celestinals/celestinal
 
 go 1.24.2
-
 replace github.com/celestinals/celestinal/api => ./api
 
 require (
 	github.com/bufbuild/protovalidate-go v0.9.2
-	github.com/celestinals/celestinal/api v0.0.0-00010101000000-000000000000
 	github.com/elastic/go-elasticsearch/v8 v8.17.1
 	github.com/go-telegram-bot-api/telegram-bot-api/v5 v5.5.1
 	github.com/google/go-cmp v0.6.0
@@ -17,7 +15,7 @@ require (
 	github.com/stretchr/testify v1.10.0
 	go.uber.org/fx v1.23.0
 	go.uber.org/zap v1.27.0
-	google.golang.org/grpc v1.70.0
+	google.golang.org/grpc v1.71.1
 	google.golang.org/protobuf v1.36.6
 )
 
