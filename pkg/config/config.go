@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package cestconf provides the configs for the service.
-package cestconf
+// Package config provides the configs for the service.
+package config
 
 import (
 	"os"

@@ -12,5 +12,5 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package cestcrypto provides a simple crypto library for the application.
-package cestcrypto
+// Package crypto provides a simple crypto library for the application.
+package crypto

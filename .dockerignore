@@ -3,7 +3,7 @@
 
 _docs/
 _submodules/
-_tools/
+tools/
 
 _dumpdata/
 dumpdata/

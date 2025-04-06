@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package cestcore provides the cestcore setting for the application.
-package cestcore
+// Package core provides the core setting for the application.
+package core
 
 import (
 	"context"
@@ -23,7 +23,7 @@ import (
 )
 
 // Application represents the application when all constructor was build
-// by cestcore.Build() start the app, it will start the server and provide all
+// by core.Build() start the app, it will start the server and provide all
 // constructor needed
 type Application interface {
 	Run(ctx context.Context) error

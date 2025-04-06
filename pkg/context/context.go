@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package cestctx provides a context with a message.
-package cestctx
+// Package context provides a context with a message.
+package context
 
 import (
 	"context"

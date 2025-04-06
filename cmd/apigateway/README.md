@@ -1,4 +1,4 @@
-cmd/egde directory is where you start the API.
+cmd/apigateway directory is where you start the API.
 ```
-go run cmd/egde/main.go
+go run cmd/apigateway/main.go
 ```

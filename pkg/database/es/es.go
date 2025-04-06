@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package es provides an implementation of the cestdb using elasticsearch.
+// Package es provides an implementation of the database using elasticsearch.
 package es
 
 import (
