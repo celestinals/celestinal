@@ -18,16 +18,13 @@ package main
 import (
 	"context"
 
-	"github.com/celestinals/celestinal/internal/greeter/v1/boots/server"
-
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/greeter/v1"
-	_ "github.com/celestinals/celestinal/internal/greeter/v1/boots/init"
-
 	cestconf "github.com/celestinals/celestinal/pkg/config"
 	cestcore "github.com/celestinals/celestinal/pkg/core"
 	cestflag "github.com/celestinals/celestinal/pkg/flag"
 	cestlog "github.com/celestinals/celestinal/pkg/logger"
 	cestns "github.com/celestinals/celestinal/pkg/names"
+	geeterv1 "github.com/celestinals/celestinal/staging/mod/greeter"
 )
 
 // Build and run main application with environment variable
@@ -43,7 +40,7 @@ func main() {
 
 	_ = cestflag.Parse()
 
-	app := cestcore.Build(server.New, cestconf.Default)
+	app := cestcore.Build(geeterv1.New, cestconf.Default)
 	if err := app.Run(context.Background()); err != nil {
 		cestlog.Fatal(err)
 	}

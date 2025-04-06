@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package cestnoti provide functions log by telegram bot
-package cestnoti
+// Package noti provide functions log by telegram bot
+package noti
 
 import (
 	"fmt"

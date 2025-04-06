@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package cestcolor provides text coloring.
-package cestcolor
+// Package color provides text coloring.
+package color
 
 import "fmt"
 
@@ -29,7 +29,7 @@ const (
 	White
 )
 
-// Color represents a text cestcolor.
+// Color represents a text color.
 type Color uint8
 
 // Add adds the coloring to the given string.

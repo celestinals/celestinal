@@ -18,14 +18,14 @@ package main
 import (
 	"context"
 
-	"github.com/celestinals/celestinal/internal/apigateway"
-	"github.com/celestinals/celestinal/internal/utils/version"
+	"github.com/celestinals/celestinal/pkg/version"
 
 	cestconf "github.com/celestinals/celestinal/pkg/config"
 	cestcore "github.com/celestinals/celestinal/pkg/core"
 	cestflag "github.com/celestinals/celestinal/pkg/flag"
 	cestlog "github.com/celestinals/celestinal/pkg/logger"
 	cestns "github.com/celestinals/celestinal/pkg/names"
+	"github.com/celestinals/celestinal/staging/mod/apigateway"
 )
 
 // Build and run the main application with environment variables.
@@ -47,9 +47,9 @@ import (
 // Run the application using the Makefile command
 //
 //	make run.apigateway // start celestinal apigateway
-//	make run.x.<service> // start service
+//	make run.<service> // start service
 func main() {
-	cestflag.SetDefault(cestns.Edge, "0.0.0.0:9000", "dev")
+	cestflag.SetDefault(cestns.APIGateway, "0.0.0.0:9000", "dev")
 	cestflag.SetConsole(version.ASCIIArt)
 
 	_ = cestflag.ParseEdge()

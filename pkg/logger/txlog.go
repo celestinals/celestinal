@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package cestlog provides the logger for the service.
-package cestlog
+// Package logger provides the logger for the service.
+package logger
 
 import (
 	"os"

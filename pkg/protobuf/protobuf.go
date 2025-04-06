@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package cestpb provides utilities for working with cestpb messages.
-package cestpb
+// Package protobuf provides utilities for working with protobuf messages.
+package protobuf
 
 import (
 	"time"

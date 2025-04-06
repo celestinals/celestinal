@@ -112,6 +112,10 @@ func (m *FlagEdge) Validate() error {
 
 	// no validation rules for Telegram
 
+	// no validation rules for SwaggerPath
+
+	// no validation rules for ApiSpecsPath
+
 	return nil
 }
 

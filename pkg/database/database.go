@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package cestdb provides the cestdb interface.
-package cestdb
+// Package database provides the database interface.
+package database
 
 import (
 	"context"
@@ -22,7 +22,7 @@ import (
 	cestlog "github.com/celestinals/celestinal/pkg/logger"
 )
 
-// Repository provides the interface for the cestdb.
+// Repository provides the interface for the database.
 type Repository[T any, ID comparable] interface {
 	Create(ctx context.Context, entity T) (T, error)
 	Get(ctx context.Context, id ID) (T, error)
@@ -33,7 +33,7 @@ type Repository[T any, ID comparable] interface {
 	Count(ctx context.Context) (int64, error)
 }
 
-// New create multi-layer cestdb instance
+// New create multi-layer database instance
 func New[T any, ID comparable](
 	searchLayer Repository[T, ID], storageLayer Repository[T, ID]) Repository[T, ID] {
 
