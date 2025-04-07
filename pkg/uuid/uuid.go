@@ -12,5 +12,5 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package uuid provides a simple UUID generator.
-package uuid
+// Package cestuuid provides a simple UUID generator.
+package cestuuid

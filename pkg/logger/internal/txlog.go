@@ -18,7 +18,7 @@ package internal
 import (
 	"fmt"
 
-	"github.com/celestinals/celestinal/pkg/version"
+	"github.com/celestinals/celestinal/internal/utils/version"
 
 	cestcolor "github.com/celestinals/celestinal/pkg/color"
 	"go.uber.org/zap"

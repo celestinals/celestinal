@@ -28,6 +28,4 @@ message Flag {
 
 message FlagEdge {
   bool telegram = 1;
-  string swagger_path = 2;
-  string api_specs_path = 3;
 }

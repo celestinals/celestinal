@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package sql provides an implementation of the database using PostgreSQL.
+// Package sql provides an implementation of the cestdb using PostgreSQL.
 package sql
 
 import (
@@ -40,7 +40,7 @@ func New[T any, ID comparable](
 	return &SQL[T, ID]{db: db, tableName: tableName}
 }
 
-// Create inserts a new record into the database.
+// Create inserts a new record into the cestdb.
 func (s *SQL[T, ID]) Create(ctx context.Context, entity T) (T, error) {
 
 	_ = ctx

@@ -13,4 +13,4 @@
 // limitations under the License.
 
 // Package copier provides functions to copy objects.
-package copier
+package cestcopier

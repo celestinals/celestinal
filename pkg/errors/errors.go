@@ -12,16 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package errors provide all type of error in celestinal universal
-package errors
+// Package cesterr provide all type of error in celestinal universal
+package cesterr
 
 import (
 	"errors"
 	"fmt"
 
-	"github.com/celestinals/celestinal/pkg/version"
-
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
+	"github.com/celestinals/celestinal/internal/utils/version"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )

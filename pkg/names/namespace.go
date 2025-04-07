@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package names provide name of all service at celestinal
-package names
+// Package cestns provide name of all service at celestinal
+package cestns
 
 // Namespace is a type that represents the cestns of a service.
 type Namespace string
@@ -23,8 +23,8 @@ func (ns Namespace) String() string {
 }
 
 const (
-	// APIGateway cestns info
-	APIGateway Namespace = "celestinal.apigateway"
+	// Edge cestns info
+	Edge Namespace = "celestinal.apigateway"
 
 	// GreeterV1 cestns info
 	GreeterV1 Namespace = "celestinal.greeter.v1"

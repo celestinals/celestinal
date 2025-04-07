@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package errors provide all type of error in celestinal universal
-package errors
+// Package cesterr provide all type of error in celestinal universal
+package cesterr
 
 import (
 	"testing"

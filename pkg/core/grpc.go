@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package core
+package cestcore
 
 import (
 	"context"
@@ -42,7 +42,7 @@ type ServiceServer interface {
 // inherit in <Service>GRPCServer:
 //
 //	type Greeter struct {
-//		*core.GRPCServer
+//		*cestcore.GRPCServer
 //		cestconf *types.Config
 //		srv    greeter.GreeterServiceServer
 //	}

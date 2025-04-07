@@ -12,17 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package flag provide flag variable props
-package flag
+// Package cestflag provide cestflag variable props
+package cestflag
 
 import (
 	"fmt"
 	"os"
 	"sync"
 
-	"github.com/celestinals/celestinal/pkg/version"
-
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
+	"github.com/celestinals/celestinal/internal/utils/version"
+
 	cestns "github.com/celestinals/celestinal/pkg/names"
 
 	"github.com/spf13/pflag"
@@ -47,9 +47,7 @@ var flags = &celestinal.Flag{
 
 // EdgeFlags global variable
 var edgeFlags = &celestinal.FlagEdge{
-	Telegram:     false,
-	ApiSpecsPath: "staging/api/v1",
-	SwaggerPath:  "staging/public/swagger",
+	Telegram: false,
 }
 
 // Parse cestflag args

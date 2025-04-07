@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package utils provides utility functions for the service.
-package utils
+// Package cestutils provides utility functions for the service.
+package cestutils
 
 import (
 	"context"

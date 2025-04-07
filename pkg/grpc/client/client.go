@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package client provides the grpc client for the greeter service.
-package client
+// Package grpcclient provides the grpc client for the greeter service.
+package grpcclient
 
 import (
 	"context"
