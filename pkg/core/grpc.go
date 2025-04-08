@@ -19,7 +19,7 @@ import (
 	"fmt"
 
 	"github.com/celestinals/celestinal/pkg/core/net"
-	cesterr "github.com/celestinals/celestinal/pkg/errors"
+	"github.com/celestinals/celestinal/pkg/errors"
 	"google.golang.org/grpc"
 )
 
@@ -43,7 +43,7 @@ type ServiceServer interface {
 //
 //	type Greeter struct {
 //		*core.GRPCServer
-//		cestconf *types.Config
+//		config *types.Config
 //		srv    greeter.GreeterServiceServer
 //	}
 type GRPCServer struct {
@@ -53,7 +53,7 @@ type GRPCServer struct {
 // Start implements Server.
 func (s *GRPCServer) Start(ctx context.Context) error {
 	_ = ctx
-	return cesterr.ErrUnimplemented
+	return errors.ErrUnimplemented
 }
 
 // Shutdown implements ServiceServer.

@@ -18,8 +18,8 @@ package database
 import (
 	"context"
 
-	cesterr "github.com/celestinals/celestinal/pkg/errors"
-	cestlog "github.com/celestinals/celestinal/pkg/logger"
+	"github.com/celestinals/celestinal/pkg/errors"
+	"github.com/celestinals/celestinal/pkg/logger"
 )
 
 // Repository provides the interface for the database.
@@ -54,20 +54,20 @@ type Database[T any, ID comparable] struct {
 func (db *Database[T, ID]) Create(ctx context.Context, entity T) (T, error) {
 	var empty T
 	if db.storage == nil {
-		cestlog.Debug("[db.Create] storage layer is nil")
-		return empty, cesterr.F("db.Create err: storage is nil")
+		logger.Debug("[db.Create] storage layer is nil")
+		return empty, errors.F("db.Create err: storage is nil")
 	}
 
 	// insert into PostgresSQL first
 	createdEntity, err := db.storage.Create(ctx, entity)
 	if err != nil {
-		cestlog.Debugf("[db.Create] storage err: %v", err)
-		return empty, cesterr.F("db.Create err: %v", err)
+		logger.Debugf("[db.Create] storage err: %v", err)
+		return empty, errors.F("db.Create err: %v", err)
 	}
 
 	// if search layer is nil, return created entity
 	if db.search == nil {
-		cestlog.Infof("[db.Create] search => pass")
+		logger.Infof("[db.Create] search => pass")
 		return createdEntity, nil
 	}
 
@@ -75,7 +75,7 @@ func (db *Database[T, ID]) Create(ctx context.Context, entity T) (T, error) {
 	// ignore error if exist
 	_, err = db.search.Create(ctx, entity)
 	if err != nil {
-		cestlog.Warnf("[db.Create] search err: %v", err)
+		logger.Warnf("[db.Create] search err: %v", err)
 	}
 
 	return createdEntity, nil
@@ -86,20 +86,20 @@ func (db *Database[T, ID]) Create(ctx context.Context, entity T) (T, error) {
 func (db *Database[T, ID]) Update(ctx context.Context, id ID, entity T) (T, error) {
 	var empty T
 	if db.storage == nil {
-		cestlog.Debug("[db.Update] storage layer is nil")
-		return empty, cesterr.F("db.Update err: storage is nil")
+		logger.Debug("[db.Update] storage layer is nil")
+		return empty, errors.F("db.Update err: storage is nil")
 	}
 
 	// update in PostgresSQL
 	updatedEntity, err := db.storage.Update(ctx, id, entity)
 	if err != nil {
-		cestlog.Debugf("[db.Update] storage err: %v", err)
-		return empty, cesterr.F("db.Update storage err: %v", err)
+		logger.Debugf("[db.Update] storage err: %v", err)
+		return empty, errors.F("db.Update storage err: %v", err)
 	}
 
 	// if search layer is nil, return updated entity
 	if db.search == nil {
-		cestlog.Info("[db.Update] search => pass")
+		logger.Info("[db.Update] search => pass")
 		return updatedEntity, nil
 	}
 
@@ -107,7 +107,7 @@ func (db *Database[T, ID]) Update(ctx context.Context, id ID, entity T) (T, erro
 	if existed, err := db.search.Exists(ctx, id); err == nil && existed {
 		_, err = db.search.Update(ctx, id, updatedEntity)
 		if err != nil {
-			cestlog.Warnf("[db.Update] search err: %v", err)
+			logger.Warnf("[db.Update] search err: %v", err)
 		}
 	}
 
@@ -118,26 +118,26 @@ func (db *Database[T, ID]) Update(ctx context.Context, id ID, entity T) (T, erro
 // (Elasticsearch). If Elasticsearch fails after PostgresSQL succeeds,
 func (db *Database[T, ID]) Delete(ctx context.Context, id ID) error {
 	if db.storage == nil {
-		cestlog.Debug("[db.Delete] err: storage is nil")
-		return cesterr.F("db.Delete err: storage is nil")
+		logger.Debug("[db.Delete] err: storage is nil")
+		return errors.F("db.Delete err: storage is nil")
 	}
 
 	if db.search == nil {
-		cestlog.Info("[db.Delete] search => pass")
+		logger.Info("[db.Delete] search => pass")
 	}
 
 	if db.search != nil {
 		// delete from Elasticsearch, if error, return error
 		if esErr := db.search.Delete(ctx, id); esErr != nil {
-			cestlog.Debugf("[db.Delete][search] err: %v", esErr)
-			return cesterr.F("db.Delete search err: %v", esErr)
+			logger.Debugf("[db.Delete][search] err: %v", esErr)
+			return errors.F("db.Delete search err: %v", esErr)
 		}
 	}
 
 	// after delete from search, delete from storage
 	if err := db.storage.Delete(ctx, id); err != nil {
-		cestlog.Debugf("[db.Delete][storage] err: %v", err)
-		return cesterr.F("db.Delete storage err: %v", err)
+		logger.Debugf("[db.Delete][storage] err: %v", err)
+		return errors.F("db.Delete storage err: %v", err)
 	}
 
 	return nil
@@ -149,12 +149,12 @@ func (db *Database[T, ID]) Get(ctx context.Context, id ID) (T, error) {
 
 	// if storage layer is nil, return error
 	if db.storage == nil {
-		cestlog.Debug("[db.Get] storage layer is nil")
-		return empty, cesterr.F("db.Get err: storage is nil")
+		logger.Debug("[db.Get] storage layer is nil")
+		return empty, errors.F("db.Get err: storage is nil")
 	}
 
 	if db.search == nil {
-		cestlog.Info("[db.Get] search => pass")
+		logger.Info("[db.Get] search => pass")
 	}
 
 	if db.search != nil {
@@ -163,13 +163,13 @@ func (db *Database[T, ID]) Get(ctx context.Context, id ID) (T, error) {
 			return result, nil
 		}
 
-		cestlog.Warnf("[db.Get][search] err: %v", err)
+		logger.Warnf("[db.Get][search] err: %v", err)
 	}
 
 	data, err := db.storage.Get(ctx, id)
 	if err != nil {
-		cestlog.Debugf("[db.Get][storage] err: %v", err)
-		return empty, cesterr.F("db.Get storage err: %v", err)
+		logger.Debugf("[db.Get][storage] err: %v", err)
+		return empty, errors.F("db.Get storage err: %v", err)
 	}
 
 	return data, nil
@@ -178,12 +178,12 @@ func (db *Database[T, ID]) Get(ctx context.Context, id ID) (T, error) {
 // GetAll retrieves all entities from the search layer (Elasticsearch).
 func (db *Database[T, ID]) GetAll(ctx context.Context) ([]T, error) {
 	if db.storage == nil {
-		cestlog.Debug("[db.GetAll] err: storage is nil")
-		return nil, cesterr.F("db.GetAll err: storage is nil")
+		logger.Debug("[db.GetAll] err: storage is nil")
+		return nil, errors.F("db.GetAll err: storage is nil")
 	}
 
 	if db.search == nil {
-		cestlog.Info("[db.GetAll] search => pass")
+		logger.Info("[db.GetAll] search => pass")
 	}
 
 	if db.search != nil {
@@ -192,13 +192,13 @@ func (db *Database[T, ID]) GetAll(ctx context.Context) ([]T, error) {
 			return ts, nil
 		}
 
-		cestlog.Warnf("[db.GetAll][search] err: %v", err)
+		logger.Warnf("[db.GetAll][search] err: %v", err)
 	}
 
 	resp, err := db.storage.GetAll(ctx)
 	if err != nil {
-		cestlog.Debugf("[db.GetAll][search] err: %v", err)
-		return nil, cesterr.F("db.GetAll search err: %v", err)
+		logger.Debugf("[db.GetAll][search] err: %v", err)
+		return nil, errors.F("db.GetAll search err: %v", err)
 	}
 
 	return resp, nil
@@ -207,12 +207,12 @@ func (db *Database[T, ID]) GetAll(ctx context.Context) ([]T, error) {
 // Exists checks if an entity exists in the search layer (Elasticsearch).
 func (db *Database[T, ID]) Exists(ctx context.Context, id ID) (bool, error) {
 	if db.storage == nil {
-		cestlog.Debug("[db.Exists] storage layer is nil")
-		return false, cesterr.F("db.Exists storage layer is nil")
+		logger.Debug("[db.Exists] storage layer is nil")
+		return false, errors.F("db.Exists storage layer is nil")
 	}
 
 	if db.search == nil {
-		cestlog.Info("[db.Exists] search => pass")
+		logger.Info("[db.Exists] search => pass")
 	}
 
 	if db.search != nil {
@@ -221,13 +221,13 @@ func (db *Database[T, ID]) Exists(ctx context.Context, id ID) (bool, error) {
 			return existed, nil
 		}
 
-		cestlog.Warnf("[db.Exists] search err: %v", err)
+		logger.Warnf("[db.Exists] search err: %v", err)
 	}
 
 	existed, err := db.storage.Exists(ctx, id)
 	if err != nil {
-		cestlog.Debugf("[db.Exists] storage err: %v", err)
-		return false, cesterr.F("db.Exists storage err: %v", err)
+		logger.Debugf("[db.Exists] storage err: %v", err)
+		return false, errors.F("db.Exists storage err: %v", err)
 	}
 
 	return existed, nil
@@ -236,12 +236,12 @@ func (db *Database[T, ID]) Exists(ctx context.Context, id ID) (bool, error) {
 // Count returns the total number of entities from the search layer (Elasticsearch).
 func (db *Database[T, ID]) Count(ctx context.Context) (int64, error) {
 	if db.storage == nil {
-		cestlog.Debug("[db.Count][storage] layer is nil")
-		return -1, cesterr.F("db.Count storage layer is nil")
+		logger.Debug("[db.Count][storage] layer is nil")
+		return -1, errors.F("db.Count storage layer is nil")
 	}
 
 	if db.search == nil {
-		cestlog.Info("[db.Exists] search => pass")
+		logger.Info("[db.Exists] search => pass")
 	}
 
 	if db.search != nil {
@@ -250,13 +250,13 @@ func (db *Database[T, ID]) Count(ctx context.Context) (int64, error) {
 			return count, nil
 		}
 
-		cestlog.Warnf("[db.Count][search] err: %v", err)
+		logger.Warnf("[db.Count][search] err: %v", err)
 	}
 
 	count, err := db.storage.Count(ctx)
 	if err != nil {
-		cestlog.Debugf("[db.Count][storage] err: %v", err)
-		return -1, cesterr.F("db.Count storage err: %v", err)
+		logger.Debugf("[db.Count][storage] err: %v", err)
+		return -1, errors.F("db.Count storage err: %v", err)
 	}
 
 	return count, nil

@@ -18,9 +18,9 @@ import (
 	"context"
 	"time"
 
-	cestflag "github.com/celestinals/celestinal/pkg/flag"
-	cestlog "github.com/celestinals/celestinal/pkg/logger"
-	cestpb "github.com/celestinals/celestinal/pkg/protobuf"
+	"github.com/celestinals/celestinal/pkg/flag"
+	"github.com/celestinals/celestinal/pkg/logger"
+	"github.com/celestinals/celestinal/pkg/protobuf"
 	"go.uber.org/fx"
 )
 
@@ -29,15 +29,15 @@ const timeout = 500 * time.Millisecond // 500 milliseconds
 // runner functions called by fx.Invoke.
 // when the application starts, it will start the server
 func runner(lc fx.Lifecycle, srv Server) {
-	// init logger
-	logger := cestlog.NewTxSystemLog()
+	// init log
+	log := logger.NewSystemLog()
 
 	lc.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {
 			errChan := make(chan error, 1)
 			go func() {
 				if err := srv.Start(ctx); err != nil {
-					cestlog.Warnf("[runner] %+v", err)
+					log.Warningf("[runner] %+v", err)
 					errChan <- err
 				}
 			}()
@@ -46,12 +46,12 @@ func runner(lc fx.Lifecycle, srv Server) {
 			case err := <-errChan:
 				return err
 			case <-time.After(timeout):
-				return cestpb.Validate(cestflag.Parse())
+				return protobuf.Validate(flag.Parse())
 			}
 
 		},
 		OnStop: func(ctx context.Context) error {
-			_ = logger.Sync()
+			_ = log.Sync()
 
 			return srv.Shutdown(ctx)
 		},

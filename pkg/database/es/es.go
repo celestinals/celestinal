@@ -23,7 +23,7 @@ import (
 	"fmt"
 	"strings"
 
-	cestutils "github.com/celestinals/celestinal/pkg/utils"
+	"github.com/celestinals/celestinal/pkg/utils"
 	"github.com/elastic/go-elasticsearch/v8"
 )
 
@@ -75,7 +75,7 @@ func (es *ElasticSearch[T, ID]) GetAll(ctx context.Context) ([]T, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer cestutils.CallBack(res.Body.Close)
+	defer utils.CallBack(res.Body.Close)
 
 	// Decode the JSON response
 	var result struct {
@@ -114,9 +114,9 @@ func (es *ElasticSearch[T, ID]) Update(ctx context.Context, id ID, entity T) (T,
 	if err != nil {
 		return entity, err
 	}
-	defer cestutils.CallBack(res.Body.Close)
+	defer utils.CallBack(res.Body.Close)
 
-	// Check for cesterrors
+	// Check for errors
 	if res.IsError() {
 		return entity, fmt.Errorf("error updating document: %s", res.String())
 	}
@@ -131,7 +131,7 @@ func (es *ElasticSearch[T, ID]) Delete(ctx context.Context, id ID) error {
 	if err != nil {
 		return err
 	}
-	defer cestutils.CallBack(res.Body.Close)
+	defer utils.CallBack(res.Body.Close)
 
 	if res.StatusCode == 404 {
 		return errors.New("document not found")
@@ -147,7 +147,7 @@ func (es *ElasticSearch[T, ID]) Exists(ctx context.Context, id ID) (bool, error)
 	if err != nil {
 		return false, err
 	}
-	defer cestutils.CallBack(res.Body.Close)
+	defer utils.CallBack(res.Body.Close)
 
 	return res.StatusCode == 200, nil
 }
@@ -159,7 +159,7 @@ func (es *ElasticSearch[T, ID]) Count(ctx context.Context) (int64, error) {
 	if err != nil {
 		return 0, err
 	}
-	defer cestutils.CallBack(res.Body.Close)
+	defer utils.CallBack(res.Body.Close)
 
 	var result struct {
 		Count int64 `json:"count"`

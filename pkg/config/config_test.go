@@ -18,7 +18,7 @@ import (
 	"testing"
 
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
-	cestpb "github.com/celestinals/celestinal/pkg/protobuf"
+	"github.com/celestinals/celestinal/pkg/protobuf"
 )
 
 func TestConfig(t *testing.T) {
@@ -26,7 +26,7 @@ func TestConfig(t *testing.T) {
 		ApiAddr: "0.0.0.0:9000",
 	}
 
-	if err := cestpb.Validate(&conf); err != nil {
+	if err := protobuf.Validate(&conf); err != nil {
 		t.Error(err)
 	}
 }
@@ -34,7 +34,7 @@ func TestConfig(t *testing.T) {
 func TestConfigEnv(t *testing.T) {
 	conf := Default()
 
-	if err := cestpb.Validate(conf); err != nil {
+	if err := protobuf.Validate(conf); err != nil {
 		return
 	}
 

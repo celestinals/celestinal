@@ -21,8 +21,7 @@ import (
 
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/greeter/v1"
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
-
-	cestlog "github.com/celestinals/celestinal/pkg/logger"
+	"github.com/celestinals/celestinal/pkg/logger"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -30,7 +29,7 @@ import (
 
 // NewGreeterClient creates a new greeter grpc client.
 func NewGreeterClient(
-	ctx context.Context, conf *celestinal.Config) (greeter.GreeterServiceClient, error) {
+	_ context.Context, _ *celestinal.Config) (greeter.GreeterServiceClient, error) {
 
 	endpoint := ":8000"
 
@@ -40,7 +39,7 @@ func NewGreeterClient(
 
 	conn, err := grpc.NewClient(endpoint, opts...)
 	if err != nil {
-		cestlog.Errorf("failed to create greeter client connection: %v", err)
+		logger.Errorf("failed to create greeter client connection: %v", err)
 		return nil, fmt.Errorf("grpc.NewClient : %v", err)
 	}
 

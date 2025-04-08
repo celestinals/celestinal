@@ -18,30 +18,30 @@ package main
 import (
 	"context"
 
-	"github.com/celestinals/celestinal/api/gen/go/celestinal/greeter/v1"
-	cestconf "github.com/celestinals/celestinal/pkg/config"
-	cestcore "github.com/celestinals/celestinal/pkg/core"
-	cestflag "github.com/celestinals/celestinal/pkg/flag"
-	cestlog "github.com/celestinals/celestinal/pkg/logger"
-	cestns "github.com/celestinals/celestinal/pkg/names"
-	geeterv1 "github.com/celestinals/celestinal/staging/mod/greeter"
+	greeterpb "github.com/celestinals/celestinal/api/gen/go/celestinal/greeter/v1"
+	"github.com/celestinals/celestinal/internal/greeter/v1"
+	"github.com/celestinals/celestinal/pkg/config"
+	"github.com/celestinals/celestinal/pkg/core"
+	"github.com/celestinals/celestinal/pkg/flag"
+	"github.com/celestinals/celestinal/pkg/logger"
+	"github.com/celestinals/celestinal/pkg/names"
 )
 
 // Build and run main application with environment variable
 // Remember to inject all layers of the application by
-// cestcore.Inject() function
+// core.Inject() function
 //
 // Example:
 //
-// _ = cestcore.Inject(controllers.New)
+// _ = core.Inject(controllers.New)
 func main() {
-	cestflag.SetDefault(cestns.GreeterV1, "127.0.0.1:0", "dev")
-	cestflag.SetConsole(greeter.ASCII)
+	flag.SetDefault(names.GreeterV1, "127.0.0.1:0", "dev")
+	flag.SetConsole(greeterpb.ASCII)
 
-	_ = cestflag.Parse()
+	_ = flag.Parse()
 
-	app := cestcore.Build(geeterv1.New, cestconf.Default)
+	app := core.Build(greeter.New, config.Default)
 	if err := app.Run(context.Background()); err != nil {
-		cestlog.Fatal(err)
+		logger.Fatal(err)
 	}
 }

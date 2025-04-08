@@ -18,7 +18,7 @@ import (
 	"context"
 
 	"github.com/celestinals/celestinal/pkg/core/internal"
-	cestflag "github.com/celestinals/celestinal/pkg/flag"
+	"github.com/celestinals/celestinal/pkg/flag"
 	"go.uber.org/fx"
 	"google.golang.org/grpc"
 )
@@ -31,7 +31,7 @@ func Build(constructors ...any) Application {
 	}
 
 	// disable log: use fx.NopLogger
-	if cestflag.Parse().GetMode() != "dev" {
+	if flag.Parse().GetMode() != "dev" {
 		return &container{
 			engine: fx.New(
 				internal.Option(), fx.Invoke(runner), fx.NopLogger),

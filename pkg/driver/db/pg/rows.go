@@ -26,13 +26,13 @@ type dbRows[T any] struct {
 	rows pgx.Rows
 }
 
-// CollectOne collects a single row from the cestdb and maps it
+// CollectOne collects a single row from the database and maps it
 // to the specified type.
 func (r *dbRows[T]) CollectOne() (T, error) {
 	return pgx.CollectOneRow[T](r.rows, pgx.RowToStructByName[T])
 }
 
-// CollectAll collects all rows from the cestdb and maps them
+// CollectAll collects all rows from the database and maps them
 // to a slice of the specified type.
 func (r *dbRows[T]) CollectAll() ([]T, error) {
 	return pgx.CollectRows[T](r.rows, pgx.RowToStructByName[T])

@@ -19,7 +19,7 @@ import (
 	"fmt"
 
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
-	cestflag "github.com/celestinals/celestinal/pkg/flag"
+	"github.com/celestinals/celestinal/pkg/flag"
 	cestpb "github.com/celestinals/celestinal/pkg/protobuf"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
@@ -51,9 +51,9 @@ type Noti struct {
 	conf *celestinal.Config
 }
 
-// Send cestnoti to group telegram
+// Send noti to group telegram
 func (r *Noti) Send(msg *celestinal.TelegramMessage) error {
-	flags := cestflag.ParseEdge()
+	flags := flag.ParseEdge()
 	if !flags.Telegram {
 		return nil
 	}

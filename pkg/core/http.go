@@ -18,8 +18,8 @@ import (
 	"context"
 	"net/http"
 
-	cesterr "github.com/celestinals/celestinal/pkg/errors"
-	cestflag "github.com/celestinals/celestinal/pkg/flag"
+	"github.com/celestinals/celestinal/pkg/errors"
+	"github.com/celestinals/celestinal/pkg/flag"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 )
 
@@ -67,7 +67,7 @@ type httpServer struct {
 // ListenAndServe implements Server.
 func (h *httpServer) Start(ctx context.Context) error {
 	_ = ctx
-	return cesterr.ErrUnimplemented
+	return errors.ErrUnimplemented
 }
 
 // handler wraps the http handler with the middlewares. middlewares
@@ -89,7 +89,7 @@ func (h *httpServer) Use(handler func(http.Handler) http.Handler) {
 // Listen starts the runtime mux.
 func (h *httpServer) Listen(address string) error {
 	if address == "" {
-		address = cestflag.Parse().GetAddress()
+		address = flag.Parse().GetAddress()
 	}
 
 	// handler runtime.Mux with http.ServeMux

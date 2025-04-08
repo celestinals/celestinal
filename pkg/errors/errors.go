@@ -19,9 +19,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/celestinals/celestinal/pkg/version"
-
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
+	"github.com/celestinals/celestinal/internal/utils/version"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
