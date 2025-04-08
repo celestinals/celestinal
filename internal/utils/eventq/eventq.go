@@ -24,13 +24,13 @@ func New[T any](size int) *QueueChannel[T] {
 	return &QueueChannel[T]{Size: size}
 }
 
-// QueueChannel is a queue with size and mapping of cestns to channel
+// QueueChannel is a queue with size and mapping of names to channel
 type QueueChannel[T any] struct {
 	Size     int
 	channels sync.Map
 }
 
-// Get channel queue with cestns key, queue supports string type only
+// Get channel queue with names key, queue supports string type only
 func (q *QueueChannel[T]) Get(namespace string) chan T {
 	if q == nil {
 		return nil
@@ -41,7 +41,7 @@ func (q *QueueChannel[T]) Get(namespace string) chan T {
 	return ch.(chan T)
 }
 
-// Close channel queue with cestns key
+// Close channel queue with names key
 func (q *QueueChannel[T]) Close(namespace string) {
 	if q == nil {
 		return

@@ -12,23 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package openapi serve cestcore.Edge to host swagger ui
-package openapi
+// Package watcher is watching service registry when service info was changed
+package watcher
 
 import (
-	"net/http"
+	"time"
 
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
-	cestcore "github.com/celestinals/celestinal/pkg/core"
+	"github.com/celestinals/celestinal/pkg/core"
 )
 
-// Serve return api json and swagger ui
-func Serve(server cestcore.HTTPServer, _ *celestinal.Config) {
-	fs := http.FileServer(http.Dir("public/swagger/"))
-	server.HTTPMux().Handle("/swagger/", http.StripPrefix("/swagger/", fs))
+const timeout = time.Second * 2
 
-	server.HTTPMux().HandleFunc("/swagger",
-		func(writer http.ResponseWriter, request *http.Request) {
-			http.Redirect(writer, request, "/swagger/", http.StatusMovedPermanently)
-		})
+// Serve is watching function consul when service info was changed
+func Serve(_ core.HTTPServer, config *celestinal.Config) {
+	_ = config
+
+	go service()
+}
+
+func service() {
+	ticker := time.NewTicker(timeout)
+	defer ticker.Stop()
+
+	for {
+
+		<-ticker.C
+	}
 }

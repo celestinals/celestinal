@@ -23,9 +23,9 @@ import (
 	domainpb "github.com/celestinals/celestinal/api/gen/go/celestinal/greeter/domain/v1"
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/greeter/v1"
 
-	cestcopier "github.com/celestinals/celestinal/pkg/copier"
-	cesterr "github.com/celestinals/celestinal/pkg/errors"
-	cestlog "github.com/celestinals/celestinal/pkg/logger"
+	"github.com/celestinals/celestinal/pkg/copier"
+	"github.com/celestinals/celestinal/pkg/errors"
+	"github.com/celestinals/celestinal/pkg/logger"
 )
 
 // IGreeter defines the interface for the Greeter controller.
@@ -44,10 +44,10 @@ func (g *Greeter) SayHello(
 	ctx context.Context, msg *greeter.SayHelloRequest) (*greeter.SayHelloResponse, error) {
 
 	var SayHelloReq domainpb.SayHelloRequest
-	if err := cestcopier.CopyProtoMessage(msg, &SayHelloReq); err != nil {
-		cestlog.Error(err)
+	if err := copier.CopyProtoMessage(msg, &SayHelloReq); err != nil {
+		logger.Error(err)
 
-		return nil, cesterr.StatusInvalidData
+		return nil, errors.StatusInvalidData
 	}
 
 	sayHelloResp, err := g.domain.SayHello(ctx, &SayHelloReq)

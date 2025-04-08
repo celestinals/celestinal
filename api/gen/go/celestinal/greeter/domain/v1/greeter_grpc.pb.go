@@ -84,7 +84,7 @@ func (UnimplementedGreeterDomainServiceServer) testEmbeddedByValue()            
 
 // UnsafeGreeterDomainServiceServer may be embedded to opt out of forward compatibility for this service.
 // Use of this interface is not recommended, as added methods to GreeterDomainServiceServer will
-// result in compilation cesterrors.
+// result in compilation errors.
 type UnsafeGreeterDomainServiceServer interface {
 	mustEmbedUnimplementedGreeterDomainServiceServer()
 }

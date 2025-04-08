@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package pg implement cestdb cestdriver for PostgreSQL using pgxpool
+// Package pg implement database driver for PostgreSQL using pgxpool
 package pg
 
 import (
@@ -20,7 +20,7 @@ import (
 
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
 	"github.com/celestinals/celestinal/pkg/driver/db"
-	cestutils "github.com/celestinals/celestinal/pkg/utils"
+	"github.com/celestinals/celestinal/pkg/utils"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -28,9 +28,9 @@ import (
 // make sure Driver implement db.Driver
 var _ db.Driver[int] = (*Driver[int])(nil)
 
-// New creates a new PostgreSQL cestdriver instance.
+// New creates a new PostgreSQL driver instance.
 func New[T any](conf *celestinal.Config) (*Driver[T], error) {
-	pool, err := cestutils.NewPgxPool(conf)
+	pool, err := utils.NewPgxPool(conf)
 	if err != nil {
 		return nil, err
 	}
@@ -38,7 +38,7 @@ func New[T any](conf *celestinal.Config) (*Driver[T], error) {
 	return &Driver[T]{pool: pool}, nil
 }
 
-// Driver is a PostgreSQL cestdriver that implements db.Driver interface.
+// Driver is a PostgreSQL driver that implements db.Driver interface.
 type Driver[T any] struct {
 	pool *pgxpool.Pool
 }

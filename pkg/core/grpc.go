@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package cestcore
+package core
 
 import (
 	"context"
 	"fmt"
 
 	"github.com/celestinals/celestinal/pkg/core/net"
-	cesterr "github.com/celestinals/celestinal/pkg/errors"
+	"github.com/celestinals/celestinal/pkg/errors"
 	"google.golang.org/grpc"
 )
 
@@ -42,8 +42,8 @@ type ServiceServer interface {
 // inherit in <Service>GRPCServer:
 //
 //	type Greeter struct {
-//		*cestcore.GRPCServer
-//		cestconf *types.Config
+//		*core.GRPCServer
+//		config *types.Config
 //		srv    greeter.GreeterServiceServer
 //	}
 type GRPCServer struct {
@@ -53,7 +53,7 @@ type GRPCServer struct {
 // Start implements Server.
 func (s *GRPCServer) Start(ctx context.Context) error {
 	_ = ctx
-	return cesterr.ErrUnimplemented
+	return errors.ErrUnimplemented
 }
 
 // Shutdown implements ServiceServer.

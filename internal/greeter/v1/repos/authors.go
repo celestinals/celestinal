@@ -20,15 +20,15 @@ import (
 	"github.com/jackc/pgx/v5"
 
 	"github.com/celestinals/celestinal/internal/greeter/v1/models/gen/authors"
-	cestdb "github.com/celestinals/celestinal/pkg/database"
+	"github.com/celestinals/celestinal/pkg/database"
 	"github.com/celestinals/celestinal/pkg/database/sql"
 )
 
 // Check valid Object with Interface
-var _ cestdb.Repository[authors.Author, int64] = (*Authors)(nil)
+var _ database.Repository[authors.Author, int64] = (*Authors)(nil)
 var _ IAuthors = (*Authors)(nil)
 
-// IAuthors define for mockup cestdb
+// IAuthors define for mockup database
 type IAuthors interface {
 	Create(ctx context.Context, author authors.Author) (authors.Author, error)
 	Update(ctx context.Context, id int64, author authors.Author) (authors.Author, error)
@@ -39,7 +39,7 @@ type IAuthors interface {
 	Count(ctx context.Context) (int64, error)
 }
 
-// NewAuthor creates a new cestdb repository.
+// NewAuthor creates a new database repository.
 func NewAuthor(pgCon *pgx.Conn) *Authors {
 	storage := sql.New[authors.Author, int64](pgCon, "authors")
 

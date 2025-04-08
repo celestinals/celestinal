@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package cestlog provides the logger for the service.
-package cestlog
+// Package logger provides the logger for the service.
+package logger
 
 import (
 	"os"
@@ -28,12 +28,12 @@ import (
 
 var once sync.Once
 
-var logcore = NewTxLog()
+var logcore = NewLogger()
 
-var _ TxLog = (*internal.TxLogCore)(nil)
+var _ Logger = (*internal.Core)(nil)
 
-// TxLog define default logger for cestlog
-type TxLog interface {
+// Logger define default logger for logger
+type Logger interface {
 	Info(args ...any)
 	Infof(template string, args ...any)
 	Infoln(args ...any)
@@ -58,18 +58,18 @@ type TxLog interface {
 	Sync() error
 }
 
-// TxSystemLog define system logger, include grpclog wrapped
-type TxSystemLog interface{ TxLog }
+// SystemLog define system logger, include grpclog wrapped
+type SystemLog interface{ Logger }
 
-// NewTxLog creates a new cestlog instance.
-func NewTxLog() TxLog {
+// NewLogger creates a new logger instance.
+func NewLogger() Logger {
 	logger := newLogger().Sugar()
 	return internal.NewTxLogCore(logger, internal.LevelDebug)
 }
 
-// NewTxSystemLog init all system log,
-// like cestlog global variable, grpclog global variable
-func NewTxSystemLog() TxSystemLog {
+// NewSystemLog init all system log,
+// like logger global variable, grpclog global variable
+func NewSystemLog() SystemLog {
 	once.Do(func() {
 		logger := newLogger().Sugar()
 		logcore = internal.NewTxLogCore(logger, internal.LevelDebug)

@@ -12,5 +12,5 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package repos provides the cestdb repository for the greeter service.
+// Package repos provides the database repository for the greeter service.
 package repos

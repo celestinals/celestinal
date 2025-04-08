@@ -20,25 +20,25 @@ import (
 
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
 
-	"github.com/celestinals/celestinal/internal/apigateway/funcs/openapi"
-	"github.com/celestinals/celestinal/internal/apigateway/funcs/watcher"
 	"github.com/celestinals/celestinal/internal/apigateway/middleware"
 	"github.com/celestinals/celestinal/internal/apigateway/services/v1"
+	"github.com/celestinals/celestinal/internal/apigateway/utils/openapi"
+	"github.com/celestinals/celestinal/internal/apigateway/utils/watcher"
 	"github.com/celestinals/celestinal/internal/utils/version"
 
-	cestcore "github.com/celestinals/celestinal/pkg/core"
-	cestlog "github.com/celestinals/celestinal/pkg/logger"
-	cestpb "github.com/celestinals/celestinal/pkg/protobuf"
+	"github.com/celestinals/celestinal/pkg/core"
+	"github.com/celestinals/celestinal/pkg/logger"
+	"github.com/celestinals/celestinal/pkg/protobuf"
 )
 
-// make sure apigateway implement cestcore.Server
-// cestcore.runner will be start application through cestcore.Server interface
-var _ cestcore.Server = (*Edge)(nil)
+// make sure apigateway implement core.Server
+// core.runner will be start application through core.Server interface
+var _ core.Server = (*Edge)(nil)
 
-// New creates a new gateway app, return cestcore.Server interface
-func New(conf *celestinal.Config) cestcore.Server {
+// New creates a new gateway app, return core.Server interface
+func New(conf *celestinal.Config) core.Server {
 	return &Edge{
-		server: cestcore.NewHTTPServer(),
+		server: core.NewHTTPServer(),
 		config: conf,
 	}
 }
@@ -56,9 +56,9 @@ type Edge struct {
 	// variables from .env file
 	config *celestinal.Config
 
-	// server is the cestcore server, manage http.ServeMux,
+	// server is the core server, manage http.ServeMux,
 	// runtime.ServeMux and HTTP server
-	server cestcore.HTTPServer
+	server core.HTTPServer
 }
 
 // registerServiceServer gRPC server endpoint.
@@ -67,7 +67,7 @@ func (edge *Edge) registerServiceServer(ctx context.Context) error {
 	// Create folder at services, inherit base package, override function,
 	// implement business logic
 	// See: services/v1/greeter
-	serviceList := []cestcore.ServiceRegistrar{
+	serviceList := []core.ServiceRegistrar{
 		// Example: register the greeter service to the gateway
 		services.NewGreeter(),
 		// add more service here ...
@@ -77,7 +77,7 @@ func (edge *Edge) registerServiceServer(ctx context.Context) error {
 }
 
 // visit all service by Accept function
-func (edge *Edge) visit(ctx context.Context, services ...cestcore.ServiceRegistrar) error {
+func (edge *Edge) visit(ctx context.Context, services ...core.ServiceRegistrar) error {
 	for _, service := range services {
 		if err := service.Accept(ctx, edge.server); err != nil {
 			return err
@@ -89,7 +89,7 @@ func (edge *Edge) visit(ctx context.Context, services ...cestcore.ServiceRegistr
 
 // use is a chain of functions to use when accepting the request
 // serve is a function to use when accepting the request
-func (edge *Edge) use(serve func(cestcore.HTTPServer, *celestinal.Config)) {
+func (edge *Edge) use(serve func(core.HTTPServer, *celestinal.Config)) {
 	serve(edge.server, edge.config)
 }
 
@@ -111,7 +111,7 @@ func (edge *Edge) functions(ctx context.Context) error {
 func (edge *Edge) Start(ctx context.Context) error {
 	// service ascii art banner
 	version.ASCII()
-	if err := cestpb.Validate(edge.config); err != nil {
+	if err := protobuf.Validate(edge.config); err != nil {
 		return err
 	}
 
@@ -122,12 +122,12 @@ func (edge *Edge) Start(ctx context.Context) error {
 
 	// Listen HTTP server (and apigateway calls to gRPC server endpoint)
 	// log info in console and return register error if they exist
-	cestlog.Infof("[http] starting server %s", edge.config.GetApiAddr())
+	logger.Infof("[http] starting server %s", edge.config.GetApiAddr())
 	return edge.server.Listen(edge.config.GetApiAddr())
-	// return cesterrors.F("apigateway: failed to listen and serve")
+	// return errors.F("apigateway: failed to listen and serve")
 }
 
-// Shutdown implements cestcore.Server.
+// Shutdown implements core.Server.
 func (edge *Edge) Shutdown(ctx context.Context) error {
 	return edge.server.Shutdown(ctx)
 }

@@ -10,10 +10,10 @@ importers:
     devDependencies:
       '@celestinal/eslint-config':
         specifier: workspace:*
-        version: link:packages/celestinal-eslint-cestconf
+        version: link:packages/celestinal-eslint-config
       '@celestinal/typescript-config':
         specifier: workspace:*
-        version: link:packages/celestinal-typescript-cestconf
+        version: link:packages/celestinal-typescript-config
       prettier:
         specifier: ^3.2.5
         version: 3.5.3
@@ -44,10 +44,10 @@ importers:
     devDependencies:
       '@celestinal/eslint-config':
         specifier: workspace:^
-        version: link:../../packages/celestinal-eslint-cestconf
+        version: link:../../packages/celestinal-eslint-config
       '@celestinal/typescript-config':
         specifier: workspace:*
-        version: link:../../packages/celestinal-typescript-cestconf
+        version: link:../../packages/celestinal-typescript-config
       '@types/node':
         specifier: ^20
         version: 20.17.30
@@ -143,10 +143,10 @@ importers:
     devDependencies:
       '@celestinal/eslint-config':
         specifier: workspace:*
-        version: link:../celestinal-eslint-cestconf
+        version: link:../celestinal-eslint-config
       '@celestinal/typescript-config':
         specifier: workspace:*
-        version: link:../celestinal-typescript-cestconf
+        version: link:../celestinal-typescript-config
       '@types/node':
         specifier: ^22.9.0
         version: 22.14.0
@@ -1843,7 +1843,7 @@ snapshots:
       debug: 4.4.0
       minimatch: 3.1.2
     transitivePeerDependencies:
-      - supports-cestcolor
+      - supports-color
 
   '@eslint/config-helpers@0.2.1': {}
 
@@ -1867,7 +1867,7 @@ snapshots:
       minimatch: 3.1.2
       strip-json-comments: 3.1.1
     transitivePeerDependencies:
-      - supports-cestcolor
+      - supports-color
 
   '@eslint/js@9.23.0': {}
 
@@ -2094,7 +2094,7 @@ snapshots:
       ts-api-utils: 2.1.0(typescript@5.8.2)
       typescript: 5.8.2
     transitivePeerDependencies:
-      - supports-cestcolor
+      - supports-color
 
   '@typescript-eslint/parser@8.29.0(eslint@9.23.0(jiti@1.21.7))(typescript@5.8.2)':
     dependencies:
@@ -2106,7 +2106,7 @@ snapshots:
       eslint: 9.23.0(jiti@1.21.7)
       typescript: 5.8.2
     transitivePeerDependencies:
-      - supports-cestcolor
+      - supports-color
 
   '@typescript-eslint/scope-manager@8.29.0':
     dependencies:
@@ -2122,7 +2122,7 @@ snapshots:
       ts-api-utils: 2.1.0(typescript@5.8.2)
       typescript: 5.8.2
     transitivePeerDependencies:
-      - supports-cestcolor
+      - supports-color
 
   '@typescript-eslint/types@8.29.0': {}
 
@@ -2138,7 +2138,7 @@ snapshots:
       ts-api-utils: 2.1.0(typescript@5.8.2)
       typescript: 5.8.2
     transitivePeerDependencies:
-      - supports-cestcolor
+      - supports-color
 
   '@typescript-eslint/utils@8.29.0(eslint@9.23.0(jiti@1.21.7))(typescript@5.8.2)':
     dependencies:
@@ -2149,7 +2149,7 @@ snapshots:
       eslint: 9.23.0(jiti@1.21.7)
       typescript: 5.8.2
     transitivePeerDependencies:
-      - supports-cestcolor
+      - supports-color
 
   '@typescript-eslint/visitor-keys@8.29.0':
     dependencies:
@@ -2627,7 +2627,7 @@ snapshots:
     optionalDependencies:
       jiti: 1.21.7
     transitivePeerDependencies:
-      - supports-cestcolor
+      - supports-color
 
   espree@10.3.0:
     dependencies:
@@ -3052,7 +3052,7 @@ snapshots:
       '@next/swc-win32-x64-msvc': 15.2.4
       sharp: 0.33.5
     transitivePeerDependencies:
-      - '@babel/cestcore'
+      - '@babel/core'
       - babel-plugin-macros
 
   node-releases@2.0.19: {}
@@ -3604,7 +3604,7 @@ snapshots:
       eslint: 9.23.0(jiti@1.21.7)
       typescript: 5.8.2
     transitivePeerDependencies:
-      - supports-cestcolor
+      - supports-color
 
   typescript@5.5.4: {}
 

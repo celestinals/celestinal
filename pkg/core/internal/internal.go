@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package internal provides the internal function for the cestcore.
+// Package internal provides the internal function for the core.
 package internal
 
 import (

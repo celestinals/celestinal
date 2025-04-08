@@ -23,8 +23,8 @@ import (
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/greeter/domain/v1"
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/greeter/shared/v1"
 
-	cesterr "github.com/celestinals/celestinal/pkg/errors"
-	cestlog "github.com/celestinals/celestinal/pkg/logger"
+	"github.com/celestinals/celestinal/pkg/errors"
+	"github.com/celestinals/celestinal/pkg/logger"
 )
 
 // IGreeter defines the interface for the Greeter biz module.
@@ -42,13 +42,13 @@ func (g *Greeter) SayHello(
 	_ context.Context, msg *domain.SayHelloRequest) (*domain.SayHelloResponse, error) {
 
 	msgs, _ := json.Marshal(msg)
-	cestlog.Debug("Received a SayHello request" + string(msgs))
+	logger.Debug("Received a SayHello request" + string(msgs))
 
 	name := msg.GetName()
 	t := time.Now().String()
 
 	if name == "error" {
-		return nil, cesterr.StatusForbidden
+		return nil, errors.StatusForbidden
 	}
 
 	return &domain.SayHelloResponse{

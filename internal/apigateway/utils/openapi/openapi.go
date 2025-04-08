@@ -12,25 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package init provides the initialization logic for the greeter service.
-package init
+// Package openapi serve core.Edge to host swagger ui
+package openapi
 
 import (
-	"github.com/celestinals/celestinal/internal/greeter/v1/controllers"
-	"github.com/celestinals/celestinal/internal/greeter/v1/domain"
-	cestcore "github.com/celestinals/celestinal/pkg/core"
+	"net/http"
+
+	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
+	"github.com/celestinals/celestinal/pkg/core"
 )
 
-var (
-	// handlers/controllers layer
-	_ = cestcore.Inject(controllers.New)
+// Serve return api json and swagger ui
+func Serve(server core.HTTPServer, _ *celestinal.Config) {
+	fs := http.FileServer(http.Dir("public/swagger/"))
+	server.HTTPMux().Handle("/swagger/", http.StripPrefix("/swagger/", fs))
 
-	// domain layer
-	_ = cestcore.Inject(domain.New)
-
-	// repo layer
-	//_ = cestcore.Inject(repos.NewAuthor)
-
-	// data layer
-	//_ = cestcore.Inject(authors.New)
-)
+	server.HTTPMux().HandleFunc("/swagger",
+		func(writer http.ResponseWriter, request *http.Request) {
+			http.Redirect(writer, request, "/swagger/", http.StatusMovedPermanently)
+		})
+}

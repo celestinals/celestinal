@@ -25,7 +25,7 @@ const QueueSpace int = 2
 
 var queue = New[string](QueueSpace)
 
-// Subscribe to the event queue with a cestns and a handler function
+// Subscribe to the event queue with a names and a handler function
 func Subscribe(ctx context.Context, ns string, handler func(value string) error) {
 	go func() {
 		ch := queue.Get(ns)
@@ -33,12 +33,12 @@ func Subscribe(ctx context.Context, ns string, handler func(value string) error)
 		for {
 			select {
 			case <-ctx.Done():
-				cestlog.Infof("subscription to cestns %s stopped", ns)
+				cestlog.Infof("subscription to names %s stopped", ns)
 				return
 			case event, ok := <-ch:
-				cestlog.Debugf("received event of cestns: %s", ns)
+				cestlog.Debugf("received event of names: %s", ns)
 				if !ok {
-					cestlog.Warnf("channel for cestns %s closed", ns)
+					cestlog.Warnf("channel for names %s closed", ns)
 					return
 				}
 
@@ -58,14 +58,14 @@ func Subscribe(ctx context.Context, ns string, handler func(value string) error)
 	}()
 }
 
-// Publish to the event queue with a cestns and a value
+// Publish to the event queue with a names and a value
 func Publish(ns string, value string) {
 	ch := queue.Get(ns)
 
 	select {
 	case ch <- value:
-		cestlog.Debugf("published event to cestns: %s", ns)
+		cestlog.Debugf("published event to names: %s", ns)
 	default:
-		cestlog.Warnf("channel for cestns %s is full, dropping event", ns)
+		cestlog.Warnf("channel for names %s is full, dropping event", ns)
 	}
 }

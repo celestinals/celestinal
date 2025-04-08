@@ -21,20 +21,20 @@ import (
 	"github.com/celestinals/celestinal/internal/apigateway"
 	"github.com/celestinals/celestinal/internal/utils/version"
 
-	cestconf "github.com/celestinals/celestinal/pkg/config"
-	cestcore "github.com/celestinals/celestinal/pkg/core"
-	cestflag "github.com/celestinals/celestinal/pkg/flag"
-	cestlog "github.com/celestinals/celestinal/pkg/logger"
-	cestns "github.com/celestinals/celestinal/pkg/names"
+	"github.com/celestinals/celestinal/pkg/config"
+	"github.com/celestinals/celestinal/pkg/core"
+	"github.com/celestinals/celestinal/pkg/flag"
+	"github.com/celestinals/celestinal/pkg/logger"
+	"github.com/celestinals/celestinal/pkg/names"
 )
 
 // Build and run the main application with environment variables.
 // Remember to inject all layers of the application using the
-// cestcore.Inject() function.
+// core.Inject() function.
 //
 // Example:
 //
-//	_ = cestcore.Inject(controllers.New)
+//	_ = core.Inject(controllers.New)
 //
 // This is the celestinal apigateway application, it will automatically connect to
 // other services via gRPC. Run the application along with other services
@@ -49,13 +49,13 @@ import (
 //	make run.apigateway // start celestinal apigateway
 //	make run.x.<service> // start service
 func main() {
-	cestflag.SetDefault(cestns.Edge, "0.0.0.0:9000", "dev")
-	cestflag.SetConsole(version.ASCIIArt)
+	flag.SetDefault(names.Edge, "0.0.0.0:9000", "dev")
+	flag.SetConsole(version.ASCIIArt)
 
-	_ = cestflag.ParseEdge()
+	_ = flag.ParseEdge()
 
-	app := cestcore.Build(apigateway.New, cestconf.Default)
+	app := core.Build(apigateway.New, config.Default)
 	if err := app.Run(context.Background()); err != nil {
-		cestlog.Fatal(err)
+		logger.Fatal(err)
 	}
 }

@@ -21,11 +21,11 @@ import (
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
 
-	cestcore "github.com/celestinals/celestinal/pkg/core"
-	cesterr "github.com/celestinals/celestinal/pkg/errors"
+	"github.com/celestinals/celestinal/pkg/core"
+	"github.com/celestinals/celestinal/pkg/errors"
 )
 
-var _ cestcore.ServiceRegistrar = (*Base)(nil)
+var _ core.ServiceRegistrar = (*Base)(nil)
 
 // Base represents the base service
 type Base struct{}
@@ -33,10 +33,10 @@ type Base struct{}
 // Register registers the base service
 func (b Base) Register(_ context.Context, _ *runtime.ServeMux, _ string,
 	_ []grpc.DialOption) error {
-	return cesterr.ErrUnimplemented
+	return errors.ErrUnimplemented
 }
 
 // Accept accepts the base service
-func (b Base) Accept(_ context.Context, _ cestcore.HTTPServer) error {
-	return cesterr.ErrUnimplemented
+func (b Base) Accept(_ context.Context, _ core.HTTPServer) error {
+	return errors.ErrUnimplemented
 }

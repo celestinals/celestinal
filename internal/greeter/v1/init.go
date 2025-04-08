@@ -12,30 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package watcher is watching service registry when service info was changed
-package watcher
+// Package greeter provides the initialization logic for the greeter service.
+package greeter
 
 import (
-	"time"
-
-	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
-	cestcore "github.com/celestinals/celestinal/pkg/core"
+	"github.com/celestinals/celestinal/internal/greeter/v1/controllers"
+	"github.com/celestinals/celestinal/internal/greeter/v1/domain"
+	"github.com/celestinals/celestinal/pkg/core"
 )
 
-const timeout = time.Second * 2
+var (
+	// handlers/controllers layer
+	_ = core.Inject(controllers.New)
 
-// Serve is watching function consul when service info was changed
-func Serve(_ cestcore.HTTPServer, config *celestinal.Config) {
+	// domain layer
+	_ = core.Inject(domain.New)
 
-	go service()
-}
+	// repo layer
+	//_ = core.Inject(repos.NewAuthor)
 
-func service() {
-	ticker := time.NewTicker(timeout)
-	defer ticker.Stop()
-
-	for {
-
-		<-ticker.C
-	}
-}
+	// data layer
+	//_ = core.Inject(authors.New)
+)

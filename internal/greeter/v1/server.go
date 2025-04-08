@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package server implements the Greeter service server.
-package server
+// Package greeter implements the Greeter service server.
+package greeter
 
 import (
 	"context"
@@ -22,20 +22,20 @@ import (
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
 	"github.com/celestinals/celestinal/internal/greeter/v1/controllers"
 
-	cestcore "github.com/celestinals/celestinal/pkg/core"
-	cestflag "github.com/celestinals/celestinal/pkg/flag"
-	cestns "github.com/celestinals/celestinal/pkg/names"
-	cestpb "github.com/celestinals/celestinal/pkg/protobuf"
+	"github.com/celestinals/celestinal/pkg/core"
+	"github.com/celestinals/celestinal/pkg/flag"
+	"github.com/celestinals/celestinal/pkg/names"
+	"github.com/celestinals/celestinal/pkg/protobuf"
 )
 
-// make sure Greeter implement cestcore.Server
-// it will start by cestcore.runner through cestcore.Server
-var _ cestcore.Server = (*Greeter)(nil)
+// make sure Greeter implement core.Server
+// it will start by core.runner through core.Server
+var _ core.Server = (*Greeter)(nil)
 
 // New creates a new Greeter module.
-func New(srv controllers.IGreeter, conf *celestinal.Config) cestcore.Server {
+func New(srv controllers.IGreeter, conf *celestinal.Config) core.Server {
 	return &Greeter{
-		GRPCServer: cestcore.NewGRPCServerDefault(),
+		GRPCServer: core.NewGRPCServerDefault(),
 		srv:        srv,
 		config:     conf,
 	}
@@ -43,24 +43,24 @@ func New(srv controllers.IGreeter, conf *celestinal.Config) cestcore.Server {
 
 // Greeter implements GreeterServiceServer.
 type Greeter struct {
-	*cestcore.GRPCServer // inherit cestcore.GRPCServer
-	config               *celestinal.Config
-	srv                  greeter.GreeterServiceServer
+	*core.GRPCServer // inherit core.GRPCServer
+	config           *celestinal.Config
+	srv              greeter.GreeterServiceServer
 }
 
-// Start implements IGreeter, override cestcore.GRPCServer.Start
+// Start implements IGreeter, override core.GRPCServer.Start
 func (g *Greeter) Start(_ context.Context) error {
 	greeter.PrintASCII()
-	if err := cestpb.Validate(g.config); err != nil {
+	if err := protobuf.Validate(g.config); err != nil {
 		return err
 	}
 
 	greeter.RegisterGreeterServiceServer(g.AsServer(), g.srv)
 
-	return g.Serve(&cestcore.ServiceInfo{
+	return g.Serve(&core.ServiceInfo{
 		Config: g.config,
-		Addr:   cestflag.Parse().GetAddress(),
-		Tags:   []string{"greeter", cestns.GreeterV1.String()},
-		Name:   cestns.GreeterV1.String(),
+		Addr:   flag.Parse().GetAddress(),
+		Tags:   []string{"greeter", names.GreeterV1.String()},
+		Name:   names.GreeterV1.String(),
 	})
 }

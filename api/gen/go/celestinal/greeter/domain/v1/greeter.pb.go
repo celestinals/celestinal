@@ -42,8 +42,8 @@ type SayHelloRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Page *v1.Pages `cestpb:"bytes,1,opt,name=page,proto3" json:"page,omitempty"`
-	Name string    `cestpb:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Page *v1.Pages `protobuf:"bytes,1,opt,name=page,proto3" json:"page,omitempty"`
+	Name string    `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
 }
 
 func (x *SayHelloRequest) Reset() {
@@ -95,7 +95,7 @@ type SayHelloResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Response *v11.SayHelloResponse `cestpb:"bytes,1,opt,name=response,proto3" json:"response,omitempty"`
+	Response *v11.SayHelloResponse `protobuf:"bytes,1,opt,name=response,proto3" json:"response,omitempty"`
 }
 
 func (x *SayHelloResponse) Reset() {

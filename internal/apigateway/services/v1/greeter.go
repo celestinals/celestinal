@@ -25,14 +25,14 @@ import (
 	"github.com/celestinals/celestinal/internal/apigateway/services/base"
 	"github.com/celestinals/celestinal/internal/utils/visitor"
 
-	cestcore "github.com/celestinals/celestinal/pkg/core"
-	cestns "github.com/celestinals/celestinal/pkg/names"
+	"github.com/celestinals/celestinal/pkg/core"
+	"github.com/celestinals/celestinal/pkg/names"
 )
 
-var _ cestcore.ServiceRegistrar = (*greeter)(nil)
+var _ core.ServiceRegistrar = (*greeter)(nil)
 
 // NewGreeter creates a new greeter service to register handler to gateway
-func NewGreeter() cestcore.ServiceRegistrar {
+func NewGreeter() core.ServiceRegistrar {
 	return greeter{}
 }
 
@@ -42,8 +42,8 @@ type greeter struct {
 }
 
 // Accept accepts the greeter service
-func (g greeter) Accept(ctx context.Context, server cestcore.HTTPServer) error {
-	return visitor.VisitService(ctx, cestns.GreeterV1, server, g)
+func (g greeter) Accept(ctx context.Context, server core.HTTPServer) error {
+	return visitor.VisitService(ctx, names.GreeterV1, server, g)
 }
 
 // Register registers the greeter service

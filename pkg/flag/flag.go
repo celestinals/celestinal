@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package cestflag provide cestflag variable props
-package cestflag
+// Package flag provide flag variable props
+package flag
 
 import (
 	"fmt"
@@ -22,8 +22,7 @@ import (
 
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
 	"github.com/celestinals/celestinal/internal/utils/version"
-
-	cestns "github.com/celestinals/celestinal/pkg/names"
+	"github.com/celestinals/celestinal/pkg/names"
 
 	"github.com/spf13/pflag"
 )
@@ -50,7 +49,7 @@ var edgeFlags = &celestinal.FlagEdge{
 	Telegram: false,
 }
 
-// Parse cestflag args
+// Parse flag args
 func Parse() *celestinal.Flag {
 	once.Do(func() {
 		if !isService {
@@ -74,7 +73,7 @@ func Parse() *celestinal.Flag {
 	return flags
 }
 
-// ParseEdge cestflag args for apigateway service
+// ParseEdge flag args for apigateway service
 func ParseEdge() *celestinal.FlagEdge {
 	isService = false
 
@@ -83,8 +82,8 @@ func ParseEdge() *celestinal.FlagEdge {
 	return edgeFlags
 }
 
-// SetDefault set default cestflag values
-func SetDefault(name cestns.Namespace, address, mode string) {
+// SetDefault set default flag values
+func SetDefault(name names.Namespace, address, mode string) {
 	flags.Name = name.String()
 	flags.Address = address
 	flags.Mode = mode

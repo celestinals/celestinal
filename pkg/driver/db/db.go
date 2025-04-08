@@ -12,19 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package db implement cestdb cestdriver
+// Package db implement database driver
 package db
 
 import (
 	"context"
 )
 
-// Driver is an interface for cestdb cestdriver.
+// Driver is an interface for database driver.
 type Driver[T any] interface {
 	Query(ctx context.Context, sql string, args ...any) (Rows[T], error)
 }
 
-// Rows is an interface for cestdb rows.
+// Rows is an interface for database rows.
 type Rows[T any] interface {
 	CollectOne() (T, error)
 	CollectAll() ([]T, error)

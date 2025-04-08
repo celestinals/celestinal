@@ -20,24 +20,24 @@ import (
 
 	"github.com/celestinals/celestinal/internal/utils/eventq"
 
-	cestcore "github.com/celestinals/celestinal/pkg/core"
-	cestlog "github.com/celestinals/celestinal/pkg/logger"
-	cestns "github.com/celestinals/celestinal/pkg/names"
+	"github.com/celestinals/celestinal/pkg/core"
+	"github.com/celestinals/celestinal/pkg/logger"
+	"github.com/celestinals/celestinal/pkg/names"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
 
 // VisitService visits the greeter service.
-func VisitService(ctx context.Context, ns cestns.Namespace, server cestcore.HTTPServer,
-	service cestcore.ServiceRegistrar) error {
+func VisitService(ctx context.Context, ns names.Namespace, server core.HTTPServer,
+	service core.ServiceRegistrar) error {
 
 	eventq.Subscribe(ctx, ns.String(), func(endpoint string) error {
 		opts := []grpc.DialOption{
 			grpc.WithTransportCredentials(insecure.NewCredentials()),
 		}
 
-		cestlog.Infof("[visitor.VisitService] %s %s", ns.String(), "******")
-		return cestcore.RegisterService(ctx, server, service, endpoint, opts)
+		logger.Infof("[visitor.VisitService] %s %s", ns.String(), "******")
+		return core.RegisterService(ctx, server, service, endpoint, opts)
 	})
 
 	return nil

@@ -26,10 +26,10 @@ import (
 	"google.golang.org/grpc/grpclog"
 
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
-	cestcore "github.com/celestinals/celestinal/pkg/core"
-	cestflag "github.com/celestinals/celestinal/pkg/flag"
-	cestnoti "github.com/celestinals/celestinal/pkg/noti"
-	cestpb "github.com/celestinals/celestinal/pkg/protobuf"
+	"github.com/celestinals/celestinal/pkg/core"
+	"github.com/celestinals/celestinal/pkg/flag"
+	"github.com/celestinals/celestinal/pkg/noti"
+	"github.com/celestinals/celestinal/pkg/protobuf"
 )
 
 // New middleware handler
@@ -40,7 +40,7 @@ func New(conf *celestinal.Config) *Middleware {
 }
 
 // Serve middleware handler for http handler in apigateway server
-func Serve(server cestcore.HTTPServer, conf *celestinal.Config) {
+func Serve(server core.HTTPServer, conf *celestinal.Config) {
 	// new middleware handler
 	mdw := New(conf)
 
@@ -123,12 +123,12 @@ func (mdw *Middleware) preflightHandler(w http.ResponseWriter, r *http.Request) 
 }
 
 func (mdw *Middleware) notify(statusCode int, body string) {
-	monitor, _ := cestnoti.New(mdw.conf)
+	monitor, _ := noti.New(mdw.conf)
 
 	_ = monitor.Send(&celestinal.TelegramMessage{
 		Metadata: &celestinal.TelegramMessageMetadata{
-			CreatedAt: cestpb.ToTime(time.Now().Local()),
-			Author:    cestflag.Parse().GetName(),
+			CreatedAt: protobuf.ToTime(time.Now().Local()),
+			Author:    flag.Parse().GetName(),
 		},
 		Header: fmt.Sprintf("http error %+v ", statusCode),
 		Body:   fmt.Sprintf("http error %+v request body %+v", statusCode, string(body)),

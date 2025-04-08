@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package cestcopier provides functions to copy objects.
-package cestcopier
+// Package copier provides functions to copy objects.
+package copier
 
 import (
 	"encoding/json"
