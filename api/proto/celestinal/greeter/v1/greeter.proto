@@ -31,8 +31,8 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
     title: "Greeter Service";
     version: "1.0";
   };
-  schemes: HTTPS;
   schemes: HTTP;
+  schemes: HTTPS;
   consumes: "application/json";
   security_definitions: {
     security: {

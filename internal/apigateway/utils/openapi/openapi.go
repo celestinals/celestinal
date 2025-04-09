@@ -12,23 +12,44 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package openapi serve core.Edge to host swagger ui
+// Package openapi serve apigateway to host swagger ui
 package openapi
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
-	"github.com/celestinals/celestinal/pkg/core"
+	"github.com/celestinals/celestinal/pkg/capsule/capsulehttp"
+	"github.com/celestinals/celestinal/pkg/flag"
 )
 
 // Serve return api json and swagger ui
-func Serve(server core.HTTPServer, _ *celestinal.Config) {
-	fs := http.FileServer(http.Dir("public/swagger/"))
-	server.HTTPMux().Handle("/swagger/", http.StripPrefix("/swagger/", fs))
+func Serve(server capsulehttp.Server, _ *celestinal.Config) {
+	flags := flag.ParseAPIGateway()
 
-	server.HTTPMux().HandleFunc("/swagger",
-		func(writer http.ResponseWriter, request *http.Request) {
-			http.Redirect(writer, request, "/swagger/", http.StatusMovedPermanently)
-		})
+	apifs := http.FileServer(http.Dir(flags.GetApiSpecsPath()))
+	server.HTTPMux().Handle("/api/", http.StripPrefix("/api/", apifs))
+
+	swaggerfs := http.FileServer(http.Dir(flags.GetSwaggerPath()))
+	server.HTTPMux().Handle("/swagger/", apiSpecSwaggerHandler(swaggerfs))
+	server.HTTPMux().HandleFunc("/swagger", swaggerHandler())
+}
+
+func swaggerHandler() http.HandlerFunc {
+	return func(writer http.ResponseWriter, request *http.Request) {
+		http.Redirect(writer, request, "/swagger/", http.StatusMovedPermanently)
+	}
+}
+
+func apiSpecSwaggerHandler(swaggerfs http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if strings.HasSuffix(r.URL.Path, ".json") {
+			target := "/api" + strings.TrimPrefix(r.URL.Path, "/swagger")
+			http.Redirect(w, r, target, http.StatusTemporaryRedirect)
+			return
+		}
+
+		http.StripPrefix("/swagger/", swaggerfs).ServeHTTP(w, r)
+	})
 }

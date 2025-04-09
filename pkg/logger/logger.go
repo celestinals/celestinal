@@ -64,7 +64,7 @@ type SystemLog interface{ Logger }
 // NewLogger creates a new logger instance.
 func NewLogger() Logger {
 	logger := newLogger().Sugar()
-	return internal.NewTxLogCore(logger, internal.LevelDebug)
+	return internal.NewCore(logger, internal.LevelDebug)
 }
 
 // NewSystemLog init all system log,
@@ -72,9 +72,9 @@ func NewLogger() Logger {
 func NewSystemLog() SystemLog {
 	once.Do(func() {
 		logger := newLogger().Sugar()
-		logcore = internal.NewTxLogCore(logger, internal.LevelDebug)
+		logcore = internal.NewCore(logger, internal.LevelDebug)
 
-		grpclog.SetLoggerV2(internal.NewTxLogCore(logger, internal.LevelWarning))
+		grpclog.SetLoggerV2(internal.NewCore(logger, internal.LevelWarning))
 	})
 
 	return logcore

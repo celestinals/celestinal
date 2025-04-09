@@ -3,7 +3,6 @@
 
 _docs/
 _submodules/
-_tools/
 
 _dumpdata/
 dumpdata/
@@ -12,6 +11,7 @@ bin/
 build/
 docs/
 third_party/
+tools/
 
 node_modules
 

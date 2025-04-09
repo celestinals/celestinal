@@ -23,8 +23,8 @@ func (ns Namespace) String() string {
 }
 
 const (
-	// Edge names info
-	Edge Namespace = "celestinal.apigateway"
+	// APIGateway names info
+	APIGateway Namespace = "celestinal.apigateway"
 
 	// GreeterV1 names info
 	GreeterV1 Namespace = "celestinal.greeter.v1"

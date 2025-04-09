@@ -1,23 +1,22 @@
-import { Geist, Geist_Mono } from "next/font/google";
-
-import "@celestinal/ui/globals.css";
-import { Providers } from "@/components/providers";
-import { Metadata } from "next";
-import React from "react";
+import React from 'react';
+import { Metadata } from 'next';
+import { Geist, Geist_Mono } from 'next/font/google';
+import { Providers } from '@/components/providers';
+import '@celestinal/ui/globals.css';
 
 const fontSans = Geist({
-  subsets: ["latin"],
-  variable: "--font-sans",
+  subsets: ['latin'],
+  variable: '--font-sans',
 });
 
 const fontMono = Geist_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono",
+  subsets: ['latin'],
+  variable: '--font-mono',
 });
 
 export const metadata: Metadata = {
-  title: "Celestinal",
-  description: "Distributed Log Aggregator",
+  title: 'Celestinal',
+  description: 'Distributed Log Aggregator',
 };
 
 export default function RootLayout({
@@ -27,9 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${fontSans.variable} ${fontMono.variable} font-sans antialiased `}
-      >
+      <body className={`${fontSans.variable} ${fontMono.variable} font-sans antialiased `}>
         <Providers>{children}</Providers>
       </body>
     </html>

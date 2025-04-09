@@ -19,10 +19,10 @@ import (
 	"context"
 
 	"github.com/celestinals/celestinal/internal/apigateway"
-	"github.com/celestinals/celestinal/internal/utils/version"
+	"github.com/celestinals/celestinal/internal/pkg/version"
 
+	"github.com/celestinals/celestinal/pkg/capsule"
 	"github.com/celestinals/celestinal/pkg/config"
-	"github.com/celestinals/celestinal/pkg/core"
 	"github.com/celestinals/celestinal/pkg/flag"
 	"github.com/celestinals/celestinal/pkg/logger"
 	"github.com/celestinals/celestinal/pkg/names"
@@ -30,11 +30,11 @@ import (
 
 // Build and run the main application with environment variables.
 // Remember to inject all layers of the application using the
-// core.Inject() function.
+// capsule.Inject() function.
 //
 // Example:
 //
-//	_ = core.Inject(controllers.New)
+//	_ = capsule.Inject(controllers.New)
 //
 // This is the celestinal apigateway application, it will automatically connect to
 // other services via gRPC. Run the application along with other services
@@ -47,14 +47,14 @@ import (
 // Run the application using the Makefile command
 //
 //	make run.apigateway // start celestinal apigateway
-//	make run.x.<service> // start service
+//	make run.<service> // start service
 func main() {
-	flag.SetDefault(names.Edge, "0.0.0.0:9000", "dev")
+	flag.SetDefault(names.APIGateway, "0.0.0.0:9000", "dev")
 	flag.SetConsole(version.ASCIIArt)
 
-	_ = flag.ParseEdge()
+	_ = flag.ParseAPIGateway()
 
-	app := core.Build(apigateway.New, config.Default)
+	app := capsule.Build(apigateway.New, config.Default)
 	if err := app.Run(context.Background()); err != nil {
 		logger.Fatal(err)
 	}

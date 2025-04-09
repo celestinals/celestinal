@@ -18,7 +18,7 @@ package internal
 import (
 	"fmt"
 
-	"github.com/celestinals/celestinal/internal/utils/version"
+	"github.com/celestinals/celestinal/internal/pkg/version"
 	"github.com/celestinals/celestinal/pkg/color"
 
 	"go.uber.org/zap"
@@ -41,7 +41,7 @@ const (
 	LevelFatal = 4
 )
 
-var header = fmt.Sprintf("%s > ", color.Green.Add(fmt.Sprintf("[%s]", version.Name)))
+var header = fmt.Sprintf("%s > ", color.Green.Add(fmt.Sprintf("[%s]", version.Code)))
 
 // Core is the logger for the package.
 type Core struct {
@@ -158,7 +158,7 @@ func (c *Core) Sync() error {
 	return c.Logger.Sync()
 }
 
-// NewTxLogCore creates a new Core.
-func NewTxLogCore(logger *zap.SugaredLogger, verbosity int) *Core {
+// NewCore creates a new Core.
+func NewCore(logger *zap.SugaredLogger, verbosity int) *Core {
 	return &Core{Logger: logger, Verbosity: verbosity}
 }

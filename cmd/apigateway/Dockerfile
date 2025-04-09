@@ -20,7 +20,9 @@ ENV CGO_ENABLED=0 GOOS=linux GOARCH=amd64
 # Move to working directory (/src).
 WORKDIR /src
 
-COPY public/ /tmp/public/
+COPY api/ui/swagger/ /celestinal/api/ui/swagger/
+COPY api/specs/ /celestinal/api/specs
+
 COPY . ./
 
 # Set the timezone and install CA certificates
@@ -40,10 +42,12 @@ RUN go clean -modcache
 
 # Stage run
 FROM alpine AS runner
+
 WORKDIR /app
 
 COPY --from=builder /bin/main ./main
-COPY --from=builder /tmp/public ./public
+COPY --from=builder /celestinal/api/ui/swagger ./api/ui/swagger
+COPY --from=builder /celestinal/api/specs ./api/specs
 
 # Set the timezone and install CA certificates
 RUN apk --no-cache add ca-certificates tzdata

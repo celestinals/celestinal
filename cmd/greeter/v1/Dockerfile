@@ -17,12 +17,11 @@ FROM golang:1.24.2-alpine AS builder
 # Move to working directory (/src).
 WORKDIR /src
 
-COPY .. ./
-
 # Set the timezone and install CA certificates
 RUN apk --no-cache add ca-certificates tzdata
-
 RUN apk add --no-cache git
+
+COPY . ./
 RUN go mod tidy
 
 WORKDIR /src
@@ -40,6 +39,7 @@ RUN go clean -modcache
 
 # Stage run
 FROM alpine AS runner
+
 WORKDIR /app
 
 COPY --from=builder /bin/main /bin/main

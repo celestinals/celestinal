@@ -21,7 +21,7 @@ import (
 	"sync"
 
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
-	"github.com/celestinals/celestinal/internal/utils/version"
+	"github.com/celestinals/celestinal/internal/pkg/version"
 	"github.com/celestinals/celestinal/pkg/names"
 
 	"github.com/spf13/pflag"
@@ -44,16 +44,18 @@ var flags = &celestinal.Flag{
 	Mode:    "dev",
 }
 
-// EdgeFlags global variable
-var edgeFlags = &celestinal.FlagEdge{
-	Telegram: false,
+// FlagAPIGateway global variable
+var apiGatewayFlags = &celestinal.FlagAPIGateway{
+	Telegram:     false,
+	ApiSpecsPath: "api/specs/v1",
+	SwaggerPath:  "api/ui/swagger",
 }
 
 // Parse flag args
 func Parse() *celestinal.Flag {
 	once.Do(func() {
 		if !isService {
-			pflag.BoolVarP(&edgeFlags.Telegram, "telegram", "t", edgeFlags.GetTelegram(), "turn on telegram system log ?")
+			pflag.BoolVarP(&apiGatewayFlags.Telegram, "telegram", "t", apiGatewayFlags.GetTelegram(), "turn on telegram system log ?")
 		}
 
 		pflag.StringVarP(&flags.Name, "name", "n", flags.GetName(), "hostname ?")
@@ -73,13 +75,13 @@ func Parse() *celestinal.Flag {
 	return flags
 }
 
-// ParseEdge flag args for apigateway service
-func ParseEdge() *celestinal.FlagEdge {
+// ParseAPIGateway flag args for apigateway service
+func ParseAPIGateway() *celestinal.FlagAPIGateway {
 	isService = false
 
 	_ = Parse()
 
-	return edgeFlags
+	return apiGatewayFlags
 }
 
 // SetDefault set default flag values

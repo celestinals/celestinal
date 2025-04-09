@@ -19,26 +19,29 @@ import (
 	"context"
 
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
+	"github.com/celestinals/celestinal/pkg/capsule"
+	"github.com/celestinals/celestinal/pkg/capsule/capsulehttp"
+	"github.com/celestinals/celestinal/pkg/capsule/capsuleutils"
 
 	"github.com/celestinals/celestinal/internal/apigateway/middleware"
 	"github.com/celestinals/celestinal/internal/apigateway/services/v1"
 	"github.com/celestinals/celestinal/internal/apigateway/utils/openapi"
+	"github.com/celestinals/celestinal/internal/apigateway/utils/registry"
 	"github.com/celestinals/celestinal/internal/apigateway/utils/watcher"
-	"github.com/celestinals/celestinal/internal/utils/version"
+	"github.com/celestinals/celestinal/internal/pkg/version"
 
-	"github.com/celestinals/celestinal/pkg/core"
 	"github.com/celestinals/celestinal/pkg/logger"
 	"github.com/celestinals/celestinal/pkg/protobuf"
 )
 
-// make sure apigateway implement core.Server
-// core.runner will be start application through core.Server interface
-var _ core.Server = (*Edge)(nil)
+// make sure apigateway implement capsule.Server
+// capsule.runner will be start application through capsule.Server interface
+var _ capsule.Server = (*Edge)(nil)
 
-// New creates a new gateway app, return core.Server interface
-func New(conf *celestinal.Config) core.Server {
+// New creates a new gateway app, return capsule.Server interface
+func New(conf *celestinal.Config) capsule.Server {
 	return &Edge{
-		server: core.NewHTTPServer(),
+		server: capsulehttp.New(),
 		config: conf,
 	}
 }
@@ -58,7 +61,7 @@ type Edge struct {
 
 	// server is the core server, manage http.ServeMux,
 	// runtime.ServeMux and HTTP server
-	server core.HTTPServer
+	server capsulehttp.Server
 }
 
 // registerServiceServer gRPC server endpoint.
@@ -67,7 +70,7 @@ func (edge *Edge) registerServiceServer(ctx context.Context) error {
 	// Create folder at services, inherit base package, override function,
 	// implement business logic
 	// See: services/v1/greeter
-	serviceList := []core.ServiceRegistrar{
+	serviceList := []capsuleutils.ServiceRegistrar{
 		// Example: register the greeter service to the gateway
 		services.NewGreeter(),
 		// add more service here ...
@@ -77,7 +80,7 @@ func (edge *Edge) registerServiceServer(ctx context.Context) error {
 }
 
 // visit all service by Accept function
-func (edge *Edge) visit(ctx context.Context, services ...core.ServiceRegistrar) error {
+func (edge *Edge) visit(ctx context.Context, services ...capsuleutils.ServiceRegistrar) error {
 	for _, service := range services {
 		if err := service.Accept(ctx, edge.server); err != nil {
 			return err
@@ -89,7 +92,7 @@ func (edge *Edge) visit(ctx context.Context, services ...core.ServiceRegistrar) 
 
 // use is a chain of functions to use when accepting the request
 // serve is a function to use when accepting the request
-func (edge *Edge) use(serve func(core.HTTPServer, *celestinal.Config)) {
+func (edge *Edge) use(serve func(capsulehttp.Server, *celestinal.Config)) {
 	serve(edge.server, edge.config)
 }
 
@@ -103,6 +106,8 @@ func (edge *Edge) functions(ctx context.Context) error {
 
 	// watch service change on service registry
 	edge.use(watcher.Serve)
+
+	edge.use(registry.Serve)
 
 	return edge.registerServiceServer(ctx)
 }
@@ -127,7 +132,7 @@ func (edge *Edge) Start(ctx context.Context) error {
 	// return errors.F("apigateway: failed to listen and serve")
 }
 
-// Shutdown implements core.Server.
+// Shutdown implements capsule.Server.
 func (edge *Edge) Shutdown(ctx context.Context) error {
 	return edge.server.Shutdown(ctx)
 }

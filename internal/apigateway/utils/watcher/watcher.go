@@ -19,13 +19,13 @@ import (
 	"time"
 
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
-	"github.com/celestinals/celestinal/pkg/core"
+	"github.com/celestinals/celestinal/pkg/capsule/capsulehttp"
 )
 
 const timeout = time.Second * 2
 
 // Serve is watching function consul when service info was changed
-func Serve(_ core.HTTPServer, config *celestinal.Config) {
+func Serve(_ capsulehttp.Server, config *celestinal.Config) {
 	_ = config
 
 	go service()

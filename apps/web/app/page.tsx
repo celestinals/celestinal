@@ -1,4 +1,4 @@
-import { Button } from "../../../packages/celestinal-ui/src/components/button"
+import { Button } from '../../../packages/celestinal-ui/src/components/button';
 
 export default function Page() {
   return (
@@ -10,5 +10,5 @@ export default function Page() {
         </Button>
       </div>
     </div>
-  )
+  );
 }

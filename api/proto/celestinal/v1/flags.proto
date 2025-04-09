@@ -26,6 +26,8 @@ message Flag {
   string mode = 3 [(buf.validate.field).string.pattern = "^(dev|prod|sandbox)$"];
 }
 
-message FlagEdge {
+message FlagAPIGateway {
   bool telegram = 1;
+  string swagger_path = 2;
+  string api_specs_path = 3;
 }

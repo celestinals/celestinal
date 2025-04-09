@@ -53,7 +53,7 @@ type Noti struct {
 
 // Send noti to group telegram
 func (r *Noti) Send(msg *celestinal.TelegramMessage) error {
-	flags := flag.ParseEdge()
+	flags := flag.ParseAPIGateway()
 	if !flags.Telegram {
 		return nil
 	}
