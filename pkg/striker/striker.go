@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package capsule
+package striker
 
 import (
 	"context"
@@ -23,14 +23,14 @@ import (
 	"go.uber.org/fx"
 )
 
-// capsule represents the container with uber/fx frameworks.
+// striker represents the container with uber/fx frameworks.
 // manage the lifecycle of the application.
-type capsule struct {
+type striker struct {
 	engine *fx.App
 }
 
 // Run the app with the given context.
-func (c *capsule) Run(ctx context.Context) error {
+func (s *striker) Run(ctx context.Context) error {
 	err := make(chan error)
 	sig := make(chan os.Signal, 1)
 	signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM)
@@ -39,32 +39,32 @@ func (c *capsule) Run(ctx context.Context) error {
 	// defer close(sig)
 
 	// fork the goroutine 1 for start the app
-	go c.onStart(ctx, err)
+	go s.onStart(ctx, err)
 
 	// fork the goroutine 2 for stop the app
-	go c.onStop(ctx, sig, err)
+	go s.onStop(ctx, sig, err)
 
 	// wait for the error from the goroutine 1 or 2, end the app
 	return <-err
 }
 
 // onStart the app with the given context.
-func (c *capsule) onStart(ctx context.Context, errChan chan<- error) {
+func (s *striker) onStart(ctx context.Context, errChan chan<- error) {
 	// if the error is not nil, return the error to err channel end goroutine 1
-	if err := c.engine.Start(ctx); err != nil {
+	if err := s.engine.Start(ctx); err != nil {
 		errChan <- err
 	}
 }
 
 // onStop the app with the given context.
-func (c *capsule) onStop(
+func (s *striker) onStop(
 	ctx context.Context, sigChan <-chan os.Signal, errChan chan<- error) {
 
 	// wait for the signal interrupt from the OS
 	<-sigChan
 
 	// if the error is not nil, return the error to err channel, end goroutine 2
-	if err := c.engine.Stop(ctx); err != nil {
+	if err := s.engine.Stop(ctx); err != nil {
 		errChan <- err
 	}
 

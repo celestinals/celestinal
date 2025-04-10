@@ -18,8 +18,8 @@ package services
 import (
 	"context"
 
-	"github.com/celestinals/celestinal/pkg/capsule/capsulehttp"
-	"github.com/celestinals/celestinal/pkg/capsule/capsuleutils"
+	"github.com/celestinals/celestinal/pkg/striker/skhttp"
+	"github.com/celestinals/celestinal/pkg/striker/skutils"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
 
@@ -30,10 +30,10 @@ import (
 	"github.com/celestinals/celestinal/pkg/names"
 )
 
-var _ capsuleutils.ServiceRegistrar = (*greeter)(nil)
+var _ skutils.ServiceRegistrar = (*greeter)(nil)
 
 // NewGreeter creates a new greeter service to register handler to gateway
-func NewGreeter() capsuleutils.ServiceRegistrar {
+func NewGreeter() skutils.ServiceRegistrar {
 	return greeter{}
 }
 
@@ -43,7 +43,7 @@ type greeter struct {
 }
 
 // Accept accepts the greeter service
-func (g greeter) Accept(ctx context.Context, server capsulehttp.Server) error {
+func (g greeter) Accept(ctx context.Context, server skhttp.Server) error {
 	return visitor.VisitService(ctx, names.GreeterV1, server, g)
 }
 

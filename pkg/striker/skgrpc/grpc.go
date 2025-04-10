@@ -12,15 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package capsulegrpc
+// Package skgrpc provides a gRPC server for the celestinal.
+package skgrpc
 
 import (
 	"context"
 	"fmt"
 
-	"github.com/celestinals/celestinal/pkg/capsule"
-	"github.com/celestinals/celestinal/pkg/capsule/capsulenet"
+	"github.com/celestinals/celestinal/api/discovery/v1"
+	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
 	"github.com/celestinals/celestinal/pkg/errors"
+	"github.com/celestinals/celestinal/pkg/logger"
+	"github.com/celestinals/celestinal/pkg/striker"
+	"github.com/celestinals/celestinal/pkg/striker/sknet"
 	"google.golang.org/grpc"
 )
 
@@ -29,13 +33,13 @@ var (
 	_ ServiceServer = (*Server)(nil)
 
 	// Ensure Server implements Server.
-	_ capsule.Server = (*Server)(nil)
+	_ striker.Server = (*Server)(nil)
 )
 
 // ServiceServer is a gRPC service server.
 type ServiceServer interface {
 	AsServer() *grpc.Server
-	Serve(info *capsule.ServiceInfo) error
+	Serve(info *striker.ServiceInfo) error
 	Shutdown(ctx context.Context) error
 }
 
@@ -71,14 +75,29 @@ func (s *Server) AsServer() *grpc.Server {
 
 // Serve starts the http server.
 // return error if the http server fails to start.
-func (s *Server) Serve(info *capsule.ServiceInfo) error {
+func (s *Server) Serve(info *striker.ServiceInfo) error {
 	if info == nil {
 		return fmt.Errorf("info is nil")
 	}
 
-	listener, err := capsulenet.ListenNetworkTCP(info.Addr)
+	listener, err := sknet.ListenNetworkTCP(info.Addr)
 	if err != nil {
 		return err
+	}
+
+	host, port, err := sknet.SplitHostPortListener(listener)
+	if err != nil {
+		return err
+	}
+
+	if err := discovery.New("http://0.0.0.0:9000").
+		Register(context.Background(), &celestinal.RegisterRequest{
+			Name:    info.Name,
+			Address: fmt.Sprintf("%s:%d", host, port),
+			Ttl:     info.Ttl.Milliseconds(),
+		}); err != nil {
+
+		logger.Errorf("GRPC.Serve: error when register %v", err)
 	}
 
 	return s.AsServer().Serve(listener)

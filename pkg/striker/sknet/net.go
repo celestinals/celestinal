@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package capsulenet provide functions extended of http/net
-package capsulenet
+// Package sknet provide functions extended of http/net
+package sknet
 
 import (
 	"net"

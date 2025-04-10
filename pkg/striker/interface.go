@@ -12,26 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package internal provides the internal function for the capsule.
-package internal
+// Package striker provides the core setting for the application.
+package striker
 
 import (
-	"go.uber.org/fx"
+	"context"
 )
 
-var options = fx.Provide()
-
-// Provide provides the given constructors.
-func Provide(constructors ...any) {
-	options = fx.Options(options, fx.Provide(constructors...))
+// Application represents the application when all constructor was build
+// by striker.Build() start the app, it will start the server and provide all
+// constructor needed
+type Application interface {
+	Run(ctx context.Context) error
 }
 
-// Option returns the internal option.
-func Option() fx.Option {
-	return options
-}
-
-// Invoke invokes the given constructors.
-func Invoke(constructors ...any) {
-	options = fx.Options(options, fx.Invoke(constructors...))
+// Server represents the HTTP/gRPC server interface.
+type Server interface {
+	Start(ctx context.Context) error
+	Shutdown(ctx context.Context) error
 }

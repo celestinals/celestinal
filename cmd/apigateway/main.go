@@ -21,20 +21,20 @@ import (
 	"github.com/celestinals/celestinal/internal/apigateway"
 	"github.com/celestinals/celestinal/internal/pkg/version"
 
-	"github.com/celestinals/celestinal/pkg/capsule"
 	"github.com/celestinals/celestinal/pkg/config"
 	"github.com/celestinals/celestinal/pkg/flag"
 	"github.com/celestinals/celestinal/pkg/logger"
 	"github.com/celestinals/celestinal/pkg/names"
+	"github.com/celestinals/celestinal/pkg/striker"
 )
 
 // Build and run the main application with environment variables.
 // Remember to inject all layers of the application using the
-// capsule.Inject() function.
+// striker.Inject() function.
 //
 // Example:
 //
-//	_ = capsule.Inject(controllers.New)
+//	_ = striker.Inject(controllers.New)
 //
 // This is the celestinal apigateway application, it will automatically connect to
 // other services via gRPC. Run the application along with other services
@@ -54,7 +54,7 @@ func main() {
 
 	_ = flag.ParseAPIGateway()
 
-	app := capsule.Build(apigateway.New, config.Default)
+	app := striker.Build(apigateway.New, config.Default)
 	if err := app.Run(context.Background()); err != nil {
 		logger.Fatal(err)
 	}

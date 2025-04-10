@@ -12,19 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package capsuleutils
+// Package skutils provides utility functions for striker.
+package skutils
 
 import (
 	"context"
 
-	"github.com/celestinals/celestinal/pkg/capsule/capsulehttp"
+	"github.com/celestinals/celestinal/pkg/striker/skhttp"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
 )
 
 // ServiceRegistrar is an interface for registering a gRPC service. Not a server !!!
 type ServiceRegistrar interface {
-	Accept(context.Context, capsulehttp.Server) error
+	Accept(context.Context, skhttp.Server) error
 	Register(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) error
 }
 
@@ -35,7 +36,7 @@ type ServiceRegistrar interface {
 //
 // - github.com/grpc-ecosystem/grpc-gateway/v2/runtime
 func RegisterService(
-	ctx context.Context, httpServer capsulehttp.Server, service ServiceRegistrar, endpoint string,
+	ctx context.Context, httpServer skhttp.Server, service ServiceRegistrar, endpoint string,
 	opts []grpc.DialOption) error {
 
 	if err := service.Register(

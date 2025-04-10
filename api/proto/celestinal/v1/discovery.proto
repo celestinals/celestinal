@@ -26,7 +26,7 @@ message HeartbeatRequest {
 
 message RegisterRequest {
   string name = 1 [(buf.validate.field).string.pattern = "^celestinal\\."];
-  string address = 2 [(buf.validate.field).string.address = true];
+  string address = 2 [(buf.validate.field).string.host_and_port = true];
   int64 ttl = 3 [(buf.validate.field).int64.gt = 0];
 }
 

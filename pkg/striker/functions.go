@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package capsule
+package striker
 
 import (
 	"context"
 
-	"github.com/celestinals/celestinal/pkg/capsule/internal"
 	"github.com/celestinals/celestinal/pkg/flag"
+	"github.com/celestinals/celestinal/pkg/striker/internal"
 	"go.uber.org/fx"
 )
 
@@ -31,13 +31,13 @@ func Build(constructors ...any) Application {
 
 	// disable log: use fx.NopLogger
 	if flag.Parse().GetMode() != "dev" {
-		return &capsule{
+		return &striker{
 			engine: fx.New(
 				internal.Option(), fx.Invoke(runner), fx.NopLogger),
 		}
 	}
 
-	return &capsule{
+	return &striker{
 		engine: fx.New(internal.Option(), fx.Invoke(runner)),
 	}
 }

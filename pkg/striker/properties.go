@@ -12,22 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package capsule provides the core setting for the application.
-package capsule
+package striker
 
 import (
-	"context"
+	"time"
+
+	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
 )
 
-// Application represents the application when all constructor was build
-// by capsule.Build() start the app, it will start the server and provide all
-// constructor needed
-type Application interface {
-	Run(ctx context.Context) error
-}
-
-// Server represents the HTTP/gRPC server interface.
-type Server interface {
-	Start(ctx context.Context) error
-	Shutdown(ctx context.Context) error
+// ServiceInfo is Serve method properties
+type ServiceInfo struct {
+	Config *celestinal.Config
+	Addr   string
+	Name   string
+	Ttl    time.Duration
 }

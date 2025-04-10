@@ -19,8 +19,8 @@ import (
 	"context"
 
 	"github.com/celestinals/celestinal/internal/pkg/eventq"
-	"github.com/celestinals/celestinal/pkg/capsule/capsulehttp"
-	"github.com/celestinals/celestinal/pkg/capsule/capsuleutils"
+	"github.com/celestinals/celestinal/pkg/striker/skhttp"
+	"github.com/celestinals/celestinal/pkg/striker/skutils"
 
 	"github.com/celestinals/celestinal/pkg/logger"
 	"github.com/celestinals/celestinal/pkg/names"
@@ -29,8 +29,8 @@ import (
 )
 
 // VisitService visits the greeter service.
-func VisitService(ctx context.Context, ns names.Namespace, server capsulehttp.Server,
-	service capsuleutils.ServiceRegistrar) error {
+func VisitService(ctx context.Context, ns names.Namespace, server skhttp.Server,
+	service skutils.ServiceRegistrar) error {
 
 	eventq.Subscribe(ctx, ns.String(), func(endpoint string) error {
 		opts := []grpc.DialOption{
@@ -38,7 +38,7 @@ func VisitService(ctx context.Context, ns names.Namespace, server capsulehttp.Se
 		}
 
 		logger.Infof("[visitor.VisitService] %s %s", ns.String(), "******")
-		return capsuleutils.RegisterService(ctx, server, service, endpoint, opts)
+		return skutils.RegisterService(ctx, server, service, endpoint, opts)
 	})
 
 	return nil

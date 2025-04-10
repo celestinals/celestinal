@@ -26,10 +26,10 @@ import (
 	"google.golang.org/grpc/grpclog"
 
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
-	"github.com/celestinals/celestinal/pkg/capsule/capsulehttp"
 	"github.com/celestinals/celestinal/pkg/flag"
 	"github.com/celestinals/celestinal/pkg/noti"
 	"github.com/celestinals/celestinal/pkg/protobuf"
+	"github.com/celestinals/celestinal/pkg/striker/skhttp"
 )
 
 // New middleware handler
@@ -40,7 +40,7 @@ func New(conf *celestinal.Config) *Middleware {
 }
 
 // Serve middleware handler for http handler in apigateway server
-func Serve(server capsulehttp.Server, conf *celestinal.Config) {
+func Serve(server skhttp.Server, conf *celestinal.Config) {
 	// new middleware handler
 	mdw := New(conf)
 

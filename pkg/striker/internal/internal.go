@@ -12,14 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package capsule
+// Package internal provides the internal function for the striker.
+package internal
 
-import "github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
+import (
+	"go.uber.org/fx"
+)
 
-// ServiceInfo is Serve method properties
-type ServiceInfo struct {
-	Config *celestinal.Config
-	Addr   string
-	Tags   []string
-	Name   string
+var options = fx.Provide()
+
+// Provide provides the given constructors.
+func Provide(constructors ...any) {
+	options = fx.Options(options, fx.Provide(constructors...))
+}
+
+// Option returns the internal option.
+func Option() fx.Option {
+	return options
+}
+
+// Invoke invokes the given constructors.
+func Invoke(constructors ...any) {
+	options = fx.Options(options, fx.Invoke(constructors...))
 }

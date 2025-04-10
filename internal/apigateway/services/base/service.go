@@ -18,15 +18,15 @@ package base
 import (
 	"context"
 
-	"github.com/celestinals/celestinal/pkg/capsule/capsulehttp"
-	"github.com/celestinals/celestinal/pkg/capsule/capsuleutils"
+	"github.com/celestinals/celestinal/pkg/striker/skhttp"
+	"github.com/celestinals/celestinal/pkg/striker/skutils"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
 
 	"github.com/celestinals/celestinal/pkg/errors"
 )
 
-var _ capsuleutils.ServiceRegistrar = (*Base)(nil)
+var _ skutils.ServiceRegistrar = (*Base)(nil)
 
 // Base represents the base service
 type Base struct{}
@@ -38,6 +38,6 @@ func (b Base) Register(_ context.Context, _ *runtime.ServeMux, _ string,
 }
 
 // Accept accepts the base service
-func (b Base) Accept(_ context.Context, _ capsulehttp.Server) error {
+func (b Base) Accept(_ context.Context, _ skhttp.Server) error {
 	return errors.ErrUnimplemented
 }

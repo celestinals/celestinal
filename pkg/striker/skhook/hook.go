@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package capsulehook provides a way to add hooks to the application lifecycle.
-package capsulehook
+// Package skhook provides a way to add hooks to the application lifecycle.
+package skhook
 
 import (
 	"context"
 
-	"github.com/celestinals/celestinal/pkg/capsule/internal"
+	"github.com/celestinals/celestinal/pkg/striker/internal"
 	"go.uber.org/fx"
 )
 

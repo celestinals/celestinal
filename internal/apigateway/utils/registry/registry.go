@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// Package registry provides a service registry for the celestinal.
 package registry
 
 import (
@@ -19,23 +20,29 @@ import (
 	"net/http"
 
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
-	"github.com/celestinals/celestinal/pkg/capsule/capsulehttp"
+	"github.com/celestinals/celestinal/internal/pkg/eventq"
 	"github.com/celestinals/celestinal/pkg/errors"
 	"github.com/celestinals/celestinal/pkg/logger"
 	"github.com/celestinals/celestinal/pkg/protobuf"
+	"github.com/celestinals/celestinal/pkg/striker/skhttp"
 	"github.com/gorilla/schema"
 )
 
-func Serve(server capsulehttp.Server, _ *celestinal.Config) {
+// Serve registers the service registry to the server.
+func Serve(server skhttp.Server, _ *celestinal.Config) {
 	sr := &ServiceRegistry{}
 
 	server.HTTPMux().HandleFunc("/discovery/register", sr.Register)
 	server.HTTPMux().HandleFunc("/discovery/heartbeat", sr.Heartbeat)
 	server.HTTPMux().HandleFunc("/discovery/discover", sr.Discover)
+
+	logger.Info("[service registry] running ...")
 }
 
+// ServiceRegistry is a service registry for the celestinal.
 type ServiceRegistry struct{}
 
+// Register handles the service registration request.
 func (sr *ServiceRegistry) Register(w http.ResponseWriter, r *http.Request) {
 	var req celestinal.RegisterRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -52,11 +59,12 @@ func (sr *ServiceRegistry) Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//TODO:
+	eventq.Publish(req.GetName(), req.GetAddress())
 
 	w.WriteHeader(http.StatusOK)
 }
 
+// Heartbeat handles the heartbeat request.
 func (sr *ServiceRegistry) Heartbeat(w http.ResponseWriter, r *http.Request) {
 	var req celestinal.HeartbeatRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -76,26 +84,27 @@ func (sr *ServiceRegistry) Heartbeat(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
+// Discover handles the discovery request.
 func (sr *ServiceRegistry) Discover(w http.ResponseWriter, r *http.Request) {
 	var decoder = schema.NewDecoder()
 	var req celestinal.DiscoverRequest
 
 	if err := r.ParseForm(); err != nil {
-		logger.Errorf("ServiceRegistry.Register: error when parse form %v", err)
+		logger.Errorf("ServiceRegistry.Discover: error when parse form %v", err)
 		http.Error(w, errors.ErrInvalidData.Error(), http.StatusBadRequest)
 		return
 	}
 
 	if err := decoder.Decode(&req, r.Form); err != nil {
-		logger.Errorf("ServiceRegistry.Register: error when decode %v", err)
+		logger.Errorf("ServiceRegistry.Discover: error when decode %v", err)
 		http.Error(w, errors.ErrInvalidData.Error(), http.StatusBadRequest)
 		return
 	}
 
-	logger.Debugf("ServiceRegistry.Register: decode %s", req.String())
+	logger.Debugf("ServiceRegistry.Discover: decode %s", req.String())
 
 	if err := protobuf.Validate(&req); err != nil {
-		logger.Errorf("ServiceRegistry.Register: error when validate %v", err)
+		logger.Errorf("ServiceRegistry.Discover: error when validate %v", err)
 		http.Error(w, errors.ErrInvalidData.Error(), http.StatusBadRequest)
 		return
 	}
@@ -104,5 +113,9 @@ func (sr *ServiceRegistry) Discover(w http.ResponseWriter, r *http.Request) {
 	resp.Name = req.Name
 
 	w.WriteHeader(http.StatusOK)
-	_ = json.NewEncoder(w).Encode(&resp)
+	if err := json.NewEncoder(w).Encode(&resp); err != nil {
+		logger.Errorf("ServiceRegistry.Discover: error when encode %v", err)
+		http.Error(w, errors.ErrInvalidData.Error(), http.StatusInternalServerError)
+		return
+	}
 }

@@ -17,27 +17,28 @@ package greeter
 
 import (
 	"context"
+	"time"
 
-	"github.com/celestinals/celestinal/pkg/capsule/capsulegrpc"
+	"github.com/celestinals/celestinal/pkg/striker/skgrpc"
 
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/greeter/v1"
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
 	"github.com/celestinals/celestinal/internal/greeter/v1/controllers"
 
-	"github.com/celestinals/celestinal/pkg/capsule"
 	"github.com/celestinals/celestinal/pkg/flag"
 	"github.com/celestinals/celestinal/pkg/names"
 	"github.com/celestinals/celestinal/pkg/protobuf"
+	"github.com/celestinals/celestinal/pkg/striker"
 )
 
-// make sure Greeter implement capsule.Server
-// it will start by capsule.runner through capsule.Server
-var _ capsule.Server = (*Greeter)(nil)
+// make sure Greeter implement striker.Server
+// it will start by striker.runner through striker.Server
+var _ striker.Server = (*Greeter)(nil)
 
 // New creates a new Greeter module.
-func New(srv controllers.IGreeter, conf *celestinal.Config) capsule.Server {
+func New(srv controllers.IGreeter, conf *celestinal.Config) striker.Server {
 	return &Greeter{
-		Server: capsulegrpc.NewDefault(),
+		Server: skgrpc.NewDefault(),
 		srv:    srv,
 		config: conf,
 	}
@@ -45,12 +46,12 @@ func New(srv controllers.IGreeter, conf *celestinal.Config) capsule.Server {
 
 // Greeter implements GreeterServiceServer.
 type Greeter struct {
-	*capsulegrpc.Server // inherit capsulegrpc.Server
-	config              *celestinal.Config
-	srv                 greeter.GreeterServiceServer
+	*skgrpc.Server // inherit skgrpc.Server
+	config         *celestinal.Config
+	srv            greeter.GreeterServiceServer
 }
 
-// Start implements IGreeter, override capsule.Server.Start
+// Start implements IGreeter, override striker.Server.Start
 func (g *Greeter) Start(_ context.Context) error {
 	greeter.PrintASCII()
 	if err := protobuf.Validate(g.config); err != nil {
@@ -59,10 +60,10 @@ func (g *Greeter) Start(_ context.Context) error {
 
 	greeter.RegisterGreeterServiceServer(g.AsServer(), g.srv)
 
-	return g.Serve(&capsule.ServiceInfo{
+	return g.Serve(&striker.ServiceInfo{
 		Config: g.config,
 		Addr:   flag.Parse().GetAddress(),
-		Tags:   []string{"greeter", names.GreeterV1.String()},
 		Name:   names.GreeterV1.String(),
+		Ttl:    time.Minute * 5,
 	})
 }

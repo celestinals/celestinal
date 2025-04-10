@@ -18,19 +18,19 @@ package greeter
 import (
 	"github.com/celestinals/celestinal/internal/greeter/v1/controllers"
 	"github.com/celestinals/celestinal/internal/greeter/v1/domain"
-	"github.com/celestinals/celestinal/pkg/capsule"
+	"github.com/celestinals/celestinal/pkg/striker"
 )
 
 var (
 	// handlers/controllers layer
-	_ = capsule.Inject(controllers.New)
+	_ = striker.Inject(controllers.New)
 
 	// domain layer
-	_ = capsule.Inject(domain.New)
+	_ = striker.Inject(domain.New)
 
 	// repo layer
-	//_ = capsule.Inject(repos.NewAuthor)
+	//_ = striker.Inject(repos.NewAuthor)
 
 	// data layer
-	//_ = capsule.Inject(authors.New)
+	//_ = striker.Inject(authors.New)
 )

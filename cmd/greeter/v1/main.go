@@ -20,27 +20,27 @@ import (
 
 	greeterpb "github.com/celestinals/celestinal/api/gen/go/celestinal/greeter/v1"
 	"github.com/celestinals/celestinal/internal/greeter/v1"
-	"github.com/celestinals/celestinal/pkg/capsule"
 	"github.com/celestinals/celestinal/pkg/config"
 	"github.com/celestinals/celestinal/pkg/flag"
 	"github.com/celestinals/celestinal/pkg/logger"
 	"github.com/celestinals/celestinal/pkg/names"
+	"github.com/celestinals/celestinal/pkg/striker"
 )
 
 // Build and run main application with environment variable
 // Remember to inject all layers of the application by
-// capsule.Inject() function
+// striker.Inject() function
 //
 // Example:
 //
-// _ = capsule.Inject(controllers.New)
+// _ = striker.Inject(controllers.New)
 func main() {
 	flag.SetDefault(names.GreeterV1, "127.0.0.1:0", "dev")
 	flag.SetConsole(greeterpb.ASCII)
 
 	_ = flag.Parse()
 
-	app := capsule.Build(greeter.New, config.Default)
+	app := striker.Build(greeter.New, config.Default)
 	if err := app.Run(context.Background()); err != nil {
 		logger.Fatal(err)
 	}

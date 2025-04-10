@@ -20,12 +20,12 @@ import (
 	"strings"
 
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
-	"github.com/celestinals/celestinal/pkg/capsule/capsulehttp"
 	"github.com/celestinals/celestinal/pkg/flag"
+	"github.com/celestinals/celestinal/pkg/striker/skhttp"
 )
 
 // Serve return api json and swagger ui
-func Serve(server capsulehttp.Server, _ *celestinal.Config) {
+func Serve(server skhttp.Server, _ *celestinal.Config) {
 	flags := flag.ParseAPIGateway()
 
 	apifs := http.FileServer(http.Dir(flags.GetApiSpecsPath()))

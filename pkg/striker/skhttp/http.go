@@ -12,21 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package capsulehttp
+// Package skhttp provides a http server with grpc-gateway support.
+package skhttp
 
 import (
 	"context"
 	"net/http"
 
-	"github.com/celestinals/celestinal/pkg/capsule"
 	"github.com/celestinals/celestinal/pkg/errors"
 	"github.com/celestinals/celestinal/pkg/flag"
+	"github.com/celestinals/celestinal/pkg/striker"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 )
 
 var (
 	// Ensure httpServer implements Server.
-	_ capsule.Server = (*httpServer)(nil)
+	_ striker.Server = (*httpServer)(nil)
 
 	// Ensure httpServer implements HttpServer.
 	_ Server = (*httpServer)(nil)
