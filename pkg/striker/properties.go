@@ -25,5 +25,5 @@ type ServiceInfo struct {
 	Config *celestinal.Config
 	Addr   string
 	Name   string
-	Ttl    time.Duration
+	TTL    time.Duration
 }

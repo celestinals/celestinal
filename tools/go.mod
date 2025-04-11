@@ -8,6 +8,7 @@ require (
 	github.com/bufbuild/buf v1.50.1
 	github.com/celestinals/celestinal/api v0.0.0-00010101000000-000000000000
 	github.com/codesenberg/bombardier v1.2.6
+	github.com/common-nighthawk/go-figure v0.0.0-20210622060536-734e95fb86be
 	github.com/golangci/golangci-lint v1.64.7
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.26.1
 	github.com/vektra/mockery/v2 v2.53.2

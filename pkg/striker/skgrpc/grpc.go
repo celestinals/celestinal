@@ -94,7 +94,7 @@ func (s *Server) Serve(info *striker.ServiceInfo) error {
 		Register(context.Background(), &celestinal.RegisterRequest{
 			Name:    info.Name,
 			Address: fmt.Sprintf("%s:%d", host, port),
-			Ttl:     info.Ttl.Milliseconds(),
+			Ttl:     info.TTL.Milliseconds(),
 		}); err != nil {
 
 		logger.Errorf("GRPC.Serve: error when register %v", err)

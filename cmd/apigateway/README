@@ -1,3 +1,0 @@
-cmd/apigateway directory is where you start the API.
-
-go run cmd/apigateway/main.go

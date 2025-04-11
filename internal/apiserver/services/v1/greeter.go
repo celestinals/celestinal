@@ -24,7 +24,7 @@ import (
 	"google.golang.org/grpc"
 
 	greeterpb "github.com/celestinals/celestinal/api/gen/go/celestinal/greeter/v1"
-	"github.com/celestinals/celestinal/internal/apigateway/services/base"
+	"github.com/celestinals/celestinal/internal/apiserver/services/base"
 	"github.com/celestinals/celestinal/internal/pkg/visitor"
 
 	"github.com/celestinals/celestinal/pkg/names"

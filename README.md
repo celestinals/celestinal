@@ -2,7 +2,7 @@
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
 
-<img src="https://avatars.githubusercontent.com/u/198875718" alt="celestinal" width="120px">
+<img src="./_docs/assets/cels.png" alt="celestinal" width="120px">
 
 ----
 
@@ -20,6 +20,7 @@ A system that centralizes logs from multiple microservices in a Cloud Native env
 - Distributed log collector (pull/push and agent-based)
 - Filter and display logs by namespace, service
 - Alert when logs containing critical errors are detected
+- Customizable Dashboard with Multiple Charts
 
 **Extensions**:
 - Support tracing with OpenTelemetry
@@ -30,6 +31,12 @@ A system that centralizes logs from multiple microservices in a Cloud Native env
 Copyright (c) Celestinal Labs. All rights reserved.
 
 Licensed under the [Apache 2.0](LICENSE) license.
+
+<p align="left">
+  <img src="./_docs/assets/cels-black.png" width="30"/>
+  <img src="./_docs/assets/cels-light.png" width="30"/>
+  <img src="./_docs/assets/cels-light2.png" width="30"/>
+</p>
 
 ##
 

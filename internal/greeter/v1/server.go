@@ -64,6 +64,6 @@ func (g *Greeter) Start(_ context.Context) error {
 		Config: g.config,
 		Addr:   flag.Parse().GetAddress(),
 		Name:   names.GreeterV1.String(),
-		Ttl:    time.Minute * 5,
+		TTL:    time.Minute * 5,
 	})
 }

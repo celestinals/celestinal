@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package openapi serve apigateway to host swagger ui
+// Package openapi serve apiserver to host swagger ui
 package openapi
 
 import (
@@ -26,7 +26,7 @@ import (
 
 // Serve return api json and swagger ui
 func Serve(server skhttp.Server, _ *celestinal.Config) {
-	flags := flag.ParseAPIGateway()
+	flags := flag.ParseAPIServer()
 
 	apifs := http.FileServer(http.Dir(flags.GetApiSpecsPath()))
 	server.HTTPMux().Handle("/api/", http.StripPrefix("/api/", apifs))

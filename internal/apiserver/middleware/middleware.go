@@ -39,12 +39,12 @@ func New(conf *celestinal.Config) *Middleware {
 	}
 }
 
-// Serve middleware handler for http handler in apigateway server
+// Serve middleware handler for http handler in apiserver server
 func Serve(server skhttp.Server, conf *celestinal.Config) {
 	// new middleware handler
 	mdw := New(conf)
 
-	// mdw.LogRequestBody(mdw.AllowCORS(e.apigateway.AsMux()))
+	// mdw.LogRequestBody(mdw.AllowCORS(e.apiserver.AsMux()))
 	server.Use(mdw.AllowCORS)
 	server.Use(mdw.LogRequestBody)
 }

@@ -18,6 +18,7 @@ import (
 	"context"
 
 	"github.com/celestinals/celestinal/pkg/flag"
+	"github.com/celestinals/celestinal/pkg/logger"
 	"github.com/celestinals/celestinal/pkg/striker/internal"
 	"go.uber.org/fx"
 )
@@ -25,6 +26,8 @@ import (
 // Build builds the application.
 // The application is built by providing the constructors.
 func Build(constructors ...any) Application {
+	logger.SetLogLevel(flag.Parse().GetLogLevel())
+
 	for _, constructor := range constructors {
 		internal.Provide(constructor)
 	}

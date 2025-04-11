@@ -34,7 +34,6 @@ func Default() *celestinal.Config {
 		ID, _ := strconv.ParseInt(sChatID, 10, 64)
 
 		conf = &celestinal.Config{
-			ApiAddr:       os.Getenv(celestinal.CelestinalPublic_CELESTINAL_PUBLIC_API_ADDR.String()),
 			TelegramToken: os.Getenv(celestinal.CelestinalPublic_CELESTINAL_PUBLIC_TELEGRAM_TOKEN.String()),
 			ChatId:        ID,
 		}

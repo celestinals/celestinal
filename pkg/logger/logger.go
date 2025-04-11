@@ -26,9 +26,15 @@ import (
 	"google.golang.org/grpc/grpclog"
 )
 
-var once sync.Once
+var (
+	once   sync.Once
+	onceLL sync.Once
+)
 
-var logcore = NewLogger()
+var (
+	logcore  = NewLogger()
+	logLevel = internal.LevelDebug
+)
 
 var _ Logger = (*internal.Core)(nil)
 
@@ -64,7 +70,8 @@ type SystemLog interface{ Logger }
 // NewLogger creates a new logger instance.
 func NewLogger() Logger {
 	logger := newLogger().Sugar()
-	return internal.NewCore(logger, internal.LevelDebug)
+
+	return internal.NewCore(logger, logLevel.Int())
 }
 
 // NewSystemLog init all system log,
@@ -72,12 +79,37 @@ func NewLogger() Logger {
 func NewSystemLog() SystemLog {
 	once.Do(func() {
 		logger := newLogger().Sugar()
-		logcore = internal.NewCore(logger, internal.LevelDebug)
+		logcore = internal.NewCore(logger, logLevel.Int())
 
-		grpclog.SetLoggerV2(internal.NewCore(logger, internal.LevelWarning))
+		grpclog.SetLoggerV2(internal.NewCore(logger, internal.LevelWarning.Int()))
 	})
 
 	return logcore
+}
+
+// SetLogLevel set logger default level
+func SetLogLevel(ll string) {
+	onceLL.Do(func() {
+		logLevel = getLogLevel(ll)
+	})
+}
+
+func getLogLevel(logLevel string) internal.Level {
+	level := internal.LevelDebug
+	switch logLevel {
+	case "debug":
+		level = internal.LevelDebug
+	case "info":
+		level = internal.LevelInfo
+	case "warn":
+		level = internal.LevelWarning
+	case "error":
+		level = internal.LevelError
+	default:
+		level = internal.LevelDebug
+	}
+
+	return level
 }
 
 // newLogger creates a new logger.

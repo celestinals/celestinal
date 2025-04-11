@@ -23,8 +23,8 @@ func (ns Namespace) String() string {
 }
 
 const (
-	// APIGateway names info
-	APIGateway Namespace = "celestinal.apigateway"
+	// APIServer names info
+	APIServer Namespace = "celestinal.apiserver"
 
 	// GreeterV1 names info
 	GreeterV1 Namespace = "celestinal.greeter.v1"

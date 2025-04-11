@@ -21,7 +21,7 @@ ENV CGO_ENABLED=0 GOOS=linux GOARCH=amd64
 WORKDIR /src
 
 COPY api/ui/swagger/ /celestinal/api/ui/swagger/
-COPY api/specs/ /celestinal/api/specs
+COPY api/specs/ /celestinal/api/specs/
 
 COPY . ./
 
@@ -32,10 +32,7 @@ RUN apk add --no-cache git
 RUN go mod tidy
 
 # Build the application
-RUN go build -ldflags="-s -w" -o /bin/main ./cmd/apigateway
-
-# Remove all source code files
-RUN rm -r *
+RUN go build -ldflags="-s -w" -o /bin/apiserver ./cmd/apiserver
 
 # Clean up
 RUN go clean -modcache
@@ -43,13 +40,16 @@ RUN go clean -modcache
 # Stage run
 FROM alpine AS runner
 
-WORKDIR /app
-
-COPY --from=builder /bin/main ./main
-COPY --from=builder /celestinal/api/ui/swagger ./api/ui/swagger
-COPY --from=builder /celestinal/api/specs ./api/specs
-
 # Set the timezone and install CA certificates
 RUN apk --no-cache add ca-certificates tzdata
 
-CMD [ "./main" ]
+WORKDIR /app
+
+COPY --from=builder /bin/apiserver ./bin/apiserver
+COPY --from=builder /celestinal/api/ui/swagger ./api/ui/swagger
+COPY --from=builder /celestinal/api/specs ./api/specs
+
+COPY --from=builder ./cmd/apiserver/docker-entrypoint.sh ./docker-entrypoint.sh
+RUN chmod +x ./docker-entrypoint.sh
+
+CMD [ "./docker-entrypoint.sh" ]

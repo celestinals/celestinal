@@ -37,7 +37,6 @@ import (
 func main() {
 	flag.SetDefault(names.GreeterV1, "127.0.0.1:0", "dev")
 	flag.SetConsole(greeterpb.ASCII)
-
 	_ = flag.Parse()
 
 	app := striker.Build(greeter.New, config.Default)

@@ -46,6 +46,8 @@ func (m *Flag) Validate() error {
 
 	// no validation rules for Mode
 
+	// no validation rules for LogLevel
+
 	return nil
 }
 
@@ -103,10 +105,10 @@ var _ interface {
 	ErrorName() string
 } = FlagValidationError{}
 
-// Validate checks the field values on FlagAPIGateway with the rules defined in
+// Validate checks the field values on FlagAPIServer with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
 // is returned.
-func (m *FlagAPIGateway) Validate() error {
+func (m *FlagAPIServer) Validate() error {
 	if m == nil {
 		return nil
 	}
@@ -120,9 +122,9 @@ func (m *FlagAPIGateway) Validate() error {
 	return nil
 }
 
-// FlagAPIGatewayValidationError is the validation error returned by
-// FlagAPIGateway.Validate if the designated constraints aren't met.
-type FlagAPIGatewayValidationError struct {
+// FlagAPIServerValidationError is the validation error returned by
+// FlagAPIServer.Validate if the designated constraints aren't met.
+type FlagAPIServerValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -130,22 +132,22 @@ type FlagAPIGatewayValidationError struct {
 }
 
 // Field function returns field value.
-func (e FlagAPIGatewayValidationError) Field() string { return e.field }
+func (e FlagAPIServerValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e FlagAPIGatewayValidationError) Reason() string { return e.reason }
+func (e FlagAPIServerValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e FlagAPIGatewayValidationError) Cause() error { return e.cause }
+func (e FlagAPIServerValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e FlagAPIGatewayValidationError) Key() bool { return e.key }
+func (e FlagAPIServerValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e FlagAPIGatewayValidationError) ErrorName() string { return "FlagAPIGatewayValidationError" }
+func (e FlagAPIServerValidationError) ErrorName() string { return "FlagAPIServerValidationError" }
 
 // Error satisfies the builtin error interface
-func (e FlagAPIGatewayValidationError) Error() string {
+func (e FlagAPIServerValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -157,14 +159,14 @@ func (e FlagAPIGatewayValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sFlagAPIGateway.%s: %s%s",
+		"invalid %sFlagAPIServer.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = FlagAPIGatewayValidationError{}
+var _ error = FlagAPIServerValidationError{}
 
 var _ interface {
 	Field() string
@@ -172,4 +174,4 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = FlagAPIGatewayValidationError{}
+} = FlagAPIServerValidationError{}

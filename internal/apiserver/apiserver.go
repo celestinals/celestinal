@@ -12,29 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package apigateway provides the apigateway
-package apigateway
+// Package apiserver provides the apiserver
+package apiserver
 
 import (
 	"context"
 
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
+	"github.com/celestinals/celestinal/pkg/flag"
 	"github.com/celestinals/celestinal/pkg/striker"
 	"github.com/celestinals/celestinal/pkg/striker/skhttp"
 	"github.com/celestinals/celestinal/pkg/striker/skutils"
 
-	"github.com/celestinals/celestinal/internal/apigateway/middleware"
-	"github.com/celestinals/celestinal/internal/apigateway/services/v1"
-	"github.com/celestinals/celestinal/internal/apigateway/utils/openapi"
-	"github.com/celestinals/celestinal/internal/apigateway/utils/registry"
-	"github.com/celestinals/celestinal/internal/apigateway/utils/watcher"
+	"github.com/celestinals/celestinal/internal/apiserver/handlers/openapi"
+	"github.com/celestinals/celestinal/internal/apiserver/handlers/registry"
+	"github.com/celestinals/celestinal/internal/apiserver/handlers/watcher"
+	"github.com/celestinals/celestinal/internal/apiserver/middleware"
+	"github.com/celestinals/celestinal/internal/apiserver/services/v1"
 	"github.com/celestinals/celestinal/internal/pkg/version"
 
 	"github.com/celestinals/celestinal/pkg/logger"
 	"github.com/celestinals/celestinal/pkg/protobuf"
 )
 
-// make sure apigateway implement striker.Server
+// make sure apiserver implement striker.Server
 // striker.runner will be start application through striker.Server interface
 var _ striker.Server = (*Edge)(nil)
 
@@ -46,7 +47,7 @@ func New(conf *celestinal.Config) striker.Server {
 	}
 }
 
-// Edge represents the celestinal app The apigateway application is the main
+// Edge represents the celestinal app The apiserver application is the main
 // entry point for the Celestinal. It will automatically connect to other
 // services via gRPC. Run the application along with other services
 // in the x/ directory. The application provides APIs for users through
@@ -55,7 +56,7 @@ func New(conf *celestinal.Config) striker.Server {
 // a Swagger UI interface for users to easily interact with the system
 // through a web interface.
 type Edge struct {
-	// config is the configuration of the apigateway app, load environment
+	// config is the configuration of the apiserver app, load environment
 	// variables from .env file
 	config *celestinal.Config
 
@@ -96,7 +97,7 @@ func (edge *Edge) use(serve func(skhttp.Server, *celestinal.Config)) {
 	serve(edge.server, edge.config)
 }
 
-// functions is chain of functions to use before starting the apigateway app
+// functions is chain of functions to use before starting the apiserver app
 func (edge *Edge) functions(ctx context.Context) error {
 	// new middleware handler
 	edge.use(middleware.Serve)
@@ -104,15 +105,16 @@ func (edge *Edge) functions(ctx context.Context) error {
 	// serve swagger ui
 	edge.use(openapi.Serve)
 
+	// register service to the gateway
+	edge.use(registry.Serve)
+
 	// watch service change on service registry
 	edge.use(watcher.Serve)
-
-	edge.use(registry.Serve)
 
 	return edge.registerServiceServer(ctx)
 }
 
-// Start the apigateway/gateway app
+// Start the apiserver/gateway app
 func (edge *Edge) Start(ctx context.Context) error {
 	// service ascii art banner
 	version.ASCII()
@@ -125,11 +127,11 @@ func (edge *Edge) Start(ctx context.Context) error {
 		return err
 	}
 
-	// Listen HTTP server (and apigateway calls to gRPC server endpoint)
+	// Listen HTTP server (and apiserver calls to gRPC server endpoint)
 	// log info in console and return register error if they exist
-	logger.Infof("[http] starting server %s", edge.config.GetApiAddr())
-	return edge.server.Listen(edge.config.GetApiAddr())
-	// return errors.F("apigateway: failed to listen and serve")
+	logger.Infof("[http] starting server %s", flag.Parse().GetAddress())
+	return edge.server.Listen(flag.Parse().GetAddress())
+	// return errors.F("apiserver: failed to listen and serve")
 }
 
 // Shutdown implements striker.Server.

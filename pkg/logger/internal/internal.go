@@ -24,21 +24,47 @@ import (
 	"go.uber.org/zap"
 )
 
+// Level is log level of logger
+type Level int
+
+// String return String type
+func (l Level) String() string {
+	switch l {
+	case LevelDebug:
+		return "debug"
+	case LevelInfo:
+		return "info"
+	case LevelWarning:
+		return "warning"
+	case LevelError:
+		return "error"
+	case LevelFatal:
+		return "fatal"
+	default:
+		return "unknown"
+	}
+}
+
+// Int return integer type
+func (l Level) Int() int {
+	return int(l)
+}
+
 const (
 	// LevelDebug is the lowest level of verbosity.
-	LevelDebug = 0
+	LevelDebug Level = 0
 
 	// LevelInfo is the default level of verbosity.
-	LevelInfo = 1
+	LevelInfo Level = 1
 
 	// LevelWarning is the default level of verbosity.
-	LevelWarning = 2
+	LevelWarning Level = 2
 
 	// LevelError is the default level of verbosity.
-	LevelError = 3
+	LevelError Level = 3
 
 	// LevelFatal is the highest level of verbosity.
-	LevelFatal = 4
+	LevelFatal Level = 4
 )
 
 var header = fmt.Sprintf("%s > ", color.Green.Add(fmt.Sprintf("[%s]", version.Code)))
@@ -59,7 +85,7 @@ func (c *Core) addPrefixFormat(format string) string {
 
 // Debug logs a debug message.
 func (c *Core) Debug(args ...any) {
-	if c.V(LevelDebug) {
+	if c.V(LevelDebug.Int()) {
 		c.Logger.Debug(c.addPrefix(args...)...)
 	}
 }
@@ -69,14 +95,14 @@ func (c *Core) Debugln(args ...any) { c.Debug(args...) }
 
 // Debugf logs a debug message with a format.
 func (c *Core) Debugf(format string, args ...any) {
-	if c.V(LevelDebug) {
+	if c.V(LevelDebug.Int()) {
 		c.Logger.Debugf(c.addPrefixFormat(format), args...)
 	}
 }
 
 // Info logs an info message.
 func (c *Core) Info(args ...any) {
-	if c.V(LevelInfo) {
+	if c.V(LevelInfo.Int()) {
 		c.Logger.Info(c.addPrefix(args...)...)
 	}
 }
@@ -88,14 +114,14 @@ func (c *Core) Infoln(args ...any) {
 
 // Infof logs an info message with a format.
 func (c *Core) Infof(format string, args ...any) {
-	if c.V(LevelInfo) {
+	if c.V(LevelInfo.Int()) {
 		c.Logger.Infof(c.addPrefixFormat(format), args...)
 	}
 }
 
 // Warning logs a warning message.
 func (c *Core) Warning(args ...any) {
-	if c.V(LevelWarning) {
+	if c.V(LevelWarning.Int()) {
 		c.Logger.Warn(c.addPrefix(args...)...)
 	}
 }
@@ -107,14 +133,14 @@ func (c *Core) Warningln(args ...any) {
 
 // Warningf logs a warning message with a format.s
 func (c *Core) Warningf(format string, args ...any) {
-	if c.V(LevelWarning) {
+	if c.V(LevelWarning.Int()) {
 		c.Logger.Warnf(c.addPrefixFormat(format), args...)
 	}
 }
 
 // Error logs an error message.
 func (c *Core) Error(args ...any) {
-	if c.V(LevelError) {
+	if c.V(LevelError.Int()) {
 		c.Logger.Error(c.addPrefix(args...)...)
 	}
 }
@@ -126,14 +152,14 @@ func (c *Core) Errorln(args ...any) {
 
 // Errorf logs an error message with a format.
 func (c *Core) Errorf(format string, args ...any) {
-	if c.V(LevelError) {
+	if c.V(LevelError.Int()) {
 		c.Logger.Errorf(c.addPrefixFormat(format), args...)
 	}
 }
 
 // Fatal logs a fatal message.
 func (c *Core) Fatal(args ...any) {
-	if c.V(LevelFatal) {
+	if c.V(LevelFatal.Int()) {
 		c.Logger.Fatal(c.addPrefix(args...)...)
 	}
 }
@@ -143,7 +169,7 @@ func (c *Core) Fatalln(args ...any) { c.Fatal(args...) }
 
 // Fatalf logs a fatal message with a format.
 func (c *Core) Fatalf(format string, args ...any) {
-	if c.V(LevelFatal) {
+	if c.V(LevelFatal.Int()) {
 		c.Logger.Fatalf(c.addPrefixFormat(format), args...)
 	}
 }

@@ -12,23 +12,4 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-syntax = "proto3";
-
-package celestinal.v1;
-
-import "buf/validate/validate.proto";
-
-option go_package = "github.com/celestinals/celestinal/api/gen/go/celestinal/v1;celestinal";
-
-message Flag {
-  string name = 1;
-  string address = 2 [(buf.validate.field).string.host_and_port = true];
-  string mode = 3 [(buf.validate.field).string.pattern = "^(dev|prod|sandbox)$"];
-  string log_level = 4 [(buf.validate.field).string.pattern = "^(debug|info|warn|error)$"];
-}
-
-message FlagAPIServer {
-  bool telegram = 1;
-  string swagger_path = 2;
-  string api_specs_path = 3;
-}
+package handlers

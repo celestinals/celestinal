@@ -18,13 +18,17 @@ package version
 import (
 	"fmt"
 	"runtime"
+	"strings"
+
+	"github.com/common-nighthawk/go-figure"
 )
 
 const asciiArt = `
-  _____      __     __ 
- / ___/___  / /___ / /_		%s
-/ /__ / -_)/ /(_-</ __/		--------
-\___/ \__//_//___/\__/ 		%s
+           ______       
+______________  /_______	
+_  ___/  _ \_  /__  ___/	%s
+/ /__ /  __/  / _(__  ) 	--------
+\___/ \___//_/  /____/  	%s
 `
 
 var (
@@ -42,19 +46,39 @@ var (
 	Name = "CELESTINAL"
 
 	// BrandName is the brand name of the project.s
-	BrandName = "CELESTINAL // API GATEWAY"
+	BrandName = "CELESTINAL // API SERVER"
 
 	// Code is the code of the project.
 	Code = "CELS"
 
 	// ASCIIArt using in console
-	ASCIIArt = fmt.Sprintf(asciiArt,
-		BrandName,
-		"celestial.apigateway",
-	)
+	ASCIIArt = figuregen(BrandName, "celestinal.apiserver")
 )
 
 // ASCII prints the ASCII art of the project.
 func ASCII() {
-	fmt.Println(ASCIIArt)
+	fmt.Print(ASCIIArt)
+}
+
+func figuregen(header string, footer string) string {
+	fig := figure.NewFigure("cels", "speed", true)
+	figureLines := strings.Split(fig.String(), "\n")
+	sideText := []string{
+		"",
+		"",
+		header,
+		"------------",
+		footer,
+	}
+
+	var v string
+	for i, line := range figureLines {
+		side := ""
+		if i < len(sideText) {
+			side = sideText[i]
+		}
+		v += fmt.Sprintf("%-35s %s\n", line, side)
+	}
+
+	return v
 }

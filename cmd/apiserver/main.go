@@ -18,7 +18,7 @@ package main
 import (
 	"context"
 
-	"github.com/celestinals/celestinal/internal/apigateway"
+	"github.com/celestinals/celestinal/internal/apiserver"
 	"github.com/celestinals/celestinal/internal/pkg/version"
 
 	"github.com/celestinals/celestinal/pkg/config"
@@ -36,7 +36,7 @@ import (
 //
 //	_ = striker.Inject(controllers.New)
 //
-// This is the celestinal apigateway application, it will automatically connect to
+// This is the celestinal apiserver application, it will automatically connect to
 // other services via gRPC. Run the application along with other services
 // in the x/ directory.The application provides APIs for users through a
 // single HTTP gateway following the REST API standard. The application
@@ -46,15 +46,14 @@ import (
 //
 // Run the application using the Makefile command
 //
-//	make run.apigateway // start celestinal apigateway
+//	make run.apiserver // start celestinal apiserver
 //	make run.<service> // start service
 func main() {
-	flag.SetDefault(names.APIGateway, "0.0.0.0:9000", "dev")
+	flag.SetDefault(names.APIServer, "0.0.0.0:9000", "dev")
 	flag.SetConsole(version.ASCIIArt)
+	_ = flag.ParseAPIServer()
 
-	_ = flag.ParseAPIGateway()
-
-	app := striker.Build(apigateway.New, config.Default)
+	app := striker.Build(apiserver.New, config.Default)
 	if err := app.Run(context.Background()); err != nil {
 		logger.Fatal(err)
 	}

@@ -15,7 +15,7 @@
 .PHONY: default
 
 default: default.print \
-	build.apigateway \
+	build.apiserver \
 	build.greeter
 
 default.print:
@@ -42,10 +42,10 @@ updaterule:
 #####################################################################
 #####################################################################
 
-build.apigateway: CELESTINAL_OUT ?= apigateway
-build.apigateway:
-	@go build -ldflags="-s -w" -o ./bin/$(CELESTINAL_OUT) ./cmd/apigateway
-	@echo "[DONE]  CELESTINAL: apigateway ... ok"
+build.apiserver: CELESTINAL_OUT ?= apiserver
+build.apiserver:
+	@go build -ldflags="-s -w" -o ./bin/$(CELESTINAL_OUT) ./cmd/apiserver
+	@echo "[DONE]  CELESTINAL: apiserver ... ok"
 
 
 build.greeter: CELESTINAL_OUT ?= greeter
@@ -55,9 +55,9 @@ build.greeter:
 
 #####################################################################
 
-run.apigateway: CELESTINAL_OUT ?= apigateway
-run.apigateway:
-	@go build -ldflags="-s -w" -o ./bin/$(CELESTINAL_OUT) ./cmd/apigateway && \
+run.apiserver: CELESTINAL_OUT ?= apiserver
+run.apiserver:
+	@go build -ldflags="-s -w" -o ./bin/$(CELESTINAL_OUT) ./cmd/apiserver && \
  	./bin/$(CELESTINAL_OUT)
 
 run.greeter: CELESTINAL_OUT ?= greeter
@@ -72,9 +72,9 @@ mesh:
 	@docker compose -f ./deploy/docker/mesh/docker-compose.yaml \
     -f ./deploy/docker/resource/docker-compose.resources.yaml up -d
 
-build.image.apigateway: TAG ?= celestinals/celestinal
-build.image.apigateway:
-	docker buildx build -f ./cmd/apigateway/Dockerfile -t $(TAG):latest .
+build.image.apiserver: TAG ?= celestinals/celestinal
+build.image.apiserver:
+	docker buildx build -f ./cmd/apiserver/Dockerfile -t $(TAG):latest .
 
 build.image.greeter: TAG ?= celestinals/celestinal.greeter
 build.image.greeter:

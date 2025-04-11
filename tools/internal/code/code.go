@@ -20,6 +20,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/common-nighthawk/go-figure"
 	"google.golang.org/protobuf/compiler/protogen"
 )
 
@@ -49,15 +50,11 @@ func GenerateFile(gen *protogen.Plugin, file *protogen.File) *protogen.Generated
 }
 
 func ascii(g *protogen.GeneratedFile, file *protogen.File) {
-	const asciiArt = `
-  _____      __     __ 
- / ___/___  / /___ / /_		%s
-/ /__ / -_)/ /(_-</ __/		--------
-\___/ \__//_//___/\__/ 		%s
-`
+
 	n := "CELESTINAL // " + strings.ToUpper(string(file.GoPackageName))
-	s := fmt.Sprintf(asciiArt, n, *file.Proto.Package)
-	g.P("const ASCII = `", s, "\n`")
+	asciiArt := figuregen(n, *file.Proto.Package)
+
+	g.P("const ASCII = `\n", asciiArt, "`")
 	g.P("\n")
 
 	g.P("// PrintASCII the ASCII art to the console.")
@@ -65,4 +62,27 @@ func ascii(g *protogen.GeneratedFile, file *protogen.File) {
 	g.P("\tfmt.Print(ASCII)")
 	g.P("}")
 	g.P("\n")
+}
+
+func figuregen(header string, footer string) string {
+	fig := figure.NewFigure("cels", "speed", true)
+	figureLines := strings.Split(fig.String(), "\n")
+	sideText := []string{
+		"",
+		"",
+		header,
+		"------------",
+		footer,
+	}
+
+	var v string
+	for i, line := range figureLines {
+		side := ""
+		if i < len(sideText) {
+			side = sideText[i]
+		}
+		v += fmt.Sprintf("%-35s %s\n", line, side)
+	}
+
+	return v
 }
