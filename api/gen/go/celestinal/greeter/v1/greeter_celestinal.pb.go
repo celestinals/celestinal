@@ -14,11 +14,12 @@ var (
 )
 
 const ASCII = `
-  _____ ____ ____ ______
- / ___// __// __//_  __/	CELESTINAL // GREETER
-/ /__ / _/ _\ \   / /   	-------
-\___//___//___/  /_/    	celestinal.greeter.v1      
-
+             ______                 
+____________ ___  /________         
+_  ___/_  _ \__  / __  ___/         CELESTINAL // GREETER
+/ /__  /  __/_  /  _(__  )          ------------
+\___/  \___/ /_/   /____/           celestinal.greeter.v1
+                                    
 `
 
 // PrintASCII the ASCII art to the console.

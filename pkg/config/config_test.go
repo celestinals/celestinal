@@ -16,30 +16,7 @@ package config
 
 import (
 	"testing"
-
-	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
-	"github.com/celestinals/celestinal/pkg/protobuf"
 )
-
-func TestConfig(t *testing.T) {
-	conf := celestinal.Config{
-		ApiAddr: "0.0.0.0:9000",
-	}
-
-	if err := protobuf.Validate(&conf); err != nil {
-		t.Error(err)
-	}
-}
-
-func TestConfigEnv(t *testing.T) {
-	conf := Default()
-
-	if err := protobuf.Validate(conf); err != nil {
-		return
-	}
-
-	t.Error("should not validate env")
-}
 
 func BenchmarkConfigHeapAllocation(b *testing.B) {
 	b.ReportAllocs()

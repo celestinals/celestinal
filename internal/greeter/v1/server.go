@@ -17,38 +17,41 @@ package greeter
 
 import (
 	"context"
+	"time"
+
+	"github.com/celestinals/celestinal/pkg/striker/skgrpc"
 
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/greeter/v1"
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
 	"github.com/celestinals/celestinal/internal/greeter/v1/controllers"
 
-	"github.com/celestinals/celestinal/pkg/core"
 	"github.com/celestinals/celestinal/pkg/flag"
 	"github.com/celestinals/celestinal/pkg/names"
 	"github.com/celestinals/celestinal/pkg/protobuf"
+	"github.com/celestinals/celestinal/pkg/striker"
 )
 
-// make sure Greeter implement core.Server
-// it will start by core.runner through core.Server
-var _ core.Server = (*Greeter)(nil)
+// make sure Greeter implement striker.Server
+// it will start by striker.runner through striker.Server
+var _ striker.Server = (*Greeter)(nil)
 
 // New creates a new Greeter module.
-func New(srv controllers.IGreeter, conf *celestinal.Config) core.Server {
+func New(srv controllers.IGreeter, conf *celestinal.Config) striker.Server {
 	return &Greeter{
-		GRPCServer: core.NewGRPCServerDefault(),
-		srv:        srv,
-		config:     conf,
+		Server: skgrpc.NewDefault(),
+		srv:    srv,
+		config: conf,
 	}
 }
 
 // Greeter implements GreeterServiceServer.
 type Greeter struct {
-	*core.GRPCServer // inherit core.GRPCServer
-	config           *celestinal.Config
-	srv              greeter.GreeterServiceServer
+	*skgrpc.Server // inherit skgrpc.Server
+	config         *celestinal.Config
+	srv            greeter.GreeterServiceServer
 }
 
-// Start implements IGreeter, override core.GRPCServer.Start
+// Start implements IGreeter, override striker.Server.Start
 func (g *Greeter) Start(_ context.Context) error {
 	greeter.PrintASCII()
 	if err := protobuf.Validate(g.config); err != nil {
@@ -57,10 +60,10 @@ func (g *Greeter) Start(_ context.Context) error {
 
 	greeter.RegisterGreeterServiceServer(g.AsServer(), g.srv)
 
-	return g.Serve(&core.ServiceInfo{
+	return g.Serve(&striker.ServiceInfo{
 		Config: g.config,
 		Addr:   flag.Parse().GetAddress(),
-		Tags:   []string{"greeter", names.GreeterV1.String()},
 		Name:   names.GreeterV1.String(),
+		TTL:    time.Minute * 5,
 	})
 }

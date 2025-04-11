@@ -4,3 +4,7 @@ build
 .next
 out
 pnpm-lock.yaml
+
+_submodules
+
+packages/celestinal-ui/

@@ -114,8 +114,8 @@ If you set your `user.name` and `user.email` git configs, you can sign your comm
 - `internal`: Internal packages, not exported.
 - `packages`: Shared packages across apps
 - `pkg`: Common packages, shared with external modules.
+- `tools`: Tools necessary used in project, not imported
 
 **Every folder with prefix "_" not related to the main source code.**
 - `_submodules`: All repo submodules needed to generate go code from proto file
 - `_test`: Test folder with scripts run performance test
-- `_tools`: Tools necessary used in project, not imported

@@ -24,7 +24,6 @@ error_exit() {
 
 commands=(
   "go mod tidy && golangci-lint run"
-  "cd ./x/greeter/v1 && go mod tidy && golangci-lint run"
 )
 
 for cmd in "${commands[@]}"; do

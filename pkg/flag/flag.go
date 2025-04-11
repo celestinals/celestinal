@@ -21,47 +21,46 @@ import (
 	"sync"
 
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
-	"github.com/celestinals/celestinal/internal/utils/version"
+	"github.com/celestinals/celestinal/internal/pkg/version"
 	"github.com/celestinals/celestinal/pkg/names"
 
 	"github.com/spf13/pflag"
 )
 
 var (
-	once sync.Once
+	once          sync.Once
+	onceAPIServer sync.Once
 )
 
 var (
 	// ascii art use in console with --help option
 	asciiConsole = version.ASCIIArt
-	isService    = true
 )
 
 // flags global variable
 var flags = &celestinal.Flag{
-	Name:    "celestinal.server.default",
-	Address: "0.0.0.0:9000",
-	Mode:    "dev",
+	Name:     "celestinal.server.default",
+	Address:  "0.0.0.0:9000",
+	Mode:     "dev",
+	LogLevel: "debug",
 }
 
-// EdgeFlags global variable
-var edgeFlags = &celestinal.FlagEdge{
-	Telegram: false,
+// apiServerFlags global variable
+var apiServerFlags = &celestinal.FlagAPIServer{
+	Telegram:     false,
+	ApiSpecsPath: "api/specs/v1",
+	SwaggerPath:  "api/ui/swagger",
 }
 
 // Parse flag args
 func Parse() *celestinal.Flag {
 	once.Do(func() {
-		if !isService {
-			pflag.BoolVarP(&edgeFlags.Telegram, "telegram", "t", edgeFlags.GetTelegram(), "turn on telegram system log ?")
-		}
-
-		pflag.StringVarP(&flags.Name, "name", "n", flags.GetName(), "hostname ?")
 		pflag.StringVarP(&flags.Address, "address", "a", flags.GetAddress(), "host address ?")
 		pflag.StringVarP(&flags.Mode, "mode", "m", flags.GetMode(), "run mode (dev|prod|sandbox) ?")
+		pflag.StringVar(&flags.LogLevel, "log-level", flags.GetLogLevel(), "log level (debug|info|warn|error) ?")
 
 		pflag.Usage = func() {
-			fmt.Println(asciiConsole)
+			fmt.Print(asciiConsole)
 			fmt.Println("Usage: <service> [Flags]")
 			pflag.PrintDefaults()
 			os.Exit(0)
@@ -73,13 +72,16 @@ func Parse() *celestinal.Flag {
 	return flags
 }
 
-// ParseEdge flag args for apigateway service
-func ParseEdge() *celestinal.FlagEdge {
-	isService = false
-
+// ParseAPIServer flag args for apiserver service
+func ParseAPIServer() *celestinal.FlagAPIServer {
+	onceAPIServer.Do(func() {
+		pflag.BoolVarP(&apiServerFlags.Telegram, "telegram", "t", apiServerFlags.GetTelegram(), "turn on telegram system log ?")
+		pflag.StringVar(&apiServerFlags.ApiSpecsPath, "api-specs", apiServerFlags.GetApiSpecsPath(), "openapi specification path ?")
+		pflag.StringVar(&apiServerFlags.SwaggerPath, "swagger-ui", apiServerFlags.GetSwaggerPath(), "swagger ui path ?")
+	})
 	_ = Parse()
 
-	return edgeFlags
+	return apiServerFlags
 }
 
 // SetDefault set default flag values

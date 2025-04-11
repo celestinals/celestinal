@@ -22,10 +22,13 @@ option go_package = "github.com/celestinals/celestinal/api/gen/go/celestinal/v1;
 
 message Flag {
   string name = 1;
-  string address = 2 [(buf.validate.field).string.pattern = "^[a-zA-Z0-9.-]+:[0-9]{1,5}$"];
+  string address = 2 [(buf.validate.field).string.host_and_port = true];
   string mode = 3 [(buf.validate.field).string.pattern = "^(dev|prod|sandbox)$"];
+  string log_level = 4 [(buf.validate.field).string.pattern = "^(debug|info|warn|error)$"];
 }
 
-message FlagEdge {
+message FlagAPIServer {
   bool telegram = 1;
+  string swagger_path = 2;
+  string api_specs_path = 3;
 }

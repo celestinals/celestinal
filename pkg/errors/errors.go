@@ -20,7 +20,7 @@ import (
 	"fmt"
 
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
-	"github.com/celestinals/celestinal/internal/utils/version"
+	"github.com/celestinals/celestinal/internal/pkg/version"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -74,6 +74,9 @@ var (
 var (
 	// ErrUnimplemented is a generic error
 	ErrUnimplemented = errors.New(unimplemented)
+
+	// ErrInvalidData is an invalid data error
+	ErrInvalidData = errors.New(invalidData)
 )
 
 // F wrapped error with format template

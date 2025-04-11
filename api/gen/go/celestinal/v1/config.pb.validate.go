@@ -40,8 +40,6 @@ func (m *Config) Validate() error {
 		return nil
 	}
 
-	// no validation rules for ApiAddr
-
 	// no validation rules for TelegramToken
 
 	// no validation rules for ChatId

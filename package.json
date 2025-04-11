@@ -28,7 +28,8 @@
     "url": "git+https://github.com/celestinals/celestinal.git"
   },
   "keywords": [
-    "tkx-web"
+    "cels",
+    "celestinal"
   ],
   "author": "Celestinal Labs",
   "license": "Apache-2.0",
