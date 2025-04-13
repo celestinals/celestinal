@@ -19,8 +19,9 @@ import (
 	"time"
 
 	"github.com/celestinals/celestinal/pkg/flag"
-	"github.com/celestinals/celestinal/pkg/logger"
 	"github.com/celestinals/celestinal/pkg/protobuf"
+
+	"github.com/celestinals/celestinal/pkg/logger"
 	"go.uber.org/fx"
 )
 
@@ -37,7 +38,7 @@ func runner(lc fx.Lifecycle, srv Server) {
 			errChan := make(chan error, 1)
 			go func() {
 				if err := srv.Start(ctx); err != nil {
-					log.Warningf("[runner] %+v", err)
+					log.Infof("[runner] %+v", err)
 					errChan <- err
 				}
 			}()

@@ -12,19 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package striker
+// Package apiserver provides the apiserver
+package apiserver
 
 import (
-	"time"
-
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
+	discoveryrepo "github.com/celestinals/celestinal/internal/apiserver/repos/discovery"
+	discoverysvc "github.com/celestinals/celestinal/internal/apiserver/services/discovery"
+	"github.com/celestinals/celestinal/pkg/cache/mem"
+	"github.com/celestinals/celestinal/pkg/striker"
 )
 
-// ServiceInfo is Serve method properties
-type ServiceInfo struct {
-	GatewayAddr string
-	Config      *celestinal.Config
-	Addr        string
-	Name        string
-	TTL         time.Duration
-}
+// inject all dependencies to the apiserver
+// This is a dependency injection pattern.
+var (
+	// discovery dependency data - repo - service
+	_ = striker.Inject(mem.NewDefault[*celestinal.Registrar])
+	_ = striker.Inject(discoveryrepo.New)
+	_ = striker.Inject(discoverysvc.NewDiscoveryService)
+)

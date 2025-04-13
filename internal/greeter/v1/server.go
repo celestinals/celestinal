@@ -61,9 +61,10 @@ func (g *Greeter) Start(_ context.Context) error {
 	greeter.RegisterGreeterServiceServer(g.AsServer(), g.srv)
 
 	return g.Serve(&striker.ServiceInfo{
-		Config: g.config,
-		Addr:   flag.Parse().GetAddress(),
-		Name:   names.GreeterV1.String(),
-		TTL:    time.Minute * 5,
+		Config:      g.config,
+		Addr:        flag.ParseGRPCService().GetAddress(),
+		GatewayAddr: flag.ParseGRPCService().GetGatewayAddress(),
+		Name:        names.GreeterV1.String(),
+		TTL:         time.Minute * 5,
 	})
 }

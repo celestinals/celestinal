@@ -28,8 +28,8 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-// VisitService visits the greeter service.
-func VisitService(ctx context.Context, ns names.Namespace, server skhttp.Server,
+// VisitServiceFromEndpoint visits and registers a service from an endpoint
+func VisitServiceFromEndpoint(ctx context.Context, ns names.Namespace, server skhttp.Server,
 	service skutils.ServiceRegistrar) error {
 
 	eventq.Subscribe(ctx, ns.String(), func(endpoint string) error {
@@ -37,9 +37,14 @@ func VisitService(ctx context.Context, ns names.Namespace, server skhttp.Server,
 			grpc.WithTransportCredentials(insecure.NewCredentials()),
 		}
 
-		logger.Infof("[visitor.VisitService] %s %s", ns.String(), "******")
-		return skutils.RegisterService(ctx, server, service, endpoint, opts)
+		logger.Infof("[visitor.VisitServiceFromEndpoint] %s %s", ns.String(), "******")
+		return skutils.RegisterServiceFromEndpoint(ctx, server, service, endpoint, opts)
 	})
 
 	return nil
+}
+
+// VisitService visits and registers a service
+func VisitService(ctx context.Context, server skhttp.Server, service skutils.ServiceRegistrar) error {
+	return skutils.RegisterService(ctx, server, service)
 }

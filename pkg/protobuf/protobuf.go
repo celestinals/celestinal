@@ -21,6 +21,7 @@ import (
 	"github.com/bufbuild/protovalidate-go"
 	"github.com/google/go-cmp/cmp"
 	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/durationpb"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -32,6 +33,16 @@ func ToTime(from time.Time) *timestamppb.Timestamp {
 // FromTime creates time.Time from pb Timestamp.
 func FromTime(from *timestamppb.Timestamp) time.Time {
 	return from.AsTime()
+}
+
+// ToDuration creates pb Duration from time.Duration.
+func ToDuration(from time.Duration) *durationpb.Duration {
+	return durationpb.New(from)
+}
+
+// FromDuration creates time.Duration from pb Duration.
+func FromDuration(from *durationpb.Duration) time.Duration {
+	return from.AsDuration()
 }
 
 // Compare compares two proto messages.

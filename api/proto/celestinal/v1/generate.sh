@@ -29,6 +29,7 @@ fi
 
 CELESTINAL_PATH=$GOPATH/src/github.com/celestinals/celestinal
 CELESTINAL_GEN_OUT=$GOPATH/src
+CELESTINAL_OPENAPI_OUT=$CELESTINAL_PATH/api/specs/v1
 
 protoc \
   -I"$CELESTINAL_PATH"/api/proto \
@@ -38,4 +39,18 @@ protoc \
   --go_out="$CELESTINAL_GEN_OUT" \
   --go-grpc_out="$CELESTINAL_GEN_OUT" \
   --validate_out="lang=go,paths=:$CELESTINAL_GEN_OUT" \
+  --grpc-gateway_out="$CELESTINAL_GEN_OUT" \
   "$(pwd)"/*.proto
+
+protoc \
+  -I"$CELESTINAL_PATH"/api/proto \
+  -I"$CELESTINAL_PATH"/_submodules/googleapis \
+  -I"$CELESTINAL_PATH"/_submodules/grpc-gateway \
+  -I"$CELESTINAL_PATH"/_submodules/protovalidate/proto/protovalidate \
+  --openapiv2_out="$CELESTINAL_OPENAPI_OUT" \
+  "$(pwd)"/discovery.proto
+
+cd "$CELESTINAL_OPENAPI_OUT" || exit 1
+find . -mindepth 2 -type f -name "*.json" -exec mv {} ./ \; || exit 1
+rm -rf ./celestinal || exit 1
+cd "$OLDPWD" || exit 1

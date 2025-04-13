@@ -12,22 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package services provides all service declare.
-package services
+// Package registrar provides all service declare.
+package registrar
 
 import (
 	"context"
 
-	"github.com/celestinals/celestinal/pkg/striker/skhttp"
-	"github.com/celestinals/celestinal/pkg/striker/skutils"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
 
 	greeterpb "github.com/celestinals/celestinal/api/gen/go/celestinal/greeter/v1"
-	"github.com/celestinals/celestinal/internal/apiserver/services/base"
-	"github.com/celestinals/celestinal/internal/pkg/visitor"
+	registrarbase "github.com/celestinals/celestinal/internal/apiserver/registrar/base"
 
+	"github.com/celestinals/celestinal/internal/pkg/visitor"
 	"github.com/celestinals/celestinal/pkg/names"
+	"github.com/celestinals/celestinal/pkg/striker/skhttp"
+	"github.com/celestinals/celestinal/pkg/striker/skutils"
 )
 
 var _ skutils.ServiceRegistrar = (*greeter)(nil)
@@ -39,16 +39,16 @@ func NewGreeter() skutils.ServiceRegistrar {
 
 // greeter represents the greeter service
 type greeter struct {
-	base.Base
+	registrarbase.Base
 }
 
 // Accept accepts the greeter service
 func (g greeter) Accept(ctx context.Context, server skhttp.Server) error {
-	return visitor.VisitService(ctx, names.GreeterV1, server, g)
+	return visitor.VisitServiceFromEndpoint(ctx, names.GreeterV1, server, g)
 }
 
-// Register registers the greeter service
-func (g greeter) Register(ctx context.Context, mux *runtime.ServeMux,
+// RegisterFromEndpoint registers the greeter service
+func (g greeter) RegisterFromEndpoint(ctx context.Context, mux *runtime.ServeMux,
 	endpoint string, opts []grpc.DialOption) error {
 
 	return greeterpb.

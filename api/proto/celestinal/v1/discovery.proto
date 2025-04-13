@@ -17,8 +17,60 @@ syntax = "proto3";
 package celestinal.v1;
 
 import "buf/validate/validate.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
 
 option go_package = "github.com/celestinals/celestinal/api/gen/go/celestinal/v1;celestinal";
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "Discovery API";
+    version: "1.0";
+  };
+  schemes: HTTP;
+  schemes: HTTPS;
+  consumes: "application/json";
+  security_definitions: {
+    security: {
+      key: "ApiKeyAuth";
+      value: {
+        type: TYPE_API_KEY;
+        in: IN_HEADER;
+        name: "Authorization";
+      }
+    }
+  }
+  security: {
+    security_requirement: {
+      key: "ApiKeyAuth";
+      value: {}
+    }
+  }
+};
+
+service DiscoveryService {
+  rpc Register(RegisterRequest) returns (RegisterResponse) {
+    option (google.api.http) = {
+      post: "/discovery/register",
+      body: "*"
+    };
+  }
+
+  rpc Heartbeat(HeartbeatRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/discovery/heartbeat",
+      body: "*"
+    };
+  }
+
+  rpc Discover(DiscoverRequest) returns (DiscoverResponse) {
+    option (google.api.http) = {
+      get: "/discovery/discover"
+    };
+  }
+}
 
 message HeartbeatRequest {
   string address = 1 [(buf.validate.field).string.address = true];
@@ -27,7 +79,13 @@ message HeartbeatRequest {
 message RegisterRequest {
   string name = 1 [(buf.validate.field).string.pattern = "^celestinal\\."];
   string address = 2 [(buf.validate.field).string.host_and_port = true];
-  int64 ttl = 3 [(buf.validate.field).int64.gt = 0];
+  google.protobuf.Duration ttl = 3 [(buf.validate.field).duration.gt = {seconds: 0}];
+}
+
+message RegisterResponse {
+  string id = 1;
+  string name = 2 [(buf.validate.field).string.pattern = "^celestinal\\."];
+  string address = 3 [(buf.validate.field).string.host_and_port = true];
 }
 
 message DiscoverRequest {
@@ -36,5 +94,14 @@ message DiscoverRequest {
 
 message DiscoverResponse {
   string name = 1 [(buf.validate.field).string.pattern = "^celestinal\\."];
-  string address = 2 [(buf.validate.field).string.address = true];
+  string address = 2 [(buf.validate.field).string.host_and_port = true];
 }
+
+// Registrar model
+message Registrar {
+  string id = 1;
+  string name = 2 [(buf.validate.field).string.pattern = "^celestinal\\."];
+  string address = 3 [(buf.validate.field).string.host_and_port = true];
+  google.protobuf.Duration ttl = 4 [(buf.validate.field).duration.gt = {seconds: 0}];
+}
+

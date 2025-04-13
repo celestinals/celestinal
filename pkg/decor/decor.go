@@ -12,19 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package striker
+// Package decor provides a simple way to decorate functions with context
+package decor
 
-import (
-	"time"
+import "context"
 
-	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
-)
+// WithContextReturn executes the function fn and returns its result.
+func WithContextReturn[T any](ctx context.Context, fn func() (T, error)) (T, error) {
+	var zero T
+	select {
+	case <-ctx.Done():
+		return zero, ctx.Err()
+	default:
+		return fn()
+	}
+}
 
-// ServiceInfo is Serve method properties
-type ServiceInfo struct {
-	GatewayAddr string
-	Config      *celestinal.Config
-	Addr        string
-	Name        string
-	TTL         time.Duration
+// WithContext executes the function fn and returns its error.
+func WithContext(ctx context.Context, fn func() error) error {
+	select {
+	case <-ctx.Done():
+		return ctx.Err()
+	default:
+		return fn()
+	}
 }

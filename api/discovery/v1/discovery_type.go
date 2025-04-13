@@ -12,19 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package striker
+package discovery
 
-import (
-	"time"
-
-	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
-)
-
-// ServiceInfo is Serve method properties
-type ServiceInfo struct {
-	GatewayAddr string
-	Config      *celestinal.Config
-	Addr        string
-	Name        string
-	TTL         time.Duration
+type RegisterRequest struct {
+	Name    string `json:"name"`
+	Address string `json:"address"`
+	TTL     string `json:"ttl"`
 }

@@ -23,6 +23,7 @@ import (
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
 	"github.com/celestinals/celestinal/pkg/errors"
 	"github.com/celestinals/celestinal/pkg/logger"
+	"github.com/celestinals/celestinal/pkg/protobuf"
 	"github.com/celestinals/celestinal/pkg/striker"
 	"github.com/celestinals/celestinal/pkg/striker/sknet"
 	"google.golang.org/grpc"
@@ -90,11 +91,11 @@ func (s *Server) Serve(info *striker.ServiceInfo) error {
 		return err
 	}
 
-	if err := discovery.New("http://0.0.0.0:9000").
-		Register(context.Background(), &celestinal.RegisterRequest{
+	if err := discovery.New(info.GatewayAddr).Register(context.Background(),
+		&celestinal.RegisterRequest{
 			Name:    info.Name,
 			Address: fmt.Sprintf("%s:%d", host, port),
-			Ttl:     info.TTL.Milliseconds(),
+			Ttl:     protobuf.ToDuration(info.TTL),
 		}); err != nil {
 
 		logger.Errorf("GRPC.Serve: error when register %v", err)

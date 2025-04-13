@@ -39,19 +39,17 @@ func New(conf *celestinal.Config) *Middleware {
 	}
 }
 
-// Serve middleware handler for http handler in apiserver server
-func Serve(server skhttp.Server, conf *celestinal.Config) {
-	// new middleware handler
-	mdw := New(conf)
+// Middleware for http handler in grpc gateway
+type Middleware struct {
+	conf *celestinal.Config
+}
+
+// RegisterServer register middleware handler for http handler in apiserver server
+func (mdw *Middleware) RegisterServer(server skhttp.Server, _ *celestinal.Config) {
 
 	// mdw.LogRequestBody(mdw.AllowCORS(e.apiserver.AsMux()))
 	server.Use(mdw.AllowCORS)
 	server.Use(mdw.LogRequestBody)
-}
-
-// Middleware for http handler in grpc gateway
-type Middleware struct {
-	conf *celestinal.Config
 }
 
 // LogRequestBody logs the request body when the response status code is not 200.

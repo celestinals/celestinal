@@ -24,13 +24,18 @@ import (
 
 const timeout = time.Second * 2
 
-// Serve is watching function consul when service info was changed
-func Serve(_ skhttp.Server, config *celestinal.Config) {
-	_ = config
+// Watcher is a watcher for service registry when service info was
+// changed it will notify the service registry and update the service
+// info in the service registry
+type Watcher struct{}
 
+// RegisterStriker registers the watcher to the striker server
+func (w *Watcher) RegisterStriker(_ skhttp.Server, _ *celestinal.Config) {
 	go service()
 }
 
+// service is a service watcher
+// it will watch the service registry and update the service info
 func service() {
 	ticker := time.NewTicker(timeout)
 	defer ticker.Stop()

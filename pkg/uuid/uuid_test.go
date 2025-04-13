@@ -12,19 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package striker
+package uuid
 
-import (
-	"time"
+import "testing"
 
-	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
-)
-
-// ServiceInfo is Serve method properties
-type ServiceInfo struct {
-	GatewayAddr string
-	Config      *celestinal.Config
-	Addr        string
-	Name        string
-	TTL         time.Duration
+func TestGenerate(t *testing.T) {
+	t.Log(Generate())
 }

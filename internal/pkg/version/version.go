@@ -23,14 +23,6 @@ import (
 	"github.com/common-nighthawk/go-figure"
 )
 
-const asciiArt = `
-           ______       
-______________  /_______	
-_  ___/  _ \_  /__  ___/	%s
-/ /__ /  __/  / _(__  ) 	--------
-\___/ \___//_/  /____/  	%s
-`
-
 var (
 
 	// Package is filled at linking time
@@ -52,7 +44,7 @@ var (
 	Code = "CELS"
 
 	// ASCIIArt using in console
-	ASCIIArt = figuregen(BrandName, "celestinal.apiserver")
+	ASCIIArt = figureGen(BrandName, "celestinal.apiserver")
 )
 
 // ASCII prints the ASCII art of the project.
@@ -60,7 +52,7 @@ func ASCII() {
 	fmt.Print(ASCIIArt)
 }
 
-func figuregen(header string, footer string) string {
+func figureGen(header string, footer string) string {
 	fig := figure.NewFigure("cels", "speed", true)
 	figureLines := strings.Split(fig.String(), "\n")
 	sideText := []string{

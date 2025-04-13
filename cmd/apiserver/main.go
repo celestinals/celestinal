@@ -49,9 +49,12 @@ import (
 //	make run.apiserver // start celestinal apiserver
 //	make run.<service> // start service
 func main() {
-	flag.SetDefault(names.APIServer, "0.0.0.0:9000", "dev")
+	flag.SetDefault(names.APIServer, "dev")
 	flag.SetConsole(version.ASCIIArt)
-	_ = flag.ParseAPIServer()
+
+	if err := flag.Validate(flag.ParseAPIServer()); err != nil {
+		logger.Fatal(err)
+	}
 
 	app := striker.Build(apiserver.New, config.Default)
 	if err := app.Run(context.Background()); err != nil {

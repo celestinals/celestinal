@@ -77,6 +77,9 @@ var (
 
 	// ErrInvalidData is an invalid data error
 	ErrInvalidData = errors.New(invalidData)
+
+	// ErrNotFound is a not found error
+	ErrNotFound = errors.New(notFound)
 )
 
 // F wrapped error with format template

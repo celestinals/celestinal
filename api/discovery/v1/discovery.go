@@ -47,7 +47,11 @@ func (d *discovery) Heartbeat(ctx context.Context, req *celestinal.HeartbeatRequ
 }
 
 func (d *discovery) Register(ctx context.Context, req *celestinal.RegisterRequest) error {
-	return d.post("/discovery/register", req)
+	return d.post("/discovery/register", RegisterRequest{
+		Name:    req.Name,
+		Address: req.Address,
+		TTL:     fmt.Sprintf("%ds", req.GetTtl().Seconds),
+	})
 
 }
 
