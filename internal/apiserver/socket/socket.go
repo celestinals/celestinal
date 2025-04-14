@@ -12,5 +12,5 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package ws provides the websocket server for the apiserver
-package ws
+// Package socket provides the websocket server for the apiserver
+package socket

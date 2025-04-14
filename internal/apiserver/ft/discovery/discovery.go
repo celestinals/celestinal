@@ -19,13 +19,15 @@ import (
 	"context"
 
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
-	discoverysvc "github.com/celestinals/celestinal/internal/apiserver/services/discovery"
+
+	"google.golang.org/protobuf/types/known/emptypb"
+
+	discoverysvc "github.com/celestinals/celestinal/internal/apiserver/ft/discovery/services"
 
 	"github.com/celestinals/celestinal/pkg/errors"
 	"github.com/celestinals/celestinal/pkg/logger"
 	"github.com/celestinals/celestinal/pkg/striker/skhttp"
 	"github.com/celestinals/celestinal/pkg/uuid"
-	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 var _ celestinal.DiscoveryServiceServer = (*Discovery)(nil)

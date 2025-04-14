@@ -19,11 +19,12 @@ import (
 	"context"
 
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
-	"github.com/celestinals/celestinal/internal/apiserver/controllers/discovery"
-	"github.com/celestinals/celestinal/internal/apiserver/controllers/openapi"
+
+	"github.com/celestinals/celestinal/internal/apiserver/ft/discovery"
+	discoverysvc "github.com/celestinals/celestinal/internal/apiserver/ft/discovery/services"
+	"github.com/celestinals/celestinal/internal/apiserver/ft/openapi"
 	"github.com/celestinals/celestinal/internal/apiserver/middleware"
 	"github.com/celestinals/celestinal/internal/apiserver/registrar/v1"
-	discoverysvc "github.com/celestinals/celestinal/internal/apiserver/services/discovery"
 	"github.com/celestinals/celestinal/internal/pkg/version"
 
 	"github.com/celestinals/celestinal/pkg/flag"
@@ -66,11 +67,7 @@ func New(conf *celestinal.Config, dcv discoverysvc.Discovery) (striker.Server, e
 		registrar.NewDiscovery(discovery.New(dcv)),
 	)
 
-	if err != nil {
-		return nil, err
-	}
-
-	return srv, nil
+	return srv, err
 }
 
 // Handler interface must be implemented by object handler

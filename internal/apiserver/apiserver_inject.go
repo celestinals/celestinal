@@ -17,8 +17,8 @@ package apiserver
 
 import (
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
-	discoveryrepo "github.com/celestinals/celestinal/internal/apiserver/repos/discovery"
-	discoverysvc "github.com/celestinals/celestinal/internal/apiserver/services/discovery"
+	discoveryrepo "github.com/celestinals/celestinal/internal/apiserver/ft/discovery/repos"
+	discoverysvc "github.com/celestinals/celestinal/internal/apiserver/ft/discovery/services"
 	"github.com/celestinals/celestinal/pkg/cache/mem"
 	"github.com/celestinals/celestinal/pkg/striker"
 )

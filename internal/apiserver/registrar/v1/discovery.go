@@ -46,7 +46,7 @@ func (d discovery) Accept(ctx context.Context, server skhttp.Server) error {
 	return visitor.VisitService(ctx, server, d)
 }
 
-// RegisterFromEndpoint registers the Discovery service
+// Register registers the Discovery service
 func (d discovery) Register(ctx context.Context, mux *runtime.ServeMux) error {
 	return celestinal.RegisterDiscoveryServiceHandlerServer(ctx, mux, d.server)
 }

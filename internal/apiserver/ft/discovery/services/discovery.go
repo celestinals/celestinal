@@ -18,7 +18,7 @@ package discverysvc
 import (
 	"context"
 
-	discoveryrepo "github.com/celestinals/celestinal/internal/apiserver/repos/discovery"
+	discoveryrepo "github.com/celestinals/celestinal/internal/apiserver/ft/discovery/repos"
 
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
 	"github.com/celestinals/celestinal/internal/pkg/eventq"
