@@ -34,8 +34,8 @@ type ServiceRegistrar interface {
 // The service is registered with the runtime mux.
 //
 // dependency:
-//
-// - github.com/grpc-ecosystem/grpc-gateway/v2/runtime
+//   - github.com/grpc-ecosystem/grpc-gateway/v2/runtime
+//   - google.golang.org/grpc
 func RegisterServiceFromEndpoint(
 	ctx context.Context, httpServer skhttp.Server, service ServiceRegistrar, endpoint string,
 	opts []grpc.DialOption) error {

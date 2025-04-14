@@ -47,7 +47,7 @@ var _ striker.Server = (*Server)(nil)
 // Example:
 //
 //	var _ = striker.Inject(discoverysvc.NewDiscoveryService)
-func New(conf *celestinal.Config, dcv discoverysvc.Discovery) striker.Server {
+func New(conf *celestinal.Config, dcv discoverysvc.Discovery) (striker.Server, error) {
 	srv := &Server{
 		server: skhttp.New(),
 		config: conf,
@@ -55,9 +55,22 @@ func New(conf *celestinal.Config, dcv discoverysvc.Discovery) striker.Server {
 
 	// handler custom
 	srv.use(openapi.New())
-	srv.use(discovery.New(dcv))
 	srv.use(middleware.New(conf))
-	return srv
+
+	// NOTE: Make sure the gRPC server is running properly and accessible
+	// Create folder at services, inherit base package, override function,
+	// implement business logic
+	// See: registrar/v1/greeter
+	err := srv.visit(context.Background(),
+		registrar.NewGreeter(),
+		registrar.NewDiscovery(discovery.New(dcv)),
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return srv, nil
 }
 
 // Handler interface must be implemented by object handler
@@ -88,21 +101,6 @@ type Server struct {
 	server skhttp.Server
 }
 
-// registerServiceServer gRPC server endpoint.
-func (srv *Server) registerServiceServer(ctx context.Context) error {
-	// NOTE: Make sure the gRPC server is running properly and accessible
-	// Create folder at services, inherit base package, override function,
-	// implement business logic
-	// See: registrar/v1/greeter
-	serviceList := []skutils.ServiceRegistrar{
-		// Example: register the greeter service to the gateway
-		registrar.NewGreeter(),
-		// add more service here ...
-	}
-
-	return srv.visit(ctx, serviceList...)
-}
-
 // visit all service by Accept function
 func (srv *Server) visit(ctx context.Context, services ...skutils.ServiceRegistrar) error {
 	for _, service := range services {
@@ -111,6 +109,7 @@ func (srv *Server) visit(ctx context.Context, services ...skutils.ServiceRegistr
 		}
 	}
 	return nil
+	// return errors.F("apiserver: failed to visit service")
 }
 
 // use is a chain of functions to use when accepting the request
@@ -120,15 +119,10 @@ func (srv *Server) use(handler Handler) {
 }
 
 // Start the apiserver/gateway app
-func (srv *Server) Start(ctx context.Context) error {
+func (srv *Server) Start(_ context.Context) error {
 	// service ascii art banner
 	version.ASCII()
 	if err := protobuf.Validate(srv.config); err != nil {
-		return err
-	}
-
-	// add chain functions handler request
-	if err := srv.registerServiceServer(ctx); err != nil {
 		return err
 	}
 
