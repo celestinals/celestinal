@@ -12,15 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package discverysvc implements the discovery business logic
-package discverysvc
+// Package dcvrdomain implements the discovery business logic
+package dcvrdomain
 
 import (
 	"context"
 
-	discoveryrepo "github.com/celestinals/celestinal/internal/apiserver/apps/discovery/v1/repos"
-
-	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
+	discoverypb "github.com/celestinals/celestinal/api/gen/go/celestinal/discovery/v1"
+	dcvrrepo "github.com/celestinals/celestinal/internal/discovery/v1/repos"
 	"github.com/celestinals/celestinal/internal/pkg/eventq"
 )
 
@@ -28,23 +27,23 @@ var _ Discovery = (*discovery)(nil)
 
 // Discovery implement discovery registry business logic
 type Discovery interface {
-	RegisterService(ctx context.Context, id string, req *celestinal.RegisterRequest) error
+	RegisterService(ctx context.Context, id string, req *discoverypb.RegisterRequest) error
 }
 
-// NewDiscoveryService creates a new discovery service
+// NewDiscovery creates a new discovery service
 // and returns a Discovery interface.
-func NewDiscoveryService(repo discoveryrepo.Discovery) Discovery {
+func NewDiscovery(repo dcvrrepo.Discovery) Discovery {
 	return &discovery{
 		repo: repo,
 	}
 }
 
 type discovery struct {
-	repo discoveryrepo.Discovery
+	repo dcvrrepo.Discovery
 }
 
 // RegisterService implements Discovery
-func (d *discovery) RegisterService(ctx context.Context, id string, req *celestinal.RegisterRequest) error {
+func (d *discovery) RegisterService(ctx context.Context, id string, req *discoverypb.RegisterRequest) error {
 
 	_ = ctx
 	_ = req

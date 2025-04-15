@@ -12,27 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package discovery provides a service discovery for the celestinal.
-package discovery
+// Package dcvrcontrollers provides a service discovery for the celestinal.
+package dcvrcontrollers
 
 import (
 	"context"
 
-	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
-
 	"google.golang.org/protobuf/types/known/emptypb"
 
-	discoverysvc "github.com/celestinals/celestinal/internal/apiserver/apps/discovery/v1/services"
+	discoverypb "github.com/celestinals/celestinal/api/gen/go/celestinal/discovery/v1"
+	dcvrdomain "github.com/celestinals/celestinal/internal/discovery/v1/domain"
 
 	"github.com/celestinals/celestinal/pkg/errors"
 	"github.com/celestinals/celestinal/pkg/logger"
 	"github.com/celestinals/celestinal/pkg/uuid"
 )
 
-var _ celestinal.DiscoveryServiceServer = (*Discovery)(nil)
+var _ discoverypb.DiscoveryServiceServer = (*Discovery)(nil)
 
 // New create new instance
-func New(svc discoverysvc.Discovery) *Discovery {
+func New(svc dcvrdomain.Discovery) *Discovery {
 	return &Discovery{
 		service: svc,
 	}
@@ -40,12 +39,12 @@ func New(svc discoverysvc.Discovery) *Discovery {
 
 // Discovery is a service registry for the celestinal.
 type Discovery struct {
-	celestinal.UnimplementedDiscoveryServiceServer
-	service discoverysvc.Discovery
+	discoverypb.UnimplementedDiscoveryServiceServer
+	service dcvrdomain.Discovery
 }
 
 // Register registers the service to the service registry.
-func (dcv *Discovery) Register(ctx context.Context, request *celestinal.RegisterRequest) (*celestinal.RegisterResponse, error) {
+func (dcv *Discovery) Register(ctx context.Context, request *discoverypb.RegisterRequest) (*discoverypb.RegisterResponse, error) {
 	id := uuid.Generate()
 
 	if err := dcv.service.RegisterService(ctx, id, request); err != nil {
@@ -53,7 +52,7 @@ func (dcv *Discovery) Register(ctx context.Context, request *celestinal.Register
 		return nil, errors.StatusInternalError
 	}
 
-	return &celestinal.RegisterResponse{
+	return &discoverypb.RegisterResponse{
 		Id:      id,
 		Name:    request.GetName(),
 		Address: request.GetAddress(),
@@ -61,7 +60,7 @@ func (dcv *Discovery) Register(ctx context.Context, request *celestinal.Register
 }
 
 // Heartbeat is used to send heartbeat to the service registry.
-func (dcv *Discovery) Heartbeat(ctx context.Context, request *celestinal.HeartbeatRequest) (*emptypb.Empty, error) {
+func (dcv *Discovery) Heartbeat(ctx context.Context, request *discoverypb.HeartbeatRequest) (*emptypb.Empty, error) {
 	_ = ctx
 	_ = request
 	//TODO implement me
@@ -69,10 +68,10 @@ func (dcv *Discovery) Heartbeat(ctx context.Context, request *celestinal.Heartbe
 }
 
 // Discover used to discover the service registry.
-func (dcv *Discovery) Discover(ctx context.Context, request *celestinal.DiscoverRequest) (*celestinal.DiscoverResponse, error) {
+func (dcv *Discovery) Discover(ctx context.Context, request *discoverypb.DiscoverRequest) (*discoverypb.DiscoverResponse, error) {
 	_ = ctx
 	_ = request
-	return &celestinal.DiscoverResponse{
+	return &discoverypb.DiscoverResponse{
 		Name: request.GetName(),
 	}, nil
 }

@@ -24,6 +24,7 @@ import (
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/greeter/v1"
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
 	"github.com/celestinals/celestinal/internal/greeter/v1/controllers"
+	"github.com/celestinals/celestinal/internal/greeter/v1/domain"
 
 	"github.com/celestinals/celestinal/pkg/flag"
 	"github.com/celestinals/celestinal/pkg/names"
@@ -34,6 +35,13 @@ import (
 // make sure Greeter implement striker.Server
 // it will start by striker.runner through striker.Server
 var _ striker.Server = (*Greeter)(nil)
+
+// inject all dependencies to the greeter
+// This is a dependency injection pattern.
+var (
+	_ = striker.Inject(controllers.New)
+	_ = striker.Inject(domain.New)
+)
 
 // New creates a new Greeter module.
 func New(srv controllers.IGreeter, conf *celestinal.Config) striker.Server {

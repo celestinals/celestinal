@@ -20,11 +20,10 @@ import (
 
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
 
-	"github.com/celestinals/celestinal/internal/apiserver/apps/discovery/v1"
-	discoverysvc "github.com/celestinals/celestinal/internal/apiserver/apps/discovery/v1/services"
 	"github.com/celestinals/celestinal/internal/apiserver/apps/openapi"
 	"github.com/celestinals/celestinal/internal/apiserver/middleware"
 	"github.com/celestinals/celestinal/internal/apiserver/registrar/v1"
+	dcvrcontrollers "github.com/celestinals/celestinal/internal/discovery/v1/controllers"
 	"github.com/celestinals/celestinal/internal/pkg/version"
 
 	"github.com/celestinals/celestinal/pkg/flag"
@@ -48,7 +47,7 @@ var _ striker.Server = (*Server)(nil)
 // Example:
 //
 //	var _ = striker.Inject(discoverysvc.NewDiscoveryService)
-func New(conf *celestinal.Config, dcv discoverysvc.Discovery) (striker.Server, error) {
+func New(conf *celestinal.Config, dcv *dcvrcontrollers.Discovery) (striker.Server, error) {
 	srv := &Server{
 		server: skhttp.New(),
 		config: conf,
@@ -59,12 +58,12 @@ func New(conf *celestinal.Config, dcv discoverysvc.Discovery) (striker.Server, e
 	srv.use(middleware.New(conf))
 
 	// NOTE: Make sure the gRPC server is running properly and accessible
-	// Create folder at services, inherit base package, override function,
+	// Create file at registrar, inherit base package, override function,
 	// implement business logic
 	// See: registrar/v1/greeter
 	err := srv.visit(context.Background(),
 		registrar.NewGreeter(),
-		registrar.NewDiscovery(discovery.New(dcv)),
+		registrar.NewDiscovery(dcv),
 	)
 
 	return srv, err
@@ -74,7 +73,6 @@ func New(conf *celestinal.Config, dcv discoverysvc.Discovery) (striker.Server, e
 //
 // References:
 //   - openapi
-//   - discovery
 //   - middleware
 type Handler interface {
 	RegisterServer(server skhttp.Server, conf *celestinal.Config)

@@ -16,9 +16,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             v3.21.12
-// source: celestinal/v1/discovery.proto
+// source: celestinal/discovery/v1/discovery.proto
 
-package celestinal
+package discovery
 
 import (
 	context "context"
@@ -34,9 +34,9 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	DiscoveryService_Register_FullMethodName  = "/celestinal.v1.DiscoveryService/Register"
-	DiscoveryService_Heartbeat_FullMethodName = "/celestinal.v1.DiscoveryService/Heartbeat"
-	DiscoveryService_Discover_FullMethodName  = "/celestinal.v1.DiscoveryService/Discover"
+	DiscoveryService_Register_FullMethodName  = "/celestinal.discovery.v1.DiscoveryService/Register"
+	DiscoveryService_Heartbeat_FullMethodName = "/celestinal.discovery.v1.DiscoveryService/Heartbeat"
+	DiscoveryService_Discover_FullMethodName  = "/celestinal.discovery.v1.DiscoveryService/Discover"
 )
 
 // DiscoveryServiceClient is the client API for DiscoveryService service.
@@ -191,7 +191,7 @@ func _DiscoveryService_Discover_Handler(srv interface{}, ctx context.Context, de
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var DiscoveryService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "celestinal.v1.DiscoveryService",
+	ServiceName: "celestinal.discovery.v1.DiscoveryService",
 	HandlerType: (*DiscoveryServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -208,5 +208,5 @@ var DiscoveryService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "celestinal/v1/discovery.proto",
+	Metadata: "celestinal/discovery/v1/discovery.proto",
 }

@@ -20,7 +20,7 @@ import (
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 
-	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
+	discoverypb "github.com/celestinals/celestinal/api/gen/go/celestinal/discovery/v1"
 	registrarbase "github.com/celestinals/celestinal/internal/apiserver/registrar/base"
 
 	"github.com/celestinals/celestinal/internal/pkg/visitor"
@@ -31,14 +31,14 @@ import (
 var _ skutils.ServiceRegistrar = (*discovery)(nil)
 
 // NewDiscovery creates a new Discovery service to register handler to gateway
-func NewDiscovery(srv celestinal.DiscoveryServiceServer) skutils.ServiceRegistrar {
+func NewDiscovery(srv discoverypb.DiscoveryServiceServer) skutils.ServiceRegistrar {
 	return discovery{server: srv}
 }
 
 // discovery represents the discovery service
 type discovery struct {
 	registrarbase.Base
-	server celestinal.DiscoveryServiceServer
+	server discoverypb.DiscoveryServiceServer
 }
 
 // Accept accepts the Discovery service
@@ -48,5 +48,5 @@ func (d discovery) Accept(ctx context.Context, server skhttp.Server) error {
 
 // Register registers the Discovery service
 func (d discovery) Register(ctx context.Context, mux *runtime.ServeMux) error {
-	return celestinal.RegisterDiscoveryServiceHandlerServer(ctx, mux, d.server)
+	return discoverypb.RegisterDiscoveryServiceHandlerServer(ctx, mux, d.server)
 }

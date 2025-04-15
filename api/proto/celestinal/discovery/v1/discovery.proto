@@ -14,7 +14,7 @@
 
 syntax = "proto3";
 
-package celestinal.v1;
+package celestinal.discovery.v1;
 
 import "buf/validate/validate.proto";
 import "google/protobuf/duration.proto";
@@ -22,12 +22,12 @@ import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
-option go_package = "github.com/celestinals/celestinal/api/gen/go/celestinal/v1;celestinal";
+option go_package = "github.com/celestinals/celestinal/api/gen/go/celestinal/discovery/v1;discovery";
 
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
   info: {
-    title: "Discovery API";
-    version: "1.0";
+    title: "Discovery Service";
+    version: "0.0.1";
   };
   schemes: HTTP;
   schemes: HTTPS;

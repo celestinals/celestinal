@@ -12,22 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package apiserver provides the apiserver
-package apiserver
+// Package discovery implements the discovery service
+package discovery
 
 import (
-	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
-	discoveryrepo "github.com/celestinals/celestinal/internal/apiserver/apps/discovery/v1/repos"
-	discoverysvc "github.com/celestinals/celestinal/internal/apiserver/apps/discovery/v1/services"
+	"github.com/celestinals/celestinal/api/gen/go/celestinal/discovery/v1"
+	dcvrcontrollers "github.com/celestinals/celestinal/internal/discovery/v1/controllers"
+	dcvrdomain "github.com/celestinals/celestinal/internal/discovery/v1/domain"
+	dcvrrepo "github.com/celestinals/celestinal/internal/discovery/v1/repos"
 	"github.com/celestinals/celestinal/pkg/cache/mem"
 	"github.com/celestinals/celestinal/pkg/striker"
 )
 
-// inject all dependencies to the apiserver
-// This is a dependency injection pattern.
 var (
 	// discovery dependency data - repo - service
-	_ = striker.Inject(mem.NewDefault[*celestinal.Registrar])
-	_ = striker.Inject(discoveryrepo.New)
-	_ = striker.Inject(discoverysvc.NewDiscoveryService)
+	_ = striker.Inject(mem.NewDefault[*discovery.Registrar])
+	_ = striker.Inject(dcvrrepo.New)
+	_ = striker.Inject(dcvrdomain.NewDiscovery)
+	_ = striker.Inject(dcvrcontrollers.New)
 )

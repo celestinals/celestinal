@@ -12,13 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package discoveryrepo implements the discovery repository
-package discoveryrepo
+// Package dcvrrepo implements the discovery repository
+package dcvrrepo
 
 import (
 	"context"
 
-	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
+	discoverypb "github.com/celestinals/celestinal/api/gen/go/celestinal/discovery/v1"
+
 	"github.com/celestinals/celestinal/pkg/cache/mem"
 	"github.com/celestinals/celestinal/pkg/decor"
 	"github.com/celestinals/celestinal/pkg/errors"
@@ -27,7 +28,7 @@ import (
 )
 
 // New creates a new discovery repository
-func New(cache *mem.Cache[*celestinal.Registrar]) Discovery {
+func New(cache *mem.Cache[*discoverypb.Registrar]) Discovery {
 	return &discovery{
 		cache: cache,
 	}
@@ -35,25 +36,25 @@ func New(cache *mem.Cache[*celestinal.Registrar]) Discovery {
 
 // Discovery is a discovery repository
 type Discovery interface {
-	List(ctx context.Context, req *celestinal.DiscoverRequest) ([]*celestinal.Registrar, error)
-	Get(ctx context.Context, id string) (*celestinal.Registrar, error)
+	List(ctx context.Context, req *discoverypb.DiscoverRequest) ([]*discoverypb.Registrar, error)
+	Get(ctx context.Context, id string) (*discoverypb.Registrar, error)
 	Delete(ctx context.Context, ids ...string) error
-	Save(ctx context.Context, req *celestinal.Registrar) error
+	Save(ctx context.Context, req *discoverypb.Registrar) error
 }
 
 type discovery struct {
-	cache *mem.Cache[*celestinal.Registrar]
+	cache *mem.Cache[*discoverypb.Registrar]
 }
 
-func (d *discovery) List(ctx context.Context, req *celestinal.DiscoverRequest) ([]*celestinal.Registrar, error) {
-	return decor.WithContextReturn(ctx, func() ([]*celestinal.Registrar, error) {
+func (d *discovery) List(ctx context.Context, req *discoverypb.DiscoverRequest) ([]*discoverypb.Registrar, error) {
+	return decor.WithContextReturn(ctx, func() ([]*discoverypb.Registrar, error) {
 		resp, ok := d.cache.List()
 		if !ok {
 			logger.Errorf("discovery.List: cannot list object in registrar")
 			return nil, errors.ErrInvalidData
 		}
 
-		resp = utils.Filter(resp, func(r *celestinal.Registrar) bool {
+		resp = utils.Filter(resp, func(r *discoverypb.Registrar) bool {
 			return r.GetName() == req.GetName()
 		})
 
@@ -61,8 +62,8 @@ func (d *discovery) List(ctx context.Context, req *celestinal.DiscoverRequest) (
 	})
 }
 
-func (d *discovery) Get(ctx context.Context, id string) (*celestinal.Registrar, error) {
-	return decor.WithContextReturn(ctx, func() (*celestinal.Registrar, error) {
+func (d *discovery) Get(ctx context.Context, id string) (*discoverypb.Registrar, error) {
+	return decor.WithContextReturn(ctx, func() (*discoverypb.Registrar, error) {
 		resp, ok := d.cache.Get(id)
 		if !ok {
 			logger.Errorf("discovery.Get: cannot find object in registrar")
@@ -83,7 +84,7 @@ func (d *discovery) Delete(ctx context.Context, ids ...string) error {
 	})
 }
 
-func (d *discovery) Save(ctx context.Context, req *celestinal.Registrar) error {
+func (d *discovery) Save(ctx context.Context, req *discoverypb.Registrar) error {
 	return decor.WithContext(ctx, func() error {
 		d.cache.SetWithTTL(req.GetId(), req, req.GetTtl().AsDuration())
 		return nil

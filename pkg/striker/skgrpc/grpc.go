@@ -19,8 +19,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/celestinals/celestinal/api/discovery/v1"
-	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
+	discoverypb "github.com/celestinals/celestinal/api/gen/go/celestinal/discovery/v1"
+	"github.com/celestinals/celestinal/api/sdk/discovery/v1"
 	"github.com/celestinals/celestinal/pkg/errors"
 	"github.com/celestinals/celestinal/pkg/logger"
 	"github.com/celestinals/celestinal/pkg/protobuf"
@@ -92,7 +92,7 @@ func (s *Server) Serve(info *striker.ServiceInfo) error {
 	}
 
 	if err := discovery.New(info.GatewayAddr).Register(context.Background(),
-		&celestinal.RegisterRequest{
+		&discoverypb.RegisterRequest{
 			Name:    info.Name,
 			Address: fmt.Sprintf("%s:%d", host, port),
 			Ttl:     protobuf.ToDuration(info.TTL),

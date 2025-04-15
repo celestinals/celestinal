@@ -26,6 +26,8 @@ import (
 	"github.com/celestinals/celestinal/pkg/logger"
 	"github.com/celestinals/celestinal/pkg/names"
 	"github.com/celestinals/celestinal/pkg/striker"
+
+	_ "github.com/celestinals/celestinal/internal/discovery/v1"
 )
 
 // Build and run the main application with environment variables.

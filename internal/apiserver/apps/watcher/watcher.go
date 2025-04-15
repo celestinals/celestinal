@@ -29,8 +29,8 @@ const timeout = time.Second * 2
 // info in the service registry
 type Watcher struct{}
 
-// RegisterStriker registers the watcher to the striker server
-func (w *Watcher) RegisterStriker(_ skhttp.Server, _ *celestinal.Config) {
+// RegisterServer registers the watcher to the striker server
+func (w *Watcher) RegisterServer(_ skhttp.Server, _ *celestinal.Config) {
 	go service()
 }
 
