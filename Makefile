@@ -68,9 +68,6 @@ run.greeter:
 #####################################################################
 # Docker build commands
 #####################################################################
-mesh:
-	@docker compose -f ./deploy/docker/mesh/docker-compose.yaml \
-    -f ./deploy/docker/resource/docker-compose.resources.yaml up -d
 
 build.image.apiserver: TAG ?= celestinals/celestinal
 build.image.apiserver:
