@@ -28,4 +28,6 @@ const (
 
 	// GreeterV1 names info
 	GreeterV1 Namespace = "celestinal.greeter.v1"
+
+	Discovery Namespace = "celestinal.discovery.v1"
 )

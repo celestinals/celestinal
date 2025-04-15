@@ -18,6 +18,7 @@ import (
 	"context"
 	"time"
 
+	"github.com/celestinals/celestinal/pkg/errors"
 	"github.com/celestinals/celestinal/pkg/flag"
 	"github.com/celestinals/celestinal/pkg/protobuf"
 
@@ -38,7 +39,12 @@ func runner(lc fx.Lifecycle, srv Server) {
 			errChan := make(chan error, 1)
 			go func() {
 				if err := srv.Start(ctx); err != nil {
-					log.Infof("[runner] %+v", err)
+					if errors.Is(err, errors.ErrServerClosed) {
+						log.Infof("[runner] %+v", err)
+					} else {
+						log.Errorf("[runner] %+v", err)
+					}
+
 					errChan <- err
 				}
 			}()
