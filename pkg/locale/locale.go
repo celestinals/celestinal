@@ -12,23 +12,5 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package names provide name of all service at celestinal
-package names
-
-// Namespace is a type that represents the names of a service.
-type Namespace string
-
-func (ns Namespace) String() string {
-	return string(ns)
-}
-
-const (
-	// APIServer names info
-	APIServer Namespace = "celestinal.apiserver"
-
-	// GreeterV1 names info
-	GreeterV1 Namespace = "celestinal.greeter.v1"
-
-	// DiscoveryV1 names info
-	DiscoveryV1 Namespace = "celestinal.discovery.v1"
-)
+// Package locale provides the locale of the celestinal
+package locale

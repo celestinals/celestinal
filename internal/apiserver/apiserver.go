@@ -20,9 +20,9 @@ import (
 
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
 
-	"github.com/celestinals/celestinal/internal/apiserver/ft/discovery"
-	discoverysvc "github.com/celestinals/celestinal/internal/apiserver/ft/discovery/services"
-	"github.com/celestinals/celestinal/internal/apiserver/ft/openapi"
+	"github.com/celestinals/celestinal/internal/apiserver/apps/discovery/v1"
+	discoverysvc "github.com/celestinals/celestinal/internal/apiserver/apps/discovery/v1/services"
+	"github.com/celestinals/celestinal/internal/apiserver/apps/openapi"
 	"github.com/celestinals/celestinal/internal/apiserver/middleware"
 	"github.com/celestinals/celestinal/internal/apiserver/registrar/v1"
 	"github.com/celestinals/celestinal/internal/pkg/version"

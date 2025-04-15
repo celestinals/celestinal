@@ -22,7 +22,7 @@ import (
 
 	"google.golang.org/protobuf/types/known/emptypb"
 
-	discoverysvc "github.com/celestinals/celestinal/internal/apiserver/ft/discovery/services"
+	discoverysvc "github.com/celestinals/celestinal/internal/apiserver/apps/discovery/v1/services"
 
 	"github.com/celestinals/celestinal/pkg/errors"
 	"github.com/celestinals/celestinal/pkg/logger"
