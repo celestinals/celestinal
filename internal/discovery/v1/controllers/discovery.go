@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package dcvrcontrollers provides a service discovery for the celestinal.
-package dcvrcontrollers
+// Package dcvrctrls provides a service discovery for the celestinal.
+package dcvrctrls
 
 import (
 	"context"
@@ -22,6 +22,7 @@ import (
 
 	discoverypb "github.com/celestinals/celestinal/api/gen/go/celestinal/discovery/v1"
 	dcvrdomain "github.com/celestinals/celestinal/internal/discovery/v1/domain"
+	dcvrrepo "github.com/celestinals/celestinal/internal/discovery/v1/repos"
 
 	"github.com/celestinals/celestinal/pkg/errors"
 	"github.com/celestinals/celestinal/pkg/logger"
@@ -31,9 +32,9 @@ import (
 var _ discoverypb.DiscoveryServiceServer = (*Discovery)(nil)
 
 // New create new instance
-func New(svc dcvrdomain.Discovery) *Discovery {
+func New(repo dcvrrepo.Discovery) *Discovery {
 	return &Discovery{
-		service: svc,
+		service: dcvrdomain.NewDiscovery(repo),
 	}
 }
 

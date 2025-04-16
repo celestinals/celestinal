@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package domain provides the business logic for the greeter service.
-package domain
+// Package greeterdomain provides the business logic for the greeter service.
+package greeterdomain
 
 import (
 	"context"

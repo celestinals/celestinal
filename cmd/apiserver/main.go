@@ -38,13 +38,13 @@ import (
 //
 //	_ = striker.Inject(controllers.New)
 //
-// This is the celestinal apiserver application, it will automatically connect to
-// other services via gRPC. Run the application along with other services
-// in the x/ directory.The application provides APIs for users through a
-// single HTTP gateway following the REST API standard. The application
-// uses gRPC to connect to other services.Additionally, the system provides
-// a Swagger UI interface for users to easily interact with the system
-// through a web interface.
+// This is the celestinal apiserver application, it will automatically
+// connect to other services via gRPC. Run the application along with
+// other services in the cmd/ directory.The application provides APIs
+// for users through a single HTTP gateway following the REST API standard.
+// The application uses gRPC to connect to other services.Additionally,
+// the system provides a Swagger UI interface for users to easily interact
+// with the system through a web interface.
 //
 // Run the application using the Makefile command
 //

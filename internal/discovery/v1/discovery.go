@@ -17,9 +17,10 @@ package discovery
 
 import (
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/discovery/v1"
-	dcvrcontrollers "github.com/celestinals/celestinal/internal/discovery/v1/controllers"
-	dcvrdomain "github.com/celestinals/celestinal/internal/discovery/v1/domain"
+
+	dcvrctrls "github.com/celestinals/celestinal/internal/discovery/v1/controllers"
 	dcvrrepo "github.com/celestinals/celestinal/internal/discovery/v1/repos"
+
 	"github.com/celestinals/celestinal/pkg/cache/mem"
 	"github.com/celestinals/celestinal/pkg/striker"
 )
@@ -28,6 +29,5 @@ var (
 	// discovery dependency data - repo - service
 	_ = striker.Inject(mem.NewDefault[*discovery.Registrar])
 	_ = striker.Inject(dcvrrepo.New)
-	_ = striker.Inject(dcvrdomain.NewDiscovery)
-	_ = striker.Inject(dcvrcontrollers.New)
+	_ = striker.Inject(dcvrctrls.New)
 )
