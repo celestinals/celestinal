@@ -15,8 +15,8 @@
 .PHONY: default
 
 default: default.print \
-	build.apiserver \
-	build.greeter
+	apiserver.build \
+	greeter.build
 
 default.print:
 	@echo "[BUILD] CELESTINAL: build celestinal and services"
@@ -35,44 +35,34 @@ lint.go:
 lint.proto:
 	@cd ./api && buf lint
 
-updaterule:
-	@echo "Updating the core ruleset"
-
-
 #####################################################################
 #####################################################################
 
-build.apiserver: CELESTINAL_OUT ?= apiserver
-build.apiserver:
+apiserver.build: CELESTINAL_OUT ?= apiserver
+apiserver.build:
 	@go build -ldflags="-s -w" -o ./bin/$(CELESTINAL_OUT) ./cmd/apiserver
 	@echo "[DONE]  CELESTINAL: apiserver ... ok"
 
-
-build.greeter: CELESTINAL_OUT ?= greeter
-build.greeter:
-	@go build -ldflags="-s -w" -o ./bin/$(CELESTINAL_OUT) ./cmd/greeter/v1
-	@echo "[DONE]  CELESTINAL: greeter.v1 ... ok"
-
-#####################################################################
-
-run.apiserver: CELESTINAL_OUT ?= apiserver
-run.apiserver:
+apiserver.run: CELESTINAL_OUT ?= apiserver
+apiserver.run:
 	@go build -ldflags="-s -w" -o ./bin/$(CELESTINAL_OUT) ./cmd/apiserver && \
  	./bin/$(CELESTINAL_OUT)
 
-run.greeter: CELESTINAL_OUT ?= greeter
-run.greeter:
+apiserver.build.image: TAG ?= celestinals/celestinal
+apiserver.build.image:
+	docker buildx build -f ./cmd/apiserver/Dockerfile -t $(TAG):latest .
+
+
+greeter.build: CELESTINAL_OUT ?= greeter
+greeter.build:
+	@go build -ldflags="-s -w" -o ./bin/$(CELESTINAL_OUT) ./cmd/greeter/v1
+	@echo "[DONE]  CELESTINAL: greeter.v1 ... ok"
+
+greeter.run: CELESTINAL_OUT ?= greeter
+greeter.run:
 	@go build -ldflags="-s -w" -o ./bin/$(CELESTINAL_OUT) ./cmd/greeter/v1 && \
 	./bin/$(CELESTINAL_OUT)
 
-#####################################################################
-# Docker build commands
-#####################################################################
-
-build.image.apiserver: TAG ?= celestinals/celestinal
-build.image.apiserver:
-	docker buildx build -f ./cmd/apiserver/Dockerfile -t $(TAG):latest .
-
-build.image.greeter: TAG ?= celestinals/celestinal.greeter
-build.image.greeter:
+greeter.build.image: TAG ?= celestinals/celestinal.greeter
+greeter.build.image:
 	docker buildx build -f ./cmd/greeter/v1/Dockerfile -t $(TAG):latest .

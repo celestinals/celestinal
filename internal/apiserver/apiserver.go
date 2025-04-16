@@ -20,10 +20,10 @@ import (
 
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
 
-	"github.com/celestinals/celestinal/internal/apiserver/apps/openapi"
+	"github.com/celestinals/celestinal/internal/apiserver/handlers/openapi"
 	"github.com/celestinals/celestinal/internal/apiserver/middleware"
 	"github.com/celestinals/celestinal/internal/apiserver/registrar/v1"
-	dcvrcontrollers "github.com/celestinals/celestinal/internal/discovery/v1/controllers"
+	dcvrctrls "github.com/celestinals/celestinal/internal/discovery/v1/controllers"
 	"github.com/celestinals/celestinal/internal/pkg/version"
 
 	"github.com/celestinals/celestinal/pkg/flag"
@@ -47,7 +47,7 @@ var _ striker.Server = (*Server)(nil)
 // Example:
 //
 //	var _ = striker.Inject(discoverysvc.NewDiscoveryService)
-func New(conf *celestinal.Config, dcv *dcvrcontrollers.Discovery) (striker.Server, error) {
+func New(conf *celestinal.Config, dcv *dcvrctrls.Discovery) (striker.Server, error) {
 	srv := &Server{
 		server: skhttp.New(),
 		config: conf,

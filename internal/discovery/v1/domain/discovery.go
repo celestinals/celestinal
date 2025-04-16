@@ -30,9 +30,9 @@ type Discovery interface {
 	RegisterService(ctx context.Context, id string, req *discoverypb.RegisterRequest) error
 }
 
-// NewDiscovery creates a new discovery service
+// New creates a new discovery service
 // and returns a Discovery interface.
-func NewDiscovery(repo dcvrrepo.Discovery) Discovery {
+func New(repo dcvrrepo.Discovery) Discovery {
 	return &discovery{
 		repo: repo,
 	}

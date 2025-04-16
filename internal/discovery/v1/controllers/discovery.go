@@ -22,7 +22,6 @@ import (
 
 	discoverypb "github.com/celestinals/celestinal/api/gen/go/celestinal/discovery/v1"
 	dcvrdomain "github.com/celestinals/celestinal/internal/discovery/v1/domain"
-	dcvrrepo "github.com/celestinals/celestinal/internal/discovery/v1/repos"
 
 	"github.com/celestinals/celestinal/pkg/errors"
 	"github.com/celestinals/celestinal/pkg/logger"
@@ -32,9 +31,9 @@ import (
 var _ discoverypb.DiscoveryServiceServer = (*Discovery)(nil)
 
 // New create new instance
-func New(repo dcvrrepo.Discovery) *Discovery {
+func New(svc dcvrdomain.Discovery) *Discovery {
 	return &Discovery{
-		service: dcvrdomain.NewDiscovery(repo),
+		service: svc,
 	}
 }
 

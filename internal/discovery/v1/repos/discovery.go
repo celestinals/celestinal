@@ -28,9 +28,9 @@ import (
 )
 
 // New creates a new discovery repository
-func New(cache *mem.Cache[*discoverypb.Registrar]) Discovery {
+func New() Discovery {
 	return &discovery{
-		cache: cache,
+		cache: mem.NewDefault[*discoverypb.Registrar](),
 	}
 }
 
