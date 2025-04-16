@@ -18,6 +18,7 @@ package errors
 import (
 	"errors"
 	"fmt"
+	"net/http"
 
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
 	"github.com/celestinals/celestinal/internal/pkg/version"
@@ -72,14 +73,34 @@ var (
 )
 
 var (
+	// ErrServerClosed is a server closed error
+	ErrServerClosed = http.ErrServerClosed
+
 	// ErrUnimplemented is a generic error
 	ErrUnimplemented = errors.New(unimplemented)
 
 	// ErrInvalidData is an invalid data error
 	ErrInvalidData = errors.New(invalidData)
+
+	// ErrNotFound is a not found error
+	ErrNotFound = errors.New(notFound)
 )
 
 // F wrapped error with format template
 func F(template string, args ...any) error {
 	return fmt.Errorf(template, args...)
+}
+
+// Is checks if the error is a specific error
+func Is(err error, target error) bool {
+	if err == nil {
+		return false
+	}
+	if errors.Is(err, target) {
+		return true
+	}
+	if errors.Is(err, ErrUnimplemented) {
+		return true
+	}
+	return false
 }

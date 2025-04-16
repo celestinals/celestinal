@@ -21,13 +21,13 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
+	discoverypb "github.com/celestinals/celestinal/api/gen/go/celestinal/discovery/v1"
 )
 
 type Discovery interface {
-	Heartbeat(ctx context.Context, req *celestinal.HeartbeatRequest) error
-	Register(ctx context.Context, req *celestinal.RegisterRequest) error
-	Discover(ctx context.Context, req *celestinal.DiscoverRequest) (*celestinal.DiscoverResponse, error)
+	Heartbeat(ctx context.Context, req *discoverypb.HeartbeatRequest) error
+	Register(ctx context.Context, req *discoverypb.RegisterRequest) error
+	Discover(ctx context.Context, req *discoverypb.DiscoverRequest) (*discoverypb.DiscoverResponse, error)
 }
 
 func New(baseUrl string) Discovery {
@@ -42,23 +42,27 @@ type discovery struct {
 	client  *http.Client
 }
 
-func (d *discovery) Heartbeat(ctx context.Context, req *celestinal.HeartbeatRequest) error {
+func (d *discovery) Heartbeat(ctx context.Context, req *discoverypb.HeartbeatRequest) error {
 	return d.post("/discovery/heartbeat", req)
 }
 
-func (d *discovery) Register(ctx context.Context, req *celestinal.RegisterRequest) error {
-	return d.post("/discovery/register", req)
+func (d *discovery) Register(ctx context.Context, req *discoverypb.RegisterRequest) error {
+	return d.post("/discovery/register", RegisterRequest{
+		Name:    req.Name,
+		Address: req.Address,
+		TTL:     fmt.Sprintf("%ds", req.GetTtl().Seconds),
+	})
 
 }
 
-func (d *discovery) Discover(ctx context.Context, req *celestinal.DiscoverRequest) (*celestinal.DiscoverResponse, error) {
+func (d *discovery) Discover(ctx context.Context, req *discoverypb.DiscoverRequest) (*discoverypb.DiscoverResponse, error) {
 	resp, err := d.client.Get(fmt.Sprintf("%s/discovery/discover?name=%s", d.baseUrl, req.GetName()))
 	if err != nil {
 		return nil, err
 	}
 	defer func() { _ = resp.Body.Close() }()
 
-	var result celestinal.DiscoverResponse
+	var result discoverypb.DiscoverResponse
 	err = json.NewDecoder(resp.Body).Decode(&result)
 	return &result, err
 }

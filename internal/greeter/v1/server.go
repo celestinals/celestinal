@@ -23,7 +23,9 @@ import (
 
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/greeter/v1"
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
-	"github.com/celestinals/celestinal/internal/greeter/v1/controllers"
+
+	greeterctrls "github.com/celestinals/celestinal/internal/greeter/v1/controllers"
+	greeterdomain "github.com/celestinals/celestinal/internal/greeter/v1/domain"
 
 	"github.com/celestinals/celestinal/pkg/flag"
 	"github.com/celestinals/celestinal/pkg/names"
@@ -35,8 +37,15 @@ import (
 // it will start by striker.runner through striker.Server
 var _ striker.Server = (*Greeter)(nil)
 
+// inject all dependencies to the greeter
+// This is a dependency injection pattern.
+var (
+	_ = striker.Inject(greeterctrls.New)
+	_ = striker.Inject(greeterdomain.New)
+)
+
 // New creates a new Greeter module.
-func New(srv controllers.IGreeter, conf *celestinal.Config) striker.Server {
+func New(srv greeterctrls.IGreeter, conf *celestinal.Config) striker.Server {
 	return &Greeter{
 		Server: skgrpc.NewDefault(),
 		srv:    srv,
@@ -61,9 +70,10 @@ func (g *Greeter) Start(_ context.Context) error {
 	greeter.RegisterGreeterServiceServer(g.AsServer(), g.srv)
 
 	return g.Serve(&striker.ServiceInfo{
-		Config: g.config,
-		Addr:   flag.Parse().GetAddress(),
-		Name:   names.GreeterV1.String(),
-		TTL:    time.Minute * 5,
+		Config:      g.config,
+		Addr:        flag.ParseGRPCService().GetAddress(),
+		GatewayAddr: flag.ParseGRPCService().GetGatewayAddress(),
+		Name:        names.GreeterV1.String(),
+		TTL:         time.Minute * 5,
 	})
 }

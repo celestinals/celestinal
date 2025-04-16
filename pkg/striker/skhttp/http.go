@@ -91,7 +91,7 @@ func (h *httpServer) Use(handler func(http.Handler) http.Handler) {
 // Listen starts the runtime mux.
 func (h *httpServer) Listen(address string) error {
 	if address == "" {
-		address = flag.Parse().GetAddress()
+		address = flag.ParseAPIServer().GetAddress()
 	}
 
 	// handler runtime.Mux with http.ServeMux

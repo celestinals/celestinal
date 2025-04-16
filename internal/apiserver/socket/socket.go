@@ -12,25 +12,5 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package greeter provides the initialization logic for the greeter service.
-package greeter
-
-import (
-	"github.com/celestinals/celestinal/internal/greeter/v1/controllers"
-	"github.com/celestinals/celestinal/internal/greeter/v1/domain"
-	"github.com/celestinals/celestinal/pkg/striker"
-)
-
-var (
-	// handlers/controllers layer
-	_ = striker.Inject(controllers.New)
-
-	// domain layer
-	_ = striker.Inject(domain.New)
-
-	// repo layer
-	//_ = striker.Inject(repos.NewAuthor)
-
-	// data layer
-	//_ = striker.Inject(authors.New)
-)
+// Package socket provides the websocket server for the apiserver
+package socket

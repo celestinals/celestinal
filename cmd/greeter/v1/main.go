@@ -35,9 +35,12 @@ import (
 //
 // _ = striker.Inject(controllers.New)
 func main() {
-	flag.SetDefault(names.GreeterV1, "127.0.0.1:0", "dev")
+	flag.SetDefault(names.GreeterV1, "dev")
 	flag.SetConsole(greeterpb.ASCII)
-	_ = flag.Parse()
+
+	if err := flag.Validate(flag.ParseGRPCService()); err != nil {
+		logger.Fatal(err)
+	}
 
 	app := striker.Build(greeter.New, config.Default)
 	if err := app.Run(context.Background()); err != nil {

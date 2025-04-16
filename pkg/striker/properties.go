@@ -22,8 +22,9 @@ import (
 
 // ServiceInfo is Serve method properties
 type ServiceInfo struct {
-	Config *celestinal.Config
-	Addr   string
-	Name   string
-	TTL    time.Duration
+	GatewayAddr string
+	Config      *celestinal.Config
+	Addr        string
+	Name        string
+	TTL         time.Duration
 }

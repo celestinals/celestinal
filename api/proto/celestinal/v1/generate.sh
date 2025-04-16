@@ -38,4 +38,5 @@ protoc \
   --go_out="$CELESTINAL_GEN_OUT" \
   --go-grpc_out="$CELESTINAL_GEN_OUT" \
   --validate_out="lang=go,paths=:$CELESTINAL_GEN_OUT" \
+  --grpc-gateway_out="$CELESTINAL_GEN_OUT" \
   "$(pwd)"/*.proto

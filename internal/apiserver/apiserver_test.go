@@ -13,16 +13,3 @@
 // limitations under the License.
 
 package apiserver
-
-import (
-	"testing"
-
-	cestconf "github.com/celestinals/celestinal/pkg/config"
-)
-
-func BenchmarkEdgeToService(b *testing.B) {
-	b.ReportAllocs()
-	for i := 0; i < b.N; i++ {
-		_ = New(cestconf.Default())
-	}
-}

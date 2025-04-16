@@ -46,3 +46,14 @@ func NewPgxConn(ctx context.Context, conf *celestinal.Config) (*pgx.Conn, error)
 
 	return pgx.Connect(ctx, dsn)
 }
+
+// Filter is a function that filters a slice of object generically
+func Filter[T any](slice []T, fn func(T) bool) []T {
+	var result []T
+	for _, item := range slice {
+		if fn(item) {
+			result = append(result, item)
+		}
+	}
+	return result
+}

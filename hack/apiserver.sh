@@ -16,4 +16,9 @@
 
 make build.cest
 
-./build/edge --mode=sandbox 
+./bin/apiserver \
+    --log-level debug  \
+    --mode sanbox \
+    --address 0.0.0.0:9000 \
+    --api-specs ./api/specs/v1 \
+    --swagger-ui ./api/ui/swagger

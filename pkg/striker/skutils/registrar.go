@@ -26,23 +26,29 @@ import (
 // ServiceRegistrar is an interface for registering a gRPC service. Not a server !!!
 type ServiceRegistrar interface {
 	Accept(context.Context, skhttp.Server) error
-	Register(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) error
+	RegisterFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) error
+	Register(ctx context.Context, mux *runtime.ServeMux) error
 }
 
-// RegisterService registers a service with the runtime.
+// RegisterServiceFromEndpoint registers a service with the runtime from endpoint
 // The service is registered with the runtime mux.
 //
 // dependency:
-//
-// - github.com/grpc-ecosystem/grpc-gateway/v2/runtime
-func RegisterService(
+//   - github.com/grpc-ecosystem/grpc-gateway/v2/runtime
+//   - google.golang.org/grpc
+func RegisterServiceFromEndpoint(
 	ctx context.Context, httpServer skhttp.Server, service ServiceRegistrar, endpoint string,
 	opts []grpc.DialOption) error {
 
-	if err := service.Register(
+	if err := service.RegisterFromEndpoint(
 		ctx, httpServer.RuntimeMux(), endpoint, opts); err != nil {
 		return err
 	}
 
 	return nil
+}
+
+// RegisterService registers a service with the run time
+func RegisterService(ctx context.Context, httpServer skhttp.Server, service ServiceRegistrar) error {
+	return service.Register(ctx, httpServer.RuntimeMux())
 }

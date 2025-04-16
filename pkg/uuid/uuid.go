@@ -14,3 +14,17 @@
 
 // Package uuid provides a simple UUID generator.
 package uuid
+
+import (
+	"fmt"
+	"strings"
+
+	"github.com/celestinals/celestinal/internal/pkg/version"
+	"github.com/google/uuid"
+)
+
+// Generate generates a new UUID and returns it as a string.
+func Generate() string {
+	id := uuid.New()
+	return fmt.Sprintf("%s-%s", strings.ToLower(version.Code), id.String())
+}

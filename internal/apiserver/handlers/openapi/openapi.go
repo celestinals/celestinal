@@ -24,25 +24,33 @@ import (
 	"github.com/celestinals/celestinal/pkg/striker/skhttp"
 )
 
-// Serve return api json and swagger ui
-func Serve(server skhttp.Server, _ *celestinal.Config) {
+// New creates a new OpenAPI handler.
+func New() *OpenAPI {
+	return &OpenAPI{}
+}
+
+// OpenAPI serves the OpenAPI specification and Swagger UI.
+type OpenAPI struct{}
+
+// RegisterServer return api json and swagger ui
+func (oapi *OpenAPI) RegisterServer(server skhttp.Server, _ *celestinal.Config) {
 	flags := flag.ParseAPIServer()
 
 	apifs := http.FileServer(http.Dir(flags.GetApiSpecsPath()))
 	server.HTTPMux().Handle("/api/", http.StripPrefix("/api/", apifs))
 
 	swaggerfs := http.FileServer(http.Dir(flags.GetSwaggerPath()))
-	server.HTTPMux().Handle("/swagger/", apiSpecSwaggerHandler(swaggerfs))
-	server.HTTPMux().HandleFunc("/swagger", swaggerHandler())
+	server.HTTPMux().Handle("/swagger/", oapi.apiSpecSwaggerHandler(swaggerfs))
+	server.HTTPMux().HandleFunc("/swagger", oapi.swaggerHandler())
 }
 
-func swaggerHandler() http.HandlerFunc {
+func (oapi *OpenAPI) swaggerHandler() http.HandlerFunc {
 	return func(writer http.ResponseWriter, request *http.Request) {
 		http.Redirect(writer, request, "/swagger/", http.StatusMovedPermanently)
 	}
 }
 
-func apiSpecSwaggerHandler(swaggerfs http.Handler) http.Handler {
+func (oapi *OpenAPI) apiSpecSwaggerHandler(swaggerfs http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if strings.HasSuffix(r.URL.Path, ".json") {
 			target := "/api" + strings.TrimPrefix(r.URL.Path, "/swagger")

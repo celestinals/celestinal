@@ -19,43 +19,74 @@ import (
 	"context"
 
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
+
+	"github.com/celestinals/celestinal/internal/apiserver/handlers/openapi"
+	"github.com/celestinals/celestinal/internal/apiserver/middleware"
+	"github.com/celestinals/celestinal/internal/apiserver/registrar/v1"
+	dcvrctrls "github.com/celestinals/celestinal/internal/discovery/v1/controllers"
+	"github.com/celestinals/celestinal/internal/pkg/version"
+
 	"github.com/celestinals/celestinal/pkg/flag"
+	"github.com/celestinals/celestinal/pkg/logger"
+	"github.com/celestinals/celestinal/pkg/protobuf"
 	"github.com/celestinals/celestinal/pkg/striker"
 	"github.com/celestinals/celestinal/pkg/striker/skhttp"
 	"github.com/celestinals/celestinal/pkg/striker/skutils"
-
-	"github.com/celestinals/celestinal/internal/apiserver/handlers/openapi"
-	"github.com/celestinals/celestinal/internal/apiserver/handlers/registry"
-	"github.com/celestinals/celestinal/internal/apiserver/handlers/watcher"
-	"github.com/celestinals/celestinal/internal/apiserver/middleware"
-	"github.com/celestinals/celestinal/internal/apiserver/services/v1"
-	"github.com/celestinals/celestinal/internal/pkg/version"
-
-	"github.com/celestinals/celestinal/pkg/logger"
-	"github.com/celestinals/celestinal/pkg/protobuf"
 )
 
 // make sure apiserver implement striker.Server
 // striker.runner will be start application through striker.Server interface
-var _ striker.Server = (*Edge)(nil)
+var _ striker.Server = (*Server)(nil)
 
-// New creates a new gateway app, return striker.Server interface
-func New(conf *celestinal.Config) striker.Server {
-	return &Edge{
+// New creates a new gateway app and returns a striker.Server interface.
+// This constructor is based on dependency injection. When you add parameters
+// (e.g., svc discoverysvc.Discovery), you must use the striker.Inject
+// to inject the constructor of the object into the striker framework.
+// See service/discoverysvc/discoverysvc.go for reference.
+//
+// Example:
+//
+//	var _ = striker.Inject(discoverysvc.NewDiscoveryService)
+func New(conf *celestinal.Config, dcv *dcvrctrls.Discovery) (striker.Server, error) {
+	srv := &Server{
 		server: skhttp.New(),
 		config: conf,
 	}
+
+	// handler custom
+	srv.use(openapi.New())
+	srv.use(middleware.New(conf))
+
+	// NOTE: Make sure the gRPC server is running properly and accessible
+	// Create file at registrar, inherit base package, override function,
+	// implement business logic
+	// See: registrar/v1/greeter
+	err := srv.visit(context.Background(),
+		registrar.NewGreeter(),
+		registrar.NewDiscovery(dcv),
+	)
+
+	return srv, err
 }
 
-// Edge represents the celestinal app The apiserver application is the main
+// Handler interface must be implemented by object handler
+//
+// References:
+//   - openapi
+//   - middleware
+type Handler interface {
+	RegisterServer(server skhttp.Server, conf *celestinal.Config)
+}
+
+// Server represents the celestinal app The apiserver application is the main
 // entry point for the Celestinal. It will automatically connect to other
 // services via gRPC. Run the application along with other services
-// in the x/ directory. The application provides APIs for users through
+// in the cmd/ directory. The application provides APIs for users through
 // a single HTTP gateway following the REST API standard. The application
 // uses gRPC to connect to other services. Additionally, the system provides
 // a Swagger UI interface for users to easily interact with the system
 // through a web interface.
-type Edge struct {
+type Server struct {
 	// config is the configuration of the apiserver app, load environment
 	// variables from .env file
 	config *celestinal.Config
@@ -65,76 +96,40 @@ type Edge struct {
 	server skhttp.Server
 }
 
-// registerServiceServer gRPC server endpoint.
-func (edge *Edge) registerServiceServer(ctx context.Context) error {
-	// NOTE: Make sure the gRPC server is running properly and accessible
-	// Create folder at services, inherit base package, override function,
-	// implement business logic
-	// See: services/v1/greeter
-	serviceList := []skutils.ServiceRegistrar{
-		// Example: register the greeter service to the gateway
-		services.NewGreeter(),
-		// add more service here ...
-	}
-
-	return edge.visit(ctx, serviceList...)
-}
-
 // visit all service by Accept function
-func (edge *Edge) visit(ctx context.Context, services ...skutils.ServiceRegistrar) error {
+func (srv *Server) visit(ctx context.Context, services ...skutils.ServiceRegistrar) error {
 	for _, service := range services {
-		if err := service.Accept(ctx, edge.server); err != nil {
+		if err := service.Accept(ctx, srv.server); err != nil {
 			return err
 		}
 	}
-
 	return nil
+	// return errors.F("apiserver: failed to visit service")
 }
 
 // use is a chain of functions to use when accepting the request
 // serve is a function to use when accepting the request
-func (edge *Edge) use(serve func(skhttp.Server, *celestinal.Config)) {
-	serve(edge.server, edge.config)
-}
-
-// functions is chain of functions to use before starting the apiserver app
-func (edge *Edge) functions(ctx context.Context) error {
-	// new middleware handler
-	edge.use(middleware.Serve)
-
-	// serve swagger ui
-	edge.use(openapi.Serve)
-
-	// register service to the gateway
-	edge.use(registry.Serve)
-
-	// watch service change on service registry
-	edge.use(watcher.Serve)
-
-	return edge.registerServiceServer(ctx)
+func (srv *Server) use(handler Handler) {
+	handler.RegisterServer(srv.server, srv.config)
 }
 
 // Start the apiserver/gateway app
-func (edge *Edge) Start(ctx context.Context) error {
+func (srv *Server) Start(_ context.Context) error {
 	// service ascii art banner
 	version.ASCII()
-	if err := protobuf.Validate(edge.config); err != nil {
-		return err
-	}
-
-	// add chain functions handler request
-	if err := edge.functions(ctx); err != nil {
+	if err := protobuf.Validate(srv.config); err != nil {
 		return err
 	}
 
 	// Listen HTTP server (and apiserver calls to gRPC server endpoint)
 	// log info in console and return register error if they exist
-	logger.Infof("[http] starting server %s", flag.Parse().GetAddress())
-	return edge.server.Listen(flag.Parse().GetAddress())
+	logger.Infof("[http] starting server %s", flag.ParseAPIServer().GetAddress())
+	return srv.server.Listen(flag.ParseAPIServer().GetAddress())
+	// for DEBUG:
 	// return errors.F("apiserver: failed to listen and serve")
 }
 
 // Shutdown implements striker.Server.
-func (edge *Edge) Shutdown(ctx context.Context) error {
-	return edge.server.Shutdown(ctx)
+func (srv *Server) Shutdown(ctx context.Context) error {
+	return srv.server.Shutdown(ctx)
 }

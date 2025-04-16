@@ -12,18 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package base provides the base service.
-package base
+// Package registrarbase provides the base service.
+package registrarbase
 
 import (
 	"context"
 
-	"github.com/celestinals/celestinal/pkg/striker/skhttp"
-	"github.com/celestinals/celestinal/pkg/striker/skutils"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
 
 	"github.com/celestinals/celestinal/pkg/errors"
+	"github.com/celestinals/celestinal/pkg/striker/skhttp"
+	"github.com/celestinals/celestinal/pkg/striker/skutils"
 )
 
 var _ skutils.ServiceRegistrar = (*Base)(nil)
@@ -32,7 +32,12 @@ var _ skutils.ServiceRegistrar = (*Base)(nil)
 type Base struct{}
 
 // Register registers the base service
-func (b Base) Register(_ context.Context, _ *runtime.ServeMux, _ string,
+func (b Base) Register(_ context.Context, _ *runtime.ServeMux) error {
+	return errors.ErrUnimplemented
+}
+
+// RegisterFromEndpoint registers the base service
+func (b Base) RegisterFromEndpoint(_ context.Context, _ *runtime.ServeMux, _ string,
 	_ []grpc.DialOption) error {
 	return errors.ErrUnimplemented
 }

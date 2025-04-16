@@ -12,31 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package watcher is watching service registry when service info was changed
-package watcher
+// Package discovery implements the discovery service
+package discovery
 
 import (
-	"time"
+	dcvrctrls "github.com/celestinals/celestinal/internal/discovery/v1/controllers"
+	dcvrdomain "github.com/celestinals/celestinal/internal/discovery/v1/domain"
+	dcvrrepo "github.com/celestinals/celestinal/internal/discovery/v1/repos"
 
-	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
-	"github.com/celestinals/celestinal/pkg/striker/skhttp"
+	"github.com/celestinals/celestinal/pkg/striker"
 )
 
-const timeout = time.Second * 2
-
-// Serve is watching function consul when service info was changed
-func Serve(_ skhttp.Server, config *celestinal.Config) {
-	_ = config
-
-	go service()
-}
-
-func service() {
-	ticker := time.NewTicker(timeout)
-	defer ticker.Stop()
-
-	for {
-
-		<-ticker.C
-	}
-}
+var (
+	// discovery dependency repo - domain - controller
+	_ = striker.Inject(dcvrrepo.New)
+	_ = striker.Inject(dcvrdomain.New)
+	_ = striker.Inject(dcvrctrls.New)
+)

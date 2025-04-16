@@ -12,5 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package ws provides the websocket server for the apiserver
-package ws
+package discovery
+
+type RegisterRequest struct {
+	Name    string `json:"name"`
+	Address string `json:"address"`
+	TTL     string `json:"ttl"`
+}

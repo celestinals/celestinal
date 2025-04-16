@@ -26,6 +26,8 @@ import (
 	"github.com/celestinals/celestinal/pkg/logger"
 	"github.com/celestinals/celestinal/pkg/names"
 	"github.com/celestinals/celestinal/pkg/striker"
+
+	_ "github.com/celestinals/celestinal/internal/discovery/v1"
 )
 
 // Build and run the main application with environment variables.
@@ -36,22 +38,25 @@ import (
 //
 //	_ = striker.Inject(controllers.New)
 //
-// This is the celestinal apiserver application, it will automatically connect to
-// other services via gRPC. Run the application along with other services
-// in the x/ directory.The application provides APIs for users through a
-// single HTTP gateway following the REST API standard. The application
-// uses gRPC to connect to other services.Additionally, the system provides
-// a Swagger UI interface for users to easily interact with the system
-// through a web interface.
+// This is the celestinal apiserver application, it will automatically
+// connect to other services via gRPC. Run the application along with
+// other services in the cmd/ directory.The application provides APIs
+// for users through a single HTTP gateway following the REST API standard.
+// The application uses gRPC to connect to other services.Additionally,
+// the system provides a Swagger UI interface for users to easily interact
+// with the system through a web interface.
 //
 // Run the application using the Makefile command
 //
 //	make run.apiserver // start celestinal apiserver
 //	make run.<service> // start service
 func main() {
-	flag.SetDefault(names.APIServer, "0.0.0.0:9000", "dev")
+	flag.SetDefault(names.APIServer, "dev")
 	flag.SetConsole(version.ASCIIArt)
-	_ = flag.ParseAPIServer()
+
+	if err := flag.Validate(flag.ParseAPIServer()); err != nil {
+		logger.Fatal(err)
+	}
 
 	app := striker.Build(apiserver.New, config.Default)
 	if err := app.Run(context.Background()); err != nil {

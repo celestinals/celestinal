@@ -32,12 +32,15 @@ Copyright (c) Celestinal Labs. All rights reserved.
 
 Licensed under the [Apache 2.0](LICENSE) license.
 
+### Logo
+
 <p align="left">
-  <img src="./_docs/assets/cels-black.png" width="30"/>
-  <img src="./_docs/assets/cels-light.png" width="30"/>
-  <img src="./_docs/assets/cels-light2.png" width="30"/>
+  <img src="./_docs/assets/cels.png" width="40"/>
+  <img src="./_docs/assets/cels-black.png" width="40"/>
+  <img src="./_docs/assets/cels-light.png" width="40"/>
+  <img src="./_docs/assets/cels-light2.png" width="40"/>
 </p>
 
-##
-
-Made in 🇻🇳 🚀
+![Creative Commons License](https://i.creativecommons.org/l/by-sa/4.0/88x31.png)  
+**Celestinal** – photo by **Duc-Hung Ho**  
+Licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)

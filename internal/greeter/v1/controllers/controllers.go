@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package controllers provides the controller for the greeter service.
-package controllers
+// Package greeterctrls provides the controller for the greeter service.
+package greeterctrls
 
 import (
 	"context"
 
-	"github.com/celestinals/celestinal/internal/greeter/v1/domain"
+	greeterdomain "github.com/celestinals/celestinal/internal/greeter/v1/domain"
 
 	domainpb "github.com/celestinals/celestinal/api/gen/go/celestinal/greeter/domain/v1"
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/greeter/v1"
@@ -73,7 +73,7 @@ func (g *Greeter) Status(
 }
 
 // New creates a new Greeter module.
-func New(biz domain.IGreeter) IGreeter {
+func New(biz greeterdomain.IGreeter) IGreeter {
 	return &Greeter{
 		domain: biz,
 	}
