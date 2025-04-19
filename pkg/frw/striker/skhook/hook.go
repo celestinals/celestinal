@@ -18,7 +18,7 @@ package skhook
 import (
 	"context"
 
-	"github.com/celestinals/celestinal/pkg/striker/internal"
+	"github.com/celestinals/celestinal/pkg/frw/striker/internal"
 	"go.uber.org/fx"
 )
 

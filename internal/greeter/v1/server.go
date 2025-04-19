@@ -19,7 +19,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/celestinals/celestinal/pkg/striker/skgrpc"
+	"github.com/celestinals/celestinal/pkg/frw/striker/skgrpc"
 
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/greeter/v1"
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
@@ -27,10 +27,10 @@ import (
 	greeterctrls "github.com/celestinals/celestinal/internal/greeter/v1/controllers"
 	greeterdomain "github.com/celestinals/celestinal/internal/greeter/v1/domain"
 
-	"github.com/celestinals/celestinal/pkg/flag"
+	"github.com/celestinals/celestinal/pkg/flags"
+	"github.com/celestinals/celestinal/pkg/frw/striker"
 	"github.com/celestinals/celestinal/pkg/names"
 	"github.com/celestinals/celestinal/pkg/protobuf"
-	"github.com/celestinals/celestinal/pkg/striker"
 )
 
 // make sure Greeter implement striker.Server
@@ -71,8 +71,8 @@ func (g *Greeter) Start(_ context.Context) error {
 
 	return g.Serve(&striker.ServiceInfo{
 		Config:      g.config,
-		Addr:        flag.ParseGRPCService().GetAddress(),
-		GatewayAddr: flag.ParseGRPCService().GetGatewayAddress(),
+		Addr:        flags.ParseGRPCService().GetAddress(),
+		GatewayAddr: flags.ParseGRPCService().GetGatewayAddress(),
 		Name:        names.GreeterV1.String(),
 		TTL:         time.Minute * 5,
 	})

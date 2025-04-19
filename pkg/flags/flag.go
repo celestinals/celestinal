@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package flag provide flag variable props
-package flag
+// Package flags provide flag variable props
+package flags
 
 import (
 	"fmt"
@@ -88,6 +88,7 @@ func ParseAPIServer() *celestinal.FlagAPIServer {
 		pflag.StringVar(&apiServerFlags.ApiSpecsPath, "api-specs", apiServerFlags.GetApiSpecsPath(), "openapi specification path")
 		pflag.StringVar(&apiServerFlags.SwaggerPath, "swagger-ui", apiServerFlags.GetSwaggerPath(), "swagger ui path")
 	})
+
 	_ = Parse()
 
 	return apiServerFlags
@@ -101,6 +102,7 @@ func ParseGRPCService() *celestinal.FlagGRPCService {
 	})
 
 	_ = Parse()
+
 	return grpcServiceFlags
 }
 

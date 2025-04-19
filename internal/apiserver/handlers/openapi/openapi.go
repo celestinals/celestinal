@@ -20,8 +20,8 @@ import (
 	"strings"
 
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
-	"github.com/celestinals/celestinal/pkg/flag"
-	"github.com/celestinals/celestinal/pkg/striker/skhttp"
+	"github.com/celestinals/celestinal/pkg/flags"
+	"github.com/celestinals/celestinal/pkg/frw/striker/skhttp"
 )
 
 // New creates a new OpenAPI handler.
@@ -34,7 +34,7 @@ type OpenAPI struct{}
 
 // RegisterServer return api json and swagger ui
 func (oapi *OpenAPI) RegisterServer(server skhttp.Server, _ *celestinal.Config) {
-	flags := flag.ParseAPIServer()
+	flags := flags.ParseAPIServer()
 
 	apifs := http.FileServer(http.Dir(flags.GetApiSpecsPath()))
 	server.HTTPMux().Handle("/api/", http.StripPrefix("/api/", apifs))

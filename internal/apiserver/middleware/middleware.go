@@ -26,10 +26,10 @@ import (
 	"google.golang.org/grpc/grpclog"
 
 	"github.com/celestinals/celestinal/api/gen/go/celestinal/v1"
-	"github.com/celestinals/celestinal/pkg/flag"
+	"github.com/celestinals/celestinal/pkg/flags"
+	"github.com/celestinals/celestinal/pkg/frw/striker/skhttp"
 	"github.com/celestinals/celestinal/pkg/noti"
 	"github.com/celestinals/celestinal/pkg/protobuf"
-	"github.com/celestinals/celestinal/pkg/striker/skhttp"
 )
 
 // New middleware handler
@@ -126,7 +126,7 @@ func (mdw *Middleware) notify(statusCode int, body string) {
 	_ = monitor.Send(&celestinal.TelegramMessage{
 		Metadata: &celestinal.TelegramMessageMetadata{
 			CreatedAt: protobuf.ToTime(time.Now().Local()),
-			Author:    flag.Parse().GetName(),
+			Author:    flags.Parse().GetName(),
 		},
 		Header: fmt.Sprintf("http error %+v ", statusCode),
 		Body:   fmt.Sprintf("http error %+v request body %+v", statusCode, string(body)),

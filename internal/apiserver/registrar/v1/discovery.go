@@ -24,8 +24,8 @@ import (
 	registrarbase "github.com/celestinals/celestinal/internal/apiserver/registrar/base"
 
 	"github.com/celestinals/celestinal/internal/pkg/visitor"
-	"github.com/celestinals/celestinal/pkg/striker/skhttp"
-	"github.com/celestinals/celestinal/pkg/striker/skutils"
+	"github.com/celestinals/celestinal/pkg/frw/striker/skhttp"
+	"github.com/celestinals/celestinal/pkg/frw/striker/skutils"
 )
 
 var _ skutils.ServiceRegistrar = (*discovery)(nil)

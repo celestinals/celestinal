@@ -18,7 +18,7 @@ package skutils
 import (
 	"context"
 
-	"github.com/celestinals/celestinal/pkg/striker/skhttp"
+	"github.com/celestinals/celestinal/pkg/frw/striker/skhttp"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
 )

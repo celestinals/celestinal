@@ -26,12 +26,12 @@ import (
 	dcvrctrls "github.com/celestinals/celestinal/internal/discovery/v1/controllers"
 	"github.com/celestinals/celestinal/internal/pkg/version"
 
-	"github.com/celestinals/celestinal/pkg/flag"
+	"github.com/celestinals/celestinal/pkg/flags"
+	"github.com/celestinals/celestinal/pkg/frw/striker"
+	"github.com/celestinals/celestinal/pkg/frw/striker/skhttp"
+	"github.com/celestinals/celestinal/pkg/frw/striker/skutils"
 	"github.com/celestinals/celestinal/pkg/logger"
 	"github.com/celestinals/celestinal/pkg/protobuf"
-	"github.com/celestinals/celestinal/pkg/striker"
-	"github.com/celestinals/celestinal/pkg/striker/skhttp"
-	"github.com/celestinals/celestinal/pkg/striker/skutils"
 )
 
 // make sure apiserver implement striker.Server
@@ -123,8 +123,8 @@ func (srv *Server) Start(_ context.Context) error {
 
 	// Listen HTTP server (and apiserver calls to gRPC server endpoint)
 	// log info in console and return register error if they exist
-	logger.Infof("[http] starting server %s", flag.ParseAPIServer().GetAddress())
-	return srv.server.Listen(flag.ParseAPIServer().GetAddress())
+	logger.Infof("[http] starting server %s", flags.ParseAPIServer().GetAddress())
+	return srv.server.Listen(flags.ParseAPIServer().GetAddress())
 	// for DEBUG:
 	// return errors.F("apiserver: failed to listen and serve")
 }

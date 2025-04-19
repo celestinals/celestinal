@@ -97,7 +97,7 @@ By making a contribution to this project, I certify that:
 Then you just add a line to every git commit message:
 
 ```
-Signed-off-by: Joe Smith <joe.smith@email.com>
+Signed-off-by: Duc Hung Ho <hunghd@email.com>
 ```
 
 If you set your `user.name` and `user.email` git configs, you can sign your commit automatically with `git commit -s`.
@@ -109,7 +109,6 @@ If you set your `user.name` and `user.email` git configs, you can sign your comm
 - `apps`: Main application web ui based on monorepo
 - `cmd`: Main application apis, edge app endpoints.
 - `deploy`: Contains scripts and config for deployment.
-- `docs`: Documentation.
 - `hack`: Scripts used by developers.
 - `internal`: Internal packages, not exported.
 - `packages`: Shared packages across apps
@@ -119,3 +118,4 @@ If you set your `user.name` and `user.email` git configs, you can sign your comm
 **Every folder with prefix "_" not related to the main source code.**
 - `_submodules`: All repo submodules needed to generate go code from proto file
 - `_test`: Test folder with scripts run performance test
+- `_docs`: Documentation.

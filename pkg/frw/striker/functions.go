@@ -17,23 +17,23 @@ package striker
 import (
 	"context"
 
-	"github.com/celestinals/celestinal/pkg/flag"
+	"github.com/celestinals/celestinal/pkg/flags"
+	"github.com/celestinals/celestinal/pkg/frw/striker/internal"
 	"github.com/celestinals/celestinal/pkg/logger"
-	"github.com/celestinals/celestinal/pkg/striker/internal"
 	"go.uber.org/fx"
 )
 
 // Build builds the application.
 // The application is built by providing the constructors.
 func Build(constructors ...any) Application {
-	logger.SetLogLevel(flag.Parse().GetLogLevel())
+	logger.SetLogLevel(flags.Parse().GetLogLevel())
 
 	for _, constructor := range constructors {
 		internal.Provide(constructor)
 	}
 
 	// disable log: use fx.NopLogger
-	if flag.Parse().GetMode() != "dev" {
+	if flags.Parse().GetMode() != "dev" {
 		return &striker{
 			engine: fx.New(
 				internal.Option(), fx.Invoke(runner), fx.NopLogger),

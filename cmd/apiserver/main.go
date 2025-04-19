@@ -22,10 +22,10 @@ import (
 	"github.com/celestinals/celestinal/internal/pkg/version"
 
 	"github.com/celestinals/celestinal/pkg/config"
-	"github.com/celestinals/celestinal/pkg/flag"
+	"github.com/celestinals/celestinal/pkg/flags"
+	"github.com/celestinals/celestinal/pkg/frw/striker"
 	"github.com/celestinals/celestinal/pkg/logger"
 	"github.com/celestinals/celestinal/pkg/names"
-	"github.com/celestinals/celestinal/pkg/striker"
 
 	_ "github.com/celestinals/celestinal/internal/discovery/v1"
 )
@@ -51,10 +51,10 @@ import (
 //	make run.apiserver // start celestinal apiserver
 //	make run.<service> // start service
 func main() {
-	flag.SetDefault(names.APIServer, "dev")
-	flag.SetConsole(version.ASCIIArt)
+	flags.SetDefault(names.APIServer, "dev")
+	flags.SetConsole(version.ASCIIArt)
 
-	if err := flag.Validate(flag.ParseAPIServer()); err != nil {
+	if err := flags.Validate(flags.ParseAPIServer()); err != nil {
 		logger.Fatal(err)
 	}
 

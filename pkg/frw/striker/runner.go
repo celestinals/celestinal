@@ -19,7 +19,7 @@ import (
 	"time"
 
 	"github.com/celestinals/celestinal/pkg/errors"
-	"github.com/celestinals/celestinal/pkg/flag"
+	"github.com/celestinals/celestinal/pkg/flags"
 	"github.com/celestinals/celestinal/pkg/protobuf"
 
 	"github.com/celestinals/celestinal/pkg/logger"
@@ -53,7 +53,7 @@ func runner(lc fx.Lifecycle, srv Server) {
 			case err := <-errChan:
 				return err
 			case <-time.After(timeout):
-				return protobuf.Validate(flag.Parse())
+				return protobuf.Validate(flags.Parse())
 			}
 
 		},

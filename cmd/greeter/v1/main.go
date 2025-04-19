@@ -21,10 +21,10 @@ import (
 	greeterpb "github.com/celestinals/celestinal/api/gen/go/celestinal/greeter/v1"
 	"github.com/celestinals/celestinal/internal/greeter/v1"
 	"github.com/celestinals/celestinal/pkg/config"
-	"github.com/celestinals/celestinal/pkg/flag"
+	"github.com/celestinals/celestinal/pkg/flags"
+	"github.com/celestinals/celestinal/pkg/frw/striker"
 	"github.com/celestinals/celestinal/pkg/logger"
 	"github.com/celestinals/celestinal/pkg/names"
-	"github.com/celestinals/celestinal/pkg/striker"
 )
 
 // Build and run main application with environment variable
@@ -35,10 +35,10 @@ import (
 //
 // _ = striker.Inject(controllers.New)
 func main() {
-	flag.SetDefault(names.GreeterV1, "dev")
-	flag.SetConsole(greeterpb.ASCII)
+	flags.SetDefault(names.GreeterV1, "dev")
+	flags.SetConsole(greeterpb.ASCII)
 
-	if err := flag.Validate(flag.ParseGRPCService()); err != nil {
+	if err := flags.Validate(flags.ParseGRPCService()); err != nil {
 		logger.Fatal(err)
 	}
 

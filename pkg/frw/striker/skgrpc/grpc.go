@@ -22,10 +22,10 @@ import (
 	discoverypb "github.com/celestinals/celestinal/api/gen/go/celestinal/discovery/v1"
 	"github.com/celestinals/celestinal/api/sdk/discovery/v1"
 	"github.com/celestinals/celestinal/pkg/errors"
+	"github.com/celestinals/celestinal/pkg/frw/striker"
+	"github.com/celestinals/celestinal/pkg/frw/striker/sknet"
 	"github.com/celestinals/celestinal/pkg/logger"
 	"github.com/celestinals/celestinal/pkg/protobuf"
-	"github.com/celestinals/celestinal/pkg/striker"
-	"github.com/celestinals/celestinal/pkg/striker/sknet"
 	"google.golang.org/grpc"
 )
 

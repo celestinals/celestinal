@@ -20,7 +20,7 @@ import (
 	dcvrdomain "github.com/celestinals/celestinal/internal/discovery/v1/domain"
 	dcvrrepo "github.com/celestinals/celestinal/internal/discovery/v1/repos"
 
-	"github.com/celestinals/celestinal/pkg/striker"
+	"github.com/celestinals/celestinal/pkg/frw/striker"
 )
 
 var (

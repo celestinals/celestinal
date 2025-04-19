@@ -22,8 +22,8 @@ import (
 	"google.golang.org/grpc"
 
 	"github.com/celestinals/celestinal/pkg/errors"
-	"github.com/celestinals/celestinal/pkg/striker/skhttp"
-	"github.com/celestinals/celestinal/pkg/striker/skutils"
+	"github.com/celestinals/celestinal/pkg/frw/striker/skhttp"
+	"github.com/celestinals/celestinal/pkg/frw/striker/skutils"
 )
 
 var _ skutils.ServiceRegistrar = (*Base)(nil)

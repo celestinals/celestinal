@@ -20,8 +20,8 @@ import (
 	"net/http"
 
 	"github.com/celestinals/celestinal/pkg/errors"
-	"github.com/celestinals/celestinal/pkg/flag"
-	"github.com/celestinals/celestinal/pkg/striker"
+	"github.com/celestinals/celestinal/pkg/flags"
+	"github.com/celestinals/celestinal/pkg/frw/striker"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 )
 
@@ -91,7 +91,7 @@ func (h *httpServer) Use(handler func(http.Handler) http.Handler) {
 // Listen starts the runtime mux.
 func (h *httpServer) Listen(address string) error {
 	if address == "" {
-		address = flag.ParseAPIServer().GetAddress()
+		address = flags.ParseAPIServer().GetAddress()
 	}
 
 	// handler runtime.Mux with http.ServeMux
